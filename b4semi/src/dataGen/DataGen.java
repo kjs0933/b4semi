@@ -16,7 +16,6 @@ public class DataGen {
 	
 	public static void main(String[] args) {
 		int memberCount = 500;
-		// TODO Auto-generated method stub
 		
 		Connection cn = JDBCTemplate.getConnection();
 		
