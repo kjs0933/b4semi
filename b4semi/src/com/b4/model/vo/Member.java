@@ -16,10 +16,8 @@ public class Member {
 	private Date memberQuitDate;
 	private int memberMileage;
 	
-	private void member() {
-		// TODO Auto-generated method stub
-
-	}
+	public Member() {}
+	
 	public Member(int memberSeq, String memberId, String memberGradeName, String memberPw, String memberName,
 			String memberEmail, String memberPhone, String memberComment, Date memberEnrollDate, Date memberQuitDate,
 			int memberMileage) {
