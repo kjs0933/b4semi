@@ -5,6 +5,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Base64;
@@ -14,14 +15,23 @@ import common.JDBCTemplate;
 //더미 데이터 자동 생성을 위한 클래스
 public class DataGen {
 	
+	
 	public static void main(String[] args) {
 		int memberCount = 500;
-		
+		int memberSeqStart = 1;
+
+	 
 		Connection cn = JDBCTemplate.getConnection();
 		
+		memberSeqStart = getMemberSeq(cn)+1;
+		
 		System.out.println("회원 생성중");
-		createMember(memberCount, cn); //매개변수 : 생성 인원수
+		createMember(memberCount, memberSeqStart, cn); //매개변수 : 생성 인원수, 시퀀스 시작 번호, 커넥션
 		System.out.println("회원 생성 완료");
+		System.out.println("배송지 생성중");
+		createAddressList(memberCount, memberSeqStart, cn);
+		System.out.println("배송지 생성 완료");
+
 		
 		
 		JDBCTemplate.commit(cn);
@@ -29,20 +39,59 @@ public class DataGen {
 
 	}
 	
-	public static void createMember(int count, Connection cn)
+	public static int getMemberSeq(Connection cn)
+	{
+		PreparedStatement ps =null;
+		ResultSet rs = null;
+		int result = 1;
+		try {
+			ps=cn.prepareStatement("SELECT MEMBER_SEQ.NEXTVAL FROM DUAL");
+			rs=ps.executeQuery();
+			if(rs.next())
+			{
+				result = rs.getInt(1);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try{
+				rs.close();
+				ps.close();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+	
+	public static void createMember(int memberCount, int memberSeqStart, Connection cn)
 	{
 		
 		String[] firstNames = {"k강","k권","k김","n나","m문","p박","s손","s신","w왕","y유","y윤","l이","i임","j정","h한"};
 		String[] lastNames = {"bs병승","yw영우","wj우진","js지섭","sh성희","ig일교","jh장현","jm재민","mr미리","jw진우","sh성화",
 				"hj혜진","ys윤석","ma민아","dh동현","sg순규","cw찬웅","ja지안","ss성식","jb정복","dw도원","sl솔","jh준혁"};
-		String sql = "INSERT INTO MEMBER VALUES (MEMBER_SEQ.NEXTVAL,?,'NEW',?,?,?,?,null,?,null,0)";
 		PreparedStatement ps =null;
 		try {
 			
 
-		ps=cn.prepareStatement(sql);
+		ps=cn.prepareStatement("INSERT INTO MEMBER VALUES (MEMBER_SEQ.NEXTVAL,?,'NEW',?,?,?,?,null,?,null,0)");
 		
-			for(int i=0; i<count;i++)
+			//관리자 추가 : id = admin, pw = 1234
+			ps.setString(1, "admin");
+			ps.setString(2, "1ARVn2Auq2/WAqx2gNrL+q3RNjAzXpUfCXrzkA6d4Xa22yhRLy4AC50E+6UTPoscbo31nbOoq51gvkuXzJ6B2w==");
+			ps.setString(3, "관리자");
+			ps.setString(4, "admin@admin.co.kr");
+			ps.setString(5, "01012345678");
+			ps.setTimestamp(6, new Timestamp(System.currentTimeMillis()-31536000000L));
+			ps.executeUpdate();
+		
+			for(int i=memberSeqStart+1; i<memberSeqStart+memberCount;i++)
 			{
 				String str1 = firstNames[(int)(Math.random()*firstNames.length)];
 				String str2 = lastNames[(int)(Math.random()*lastNames.length)];
@@ -98,6 +147,63 @@ public class DataGen {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public static void createAddressList(int memberCount, int memberSeqStart, Connection cn)
+	{
+		String[] address = AddressData.getAddress();
+		int addressSize = address.length;
+		
+		String sql = "INSERT INTO ADDRESSLIST VALUES (ADDRESS_SEQ.NEXTVAL,?,?,?,?)";
+		PreparedStatement ps =null;
+		try {
+			
+		ps=cn.prepareStatement(sql);
+		
+			for(int i=memberSeqStart; i<memberSeqStart+memberCount;i++)
+			{
+				int addressCount = (int)(Math.random()*Math.random()*5);
+				
+				if(addressCount <1)
+				{
+					continue;
+				}
+				
+				for(int j=1; j<=addressCount; j++)
+				{
+					//회원 번호 참조값
+					ps.setInt(1,i);
+					
+					//태그명
+					ps.setString(2, "주소"+j);
+					
+					//주소설정
+					ps.setString(3, address[(int)(Math.random()*addressSize)]);
+					
+					//폰번호설정
+					ps.setString(4, "010"+String.format("%08d",(int)(Math.random()*100000000)));
+					
+					ps.executeUpdate();
+					
+				}
+			}
+		
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try{
+				ps.close();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
 	}
 
 }
