@@ -8,16 +8,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Base64;
 
 import common.JDBCTemplate;
 
-//더미 데이터 자동 생성을 위한 클래스
+//더미 데이터 자동 생성을 위한 클래스 - DB 데이터 삭제 후 이용해주세요!
 public class DataGen {
 	
+	private static final int memberCount = 500;  //생성 회원수
+	private static final long howOld = 31536000000L; //마켓 오픈시점과 현재의 밀리초 차이
+	private static final double priceInc = 0.2; //마켓 오픈시점부터 현시점까지의 물가상승률
 	
 	public static void main(String[] args) {
-		int memberCount = 500;
+
+		
 		int memberSeqStart = 1;
 
 	 
@@ -34,9 +39,18 @@ public class DataGen {
 		System.out.println("공급사 생성중");
 		createSupplier(cn);
 		System.out.println("공급사 생성 완료");
+		if(getProductCount(cn)>0)
+		{
+			System.out.println("상품마스터 초기화");
+			deleteProduct(cn);
+		}
 		System.out.println("상품마스터 생성중");
-		ProductGen.createProduct(cn);
+		ArrayList<ProductPrice> plist = ProductGen.createProduct(cn);
 		System.out.println("상품마스터 생성 완료");
+		
+/*		System.out.println("상품입고내역 생성중");
+		createInStock(plist, cn);
+		System.out.println("상품입고내역 생성 완료");*/
 		
 
 		
@@ -95,7 +109,7 @@ public class DataGen {
 			ps.setString(3, "관리자");
 			ps.setString(4, "admin@admin.co.kr");
 			ps.setString(5, "01012345678");
-			ps.setTimestamp(6, new Timestamp(System.currentTimeMillis()-31536000000L));
+			ps.setTimestamp(6, new Timestamp(System.currentTimeMillis()-howOld));
 			ps.executeUpdate();
 		
 			for(int i=memberSeqStart+1; i<memberSeqStart+memberCount;i++)
@@ -134,7 +148,7 @@ public class DataGen {
 				ps.setString(5, "010"+String.format("%08d",(int)(Math.random()*100000000)));
 				
 				//가입일설정
-				ps.setTimestamp(6, new Timestamp(System.currentTimeMillis()-(long)(Math.random()*31536000000L)));
+				ps.setTimestamp(6, new Timestamp(System.currentTimeMillis()-(long)(Math.random()*howOld)));
 				
 				ps.executeUpdate();
 			}
@@ -169,12 +183,7 @@ public class DataGen {
 		
 			for(int i=memberSeqStart; i<memberSeqStart+memberCount;i++)
 			{
-				int addressCount = (int)(Math.random()*Math.random()*5);
-				
-				if(addressCount <1)
-				{
-					continue;
-				}
+				int addressCount = (int)(1+Math.random()*Math.random()*4);
 				
 				for(int j=1; j<=addressCount; j++)
 				{
@@ -312,6 +321,103 @@ public class DataGen {
 		
 	}
 	
+	public static void deleteProduct(Connection cn)
+	{
+		PreparedStatement ps = null;
+		try {
+			ps=cn.prepareStatement("DELETE FROM PRODUCT");
+			ps.executeUpdate();
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try{
+				ps.close();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
 	
+	public static int getProductCount(Connection cn)
+	{
+		String sql = "SELECT COUNT(*) FROM PRODUCT";
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		int result =0;
+		try {
+			
+			ps=cn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			if(rs.next())
+			{
+				result = rs.getInt(1);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try{
+				rs.close();
+				ps.close();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+	
+	
+	public static void createInStock(ArrayList<ProductPrice> plist, Connection cn)
+	{
+		
+		String sql = "INSERT INTO INSTOCK VALUES (INSTOCK_SEQ.NEXTVAL,?,?,?,?,?,?,0)";
+		PreparedStatement ps =null;
+		
+		int size = plist.size();
+		
+		try {
+
+			ps=cn.prepareStatement(sql);
+			
+/*			for(int i=0; i<size;i++)
+			{
+				int createCount = (int)(Math.random()*12);
+				for(int j=0;j<createCount;j++)
+				{
+					long time = System.currentTimeMillis()-(long)(Math.random()*howOld);
+					ps.setString(1, plist.get(i).getProductCode());
+					ps.setTimestamp(2, new Timestamp(time));
+				}
+
+			}*/
+
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try{
+				ps.close();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+	
+	}
 
 }
