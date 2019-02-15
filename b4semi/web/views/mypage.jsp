@@ -111,22 +111,9 @@
                 <div id='coupon'>쿠폰</div>
                 <div id='user-update'>개인 정보 수정</div>
             </div>
-            <div id='user-content'>
-                <p>주문 내역</p> <span>지난 3년간의 주문 내역 조회가 가능합니다.</span>
-                
-            </div>
+            <div id='user-content'></div>
         </div>
 <script>
-function test()
-{
-	$.ajax({
-		url:"<%=request.getContextPath()%>/mypage/mypage_orderlist.do",
-		type:"get",
-		data:{"data":"data"},
-		success:function(data)
-		{console.log(data);}
-	})
-}
 	$(function(){
 		$('#orderlist').click(function(){
 			$.ajax({
