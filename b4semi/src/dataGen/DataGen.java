@@ -1,6 +1,5 @@
 package dataGen;
 
-import java.io.File;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -9,8 +8,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
 
 import common.JDBCTemplate;
 
@@ -18,6 +19,7 @@ import common.JDBCTemplate;
 public class DataGen {
 	
 	private static final int memberCount = 500;  //생성 회원수
+	private static final int noticeCount = 100; //공지사항 게시수
 	private static final long howOld = 31536000000L; //마켓 오픈시점과 현재의 밀리초 차이
 	private static final double priceInc = 0.2; //마켓 오픈시점부터 현시점까지의 물가상승률
 	
@@ -38,13 +40,14 @@ public class DataGen {
 		System.out.println("배송지 생성중");
 		createAddressList(memberCount, memberSeqStart, cn);
 		System.out.println("배송지 생성 완료");
+
 		if(getProductCount(cn)>0)
 		{
-			System.out.println("상품 판매 데이터 초기화중");
+			System.out.println("상품 데이터 초기화중");
 			deleteDPOption(cn);
 			deleteProduct(cn);
 			JDBCTemplate.commit(cn);
-			System.out.println("상품 판매 데이터 초기화 완료");
+			System.out.println("상품 데이터 초기화 완료");
 		}
 		else
 		{
@@ -62,6 +65,9 @@ public class DataGen {
 		System.out.println("판매세부옵션 생성중");
 		createDPOption(plist, dpListSeqStart, cn);
 		System.out.println("판매세부옵션 생성완료");
+		System.out.println("공지사항 생성중");
+		createNotice(plist, memberSeqStart, cn);
+		System.out.println("공지사항 생성 완료");
 		
 		
 
@@ -212,6 +218,77 @@ public class DataGen {
 					ps.executeUpdate();
 					
 				}
+			}
+		
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try{
+				ps.close();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
+	}
+	
+	public static void createNotice(ArrayList<ProductPrice> plist, int memberSeqStart, Connection cn)
+	{
+		
+		String sql = "INSERT INTO NOTICE VALUES (NOTICE_SEQ.NEXTVAL,?,?,?,?,null,0)";
+		PreparedStatement ps =null;
+		try {
+			
+		ps=cn.prepareStatement(sql);
+		long time;
+		
+			for(int i=0; i<noticeCount;i++)
+			{
+				time = System.currentTimeMillis()-howOld+(long)((Math.random()+i)*(howOld/noticeCount));
+				
+				
+					//작성자 회원 번호
+					ps.setInt(1,memberSeqStart);
+					
+					if(Math.random()>0.5)
+					{
+						String date = new SimpleDateFormat("d일 HH시").format(new Date(time));
+						//공지사항 제목
+						ps.setString(2, date + " 서버 점검 안내");
+						//공지사항 내용
+						ps.setString(3, "<img class='NoticeImages' src='...imgpath...no.jpg'><br>안녕하세요. The Food Forum 입니다.<br><br><br>보다 나은 서비스 제공을 위한 시스템 작업으로 서비스가 중단될 예정입니다.<br><br><br>최대한 빠른 시간 내에 작업을 마칠 수 있도록 최선을 다하겠습니다.<br><br><br>감사합니다.");
+					}
+					else
+					{
+						if(Math.random()>0.5)
+						{
+							//공지사항 제목
+							ps.setString(2, plist.get((int)(plist.size()*Math.random())).getProductName() + " 상품 일시 품절 안내");
+							//공지사항 내용
+							ps.setString(3, "<img class='NoticeImages' src='...imgpath...no.jpg'> <br>안녕하세요. The Food Forum 입니다.<br><br>최대한 빠른 시일 내에 상품 판매를 재개할 수 있도록 하겠습니다.<br><br><br>감사합니다.");
+						}
+						else
+						{
+							String date = new SimpleDateFormat("M월 d일").format(new Date(time));
+							ProductPrice p = plist.get((int)(plist.size()*Math.random()));
+							//공지사항 제목
+							ps.setString(2, date + " " +p.getProductName() + " 할인 이벤트!");
+							//공지사항 내용
+							ps.setString(3, "<img class='NoticeImages' src='...imgpath...no.jpg'> <br>안녕하세요. The Food Forum 입니다.<br><br>오늘 단 하루! "+p.getProductName()+"를 "+(p.getOutPrice()-10)+"원에 구매하실 수 있습니다.<br><br><br>감사합니다.");
+						}
+					}
+
+					
+					//작성일시
+					ps.setTimestamp(4, new Timestamp(time));
+					
+					ps.executeUpdate();
 			}
 		
 		}
@@ -585,5 +662,7 @@ public class DataGen {
 			}
 		}
 	}
+	
+
 
 }
