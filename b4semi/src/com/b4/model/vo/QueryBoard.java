@@ -1,6 +1,7 @@
 package com.b4.model.vo;
 
-import oracle.sql.TIMESTAMP;
+
+import java.sql.Timestamp;
 
 public class QueryBoard {
 	
@@ -8,15 +9,15 @@ public class QueryBoard {
 	private int memberSeq;
 	private String queryTitle;
 	private String queryContents;
-	private TIMESTAMP queryDate;
-	private TIMESTAMP queryDeleteDate;
+	private Timestamp queryDate;
+	private Timestamp queryDeleteDate;
 
 	public QueryBoard() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public QueryBoard(int querySeq, int memberSeq, String queryTitle, String queryContents, TIMESTAMP queryDate,
-			TIMESTAMP queryDeleteDate) {
+	public QueryBoard(int querySeq, int memberSeq, String queryTitle, String queryContents, Timestamp queryDate,
+			Timestamp queryDeleteDate) {
 		super();
 		this.querySeq = querySeq;
 		this.memberSeq = memberSeq;
@@ -58,19 +59,19 @@ public class QueryBoard {
 		this.queryContents = queryContents;
 	}
 
-	public TIMESTAMP getQueryDate() {
+	public Timestamp getQueryDate() {
 		return queryDate;
 	}
 
-	public void setQueryDate(TIMESTAMP queryDate) {
+	public void setQueryDate(Timestamp queryDate) {
 		this.queryDate = queryDate;
 	}
 
-	public TIMESTAMP getQueryDeleteDate() {
+	public Timestamp getQueryDeleteDate() {
 		return queryDeleteDate;
 	}
 
-	public void setQueryDeleteDate(TIMESTAMP queryDeleteDate) {
+	public void setQueryDeleteDate(Timestamp queryDeleteDate) {
 		this.queryDeleteDate = queryDeleteDate;
 	}
 
@@ -80,6 +81,7 @@ public class QueryBoard {
 				+ ", queryContents=" + queryContents + ", queryDate=" + queryDate + ", queryDeleteDate="
 				+ queryDeleteDate + "]";
 	}
+
 	
 	
-}
+	}

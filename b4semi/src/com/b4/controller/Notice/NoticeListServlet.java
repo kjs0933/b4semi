@@ -40,9 +40,54 @@ public class NoticeListServlet extends HttpServlet {
 			cPage=1;
 		}
 		int numPerPage=15;
-		int totalBoard=new NoticeService().selectCount();
 		
-		//List<Notice> list=new NoticeService().selectList(cPage,numPerPage);
+		int totalContent=new NoticeService().NoticeCount();
+		
+		int totalPage=(int)Math.ceil((double)totalContent/numPerPage);
+		
+		List<Notice> list=new NoticeService().selectList(cPage,numPerPage);
+		
+		String pageBar="";
+		int pageBarSize=5;
+		int pageNo=((cPage-1)/pageBarSize)*pageBarSize+1;
+		int pageEnd=pageNo+pageBarSize-1;
+		
+		if(pageNo==1)
+		{
+			pageBar+="<span>[이전]</span>";
+		}
+		else
+		{
+			pageBar+="<a href='"+request.getContextPath()+"/notice/noticeList?cPage="+(pageNo-1)+"'>[이전]</a>";
+		}
+
+		while(!(pageNo>pageEnd||pageNo>totalPage))
+		{
+			if(cPage==pageNo)
+			{
+				pageBar+="<span class='cPage'>"+pageNo+"</span>";
+			}
+			else
+			{
+				pageBar+="<a href='"+request.getContextPath()+"/notice/noticeList?cPage="+pageNo+"'>"+pageNo+"</a>";
+			}
+			pageNo++;
+		}
+		
+		if(pageNo>totalPage)
+		{
+			pageBar+="<span>[다음]</span>	";
+		}
+		else
+		{
+			pageBar+="<a href='"+request.getContextPath()+"/notice/noticeList?cPage="+pageNo+"'>[다음]</a>";
+		}
+		
+		request.setAttribute("list", list);
+		request.setAttribute("cPage", cPage);
+		request.setAttribute("pageBar", pageBar);
+		
+		request.getRequestDispatcher("/views/notice/noticeList.jsp").forward(request, response);
 	}
 
 	/**
