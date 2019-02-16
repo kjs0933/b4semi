@@ -119,10 +119,28 @@ public class ProductGen {
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
 		
-		p= new ProductPrice("01V04001","고추",1000,2500,60,12);
+		p= new ProductPrice("01V03005","자른 무",1500,3500,30,11,"01V03005.jpg");
+		ps.setString(1,"01V03005");
+		ps.setString(2,"b4farm");
+		ps.setString(3,"자른 무");
+		ps.setString(4,"국내산");
+		ps.setString(5,"V03");
+		ps.setString(6,"100g");
+		ps.executeUpdate();plist.add(p);
+		
+		p= new ProductPrice("01V04001","홍고추",1000,2500,60,12,"고추.jpg");
 		ps.setString(1,"01V04001");
 		ps.setString(2,"b4farm");
-		ps.setString(3,"고추");
+		ps.setString(3,"홍고추");
+		ps.setString(4,"국내산");
+		ps.setString(5,"V04");
+		ps.setString(6,"100g");
+		ps.executeUpdate();plist.add(p);
+		
+		p= new ProductPrice("01V04005","청고추",1000,2500,60,12,"01V04005.jpg");
+		ps.setString(1,"01V04005");
+		ps.setString(2,"b4farm");
+		ps.setString(3,"청고추");
 		ps.setString(4,"국내산");
 		ps.setString(5,"V04");
 		ps.setString(6,"100g");
@@ -269,7 +287,7 @@ public class ProductGen {
 		ps.setString(3,"냉동딸기");
 		ps.setString(4,"칠레산");
 		ps.setString(5,"F02");
-		ps.setString(6,"개");
+		ps.setString(6,"팩");
 		ps.executeUpdate();plist.add(p);
 		
 		p= new ProductPrice("02F02002","냉동블루베리",3000,5500,3600,29);
@@ -278,7 +296,7 @@ public class ProductGen {
 		ps.setString(3,"냉동블루베리");
 		ps.setString(4,"미국산");
 		ps.setString(5,"F02");
-		ps.setString(6,"개");
+		ps.setString(6,"팩");
 		ps.executeUpdate();plist.add(p);
 		
 		p= new ProductPrice("02F03001","건포도",2000,4500,720,30);
@@ -287,7 +305,7 @@ public class ProductGen {
 		ps.setString(3,"건포도");
 		ps.setString(4,"중국산");
 		ps.setString(5,"F03");
-		ps.setString(6,"개");
+		ps.setString(6,"팩");
 		ps.executeUpdate();plist.add(p);
 		
 		p= new ProductPrice("02F03002","건크랜베리",2000,4000,720,31);
@@ -296,11 +314,11 @@ public class ProductGen {
 		ps.setString(3,"건크랜베리");
 		ps.setString(4,"미국산");
 		ps.setString(5,"F03");
-		ps.setString(6,"개");
+		ps.setString(6,"팩");
 		ps.executeUpdate();plist.add(p);
 		
 		
-		p= new ProductPrice("02F04001","딸기잼",1900,3800,1080,32);
+		p= new ProductPrice("02F04001","딸기잼",1900,3800,1080,32,"잼.jpg");
 		ps.setString(1,"02F04001");
 		ps.setString(2,"dalmont");
 		ps.setString(3,"딸기잼");
@@ -309,11 +327,20 @@ public class ProductGen {
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
 		
-		p= new ProductPrice("02F04002","포도잼",1900,3800,1080,32);
+		p= new ProductPrice("02F04002","포도잼",1900,3800,1080,32,null);
 		ps.setString(1,"02F04002");
 		ps.setString(2,"dalmont");
 		ps.setString(3,"포도잼");
 		ps.setString(4,"국내산");
+		ps.setString(5,"F04");
+		ps.setString(6,"개");
+		ps.executeUpdate();plist.add(p);
+		
+		p= new ProductPrice("02F04005","망고백향과잼",2600,4800,1080,32,null);
+		ps.setString(1,"02F04005");
+		ps.setString(2,"dalmont");
+		ps.setString(3,"망고백향과잼");
+		ps.setString(4,"수입산");
 		ps.setString(5,"F04");
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
@@ -343,7 +370,7 @@ public class ProductGen {
 		ps.setString(3,"쌀");
 		ps.setString(4,"국내산");
 		ps.setString(5,"G01");
-		ps.setString(6,"개");
+		ps.setString(6,"20kg");
 		ps.executeUpdate();plist.add(p);
 		
 		p= new ProductPrice("03G02001","현미",11500,22000,720,36);
@@ -352,7 +379,7 @@ public class ProductGen {
 		ps.setString(3,"현미");
 		ps.setString(4,"국내산");
 		ps.setString(5,"G02");
-		ps.setString(6,"개");
+		ps.setString(6,"10kg");
 		ps.executeUpdate();plist.add(p);
 		
 		p= new ProductPrice("03G02002","찹쌀",13000,24000,720,37);
@@ -361,7 +388,7 @@ public class ProductGen {
 		ps.setString(3,"찹쌀");
 		ps.setString(4,"국내산");
 		ps.setString(5,"G02");
-		ps.setString(6,"개");
+		ps.setString(6,"10kg");
 		ps.executeUpdate();plist.add(p);
 		
 		p= new ProductPrice("03G02003","팥",6000,11000,720,38);
@@ -370,7 +397,7 @@ public class ProductGen {
 		ps.setString(3,"팥");
 		ps.setString(4,"국내산");
 		ps.setString(5,"G02");
-		ps.setString(6,"개");
+		ps.setString(6,"5kg");
 		ps.executeUpdate();plist.add(p);
 		
 		p= new ProductPrice("03G03001","땅콩",2300,4500,720,39);
@@ -379,7 +406,7 @@ public class ProductGen {
 		ps.setString(3,"땅콩");
 		ps.setString(4,"중국산");
 		ps.setString(5,"G03");
-		ps.setString(6,"개");
+		ps.setString(6,"팩");
 		ps.executeUpdate();plist.add(p);
 		
 		p= new ProductPrice("03G03002","호두",4900,9900,720,40);
@@ -388,7 +415,7 @@ public class ProductGen {
 		ps.setString(3,"호두");
 		ps.setString(4,"미국산");
 		ps.setString(5,"G03");
-		ps.setString(6,"개");
+		ps.setString(6,"팩");
 		ps.executeUpdate();plist.add(p);
 		
 		p= new ProductPrice("03G03003","아몬드",4500,8900,720,41);
@@ -397,7 +424,7 @@ public class ProductGen {
 		ps.setString(3,"아몬드");
 		ps.setString(4,"미국산");
 		ps.setString(5,"G03");
-		ps.setString(6,"개");
+		ps.setString(6,"팩");
 		ps.executeUpdate();plist.add(p);
 		
 		p= new ProductPrice("04S01001","고등어",2000,3300,15,42);
@@ -433,7 +460,7 @@ public class ProductGen {
 		ps.setString(3,"미역");
 		ps.setString(4,"국내산");
 		ps.setString(5,"S03");
-		ps.setString(6,"개");
+		ps.setString(6,"팩");
 		ps.executeUpdate();plist.add(p);
 		
 		p= new ProductPrice("04S04001","멸치",8000,14000,180,46);
@@ -445,6 +472,7 @@ public class ProductGen {
 		ps.setString(6,"팩");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("04S05001","오징어",2000,4000,15,47);
 		ps.setString(1,"04S05001");
 		ps.setString(2,"ajaxFish");
 		ps.setString(3,"오징어");
@@ -453,6 +481,7 @@ public class ProductGen {
 		ps.setString(6,"마리");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("04S05002","낙지",1900,3800,15,48);
 		ps.setString(1,"04S05002");
 		ps.setString(2,"ajaxFish");
 		ps.setString(3,"낙지");
@@ -461,6 +490,7 @@ public class ProductGen {
 		ps.setString(6,"마리");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("04S05003","문어",4500,9000,15,49);
 		ps.setString(1,"04S05003");
 		ps.setString(2,"ajaxFish");
 		ps.setString(3,"문어");
@@ -468,7 +498,8 @@ public class ProductGen {
 		ps.setString(5,"S05");
 		ps.setString(6,"마리");
 		ps.executeUpdate();plist.add(p);
-		
+	
+		p= new ProductPrice("04S06001","새우",700,1400,15,50);
 		ps.setString(1,"04S06001");
 		ps.setString(2,"ajaxFish");
 		ps.setString(3,"새우");
@@ -477,6 +508,7 @@ public class ProductGen {
 		ps.setString(6,"100g");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("04S06002","꽃게",1050,2100,15,51);
 		ps.setString(1,"04S06002");
 		ps.setString(2,"ajaxFish");
 		ps.setString(3,"꽃게");
@@ -486,6 +518,7 @@ public class ProductGen {
 		ps.executeUpdate();plist.add(p);
 		
 		
+		p= new ProductPrice("04S06003","랍스터",17000,31000,15,52);
 		ps.setString(1,"04S06003");
 		ps.setString(2,"ajaxFish");
 		ps.setString(3,"랍스터");
@@ -494,6 +527,7 @@ public class ProductGen {
 		ps.setString(6,"마리");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("05M01001","삼겹살",900,1800,15,53);
 		ps.setString(1,"05M01001");
 		ps.setString(2,"rainbowMeat");
 		ps.setString(3,"삼겹살");
@@ -502,6 +536,7 @@ public class ProductGen {
 		ps.setString(6,"100g");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("05M01002","한돈 앞다리",600,1200,15,54);
 		ps.setString(1,"05M01002");
 		ps.setString(2,"rainbowMeat");
 		ps.setString(3,"한돈 앞다리");
@@ -510,6 +545,7 @@ public class ProductGen {
 		ps.setString(6,"100g");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("05M01003","한돈 안심",800,1600,15,55);
 		ps.setString(1,"05M01003");
 		ps.setString(2,"rainbowMeat");
 		ps.setString(3,"한돈 안심");
@@ -518,6 +554,7 @@ public class ProductGen {
 		ps.setString(6,"100g");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("05M02001","한우 등심",4500,9500,15,56);
 		ps.setString(1,"05M02001");
 		ps.setString(2,"rainbowMeat");
 		ps.setString(3,"한우 등심");
@@ -526,6 +563,7 @@ public class ProductGen {
 		ps.setString(6,"100g");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("05M02002","한우 앞다리",2200,4400,15,57);
 		ps.setString(1,"05M02002");
 		ps.setString(2,"rainbowMeat");
 		ps.setString(3,"한우 앞다리");
@@ -534,6 +572,7 @@ public class ProductGen {
 		ps.setString(6,"100g");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("05M02003","한우 차돌박이",2700,5400,15,58);
 		ps.setString(1,"05M02003");
 		ps.setString(2,"rainbowMeat");
 		ps.setString(3,"한우 차돌박이");
@@ -542,47 +581,52 @@ public class ProductGen {
 		ps.setString(6,"100g");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("05M03001","생닭",2800,4800,15,59);
 		ps.setString(1,"05M03001");
 		ps.setString(2,"haerim");
 		ps.setString(3,"생닭");
 		ps.setString(4,"국내산");
 		ps.setString(5,"M03");
-		ps.setString(6,"개");
+		ps.setString(6,"팩");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("05M03002","닭 볶음용",3300,5800,15,60);
 		ps.setString(1,"05M03002");
 		ps.setString(2,"haerim");
 		ps.setString(3,"닭 볶음용");
 		ps.setString(4,"국내산");
 		ps.setString(5,"M03");
-		ps.setString(6,"개");
+		ps.setString(6,"팩");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("05M03003","훈제오리",4000,7700,180,61);
 		ps.setString(1,"05M03003");
 		ps.setString(2,"haerim");
 		ps.setString(3,"훈제오리");
 		ps.setString(4,"국내산");
 		ps.setString(5,"M03");
-		ps.setString(6,"개");
+		ps.setString(6,"팩");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("05M04001","달걀",2700,5400,30,62);
 		ps.setString(1,"05M04001");
 		ps.setString(2,"haerim");
 		ps.setString(3,"달걀");
 		ps.setString(4,"국내산");
 		ps.setString(5,"M04");
-		ps.setString(6,"판");
+		ps.setString(6,"팩");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("05M04002","메추리알",2000,3600,30,63);
 		ps.setString(1,"05M04002");
 		ps.setString(2,"haerim");
 		ps.setString(3,"메추리알");
 		ps.setString(4,"국내산");
 		ps.setString(5,"M04");
-		ps.setString(6,"판");
+		ps.setString(6,"팩");
 		ps.executeUpdate();plist.add(p);
 		
-		
+		p= new ProductPrice("05M05001","한돈 불고기",800,1400,15,64);
 		ps.setString(1,"05M05001");
 		ps.setString(2,"rainbowMeat");
 		ps.setString(3,"한돈 불고기");
@@ -591,6 +635,7 @@ public class ProductGen {
 		ps.setString(6,"100g");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("05M05002","한우 불고기",1600,3300,15,65);
 		ps.setString(1,"05M05002");
 		ps.setString(2,"rainbowMeat");
 		ps.setString(3,"한우 불고기");
@@ -599,7 +644,7 @@ public class ProductGen {
 		ps.setString(6,"100g");
 		ps.executeUpdate();plist.add(p);
 		
-		
+		p= new ProductPrice("06D01001","매달우유 1.8L",2400,4400,15,66);
 		ps.setString(1,"06D01001");
 		ps.setString(2,"maedalMilk");
 		ps.setString(3,"매달우유 1.8L");
@@ -608,6 +653,7 @@ public class ProductGen {
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("06D01002","매달우유 1L",1500,2700,15,66);
 		ps.setString(1,"06D01002");
 		ps.setString(2,"maedalMilk");
 		ps.setString(3,"매달우유 1L");
@@ -616,6 +662,7 @@ public class ProductGen {
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("06D02001","체다치즈",3000,6000,60,67);
 		ps.setString(1,"06D02001");
 		ps.setString(2,"maedalMilk");
 		ps.setString(3,"체다치즈");
@@ -624,6 +671,7 @@ public class ProductGen {
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("06D02002","피자치즈",4400,9900,60,68);
 		ps.setString(1,"06D02002");
 		ps.setString(2,"maedalMilk");
 		ps.setString(3,"피자치즈");
@@ -632,6 +680,7 @@ public class ProductGen {
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("06D03001","버터",3500,6300,90,69);
 		ps.setString(1,"06D03001");
 		ps.setString(2,"maedalMilk");
 		ps.setString(3,"버터");
@@ -640,22 +689,25 @@ public class ProductGen {
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("06D04001","떠먹는 요거트",2200,4300,30,70);
 		ps.setString(1,"06D04001");
 		ps.setString(2,"maedalMilk");
 		ps.setString(3,"떠먹는 요거트");
 		ps.setString(4,"국내산");
 		ps.setString(5,"D04");
-		ps.setString(6,"개");
+		ps.setString(6,"팩");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("06D04002","마시는 요거트",1600,3300,30,71);
 		ps.setString(1,"06D04002");
 		ps.setString(2,"maedalMilk");
 		ps.setString(3,"마시는 요거트");
 		ps.setString(4,"국내산");
 		ps.setString(5,"D04");
-		ps.setString(6,"개");
+		ps.setString(6,"팩");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("07C01001","명란젓",3400,7000,60,72);
 		ps.setString(1,"07C01001");
 		ps.setString(2,"sandeulchan");
 		ps.setString(3,"명란젓");
@@ -664,47 +716,52 @@ public class ProductGen {
 		ps.setString(6,"100g");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("07C02001","사골곰탕",2500,5000,7,73);
 		ps.setString(1,"07C02001");
 		ps.setString(2,"sandeulchan");
 		ps.setString(3,"사골곰탕");
 		ps.setString(4,"국내산");
 		ps.setString(5,"C02");
-		ps.setString(6,"개");
+		ps.setString(6,"팩");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("07C02002","김치찌개",3000,5000,7,74);
 		ps.setString(1,"07C02002");
 		ps.setString(2,"sandeulchan");
 		ps.setString(3,"김치찌개");
 		ps.setString(4,"국내산");
 		ps.setString(5,"C02");
-		ps.setString(6,"개");
+		ps.setString(6,"팩");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("07C02003","된장찌개",2900,5000,7,75);
 		ps.setString(1,"07C02003");
 		ps.setString(2,"sandeulchan");
 		ps.setString(3,"된장찌개");
 		ps.setString(4,"국내산");
 		ps.setString(5,"C02");
-		ps.setString(6,"개");
+		ps.setString(6,"팩");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("07C03001","베이컨",4400,7700,180,76);
 		ps.setString(1,"07C03001");
 		ps.setString(2,"sandeulchan");
 		ps.setString(3,"베이컨");
 		ps.setString(4,"국내산");
 		ps.setString(5,"C03");
-		ps.setString(6,"개");
+		ps.setString(6,"팩");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("07C03002","수제소시지",6400,12800,180,77);
 		ps.setString(1,"07C03002");
 		ps.setString(2,"sandeulchan");
 		ps.setString(3,"수제소시지");
 		ps.setString(4,"국내산");
 		ps.setString(5,"C03");
-		ps.setString(6,"개");
+		ps.setString(6,"팩");
 		ps.executeUpdate();plist.add(p);
 		
-		
+		p= new ProductPrice("07C04001","국산콩 두부",1700,3300,30,78);
 		ps.setString(1,"07C04001");
 		ps.setString(2,"sandeulchan");
 		ps.setString(3,"국산콩 두부");
@@ -713,6 +770,7 @@ public class ProductGen {
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("07C04002","국산콩 순두부",1150,2300,30,79);
 		ps.setString(1,"07C04002");
 		ps.setString(2,"sandeulchan");
 		ps.setString(3,"국산콩 순두부");
@@ -721,15 +779,16 @@ public class ProductGen {
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
 		
-		
+		p= new ProductPrice("07C04003","어묵바",1750,3300,30,80);
 		ps.setString(1,"07C04003");
 		ps.setString(2,"sandeulchan");
 		ps.setString(3,"어묵바");
 		ps.setString(4,"국내산");
 		ps.setString(5,"C04");
-		ps.setString(6,"개");
+		ps.setString(6,"팩");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("07C05001","참치캔",1300,2200,1080,81);
 		ps.setString(1,"07C05001");
 		ps.setString(2,"maeddugi");
 		ps.setString(3,"참치캔");
@@ -738,6 +797,7 @@ public class ProductGen {
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("08P01001","멸치액젓",3210,6660,1080,82);
 		ps.setString(1,"08P01001");
 		ps.setString(2,"maeddugi");
 		ps.setString(3,"멸치액젓");
@@ -746,6 +806,7 @@ public class ProductGen {
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("08P01002","까나리액젓",3450,6780,1080,83);
 		ps.setString(1,"08P01002");
 		ps.setString(2,"maeddugi");
 		ps.setString(3,"까나리액젓");
@@ -754,6 +815,7 @@ public class ProductGen {
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("08P02001","된장",4320,7890,360,84);
 		ps.setString(1,"08P02001");
 		ps.setString(2,"maeddugi");
 		ps.setString(3,"된장");
@@ -762,6 +824,7 @@ public class ProductGen {
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("08P02002","고추장",4000,7650,360,85);
 		ps.setString(1,"08P02002");
 		ps.setString(2,"maeddugi");
 		ps.setString(3,"고추장");
@@ -770,6 +833,7 @@ public class ProductGen {
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("08P03001","토마토케첩",1450,2760,360,86);
 		ps.setString(1,"08P03001");
 		ps.setString(2,"maeddugi");
 		ps.setString(3,"토마토케첩");
@@ -778,6 +842,7 @@ public class ProductGen {
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("08P03002","마요네즈",1760,3060,360,87);
 		ps.setString(1,"08P03002");
 		ps.setString(2,"maeddugi");
 		ps.setString(3,"마요네즈");
@@ -786,6 +851,7 @@ public class ProductGen {
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("09I01001","식용유",1900,3500,720,88);
 		ps.setString(1,"09I01001");
 		ps.setString(2,"maeddugi");
 		ps.setString(3,"식용유");
@@ -794,6 +860,7 @@ public class ProductGen {
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("09I01002","참기름",2900,5500,720,89);
 		ps.setString(1,"09I01002");
 		ps.setString(2,"maeddugi");
 		ps.setString(3,"참기름");
@@ -802,6 +869,7 @@ public class ProductGen {
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("09I01003","올리브유",2400,4500,720,90);
 		ps.setString(1,"09I01003");
 		ps.setString(2,"maeddugi");
 		ps.setString(3,"올리브유");
@@ -810,6 +878,7 @@ public class ProductGen {
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("09I02001","사과식초",1410,2500,720,91);
 		ps.setString(1,"09I02001");
 		ps.setString(2,"maeddugi");
 		ps.setString(3,"사과식초");
@@ -818,6 +887,7 @@ public class ProductGen {
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("09I02002","발사믹식초",3890,6500,720,92);
 		ps.setString(1,"09I02002");
 		ps.setString(2,"maeddugi");
 		ps.setString(3,"발사믹식초");
@@ -826,6 +896,7 @@ public class ProductGen {
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("09I03001","스파게티면",950,1980,720,93);
 		ps.setString(1,"09I03001");
 		ps.setString(2,"darkSnow");
 		ps.setString(3,"스파게티면");
@@ -834,6 +905,7 @@ public class ProductGen {
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("09I03002","소면",1350,2980,720,94);
 		ps.setString(1,"09I03002");
 		ps.setString(2,"darkSnow");
 		ps.setString(3,"소면");
@@ -842,7 +914,7 @@ public class ProductGen {
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
 		
-		
+		p= new ProductPrice("09I03003","밀가루",1660,3190,720,95);
 		ps.setString(1,"09I03003");
 		ps.setString(2,"darkSnow");
 		ps.setString(3,"밀가루");
@@ -851,7 +923,7 @@ public class ProductGen {
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
 		
-		
+		p= new ProductPrice("10H01001","천일염",5050,8080,720,96);
 		ps.setString(1,"10H01001");
 		ps.setString(2,"darkSnow");
 		ps.setString(3,"천일염");
@@ -860,6 +932,7 @@ public class ProductGen {
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("10H01002","구운소금",3030,5790,720,97);
 		ps.setString(1,"10H01002");
 		ps.setString(2,"darkSnow");
 		ps.setString(3,"구운소금");
@@ -869,6 +942,7 @@ public class ProductGen {
 		ps.executeUpdate();plist.add(p);
 		
 		
+		p= new ProductPrice("10H02001","바질",2230,4790,720,98);
 		ps.setString(1,"10H02001");
 		ps.setString(2,"bonovo");
 		ps.setString(3,"바질");
@@ -877,6 +951,7 @@ public class ProductGen {
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("10H02002","로즈마리",2240,4800,720,99);
 		ps.setString(1,"10H02002");
 		ps.setString(2,"bonovo");
 		ps.setString(3,"로즈마리");
@@ -885,6 +960,7 @@ public class ProductGen {
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("10H02003","후추",1550,3210,720,100);
 		ps.setString(1,"10H02003");
 		ps.setString(2,"bonovo");
 		ps.setString(3,"후추");
@@ -893,7 +969,16 @@ public class ProductGen {
 		ps.setString(6,"개");
 		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("10H02004","커민",3100,6220,720,101);
+		ps.setString(1,"10H02004");
+		ps.setString(2,"bonovo");
+		ps.setString(3,"커민");
+		ps.setString(4,"수입산");
+		ps.setString(5,"H02");
+		ps.setString(6,"개");
+		ps.executeUpdate();plist.add(p);
 		
+		p= new ProductPrice("10H03001","카레분말",2220,3770,720,102);
 		ps.setString(1,"10H03001");
 		ps.setString(2,"maeddugi");
 		ps.setString(3,"카레분말");

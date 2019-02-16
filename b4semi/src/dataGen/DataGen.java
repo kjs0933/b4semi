@@ -1,5 +1,6 @@
 package dataGen;
 
+import java.io.File;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -24,6 +25,7 @@ public class DataGen {
 
 		
 		int memberSeqStart = 1;
+		int dpListSeqStart = 1;
 
 	 
 		Connection cn = JDBCTemplate.getConnection();
@@ -36,25 +38,33 @@ public class DataGen {
 		System.out.println("배송지 생성중");
 		createAddressList(memberCount, memberSeqStart, cn);
 		System.out.println("배송지 생성 완료");
-		System.out.println("공급사 생성중");
-		createSupplier(cn);
-		System.out.println("공급사 생성 완료");
 		if(getProductCount(cn)>0)
 		{
-			System.out.println("상품마스터 초기화");
+			System.out.println("상품 판매 데이터 초기화중");
+			deleteDPOption(cn);
 			deleteProduct(cn);
+			JDBCTemplate.commit(cn);
+			System.out.println("상품 판매 데이터 초기화 완료");
+		}
+		else
+		{
+			System.out.println("공급사 생성중");
+			createSupplier(cn);
+			System.out.println("공급사 생성 완료");
 		}
 		System.out.println("상품마스터 생성중");
 		ArrayList<ProductPrice> plist = ProductGen.createProduct(cn);
 		System.out.println("상품마스터 생성 완료");
+		dpListSeqStart = getDPListSeq(cn);
+		System.out.println("판매상품리스트, 이미지DB 생성중");
+		createDPList(plist, dpListSeqStart, cn);
+		System.out.println("판매상품리스트, 이미지DB 생성 완료");
+		System.out.println("판매세부옵션 생성중");
+		createDPOption(plist, dpListSeqStart, cn);
+		System.out.println("판매세부옵션 생성완료");
 		
-/*		System.out.println("상품입고내역 생성중");
-		createInStock(plist, cn);
-		System.out.println("상품입고내역 생성 완료");*/
 		
 
-		
-		
 		JDBCTemplate.commit(cn);
 		JDBCTemplate.close(cn);
 
@@ -323,10 +333,14 @@ public class DataGen {
 	
 	public static void deleteProduct(Connection cn)
 	{
-		PreparedStatement ps = null;
+		PreparedStatement ps1 = null;
+		PreparedStatement ps2 = null;
 		try {
-			ps=cn.prepareStatement("DELETE FROM PRODUCT");
-			ps.executeUpdate();
+			ps1=cn.prepareStatement("DELETE FROM PRODUCT CASCADE");
+			ps1.executeUpdate();
+			ps2=cn.prepareStatement("DELETE FROM IMAGES CASCADE");
+			ps2.executeUpdate();
+
 		}
 		catch(SQLException e)
 		{
@@ -335,7 +349,33 @@ public class DataGen {
 		finally
 		{
 			try{
-				ps.close();
+				ps1.close();
+				ps2.close();
+
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public static void deleteDPOption(Connection cn)
+	{
+		PreparedStatement ps3 = null;
+		try {
+			ps3=cn.prepareStatement("DELETE FROM DPOPTION CASCADE");
+			ps3.executeUpdate();
+
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try{
+				ps3.close();
 			}
 			catch(SQLException e)
 			{
@@ -377,31 +417,18 @@ public class DataGen {
 		return result;
 	}
 	
-	
-	public static void createInStock(ArrayList<ProductPrice> plist, Connection cn)
+	public static int getDPListSeq(Connection cn)
 	{
-		
-		String sql = "INSERT INTO INSTOCK VALUES (INSTOCK_SEQ.NEXTVAL,?,?,?,?,?,?,0)";
 		PreparedStatement ps =null;
-		
-		int size = plist.size();
-		
+		ResultSet rs = null;
+		int result = 1;
 		try {
-
-			ps=cn.prepareStatement(sql);
-			
-/*			for(int i=0; i<size;i++)
+			ps=cn.prepareStatement("SELECT DISPLAY_LIST_SEQ.NEXTVAL FROM DUAL");
+			rs=ps.executeQuery();
+			if(rs.next())
 			{
-				int createCount = (int)(Math.random()*12);
-				for(int j=0;j<createCount;j++)
-				{
-					long time = System.currentTimeMillis()-(long)(Math.random()*howOld);
-					ps.setString(1, plist.get(i).getProductCode());
-					ps.setTimestamp(2, new Timestamp(time));
-				}
-
-			}*/
-
+				result = rs.getInt(1);
+			}
 		}
 		catch(SQLException e)
 		{
@@ -410,6 +437,7 @@ public class DataGen {
 		finally
 		{
 			try{
+				rs.close();
 				ps.close();
 			}
 			catch(SQLException e)
@@ -417,7 +445,145 @@ public class DataGen {
 				e.printStackTrace();
 			}
 		}
+		return result;
+	}
 	
+	public static void createDPList(ArrayList<ProductPrice> plist, int dpListSeqStart, Connection cn)
+	{
+		PreparedStatement ps1 =null;
+		PreparedStatement ps2 =null;
+		
+		String sql1 = "INSERT INTO DPLIST VALUES (DISPLAY_LIST_SEQ.NEXTVAL,?,?,'Y',?)";
+		String sql2 = "INSERT INTO IMAGES VALUES (?,?,'BL',?)";
+		try {
+		String[] prefixs = {"","신선한 ","맛있는 ","깨끗한 ","고급 ","실속있는 ","오리지널 ","친환경 ","부드러운 ","찰진 ","푸짐한 ", "향긋한 "};
+		String prefix = prefixs[(int)(Math.random()*prefixs.length)];
+		String title = prefix;
+		String html = "";
+		ProductPrice p;
+		
+		int listSize = plist.size();
+		
+		//판매글 추가
+		ps1=cn.prepareStatement(sql1);
+		//이미지 추가
+		ps2=cn.prepareStatement(sql2);
+		
+		
+			for(int i=0; i<listSize; i++)
+			{
+				p = plist.get(i);
+				
+				
+				title +=p.getProductName();
+				
+				
+				if("default".equals(p.getUrl()))
+				{
+					html +="<div class='DPListImages'><p>"+ prefix + p.getProductName() +
+					"</p><img src='...imgpath..."+p.getProductName()+".jpg'></div>";
+
+					//저장파일명
+					ps2.setString(1, p.getProductName()+".jpg");
+					//원본파일명
+					ps2.setString(2, p.getProductName()+".jpg");
+					//게시번호
+					ps2.setInt(3, dpListSeqStart+p.getDpNo());
+					ps2.executeUpdate();
+				}
+				else if(p.getUrl() != null)
+				{
+					html +="<div class='DPListImages'><p>"+ prefix + p.getProductName() +
+					"</p><img src='...imgpath..."+p.getUrl()+"'></div>";
+					
+					//저장파일명
+					ps2.setString(1, p.getUrl());
+					//원본파일명
+					ps2.setString(2, p.getUrl());
+					//게시번호
+					ps2.setInt(3, dpListSeqStart+p.getDpNo());
+					ps2.executeUpdate();
+				}
+
+				
+				if(i+1 == listSize || p.getDpNo() != plist.get(i+1).getDpNo())
+				{
+
+					//타이틀
+					ps1.setString(1, title);
+					//내용
+					ps1.setString(2, html);
+					//작성일
+					ps1.setTimestamp(3, new Timestamp(System.currentTimeMillis()-howOld));
+					ps1.executeUpdate();
+					
+					
+					prefix = prefixs[(int)(Math.random()*prefixs.length)];
+					title = prefix;
+					html ="";
+				}
+				else
+				{
+					title +=", ";
+				}
+				
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try{
+				ps1.close();
+				ps2.close();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public static void createDPOption(ArrayList<ProductPrice> plist, int dpListSeqStart, Connection cn)
+	{
+		PreparedStatement ps3 =null;
+		String sql3 = "INSERT INTO DPOPTION VALUES (?,?,null,?,'Y')";
+		
+		try {
+		ProductPrice p;
+		
+		int listSize = plist.size();
+		
+		//세부옵션 추가
+		ps3=cn.prepareStatement(sql3);
+		
+			for(int i=0; i<listSize; i++)
+			{
+				p = plist.get(i);
+				
+				ps3.setString(1, p.getProductCode());
+				ps3.setInt(2, dpListSeqStart+p.getDpNo());
+				ps3.setInt(3, (int)(p.getOutPrice()*(0.01*Math.random()+0.1))*10   );
+				ps3.executeUpdate();
+				
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try{
+				ps3.close();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 
 }

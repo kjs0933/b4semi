@@ -1,7 +1,7 @@
 package com.b4.model.vo;
 
 
-import oracle.sql.TIMESTAMP;
+import java.sql.Timestamp;;
 
 public class Review {
 
@@ -10,7 +10,7 @@ public class Review {
 	private String productCode;
 	private String review;
 	private String reviewContents;
-	private TIMESTAMP reviewDate;
-	private TIMESTAMP DeleteDate;
+	private Timestamp reviewDate;
+	private Timestamp DeleteDate;
 	private int reviewScore;
 }
