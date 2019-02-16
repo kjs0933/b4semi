@@ -9,6 +9,7 @@ public class ProductPrice {
 	int outPrice; //기본 출고가
 	int dayLife; // 유통기한 지속일 - 날짜 단위
 	int dpNo; // 디스플레이 넘버 - 동일한 숫자를 넣으면 세부옵션으로 선택하게 됨
+	String url; //이미지 경로 - null이면 이미지 저장 없음, "default" 이면 제품명.jpg
 	
 	public ProductPrice(String productCode, String productName, int inPrice, int outPrice, int dayLife, int dpNo) {
 		this.productCode = productCode;
@@ -17,7 +18,20 @@ public class ProductPrice {
 		this.outPrice = outPrice;
 		this.dayLife = dayLife;
 		this.dpNo = dpNo;
+		this.url = "default";
 	}
+	
+	public ProductPrice(String productCode, String productName, int inPrice, int outPrice, int dayLife, int dpNo,
+			String url) {
+		this.productCode = productCode;
+		this.productName = productName;
+		this.inPrice = inPrice;
+		this.outPrice = outPrice;
+		this.dayLife = dayLife;
+		this.dpNo = dpNo;
+		this.url = url;
+	}
+	
 	public String getProductCode() {
 		return productCode;
 	}
@@ -54,6 +68,13 @@ public class ProductPrice {
 	public void setDpNo(int dpNo) {
 		this.dpNo = dpNo;
 	}
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	
 	
 	
 	

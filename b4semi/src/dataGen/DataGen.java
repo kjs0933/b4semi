@@ -24,6 +24,7 @@ public class DataGen {
 
 		
 		int memberSeqStart = 1;
+		int dpListSeqStart = 1;
 
 	 
 		Connection cn = JDBCTemplate.getConnection();
@@ -47,14 +48,13 @@ public class DataGen {
 		System.out.println("상품마스터 생성중");
 		ArrayList<ProductPrice> plist = ProductGen.createProduct(cn);
 		System.out.println("상품마스터 생성 완료");
+		dpListSeqStart = getDPListSeq(cn);
+		System.out.println("판매상품리스트 생성중");
+		createDPList(plist, cn);
+		System.out.println("판매상품리스트 생성 완료");
 		
-/*		System.out.println("상품입고내역 생성중");
-		createInStock(plist, cn);
-		System.out.println("상품입고내역 생성 완료");*/
 		
 
-		
-		
 		JDBCTemplate.commit(cn);
 		JDBCTemplate.close(cn);
 
@@ -325,7 +325,7 @@ public class DataGen {
 	{
 		PreparedStatement ps = null;
 		try {
-			ps=cn.prepareStatement("DELETE FROM PRODUCT");
+			ps=cn.prepareStatement("DELETE FROM PRODUCT CASCADE");
 			ps.executeUpdate();
 		}
 		catch(SQLException e)
@@ -377,31 +377,90 @@ public class DataGen {
 		return result;
 	}
 	
-	
-	public static void createInStock(ArrayList<ProductPrice> plist, Connection cn)
+	public static int getDPListSeq(Connection cn)
 	{
-		
-		String sql = "INSERT INTO INSTOCK VALUES (INSTOCK_SEQ.NEXTVAL,?,?,?,?,?,?,0)";
+		PreparedStatement ps =null;
+		ResultSet rs = null;
+		int result = 1;
+		try {
+			ps=cn.prepareStatement("SELECT DISPLAY_LIST_SEQ.NEXTVAL FROM DUAL");
+			rs=ps.executeQuery();
+			if(rs.next())
+			{
+				result = rs.getInt(1);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try{
+				rs.close();
+				ps.close();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+	
+	public static void createDPList(ArrayList<ProductPrice> plist, Connection cn)
+	{
 		PreparedStatement ps =null;
 		
-		int size = plist.size();
-		
+		String sql = "INSERT INTO DPLIST VALUES (DISPLAY_LIST_SEQ.NEXTVAL,?,?,'Y',?)";
 		try {
-
-			ps=cn.prepareStatement(sql);
-			
-/*			for(int i=0; i<size;i++)
+		String[] prefixs = {"","신선한 ","맛있는 ","깨끗한 ","고급 ","실속있는 ","오리지널 ","친환경 ","부드러운 ","찰진 ","푸짐한 ", "향긋한 "};
+		String prefix = prefixs[(int)(Math.random()*prefixs.length)];
+		String title = prefix;
+		String html = "";
+		
+		int listSize = plist.size();
+		
+		ps=cn.prepareStatement(sql);
+		
+			for(int i=0; i<listSize; i++)
 			{
-				int createCount = (int)(Math.random()*12);
-				for(int j=0;j<createCount;j++)
+				title +=plist.get(i).getProductName();
+				if("default".equals(plist.get(i).getUrl()))
 				{
-					long time = System.currentTimeMillis()-(long)(Math.random()*howOld);
-					ps.setString(1, plist.get(i).getProductCode());
-					ps.setTimestamp(2, new Timestamp(time));
+					html +="<div class='DPListImages'><p>"+ prefix + plist.get(i).getProductName() +
+					"</p><img src='/upload/product/"+plist.get(i).getProductName()+".jpg'></div>";
+				}
+				else if(plist.get(i).getUrl() != null)
+				{
+					html +="<div class='DPListImages'><p>"+ prefix + plist.get(i).getProductName() +
+					"</p><img src='/upload/product/"+plist.get(i).getUrl()+"'></div>";
 				}
 
-			}*/
-
+				
+				if(i+1 == listSize || plist.get(i).getDpNo() != plist.get(i+1).getDpNo())
+				{
+					//타이틀
+					ps.setString(1, title);
+		
+					//내용
+					ps.setString(2, html);
+		
+					//작성일
+					ps.setTimestamp(3, new Timestamp(System.currentTimeMillis()-howOld));
+		
+					ps.executeUpdate();
+					
+					prefix = prefixs[(int)(Math.random()*prefixs.length)];
+					title = prefix;
+					html ="";
+				}
+				else
+				{
+					title +=", ";
+				}
+				
+			}
 		}
 		catch(SQLException e)
 		{
@@ -417,7 +476,8 @@ public class DataGen {
 				e.printStackTrace();
 			}
 		}
-	
+		
+		
 	}
 
 }
