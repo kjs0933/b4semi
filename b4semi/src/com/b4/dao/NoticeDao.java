@@ -50,7 +50,7 @@ public class NoticeDao {
 		return list;
 	}
 	
-	public int selectCount(Connection conn)//조회수
+	public int NoticeCount(Connection conn)//조회수
 	{
 		PreparedStatement pstmt=null;
 		int result=0;
@@ -66,6 +66,60 @@ public class NoticeDao {
 		}
 		catch(SQLException e)
 		{e.printStackTrace();}
+		finally {close(rs);close(pstmt);}
+		return result;
+	}
+	
+	public Notice NoticeOne(Connection conn, int no)
+	{
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		Notice n=null;
+		String sql=prop.getProperty("NoticeOne");
+		try
+		{
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			rs=pstmt.executeQuery();
+			if(rs.next())
+			{
+				n=new Notice();
+				n.setNoticeSeq(rs.getInt("noticeSeq"));
+				n.setMemberSeq(rs.getInt("MemberSeq"));
+				n.setNoticeTitle(rs.getString("noticetitle"));
+				n.setNoticeContents(rs.getString("noticeContents"));
+				n.setNoticeDate(rs.getTimestamp("noticeDate"));
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally {
+			close(rs);
+			close(pstmt);
+		}
+		return n;
+	}
+	
+	public int NoticeSeq(Connection conn)
+	{
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		int result=0;
+		String sql=prop.getProperty("NoticeSeq");
+		try {
+			pstmt=conn.prepareStatement(sql);
+			rs=pstmt.executeQuery();
+			if(rs.next())
+			{
+				result=rs.getInt(1);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
 		finally {close(rs);close(pstmt);}
 		return result;
 	}
@@ -91,7 +145,7 @@ public class NoticeDao {
 		return result;
 	}
 	
-	public int updateNotice(Connection conn, Notice n)
+	public int updateNotice(Connection conn, Notice n)//수정
 	{
 		PreparedStatement pstmt=null;
 		int result=0;
@@ -107,7 +161,7 @@ public class NoticeDao {
 		return result;
 	}
 	
-	public int deleteNotice(Connection conn, Notice n)
+	public int deleteNotice(Connection conn, Notice n)//삭제
 	{
 		PreparedStatement pstmt=null;
 		int result=0;

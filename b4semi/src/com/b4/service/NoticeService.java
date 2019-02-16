@@ -15,29 +15,29 @@ public class NoticeService {
 	
 	private NoticeDao dao = new NoticeDao();
 	
-	//public List<Notice> selectList(int cPage,int numPerPage)
+	public List<Notice> selectList(int cPage,int numPerPage)
 	{
 		Connection conn=getConnection();
-		//List<Notice> list = dao.selectList(conn,cPage,numPerPage);
+		List<Notice> list = dao.NoticeList(conn,cPage,numPerPage);
 		close(conn);
-		//return list;
+		return list;
 	}
 	
-	public int selectCount()
+	public int NoticeCount()
 	{
 		Connection conn=getConnection();
-		int result=dao.selectCount(conn);
+		int result=dao.NoticeCount(conn);
 		close(conn);
 		return result;
 	}
 	
-	/*public Notice selectOne(int no)
+	public Notice NoticeOne(int no)
 	{
 		Connection conn=getConnection();
-		Notice n=dao.selectOne(conn,no);
+		Notice n=dao.NoticeOne(conn,no);
 		close(conn);
 		return n;
-	}*/
+	}
 	
 	public int insertNotice(Notice n)//
 	{
@@ -51,7 +51,7 @@ public class NoticeService {
 		{
 			//커밋하기 전에 가져온 이미지를 db에 저장하는 메소드를 작성
 			commit(conn);
-			//result=dao.selectSeq(conn);
+			result=dao.NoticeSeq(conn);
 		}
 		else {rollback(conn);}
 		close(conn);
