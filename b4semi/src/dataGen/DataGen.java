@@ -1,5 +1,6 @@
 package dataGen;
 
+import java.io.File;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -37,21 +38,30 @@ public class DataGen {
 		System.out.println("배송지 생성중");
 		createAddressList(memberCount, memberSeqStart, cn);
 		System.out.println("배송지 생성 완료");
-		System.out.println("공급사 생성중");
-		createSupplier(cn);
-		System.out.println("공급사 생성 완료");
 		if(getProductCount(cn)>0)
 		{
-			System.out.println("상품마스터 초기화");
+			System.out.println("상품 판매 데이터 초기화중");
+			deleteDPOption(cn);
 			deleteProduct(cn);
+			JDBCTemplate.commit(cn);
+			System.out.println("상품 판매 데이터 초기화 완료");
+		}
+		else
+		{
+			System.out.println("공급사 생성중");
+			createSupplier(cn);
+			System.out.println("공급사 생성 완료");
 		}
 		System.out.println("상품마스터 생성중");
 		ArrayList<ProductPrice> plist = ProductGen.createProduct(cn);
 		System.out.println("상품마스터 생성 완료");
 		dpListSeqStart = getDPListSeq(cn);
-		System.out.println("판매상품리스트와 이미지DB 생성중");
+		System.out.println("판매상품리스트, 이미지DB 생성중");
 		createDPList(plist, dpListSeqStart, cn);
-		System.out.println("판매상품리스트와 이미지DB 생성 완료");
+		System.out.println("판매상품리스트, 이미지DB 생성 완료");
+		System.out.println("판매세부옵션 생성중");
+		createDPOption(plist, dpListSeqStart, cn);
+		System.out.println("판매세부옵션 생성완료");
 		
 		
 
@@ -323,10 +333,14 @@ public class DataGen {
 	
 	public static void deleteProduct(Connection cn)
 	{
-		PreparedStatement ps = null;
+		PreparedStatement ps1 = null;
+		PreparedStatement ps2 = null;
 		try {
-			ps=cn.prepareStatement("DELETE FROM PRODUCT CASCADE");
-			ps.executeUpdate();
+			ps1=cn.prepareStatement("DELETE FROM PRODUCT CASCADE");
+			ps1.executeUpdate();
+			ps2=cn.prepareStatement("DELETE FROM IMAGES CASCADE");
+			ps2.executeUpdate();
+
 		}
 		catch(SQLException e)
 		{
@@ -335,7 +349,33 @@ public class DataGen {
 		finally
 		{
 			try{
-				ps.close();
+				ps1.close();
+				ps2.close();
+
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public static void deleteDPOption(Connection cn)
+	{
+		PreparedStatement ps3 = null;
+		try {
+			ps3=cn.prepareStatement("DELETE FROM DPOPTION CASCADE");
+			ps3.executeUpdate();
+
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try{
+				ps3.close();
 			}
 			catch(SQLException e)
 			{
@@ -420,6 +460,7 @@ public class DataGen {
 		String prefix = prefixs[(int)(Math.random()*prefixs.length)];
 		String title = prefix;
 		String html = "";
+		ProductPrice p;
 		
 		int listSize = plist.size();
 		
@@ -429,39 +470,43 @@ public class DataGen {
 		ps2=cn.prepareStatement(sql2);
 		
 		
-		
 			for(int i=0; i<listSize; i++)
 			{
-				title +=plist.get(i).getProductName();
-				if("default".equals(plist.get(i).getUrl()))
+				p = plist.get(i);
+				
+				
+				title +=p.getProductName();
+				
+				
+				if("default".equals(p.getUrl()))
 				{
-					html +="<div class='DPListImages'><p>"+ prefix + plist.get(i).getProductName() +
-					"</p><img src='/upload/product/"+plist.get(i).getProductName()+".jpg'></div>";
+					html +="<div class='DPListImages'><p>"+ prefix + p.getProductName() +
+					"</p><img src='...imgpath..."+p.getProductName()+".jpg'></div>";
 
 					//저장파일명
-					ps2.setString(1, plist.get(i).getProductName()+".jpg");
+					ps2.setString(1, p.getProductName()+".jpg");
 					//원본파일명
-					ps2.setString(2, plist.get(i).getProductName()+".jpg");
+					ps2.setString(2, p.getProductName()+".jpg");
 					//게시번호
-					ps2.setInt(3, dpListSeqStart+plist.get(i).getDpNo());
+					ps2.setInt(3, dpListSeqStart+p.getDpNo());
 					ps2.executeUpdate();
 				}
-				else if(plist.get(i).getUrl() != null)
+				else if(p.getUrl() != null)
 				{
-					html +="<div class='DPListImages'><p>"+ prefix + plist.get(i).getProductName() +
-					"</p><img src='/upload/product/"+plist.get(i).getUrl()+"'></div>";
+					html +="<div class='DPListImages'><p>"+ prefix + p.getProductName() +
+					"</p><img src='...imgpath..."+p.getUrl()+"'></div>";
 					
 					//저장파일명
-					ps2.setString(1, plist.get(i).getUrl());
+					ps2.setString(1, p.getUrl());
 					//원본파일명
-					ps2.setString(2, plist.get(i).getUrl());
+					ps2.setString(2, p.getUrl());
 					//게시번호
-					ps2.setInt(3, dpListSeqStart+plist.get(i).getDpNo());
+					ps2.setInt(3, dpListSeqStart+p.getDpNo());
 					ps2.executeUpdate();
 				}
 
 				
-				if(i+1 == listSize || plist.get(i).getDpNo() != plist.get(i+1).getDpNo())
+				if(i+1 == listSize || p.getDpNo() != plist.get(i+1).getDpNo())
 				{
 
 					//타이틀
@@ -499,8 +544,46 @@ public class DataGen {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public static void createDPOption(ArrayList<ProductPrice> plist, int dpListSeqStart, Connection cn)
+	{
+		PreparedStatement ps3 =null;
+		String sql3 = "INSERT INTO DPOPTION VALUES (?,?,null,?,'Y')";
 		
+		try {
+		ProductPrice p;
 		
+		int listSize = plist.size();
+		
+		//세부옵션 추가
+		ps3=cn.prepareStatement(sql3);
+		
+			for(int i=0; i<listSize; i++)
+			{
+				p = plist.get(i);
+				
+				ps3.setString(1, p.getProductCode());
+				ps3.setInt(2, dpListSeqStart+p.getDpNo());
+				ps3.setInt(3, (int)(p.getOutPrice()*(0.01*Math.random()+0.1))*10   );
+				ps3.executeUpdate();
+				
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try{
+				ps3.close();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 
 }
