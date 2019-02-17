@@ -1,4 +1,4 @@
-package com.b4.controller.Notice;
+package com.b4.controller.notice;
 
 import java.io.IOException;
 import java.util.List;

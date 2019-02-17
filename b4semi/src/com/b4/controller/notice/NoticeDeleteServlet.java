@@ -1,4 +1,4 @@
-package com.b4.controller.Notice;
+package com.b4.controller.notice;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,7 +15,7 @@ import com.b4.service.NoticeService;
 /**
  * Servlet implementation class NoticeListServlet
  */
-@WebServlet("/NoticeListServlet")
+@WebServlet("/NoticeDeleteServlet")
 public class NoticeDeleteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
