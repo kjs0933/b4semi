@@ -18,20 +18,25 @@ import common.JDBCTemplate;
 //더미 데이터 자동 생성을 위한 클래스 - DB 데이터 삭제 후 이용해주세요!
 public class DataGen {
 	
-	private static final int memberCount = 500; //생성 회원수
-	private static final int noticeCount = 100; //공지사항 게시수
-	private static final int qnaCount = 2000; //일대일 문의 게시수
-	private static final long howOld = 31536000000L; //마켓 오픈시점과 현재의 밀리초 차이
-	private static final double priceInc = 0.2; //마켓 오픈시점부터 현시점까지의 물가상승률
+	private final int memberCount = 100; //생성 회원수
+	private final int noticeCount = 100; //공지사항 게시수
+	private final int qnaCount = 500; //일대일 문의 게시수
+	private final long orderInterval = 31536000000L/12; //회원당 평균 주문 간격
+	
+	private final long howOld = 31536000000L; //마켓 오픈시점과 현재의 밀리초 차이
+	private final double priceInc = 0.2; //마켓 오픈시점부터 현시점까지의 물가상승률
 	
 	public static void main(String[] args) {
-
+		new DataGen();
+	}
+	
+	private DataGen () {
 		int memberSeqStart = 1;
 		int dpListSeqStart = 1;
 	 
 		Connection cn = JDBCTemplate.getConnection();
 		
-		memberSeqStart = getMemberSeq(cn)+1;
+		memberSeqStart = getMemberSeq(cn);
 		
 		//기존 데이터가 존재할 경우 초기화 로직
 		if(getProductCount(cn)>0)
@@ -69,19 +74,19 @@ public class DataGen {
 		System.out.println("공지사항 생성중");
 		createNotice(plist, memberSeqStart, cn);
 		System.out.println("공지사항 생성 완료");
-		JDBCTemplate.commit(cn);
-		JDBCTemplate.close(cn);
-		cn = JDBCTemplate.getConnection();
 		System.out.println("일대일문의, 답변 생성중");
 		createQNA(plist, memberSeqStart, cn);
 		System.out.println("일대일문의, 답변 생성완료");
-		
-		
+		System.out.println("입고, 주문결제내역, 주문상품내역, 취소환불, 상품리뷰, 마일리지변경log, 회원변경log 생성중일까??");
+		createOrder(plist, dpListSeqStart, memberSeqStart, cn);
+		System.out.println("입고, 주문결제내역, 주문상품내역, 취소환불, 상품리뷰, 마일리지변경log, 회원변경log 생성했을까??");
+		System.out.println("쿠폰마스터, 발행된 쿠폰 생성 아직 불가");
 		
 		JDBCTemplate.commit(cn);
 		JDBCTemplate.close(cn);
-
 	}
+	
+
 	
 	public static int[] chooseIndex(int indexSize, int chooseCount)
 	{
@@ -109,7 +114,7 @@ public class DataGen {
 	
 
 	
-	public static int getMemberSeq(Connection cn)
+	public int getMemberSeq(Connection cn)
 	{
 		PreparedStatement ps =null;
 		ResultSet rs = null;
@@ -137,11 +142,11 @@ public class DataGen {
 				e.printStackTrace();
 			}
 		}
-		return result;
+		return result+1;
 	}
 	
 	
-	public static int getQnaSeq(Connection cn)
+	public int getQnaSeq(Connection cn)
 	{
 		PreparedStatement ps =null;
 		ResultSet rs = null;
@@ -172,8 +177,39 @@ public class DataGen {
 		return result+1;
 	}
 	
+	public int getOrderSeq(Connection cn)
+	{
+		PreparedStatement ps =null;
+		ResultSet rs = null;
+		int result = 1;
+		try {
+			ps=cn.prepareStatement("SELECT ORDER_SEQ.NEXTVAL FROM DUAL");
+			rs=ps.executeQuery();
+			if(rs.next())
+			{
+				result = rs.getInt(1);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try{
+				rs.close();
+				ps.close();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		return result+1;
+	}
 	
-	public static void createMember(int memberSeqStart, Connection cn)
+	
+	public void createMember(int memberSeqStart, Connection cn)
 	{
 		
 		String[] firstNames = {"k강","k권","k김","n나","m문","p박","s손","s신","w왕","y유","y윤","l이","i임","j정","h한"};
@@ -252,7 +288,7 @@ public class DataGen {
 		}
 	}
 	
-	public static void createAddressList(int memberSeqStart, Connection cn)
+	public void createAddressList(int memberSeqStart, Connection cn)
 	{
 		String[] address = AddressData.getAddress();
 		int addressSize = address.length;
@@ -265,7 +301,7 @@ public class DataGen {
 		
 			for(int i=memberSeqStart; i<memberSeqStart+memberCount;i++)
 			{
-				int addressCount = (int)(1+Math.random()*Math.random()*4);
+				int addressCount = 3;
 				
 				for(int j=1; j<=addressCount; j++)
 				{
@@ -304,7 +340,7 @@ public class DataGen {
 		
 	}
 	
-	public static void createNotice(ArrayList<ProductPrice> plist, int memberSeqStart, Connection cn)
+	public void createNotice(ArrayList<ProductPrice> plist, int memberSeqStart, Connection cn)
 	{
 		
 		String sql = "INSERT INTO NOTICE VALUES (NOTICE_SEQ.NEXTVAL,?,?,?,?,null,0)";
@@ -375,7 +411,7 @@ public class DataGen {
 		
 	}
 	
-	public static void createQNA(ArrayList<ProductPrice> plist, int memberSeqStart, Connection cn)
+	public void createQNA(ArrayList<ProductPrice> plist, int memberSeqStart, Connection cn)
 	{
 		long time;
 		int qnaWriter;
@@ -528,7 +564,7 @@ public class DataGen {
 
 	}
 
-	public static void createSupplier(Connection cn) {
+	public void createSupplier(Connection cn) {
 		String[] address = AddressData.getAddress();
 		int addressSize = address.length;
 		
@@ -627,53 +663,60 @@ public class DataGen {
 		
 	}
 	
-	public static void delete(Connection cn)
+	public void delete(Connection cn)
 	{
 		PreparedStatement ps = null;
-		try {
-			ps=cn.prepareStatement("DELETE FROM CART CASCADE");
-			ps.executeUpdate();
-
-		}
-		catch(SQLException e)
-		{
-			e.printStackTrace();
-		}
-		finally
-		{
-			try{
-				ps.close();
-			}
-			catch(SQLException e)
-			{
-				e.printStackTrace();
-			}
-		}
-		
-		ps = null;
-		try {
-			ps=cn.prepareStatement("DELETE FROM DPOPTION CASCADE");
-			ps.executeUpdate();
-
-		}
-		catch(SQLException e)
-		{
-			e.printStackTrace();
-		}
-		finally
-		{
-			try{
-				ps.close();
-			}
-			catch(SQLException e)
-			{
-				e.printStackTrace();
-			}
-		}
-		
 		PreparedStatement ps1 = null;
 		PreparedStatement ps2 = null;
 		PreparedStatement ps3 = null;
+		
+		try {
+			ps1=cn.prepareStatement("DELETE FROM CART CASCADE");
+			ps1.executeUpdate();
+			ps2=cn.prepareStatement("DELETE FROM ORDERPDETAIL CASCADE");
+			ps2.executeUpdate();
+			
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try{
+				ps1.close();
+				ps2.close();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
+	
+		try {
+			ps1=cn.prepareStatement("DELETE FROM DPOPTION CASCADE");
+			ps1.executeUpdate();
+			ps2=cn.prepareStatement("DELETE FROM ORDERLIST CASCADE");
+			ps2.executeUpdate();
+
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try{
+				ps1.close();
+				ps2.close();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
 		try {
 			ps1=cn.prepareStatement("DELETE FROM PRODUCT CASCADE");
 			ps1.executeUpdate();
@@ -701,7 +744,6 @@ public class DataGen {
 			}
 		}
 		
-		ps = null;
 		try {
 			ps=cn.prepareStatement("DELETE FROM SUPPLIER CASCADE");
 			ps.executeUpdate();
@@ -725,7 +767,7 @@ public class DataGen {
 
 	}
 	
-	public static int getProductCount(Connection cn)
+	public int getProductCount(Connection cn)
 	{
 		String sql = "SELECT COUNT(*) FROM PRODUCT";
 		PreparedStatement ps = null;
@@ -758,7 +800,7 @@ public class DataGen {
 		return result;
 	}
 	
-	public static int getDPListSeq(Connection cn)
+	public int getDPListSeq(Connection cn)
 	{
 		PreparedStatement ps =null;
 		ResultSet rs = null;
@@ -789,7 +831,7 @@ public class DataGen {
 		return result;
 	}
 	
-	public static void createDPList(ArrayList<ProductPrice> plist, int dpListSeqStart, Connection cn)
+	public void createDPList(ArrayList<ProductPrice> plist, int dpListSeqStart, Connection cn)
 	{
 		PreparedStatement ps1 =null;
 		PreparedStatement ps2 =null;
@@ -887,7 +929,7 @@ public class DataGen {
 		}
 	}
 	
-	public static void createDPOption(ArrayList<ProductPrice> plist, int dpListSeqStart, Connection cn)
+	public void createDPOption(ArrayList<ProductPrice> plist, int dpListSeqStart, Connection cn)
 	{
 		PreparedStatement ps3 =null;
 		String sql3 = "INSERT INTO DPOPTION VALUES (?,?,null,?,'Y')";
@@ -927,7 +969,7 @@ public class DataGen {
 		}
 	}
 	
-	public static void createBasket(ArrayList<ProductPrice> plist, int dpListSeqStart, int memberSeqStart, Connection cn)
+	public void createBasket(ArrayList<ProductPrice> plist, int dpListSeqStart, int memberSeqStart, Connection cn)
 	{
 		PreparedStatement ps = null;
 		String sql = "INSERT INTO CART VALUES (?,?,?,?)";
@@ -972,5 +1014,197 @@ public class DataGen {
 			}
 		}
 	}
+	
+	public MemberAddress getMemberAddress(int memberNo, Connection cn)
+	{
+		PreparedStatement ps =null;
+		ResultSet rs = null;
+		MemberAddress result = null;
+		try {
+			ps=cn.prepareStatement("SELECT * FROM MEMBER JOIN ADDRESSLIST USING(MEMBERSEQ) WHERE ADDRESSTAG = '주소1' AND MEMBERSEQ = ?");
+			ps.setInt(1, memberNo);
+			rs=ps.executeQuery();
+			if(rs.next())
+			{
+				result = new MemberAddress();
+				result.setMemberSeq(rs.getInt("MEMBERSEQ"));
+				result.setMemberId(rs.getString("MEMBERID"));
+				result.setMemberName(rs.getString("MEMBERNAME"));
+				result.setMemberPhone(rs.getString("MEMBERPHONE"));
+				result.setMemberEnrollDate(rs.getTimestamp("MEMBERENROLLDATE"));
+				result.setMemberMileage(rs.getInt("MEMBERMILEAGE"));
+				result.setAddress(rs.getString("ADDRESS"));
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try{
+				rs.close();
+				ps.close();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+	
+	public void createOrder(ArrayList<ProductPrice> plist,int dpListSeqStart,int memberSeqStart,Connection cn)
+	{
+		Order order;
+		MemberAddress member;
+		int orderSeq = getOrderSeq(cn);
+		int orderCount;
+		int productKind;
+		int[] productIndex;
+		double maxKind = Math.sqrt(plist.size());
+		long currtime;
 
+		ArrayList<OrderProduct> orderList;
+		OrderProduct orderProduct;
+		
+		
+		//회원 반복
+		for(int i=memberSeqStart; i < memberSeqStart + memberCount ; i++)
+		{
+			member = getMemberAddress(i, cn);
+			currtime=System.currentTimeMillis();
+			orderCount=2+(int)(2*Math.random()*(currtime-member.getMemberEnrollDate().getTime())/orderInterval);
+			
+			//주문 반복
+			for(int j=0; j<orderCount ; j++)
+			{
+				//DB에 입력하기 전 주문정보 세팅
+				order = new Order();
+				order.setMemberSeq(member.getMemberSeq());
+				order.setOrderTime((long)(Math.random()*(currtime-member.getMemberEnrollDate().getTime())) + member.getMemberEnrollDate().getTime());
+				if(j<2)
+				{
+					productKind = 2;
+				}
+				else
+				{
+					productKind = 1+(int)(maxKind*Math.random()*Math.random()); 
+				}
+				productIndex = chooseIndex(plist.size(), productKind);
+				orderList = new ArrayList<OrderProduct> ();
+				//상품 반복
+				for(int z=0; z<productKind; z++)
+				{
+					orderProduct = new OrderProduct();
+					orderProduct.setpp(plist.get(productIndex[z]));
+					orderProduct.setProductCount((int)(Math.random()*Math.random()*Math.random()*Math.random()*50000/orderProduct.getpp().getOutPrice()+Math.pow(Math.random(),4)*4+1));
+					if(j==0)
+					{
+						orderProduct.setCancelCount(orderProduct.getProductCount());
+						orderProduct.setReview(false);
+						order.addTotalPrice(orderProduct.getProductCount()*orderProduct.getpp().getOutPrice());
+						order.addCancelPrice(orderProduct.getProductCount()*orderProduct.getpp().getOutPrice());
+					}
+					else if(j>=2 && Math.random()>0.95)
+					{
+						orderProduct.setCancelCount(orderProduct.getProductCount());
+						orderProduct.setReview(false);
+						order.addTotalPrice(orderProduct.getProductCount()*orderProduct.getpp().getOutPrice());
+						order.addCancelPrice(orderProduct.getProductCount()*orderProduct.getpp().getOutPrice());
+					}
+					else
+					{
+						orderProduct.setCancelCount(0);
+						if(Math.random()>0.5)
+						{
+							orderProduct.setReview(true);
+						}
+						else
+						{
+							orderProduct.setReview(false);
+						}
+						order.addTotalPrice(orderProduct.getProductCount()*orderProduct.getpp().getOutPrice());
+					}
+					orderList.add(orderProduct);
+					
+					
+				}
+				
+				
+				//DB 주문 입력 로직
+				PreparedStatement ps1 = null;
+				String sql1 = "INSERT INTO ORDERLIST VALUES (ORDER_SEQ.NEXTVAL,null,?,'OS05',0,?,?,?,?,?,?,?,?)";
+				
+				try {
+				
+					ps1=cn.prepareStatement(sql1);
+					ps1.setInt(1, i);
+					ps1.setString(2, member.getMemberName());
+					ps1.setString(3, member.getAddress());
+					ps1.setString(4, member.getMemberPhone());
+					ps1.setString(5, Math.random()>0.5?"빠른 배송 부탁드립니다":((int)(1+Math.random()*12)+"시쯤에 배송해주세요"));
+					ps1.setString(6, String.format("%12d",(long)(Math.random()*1000000000000L)));
+					ps1.setInt(7, order.getTotalPrice());
+					ps1.setInt(8, order.getCancelPrice());
+					ps1.setTimestamp(9, new Timestamp(order.getOrderTime()));
+					ps1.executeUpdate();
+				}
+				catch(SQLException e)
+				{
+					e.printStackTrace();
+				}
+				finally
+				{
+					try{
+						ps1.close();
+					}
+					catch(SQLException e)
+					{
+						e.printStackTrace();
+					}
+				}
+				
+				//DB 주문상세, 입고, 주문취소, 리뷰, 마일리지변경로그 입력 로직
+				
+				sql1 = "INSERT INTO ORDERPDETAIL VALUES (?,?,?,?)";
+				
+				try {
+					
+					ps1=cn.prepareStatement(sql1);
+					
+					for(int z=0; z<productKind ;z++)
+					{
+						ps1.setInt(1, orderSeq);
+						ps1.setString(2, orderList.get(z).getpp().getProductCode());
+						ps1.setInt(3, dpListSeqStart + orderList.get(z).getpp().getDpNo());
+						ps1.setInt(4, orderList.get(z).getProductCount());
+						ps1.executeUpdate();
+					}
+
+				}
+				catch(SQLException e)
+				{
+					e.printStackTrace();
+				}
+				finally
+				{
+					try{
+						ps1.close();
+					}
+					catch(SQLException e)
+					{
+						e.printStackTrace();
+					}
+				}
+				
+				orderSeq++;
+				
+			}
+			
+			//DB 회원정보 마일리지값 설정 로직
+
+		}
+	}
+	
 }

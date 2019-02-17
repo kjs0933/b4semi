@@ -15,13 +15,13 @@ public class Member {
 	private Timestamp memberEnrollDate;
 	private Timestamp memberQuitDate;
 	private int memberMileage;
+	private String memberValidation;
 	
 	public Member() {}
 
 	public Member(int memberSeq, String memberId, String memberGradeName, String memberPw, String memberName,
-			String memberEmail, String memberPhone, String memberComment, Timestamp memberEnrollDate, Timestamp memberQuitDate,
-			int memberMileage) {
-		super();
+			String memberEmail, String memberPhone, String memberComment, Timestamp memberEnrollDate,
+			Timestamp memberQuitDate, int memberMileage, String memberValidation) {
 		this.memberSeq = memberSeq;
 		this.memberId = memberId;
 		this.memberGradeName = memberGradeName;
@@ -33,6 +33,7 @@ public class Member {
 		this.memberEnrollDate = memberEnrollDate;
 		this.memberQuitDate = memberQuitDate;
 		this.memberMileage = memberMileage;
+		this.memberValidation = memberValidation;
 	}
 
 	public int getMemberSeq() {
@@ -123,16 +124,26 @@ public class Member {
 		this.memberMileage = memberMileage;
 	}
 
+	public String getMemberValidation() {
+		return memberValidation;
+	}
+
+	public void setMemberValidation(String memberValidation) {
+		this.memberValidation = memberValidation;
+	}
+
 	@Override
 	public String toString() {
 		return "Member [memberSeq=" + memberSeq + ", memberId=" + memberId + ", memberGradeName=" + memberGradeName
 				+ ", memberPw=" + memberPw + ", memberName=" + memberName + ", memberEmail=" + memberEmail
 				+ ", memberPhone=" + memberPhone + ", memberComment=" + memberComment + ", memberEnrollDate="
-				+ memberEnrollDate + ", memberQuitDate=" + memberQuitDate + ", memberMileage=" + memberMileage + "]";
+				+ memberEnrollDate + ", memberQuitDate=" + memberQuitDate + ", memberMileage=" + memberMileage
+				+ ", memberValidation=" + memberValidation + "]";
 	}
 	
 	
 	
-	}
+	
+}
 
 
