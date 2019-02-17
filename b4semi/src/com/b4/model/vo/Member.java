@@ -1,6 +1,6 @@
 package com.b4.model.vo;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class Member {
 	
@@ -12,14 +12,14 @@ public class Member {
 	private String memberEmail;
 	private String memberPhone;
 	private String memberComment;
-	private Date memberEnrollDate;
-	private Date memberQuitDate;
+	private Timestamp memberEnrollDate;
+	private Timestamp memberQuitDate;
 	private int memberMileage;
 	
 	public Member() {}
 
 	public Member(int memberSeq, String memberId, String memberGradeName, String memberPw, String memberName,
-			String memberEmail, String memberPhone, String memberComment, Date memberEnrollDate, Date memberQuitDate,
+			String memberEmail, String memberPhone, String memberComment, Timestamp memberEnrollDate, Timestamp memberQuitDate,
 			int memberMileage) {
 		super();
 		this.memberSeq = memberSeq;
@@ -99,19 +99,19 @@ public class Member {
 		this.memberComment = memberComment;
 	}
 
-	public Date getMemberEnrollDate() {
+	public Timestamp getMemberEnrollDate() {
 		return memberEnrollDate;
 	}
 
-	public void setMemberEnrollDate(Date memberEnrollDate) {
+	public void setMemberEnrollDate(Timestamp memberEnrollDate) {
 		this.memberEnrollDate = memberEnrollDate;
 	}
 
-	public Date getMemberQuitDate() {
+	public Timestamp getMemberQuitDate() {
 		return memberQuitDate;
 	}
 
-	public void setMemberQuitDate(Date memberQuitDate) {
+	public void setMemberQuitDate(Timestamp memberQuitDate) {
 		this.memberQuitDate = memberQuitDate;
 	}
 
