@@ -20,7 +20,7 @@ public class DataGen {
 	
 	private final int memberCount = 250; //생성 회원수
 	private final int noticeCount = 100; //공지사항 게시수
-	private final int qnaCount = 1000; //일대일 문의 게시수
+	private final int qnaCount = 250; //상품 무관 일대일 문의 게시수
 	private final long orderInterval = 31536000000L/12; //회원당 평균 주문 간격
 	private final long howOld = 31536000000L; //마켓 오픈시점과 현재의 밀리초 차이
 	
@@ -47,12 +47,9 @@ public class DataGen {
 			return;
 		}
 		
-		System.out.println("회원 생성중");
+		System.out.println("회원, 배송지 생성중");
 		createMember(memberSeqStart, cn); //매개변수 : 생성 인원수, 시퀀스 시작 번호, 커넥션
-		System.out.println("회원 생성 완료");
-		System.out.println("배송지 생성중");
-		createAddressList(memberSeqStart, cn);
-		System.out.println("배송지 생성 완료");
+		System.out.println("회원, 배송지 생성 완료");
 		System.out.println("공급사 생성중");
 		createSupplier(cn);
 		System.out.println("공급사 생성 완료");
@@ -214,6 +211,7 @@ public class DataGen {
 		String[] lastNames = {"bs병승","yw영우","wj우진","js지섭","sh성희","ig일교","jh장현","jm재민","mr미리","jw진우","sh성화",
 				"hj혜진","ys윤석","ma민아","dh동현","sg순규","cw찬웅","ja지안","ss성식","jb정복","dw도원","sl솔","jh준혁"};
 		PreparedStatement ps =null;
+		PreparedStatement ps2 =null;
 		try {
 			
 
@@ -227,9 +225,34 @@ public class DataGen {
 			ps.setString(5, "01012345678");
 			ps.setTimestamp(6, new Timestamp(System.currentTimeMillis()-howOld));
 			ps.executeUpdate();
-		
-			for(int i=memberSeqStart+1; i<memberSeqStart+memberCount;i++)
+			
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try{
+				ps.close();
+			}
+			catch(SQLException e)
 			{
+				e.printStackTrace();
+			}
+		}
+		
+		
+		String[] address = AddressData.getAddress();
+		int addressSize = address.length;
+		
+
+		
+
+		for(int i=memberSeqStart+1; i<memberSeqStart+memberCount;i++)
+		{
+
+			try {
 				String str1 = firstNames[(int)(Math.random()*firstNames.length)];
 				String str2 = lastNames[(int)(Math.random()*lastNames.length)];
 				String str3 = String.valueOf((int)(Math.random()*10))+String.valueOf(i);
@@ -237,105 +260,105 @@ public class DataGen {
 				{
 					str2=str2.substring(1, 2) + str2.substring(0, 1)+  str2.substring(3) + str2.substring(2,3);
 				}
+				ps=cn.prepareStatement("INSERT INTO MEMBER VALUES (MEMBER_SEQ.NEXTVAL,?,'NEW',?,?,?,?,null,?,null,0,'N')");
 				//id설정
 				ps.setString(1,str1.substring(0,1)+str2.substring(0,2)+str3);
-		
+
 				//비밀번호 설정 - 아이디 뒤에 붙은 숫자를 비밀번호로 설정
 				MessageDigest md = null;
-					try
-					{
-						md = MessageDigest.getInstance("SHA-512");
-					}
-					catch(NoSuchAlgorithmException e)
-					{
-						e.printStackTrace();
-					}
+				try
+				{
+					md = MessageDigest.getInstance("SHA-512");
+				}
+				catch(NoSuchAlgorithmException e)
+				{
+					e.printStackTrace();
+				}
 				byte[] bytes = str3.getBytes(Charset.forName("UTF-8"));
 				md.update(bytes);
 				ps.setString(2, Base64.getEncoder().encodeToString(md.digest()));
-				
+
 				//이름설정
 				ps.setString(3,str1.substring(1)+str2.substring(2));
-				
+
 				//이메일설정
 				ps.setString(4, str1.substring(0,1)+str2.substring(0,2)+str3+(Math.random()<0.7?"@naver.com":(Math.random()<0.7?"@google.com":"@daum.net")));
-				
+
 				//폰번호설정
 				ps.setString(5, "010"+String.format("%08d",(int)(Math.random()*100000000)));
-				
+
 				//가입일설정
 				ps.setTimestamp(6, new Timestamp(System.currentTimeMillis()-(long)(Math.random()*howOld)));
-				
+
 				ps.executeUpdate();
-			}
-		
-		}
-		catch(SQLException e)
-		{
-			e.printStackTrace();
-		}
-		finally
-		{
-			try{
-				ps.close();
+
 			}
 			catch(SQLException e)
 			{
 				e.printStackTrace();
 			}
-		}
-	}
-	
-	public void createAddressList(int memberSeqStart, Connection cn)
-	{
-		String[] address = AddressData.getAddress();
-		int addressSize = address.length;
-		
-		String sql = "INSERT INTO ADDRESSLIST VALUES (ADDRESS_SEQ.NEXTVAL,?,?,?,?)";
-		PreparedStatement ps =null;
-		try {
-			
-		ps=cn.prepareStatement(sql);
-		
-			for(int i=memberSeqStart; i<memberSeqStart+memberCount;i++)
+			finally
 			{
+				try{
+					ps.close();
+				}
+				catch(SQLException e)
+				{
+					e.printStackTrace();
+				}
+			}
+		
+
+
+			try {
+
+				ps2=cn.prepareStatement("INSERT INTO ADDRESSLIST VALUES (ADDRESS_SEQ.NEXTVAL,?,?,?,?,?)");
 				int addressCount = 3;
-				
+
 				for(int j=1; j<=addressCount; j++)
 				{
-					//회원 번호 참조값
-					ps.setInt(1,i);
-					
-					//태그명
-					ps.setString(2, "주소"+j);
-					
-					//주소설정
-					ps.setString(3, address[(int)(Math.random()*addressSize)]);
-					
-					//폰번호설정
-					ps.setString(4, "010"+String.format("%08d",(int)(Math.random()*100000000)));
-					
-					ps.executeUpdate();
-					
+					String str1 = firstNames[(int)(Math.random()*firstNames.length)];
+					String str2 = lastNames[(int)(Math.random()*lastNames.length)];
+					String str3 = String.valueOf((int)(Math.random()*10))+String.valueOf(i);
+					if(Math.random()>0.5 && str2.length()>3)
+					{
+						str2=str2.substring(1, 2) + str2.substring(0, 1)+  str2.substring(3) + str2.substring(2,3);
+					}
+						//회원 번호 참조값
+						ps2.setInt(1,i);
+
+						//태그명
+						ps2.setString(2, "주소"+j);
+
+						//주소설정
+						ps2.setString(3, address[(int)(Math.random()*addressSize)]);
+
+						//폰번호설정
+						ps2.setString(4, "010"+String.format("%08d",(int)(Math.random()*100000000)));
+
+						//수령자이름
+						ps2.setString(5, str1.substring(1)+str2.substring(2));
+						ps2.executeUpdate();
+
+				}
+
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+			finally
+			{
+				try{
+					ps2.close();
+				}
+				catch(SQLException e)
+				{
+					e.printStackTrace();
 				}
 			}
 		
 		}
-		catch(SQLException e)
-		{
-			e.printStackTrace();
-		}
-		finally
-		{
-			try{
-				ps.close();
-			}
-			catch(SQLException e)
-			{
-				e.printStackTrace();
-			}
-		}
-		
 	}
 	
 	public void createNotice(ArrayList<ProductPrice> plist, int memberSeqStart, Connection cn)
@@ -416,7 +439,7 @@ public class DataGen {
 		int replyWriter;
 		int qnaSeqStart = getQnaSeq(cn);
 		
-		String sql1 = "INSERT INTO QUERYBOARD VALUES (QUERY_SEQ.NEXTVAL,?,?,?,?,null)";
+		String sql1 = "INSERT INTO QUERYBOARD VALUES (QUERY_SEQ.NEXTVAL,?,?,?,?,null,null)";
 		PreparedStatement ps1 =null;
 
 
@@ -438,27 +461,27 @@ public class DataGen {
 				{
 					String date = new SimpleDateFormat("d일 H시").format(new Date(time+(long)(Math.random()*(howOld/qnaCount))));
 					//게시글 제목
-					ps1.setString(2, date + "에 배송 가능할까요?");
+					ps1.setString(2, date + "에 방문 수령 가능한가요?");
 					//게시글 내용
-					ps1.setString(3, "<img class='QNAImages' src='...imgpath...no.jpg'><br>꼭 부탁합니다");
+					ps1.setString(3, "<img class='QNAImages' src='...imgpath...no.jpg'><br>알려주세요");
 				}
 				else
 				{
 					if(Math.random()>0.5)
 					{
 						//게시글 제목
-						ps1.setString(2, plist.get((int)(plist.size()*Math.random())).getProductName() + " 상품에 대해 문의 드립니다");
+						ps1.setString(2, plist.get((int)(plist.size()*Math.random())).getProductName() + " 대량 구매하려고 하는데 재고가 어느정도 있나요?");
 						//게시글 내용
-						ps1.setString(3, "<img class='NoticeImages' src='...imgpath...no.jpg'><br>깨끗하고 좋은 물건으로 보내주실 수 있으신가요");
+						ps1.setString(3, "<img class='NoticeImages' src='...imgpath...no.jpg'><br>빨리 답변해주세요");
 					}
 					else
 					{
 						String date = new SimpleDateFormat("M월 d일").format(new Date(time+(long)(Math.random()*(howOld/qnaCount))));
 						ProductPrice p = plist.get((int)(plist.size()*Math.random()));
 						//게시글 제목
-						ps1.setString(2, date + "에 구매한 " +p.getProductName() + " 환불에 대해 문의 드립니다");
+						ps1.setString(2, date + "일에 " +p.getProductName() + " 구매하면 언제 배송가능한가요");
 						//게시글 내용
-						ps1.setString(3, "<img class='NoticeImages' src='...imgpath...no.jpg'><br>받은 물건이 마음에 안 드는데 환불 가능한가요");
+						ps1.setString(3, "<img class='NoticeImages' src='...imgpath...no.jpg'><br>답변해주시면 감사하겠습니다");
 					}
 				}
 
@@ -695,6 +718,8 @@ public class DataGen {
 			ps1.executeUpdate();
 			ps2=cn.prepareStatement("DELETE FROM ORDERPDETAIL CASCADE");
 			ps2.executeUpdate();
+			ps3=cn.prepareStatement("DELETE FROM REVIEW CASCADE");
+			ps3.executeUpdate();
 			
 		}
 		catch(SQLException e)
@@ -706,6 +731,7 @@ public class DataGen {
 			try{
 				ps1.close();
 				ps2.close();
+				ps3.close();
 			}
 			catch(SQLException e)
 			{
@@ -989,7 +1015,7 @@ public class DataGen {
 				
 				ps3.setString(1, p.getProductCode());
 				ps3.setInt(2, dpListSeqStart+p.getDpNo());
-				ps3.setInt(3, (int)(p.getOutPrice()*(0.01*Math.random()+0.1))*10   );
+				ps3.setInt(3, p.getOutPrice());
 				ps3.executeUpdate();
 				
 			}
@@ -1176,7 +1202,7 @@ public class DataGen {
 				//DB 주문 입력 로직
 				PreparedStatement ps1 = null;
 				PreparedStatement ps2 = null;
-				String sql1 = "INSERT INTO ORDERLIST VALUES (ORDER_SEQ.NEXTVAL,null,?,'OS05',0,?,?,?,?,?,?,?,?)";
+				String sql1 = "INSERT INTO ORDERLIST VALUES (ORDER_SEQ.NEXTVAL,null,?,'OS05',0,?,?,?,?,?,?,?,?,?)";
 				String sql2;
 				
 				try {
@@ -1191,6 +1217,22 @@ public class DataGen {
 					ps1.setInt(7, order.getTotalPrice());
 					ps1.setInt(8, order.getCancelPrice());
 					ps1.setTimestamp(9, new Timestamp(order.getOrderTime()));
+					if(order.getTotalPrice()>30000)
+					{
+						ps1.setInt(10,0);
+					}
+					else
+					{
+						if(order.getCancelPrice()>0 && Math.random()>0.5)
+						{
+							ps1.setInt(10,5000);
+						}
+						else
+						{
+							ps1.setInt(10,2500);
+						}
+					}
+					
 					ps1.executeUpdate();
 				}
 				catch(SQLException e)
@@ -1239,11 +1281,19 @@ public class DataGen {
 							ps2.setString(1, pp.getProductCode());
 							ps2.setTimestamp(2,new Timestamp(inTime));
 							ps2.setInt(3, inCount);
-							ps2.setInt(4, (int)(pp.getInPrice()*(0.01*Math.random()+0.1))*10 );
+							ps2.setInt(4, (int)(pp.getInPrice()*(0.01*Math.random()+0.95))*10 );
 							ps2.setTimestamp(5,new Timestamp(inTime + pp.getDayLife()*86400000L));
 							ps2.setInt(6, inCount - orderList.get(z).getProductCount());
 							ps2.executeUpdate();
 						}
+						else
+						{
+							member.addMemberMileage((int)(pp.getOutPrice()*orderList.get(z).getProductCount()*0.005));
+							//마일리지 로그 작성 코드
+							
+						}
+						
+						
 					}
 
 				}
@@ -1263,9 +1313,10 @@ public class DataGen {
 					}
 				}
 				
-				// 주문취소 입력 로직
+				// 주문취소, 리뷰 입력 로직
 				
 				sql1 = "INSERT INTO ORDERCHANGE VALUES (ORDER_CHANGE_SEQ.NEXTVAL,?,?,?,?,?,?,?)";
+				sql2 = "INSERT INTO REVIEW VALUES (REVIEW_SEQ.NEXTVAL,?,?,?,?,null,?,?,?)";
 				
 				try {
 					long cancelTime;
@@ -1279,9 +1330,11 @@ public class DataGen {
 					}
 					
 					ps1=cn.prepareStatement(sql1);
+					ps2=cn.prepareStatement(sql2);
 					
 					for(int z=0; z<productKind ;z++)
 					{
+						// 주문 취소 DB 인서트 코드
 						if(orderList.get(z).getCancelCount()>0)
 						{
 							ps1.setInt(1, orderSeq);
@@ -1310,6 +1363,211 @@ public class DataGen {
 							
 							ps1.executeUpdate();
 						}
+						
+						//문의 DB 인서트 코드
+				/*		for(int i=0; i<qnaCount;i++)
+						{
+							time = System.currentTimeMillis()-howOld+(long)((Math.random()+i)*(howOld/qnaCount));
+							qnaWriter = memberSeqStart+1 + (int)(Math.random()*(memberCount-1));
+							
+
+							try {
+
+								ps1=cn.prepareStatement(sql1);
+
+								//작성자 회원 번호
+								ps1.setInt(1,qnaWriter);
+								
+								//게시글 제목
+								if(Math.random()>0.5)
+								{
+									String date = new SimpleDateFormat("d일 H시").format(new Date(time+(long)(Math.random()*(howOld/qnaCount))));
+									//게시글 제목
+									ps1.setString(2, date + "에 배송 가능할까요?");
+									//게시글 내용
+									ps1.setString(3, "<img class='QNAImages' src='...imgpath...no.jpg'><br>꼭 부탁합니다");
+								}
+								else
+								{
+									if(Math.random()>0.5)
+									{
+										//게시글 제목
+										ps1.setString(2, plist.get((int)(plist.size()*Math.random())).getProductName() + " 상품에 대해 문의 드립니다");
+										//게시글 내용
+										ps1.setString(3, "<img class='NoticeImages' src='...imgpath...no.jpg'><br>깨끗하고 좋은 물건으로 보내주실 수 있으신가요");
+									}
+									else
+									{
+										String date = new SimpleDateFormat("M월 d일").format(new Date(time+(long)(Math.random()*(howOld/qnaCount))));
+										ProductPrice p = plist.get((int)(plist.size()*Math.random()));
+										//게시글 제목
+										ps1.setString(2, date + "에 구매한 " +p.getProductName() + " 환불에 대해 문의 드립니다");
+										//게시글 내용
+										ps1.setString(3, "<img class='NoticeImages' src='...imgpath...no.jpg'><br>받은 물건이 마음에 안 드는데 환불 가능한가요");
+									}
+								}
+
+								//작성일시
+								ps1.setTimestamp(4, new Timestamp(time));
+								ps1.executeUpdate();
+							}
+							catch(SQLException e)
+							{
+								e.printStackTrace();
+							}
+							finally
+							{
+								try{
+									ps1.close();
+								}
+								catch(SQLException e)
+								{
+									e.printStackTrace();
+								}
+							}
+							
+							
+							if(Math.random()<0.05)
+							{
+								// 관리자 답변 없는 게시글
+								continue;
+							}
+							
+							String sql2 = "INSERT INTO REPLY VALUES (COMMENT_SEQ.NEXTVAL,?,?,null,?,?,1,null)";
+							PreparedStatement ps2=null;
+							
+							replyWriter=memberSeqStart;
+							
+							try {
+								ps2=cn.prepareStatement(sql2);
+								
+								for(;;)
+								{
+									time = time+(long)(Math.random()*Math.random()*(howOld/qnaCount));
+
+									//게시글 번호
+									ps2.setInt(1, qnaSeqStart);
+									
+									//작성자 회원 번호
+									ps2.setInt(2,replyWriter);
+									
+									//작성일시
+									ps2.setTimestamp(3, new Timestamp(time));
+
+									//댓글 내용
+									if(replyWriter==memberSeqStart)
+									{
+										String[] replyText = {"안녕하세요. The Food Forum 입니다.<br>좋은 하루 되세요.","안녕하세요. The Food Forum 입니다.<br>이용에 불편을 드려 죄송합니다.",
+												"안녕하세요. The Food Forum 입니다.<br>문의하신 내용 잘 확인하였습니다.","안녕하세요. The Food Forum 입니다.<br>문의해주신 대로 처리할 수 있도록 노력하겠습니다.",
+												"안녕하세요. The Food Forum 입니다.<br>해당 상품에 많은 관심 갖아주셔서 감사합니다."};
+										ps2.setString(4, replyText[(int)(Math.random()*replyText.length)]);
+									}
+									else
+									{
+										String[] replyText = {"이런","헐","알겠습니다","...","뭔말인지 잘 모르겠네요"};
+										ps2.setString(4, replyText[(int)(Math.random()*replyText.length)]);
+									}
+
+						
+									ps2.executeUpdate();
+
+
+									if(Math.random()>0.5)
+									{
+										if(Math.random()>0.75)
+										{
+											replyWriter=memberSeqStart;
+										}
+										else
+										{
+											replyWriter=qnaWriter;
+										}
+									}
+									else
+									{
+										break;
+									}
+								}
+							}
+							catch(SQLException e)
+							{
+								e.printStackTrace();
+							}
+							finally
+							{
+								try{
+									ps2.close();
+								}
+								catch(SQLException e)
+								{
+									e.printStackTrace();
+								}
+							}
+						}*/
+						
+						// 리뷰 DB 인서트 코드
+						if(orderList.get(z).isReview())
+						{
+							//5점 만점, 0.5점 단위로 설정 가능
+							double reviewPoint = (10-(int)(Math.random()*Math.random()*Math.random()*10))/2;
+							long reviewTime = order.getOrderTime() + (long)(Math.random()*604800000L);
+							String title;
+							String text;
+							SimpleDateFormat sdf = new SimpleDateFormat("d일");
+							
+							if(reviewPoint > 4.5)
+							{
+								if(Math.random()>0.5)
+								{
+									title = "최고에요!";
+									text = "<img class='ReviewImages' src='...imgpath...no.jpg'><br>"+orderList.get(z).getpp().getProductName()+" 최고입니다!";
+								}
+								else
+								{
+									title = "생각보다 배송이 빨라서 좋았어요";
+									text = "<img class='ReviewImages' src='...imgpath...no.jpg'><br>"+sdf.format(new Date(order.getOrderTime()))+"에 주문했는데 벌써 오늘 "+sdf.format(new Date(reviewTime)) +"에 왔네요";
+								}
+							}
+							else /*if(reviewPoint > 4)*/
+							{
+								if(Math.random()>0.5)
+								{
+									title = "마음에 듭니다!";
+									text = "<img class='ReviewImages' src='...imgpath...no.jpg'><br> 마음에 들어요! 마일리지도 얻어야지";
+								}
+								else
+								{
+									title = "만족합니다.";
+									text = "<img class='ReviewImages' src='...imgpath...no.jpg'><br> 상품 만족스럽네요";
+								}
+							}
+			/*				else if(reviewPoint > 3)
+							{
+								
+							}
+							else if(reviewPoint > 2)
+							{
+								
+							}
+							else
+							{
+								
+							}
+							*/
+							ps2.setInt(1,member.getMemberSeq());
+							ps2.setString(2,title);
+							ps2.setString(3,text);
+							ps2.setTimestamp(4,new Timestamp(reviewTime));
+							ps2.setDouble(5, reviewPoint);
+							ps2.setString(6, orderList.get(z).getpp().getProductCode());
+							ps2.setInt(7, dpListSeqStart + orderList.get(z).getpp().getDpNo());
+							ps2.executeUpdate();
+							
+							//마일리지 로그 작성 코드
+							
+							
+							
+						}
 					}
 
 				}
@@ -1329,7 +1587,7 @@ public class DataGen {
 				}
 				
 				
-				//리뷰, 마일리지변경로그 입력 로직
+				//마일리지변경로그 입력 로직
 				
 				orderSeq++;
 				
