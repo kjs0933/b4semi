@@ -20,7 +20,7 @@ public class NoticeDao {
 	{
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
-		List<Notice> list = new ArrayList();
+		List<Notice> list = new ArrayList<>();
 		String sql = prop.getProperty("selectList");
 		System.out.println(sql);
 		
