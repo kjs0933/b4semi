@@ -51,6 +51,7 @@ public class AddressListDao {
 				al.setAddressTag(rs.getString("addressTag"));
 				al.setAddress(rs.getString("address"));
 				al.setAddressPhone(rs.getString("addressPhone"));
+				al.setReceiverName(rs.getString("receiverName"));
 				list.add(al);
 			}
 		}
@@ -74,10 +75,11 @@ public class AddressListDao {
 		try
 		{
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, al.getAddressTag());
-			pstmt.setString(2, al.getAddress());
-			pstmt.setString(3, al.getAddressPhone());
-			pstmt.setInt(4, al.getMemberSeq());
+			pstmt.setInt(1, al.getMemberSeq());
+			pstmt.setString(2, al.getAddressTag());
+			pstmt.setString(3, al.getAddress());
+			pstmt.setString(4, al.getAddressPhone());
+			pstmt.setString(5, al.getReceiverName());
 			result = pstmt.executeUpdate();
 		}
 		catch(SQLException e)
@@ -102,7 +104,8 @@ public class AddressListDao {
 			pstmt.setString(1, al.getAddressTag());
 			pstmt.setString(2, al.getAddress());
 			pstmt.setString(3, al.getAddressPhone());
-			pstmt.setInt(4,al.getMemberSeq());
+			pstmt.setString(4, al.getReceiverName());
+			pstmt.setInt(5,al.getMemberSeq());
 		}
 		catch(SQLException e)
 		{
