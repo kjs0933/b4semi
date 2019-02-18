@@ -13,12 +13,12 @@ public class ReviewService {
 
 	ReviewDao dao = new ReviewDao();
 	
-	public int selectCount()
+/*	public int selectCount()
 	{
 		Connection conn = getConnection();
 		int result = dao.selectCount(conn);
 	}
-	
+	임시 주석*/
 	
 	//후기작성
 	public int insertReview(Review r)

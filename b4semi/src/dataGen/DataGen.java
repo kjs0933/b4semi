@@ -326,7 +326,6 @@ public class DataGen {
 				{
 					String str1 = firstNames[(int)(Math.random()*firstNames.length)];
 					String str2 = lastNames[(int)(Math.random()*lastNames.length)];
-					String str3 = String.valueOf((int)(Math.random()*10))+String.valueOf(i);
 					if(Math.random()>0.5 && str2.length()>3)
 					{
 						str2=str2.substring(1, 2) + str2.substring(0, 1)+  str2.substring(3) + str2.substring(2,3);
@@ -701,6 +700,7 @@ public class DataGen {
 		PreparedStatement ps4 = null;
 		PreparedStatement ps5 = null;
 		PreparedStatement ps6 = null;
+		PreparedStatement ps7 = null;
 		
 		try {
 			ps1=cn.prepareStatement("DELETE FROM ORDERCHANGE CASCADE");
@@ -794,6 +794,8 @@ public class DataGen {
 			ps5.executeUpdate();
 			ps6=cn.prepareStatement("DELETE FROM QUERYBOARD CASCADE");
 			ps6.executeUpdate();
+			ps7=cn.prepareStatement("DELETE FROM MILEAGELOG CASCADE");
+			ps7.executeUpdate();
 
 		}
 		catch(SQLException e)
@@ -809,6 +811,7 @@ public class DataGen {
 				ps4.close();
 				ps5.close();
 				ps6.close();
+				ps7.close();
 
 			}
 			catch(SQLException e)
@@ -1091,6 +1094,59 @@ public class DataGen {
 		}
 	}
 	
+	public void addMileageLog(Connection cn, String type, int memberNo, Timestamp logTime, int before, int after)
+	{
+		PreparedStatement ps =null;
+		try {
+			ps = cn.prepareStatement("INSERT INTO MILEAGELOG VALUES (MILEAGE_LOG_SEQ.NEXTVAL,?,?,?,?,?)");
+			ps.setString(1, type);
+			ps.setInt(2, memberNo);
+			ps.setTimestamp(3, logTime);
+			ps.setInt(4, before);
+			ps.setInt(5, after);
+			ps.executeUpdate();
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try{
+				ps.close();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void setMemberMileage(Connection cn, int memberSeq, int mileage)
+	{
+		PreparedStatement ps =null;
+		try {
+			ps = cn.prepareStatement("UPDATE MEMBER SET MEMBERMILEAGE = ? WHERE MEMBERSEQ = ?");
+			ps.setInt(1, mileage);
+			ps.setInt(2, memberSeq);
+			ps.executeUpdate();
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try{
+				ps.close();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public MemberAddress getMemberAddress(int memberNo, Connection cn)
 	{
 		PreparedStatement ps =null;
@@ -1153,6 +1209,10 @@ public class DataGen {
 			member = getMemberAddress(i, cn);
 			currtime=System.currentTimeMillis();
 			orderCount=2+(int)(2*Math.random()*(currtime-member.getMemberEnrollDate().getTime())/orderInterval);
+			
+			//회원가입 마일리지 적용
+			addMileageLog(cn, "MPN",member.getMemberSeq(),member.getMemberEnrollDate(),0,100);
+			member.addMemberMileage(100);
 			
 			//주문 반복
 			for(int j=0; j<orderCount ; j++)
@@ -1264,6 +1324,9 @@ public class DataGen {
 						e.printStackTrace();
 					}
 				}
+				//구매 마일리지 로그 작성 코드
+				addMileageLog(cn, "MPB",member.getMemberSeq(),new Timestamp(order.getOrderTime()),member.getMemberMileage(),member.getMemberMileage()+(int)(order.getTotalPrice()*0.005));
+				member.addMemberMileage((int)(order.getTotalPrice()*0.005));
 				
 				//DB 주문상세, 입고 입력 로직
 				
@@ -1301,16 +1364,9 @@ public class DataGen {
 							ps2.setInt(6, inCount - orderList.get(z).getProductCount());
 							ps2.executeUpdate();
 						}
-						else
-						{
-							member.addMemberMileage((int)(pp.getOutPrice()*orderList.get(z).getProductCount()*0.005));
-							//마일리지 로그 작성 코드
-							
-						}
-						
-						
 					}
-
+					
+					
 				}
 				catch(SQLException e)
 				{
@@ -1346,6 +1402,13 @@ public class DataGen {
 						cancelTime = order.getOrderTime() + (long)(Math.random()*259200000L);
 					}
 					
+					if(order.getCancelPrice()>0)
+					{
+						//환불 마일리지 작성 코드
+						addMileageLog(cn,"MPC",member.getMemberSeq(),new Timestamp(cancelTime),member.getMemberMileage(),member.getMemberMileage()-(int)(order.getCancelPrice()*0.005));
+						member.addMemberMileage(-(int)(order.getCancelPrice()*0.005));
+					}
+
 					ps1=cn.prepareStatement(sql1);
 					ps2=cn.prepareStatement(sql2);
 					
@@ -1604,10 +1667,10 @@ public class DataGen {
 							ps2.setInt(7, dpListSeqStart + orderList.get(z).getpp().getDpNo());
 							ps2.executeUpdate();
 							
+
+							//리뷰 마일리지 작성 코드
+							addMileageLog(cn, "MPR",member.getMemberSeq(),new Timestamp(reviewTime),member.getMemberMileage(),member.getMemberMileage()+(int)(orderList.get(z).getpp().getOutPrice()*orderList.get(z).getProductCount()*0.005));
 							member.addMemberMileage((int)(orderList.get(z).getpp().getOutPrice()*orderList.get(z).getProductCount()*0.005));
-							//마일리지 로그 작성 코드
-							
-							
 							
 						}
 					}
@@ -1628,16 +1691,12 @@ public class DataGen {
 						e.printStackTrace();
 					}
 				}
-				
-				
-				//마일리지변경로그 입력 로직
-				
 				orderSeq++;
 				
 			}
 			
-			//DB 회원정보 마일리지값 설정 로직
-
+			//DB에 회원정보 마일리지값 설정
+			setMemberMileage(cn, member.getMemberSeq(), member.getMemberMileage());
 		}
 	}
 	
