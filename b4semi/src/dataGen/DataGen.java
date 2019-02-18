@@ -18,13 +18,11 @@ import common.JDBCTemplate;
 //더미 데이터 자동 생성을 위한 클래스 - DB 데이터 삭제 후 이용해주세요!
 public class DataGen {
 	
-	private final int memberCount = 100; //생성 회원수
+	private final int memberCount = 250; //생성 회원수
 	private final int noticeCount = 100; //공지사항 게시수
-	private final int qnaCount = 500; //일대일 문의 게시수
+	private final int qnaCount = 1000; //일대일 문의 게시수
 	private final long orderInterval = 31536000000L/12; //회원당 평균 주문 간격
-	
 	private final long howOld = 31536000000L; //마켓 오픈시점과 현재의 밀리초 차이
-	private final double priceInc = 0.2; //마켓 오픈시점부터 현시점까지의 물가상승률
 	
 	public static void main(String[] args) {
 		new DataGen();
@@ -665,10 +663,32 @@ public class DataGen {
 	
 	public void delete(Connection cn)
 	{
-		PreparedStatement ps = null;
 		PreparedStatement ps1 = null;
 		PreparedStatement ps2 = null;
 		PreparedStatement ps3 = null;
+		PreparedStatement ps4 = null;
+		PreparedStatement ps5 = null;
+		PreparedStatement ps6 = null;
+		
+		try {
+			ps1=cn.prepareStatement("DELETE FROM ORDERCHANGE CASCADE");
+			ps1.executeUpdate();
+			
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try{
+				ps1.close();
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
 		
 		try {
 			ps1=cn.prepareStatement("DELETE FROM CART CASCADE");
@@ -699,6 +719,12 @@ public class DataGen {
 			ps1.executeUpdate();
 			ps2=cn.prepareStatement("DELETE FROM ORDERLIST CASCADE");
 			ps2.executeUpdate();
+			ps3=cn.prepareStatement("DELETE FROM ORDERCHANGE CASCADE");
+			ps3.executeUpdate();
+			ps4=cn.prepareStatement("DELETE FROM REPLY CASCADE");
+			ps4.executeUpdate();
+			ps5=cn.prepareStatement("DELETE FROM INSTOCK CASCADE");
+			ps5.executeUpdate();
 
 		}
 		catch(SQLException e)
@@ -710,6 +736,9 @@ public class DataGen {
 			try{
 				ps1.close();
 				ps2.close();
+				ps3.close();
+				ps4.close();
+				ps5.close();
 			}
 			catch(SQLException e)
 			{
@@ -724,6 +753,12 @@ public class DataGen {
 			ps2.executeUpdate();
 			ps3=cn.prepareStatement("DELETE FROM DPLIST CASCADE");
 			ps3.executeUpdate();
+			ps4=cn.prepareStatement("DELETE FROM ADDRESSLIST CASCADE");
+			ps4.executeUpdate();
+			ps5=cn.prepareStatement("DELETE FROM NOTICE CASCADE");
+			ps5.executeUpdate();
+			ps6=cn.prepareStatement("DELETE FROM QUERYBOARD CASCADE");
+			ps6.executeUpdate();
 
 		}
 		catch(SQLException e)
@@ -736,6 +771,9 @@ public class DataGen {
 				ps1.close();
 				ps2.close();
 				ps3.close();
+				ps4.close();
+				ps5.close();
+				ps6.close();
 
 			}
 			catch(SQLException e)
@@ -745,8 +783,10 @@ public class DataGen {
 		}
 		
 		try {
-			ps=cn.prepareStatement("DELETE FROM SUPPLIER CASCADE");
-			ps.executeUpdate();
+			ps1=cn.prepareStatement("DELETE FROM SUPPLIER CASCADE");
+			ps1.executeUpdate();
+			ps2=cn.prepareStatement("DELETE FROM MEMBER CASCADE");
+			ps2.executeUpdate();
 
 		}
 		catch(SQLException e)
@@ -756,7 +796,8 @@ public class DataGen {
 		finally
 		{
 			try{
-				ps.close();
+				ps1.close();
+				ps2.close();
 			}
 			catch(SQLException e)
 			{
@@ -1134,7 +1175,9 @@ public class DataGen {
 				
 				//DB 주문 입력 로직
 				PreparedStatement ps1 = null;
+				PreparedStatement ps2 = null;
 				String sql1 = "INSERT INTO ORDERLIST VALUES (ORDER_SEQ.NEXTVAL,null,?,'OS05',0,?,?,?,?,?,?,?,?)";
+				String sql2;
 				
 				try {
 				
@@ -1144,7 +1187,7 @@ public class DataGen {
 					ps1.setString(3, member.getAddress());
 					ps1.setString(4, member.getMemberPhone());
 					ps1.setString(5, Math.random()>0.5?"빠른 배송 부탁드립니다":((int)(1+Math.random()*12)+"시쯤에 배송해주세요"));
-					ps1.setString(6, String.format("%12d",(long)(Math.random()*1000000000000L)));
+					ps1.setString(6, String.format("%06d",(int)(Math.random()*1000000))+String.format("%06d",(int)(Math.random()*1000000)));
 					ps1.setInt(7, order.getTotalPrice());
 					ps1.setInt(8, order.getCancelPrice());
 					ps1.setTimestamp(9, new Timestamp(order.getOrderTime()));
@@ -1165,21 +1208,108 @@ public class DataGen {
 					}
 				}
 				
-				//DB 주문상세, 입고, 주문취소, 리뷰, 마일리지변경로그 입력 로직
+				//DB 주문상세, 입고 입력 로직
 				
 				sql1 = "INSERT INTO ORDERPDETAIL VALUES (?,?,?,?)";
+				sql2 = "INSERT INTO INSTOCK VALUES (INSTOCK_SEQ.NEXTVAL,?,?,?,?,?,?,0)";
 				
 				try {
+					
+					ps1=cn.prepareStatement(sql1);
+					ps2=cn.prepareStatement(sql2);
+					long inTime = order.getOrderTime() - (long)(Math.random()*259200000L);
+					
+					
+					ProductPrice pp;
+					int inCount;
+					
+					for(int z=0; z<productKind ;z++)
+					{
+						pp = orderList.get(z).getpp();
+						
+						ps1.setInt(1, orderSeq);
+						ps1.setString(2, pp.getProductCode());
+						ps1.setInt(3, dpListSeqStart + pp.getDpNo());
+						ps1.setInt(4, orderList.get(z).getProductCount());
+						ps1.executeUpdate();
+						
+						if( (orderList.get(z).getProductCount()-orderList.get(z).getCancelCount() )>0)
+						{
+							inCount = Math.max(orderList.get(z).getProductCount(),  (int)(Math.random()*Math.random()*orderList.get(z).getProductCount()*pp.getOutPrice()/pp.getInPrice()+1) );
+							ps2.setString(1, pp.getProductCode());
+							ps2.setTimestamp(2,new Timestamp(inTime));
+							ps2.setInt(3, inCount);
+							ps2.setInt(4, (int)(pp.getInPrice()*(0.01*Math.random()+0.1))*10 );
+							ps2.setTimestamp(5,new Timestamp(inTime + pp.getDayLife()*86400000L));
+							ps2.setInt(6, inCount - orderList.get(z).getProductCount());
+							ps2.executeUpdate();
+						}
+					}
+
+				}
+				catch(SQLException e)
+				{
+					e.printStackTrace();
+				}
+				finally
+				{
+					try{
+						ps1.close();
+						ps2.close();
+					}
+					catch(SQLException e)
+					{
+						e.printStackTrace();
+					}
+				}
+				
+				// 주문취소 입력 로직
+				
+				sql1 = "INSERT INTO ORDERCHANGE VALUES (ORDER_CHANGE_SEQ.NEXTVAL,?,?,?,?,?,?,?)";
+				
+				try {
+					long cancelTime;
+					if(j>1)
+					{
+						cancelTime = order.getOrderTime() + (long)(Math.random()*604800000L);
+					}
+					else
+					{
+						cancelTime = order.getOrderTime() + (long)(Math.random()*259200000L);
+					}
 					
 					ps1=cn.prepareStatement(sql1);
 					
 					for(int z=0; z<productKind ;z++)
 					{
-						ps1.setInt(1, orderSeq);
-						ps1.setString(2, orderList.get(z).getpp().getProductCode());
-						ps1.setInt(3, dpListSeqStart + orderList.get(z).getpp().getDpNo());
-						ps1.setInt(4, orderList.get(z).getProductCount());
-						ps1.executeUpdate();
+						if(orderList.get(z).getCancelCount()>0)
+						{
+							ps1.setInt(1, orderSeq);
+							ps1.setString(2, orderList.get(z).getpp().getProductCode());
+							if(j>1)
+							{
+								ps1.setString(3, "RS05");
+							}
+							else
+							{
+								ps1.setString(3, "CS02");
+							}
+							
+							ps1.setInt(4, orderList.get(z).getCancelCount());
+							if(j>1)
+							{
+								ps1.setString(5, String.format("%06d",(int)(Math.random()*1000000))+String.format("%06d",(int)(Math.random()*1000000)));
+							}
+							else
+							{
+								ps1.setNull(5, java.sql.Types.VARCHAR);
+							}
+							
+							ps1.setInt(6, dpListSeqStart + orderList.get(z).getpp().getDpNo());
+							ps1.setTimestamp(7, new Timestamp(cancelTime));
+							
+							ps1.executeUpdate();
+						}
 					}
 
 				}
@@ -1197,6 +1327,9 @@ public class DataGen {
 						e.printStackTrace();
 					}
 				}
+				
+				
+				//리뷰, 마일리지변경로그 입력 로직
 				
 				orderSeq++;
 				
