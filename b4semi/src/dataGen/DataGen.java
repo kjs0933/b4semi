@@ -39,7 +39,7 @@ public class DataGen {
 		//기존 데이터가 존재할 경우 초기화 로직
 		if(getProductCount(cn)>0)
 		{
-			System.out.println("상품 데이터 초기화중 - 에러 발생시 오라클에서 계정 삭제 후 다시 생성하여 초기화를 해주세요");
+			System.out.println("상품 데이터 초기화중");
 			delete(cn);
 			System.out.println("상품 데이터 초기화 완료 - 재시작 필요");
 			JDBCTemplate.commit(cn);
@@ -77,10 +77,8 @@ public class DataGen {
 		System.out.println("쿠폰마스터 생성완료");
 		System.out.println("입고, 주문결제내역, 주문상품내역, 취소환불, 상품리뷰, 상품문의, 댓글, 마일리지변경log, 쿠폰발급 생성중 - 오래 걸림");
 		createOrder(plist, dpListSeqStart, memberSeqStart, cn, couponCodes);
-		System.out.println("입고, 주문결제내역, 주문상품내역, 취소환불, 상품리뷰, 상품문의, 댓글, 마일리지변경log, 쿠폰발급 생성완료");
+		System.out.println("입고, 주문결제내역, 주문상품내역, 취소환불, 상품리뷰, 상품문의, 댓글, 마일리지변경log, 쿠폰발급 생성완료 - 끝");
 
-		
-		
 		JDBCTemplate.commit(cn);
 		JDBCTemplate.close(cn);
 	}

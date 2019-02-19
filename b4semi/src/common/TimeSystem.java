@@ -5,10 +5,10 @@ import java.util.TimeZone;
 // 시간 경과에 따른 회원 등급 조정, 쿠폰 만료, 유통기한 만료 처리를 위한 클래스 
 public class TimeSystem extends Thread {
 	
-
+	
+	private static final int OFFSET = TimeZone.getDefault().getRawOffset(); // 실행국가에 따른 시간 차이를 밀리초단위로 환산한 값 
 	private static boolean isInitialized = false;
 	private long day=0; //날짜단위의 변화를 감지하기 위한 값
-	private static final int OFFSET = TimeZone.getDefault().getRawOffset(); // 실행국가에 따른 시간 차이를 밀리초단위로 환산한 값 
 	
 	private TimeSystem() { // 외부 생성 불가능
 		setDaemon(true);
@@ -31,7 +31,7 @@ public class TimeSystem extends Thread {
 				sleep(1000);
 				if(dayChangeCheck())
 				{
-					System.out.println("시스템 날짜 변경 및 데이터 갱신");
+					System.out.println("타임시스템 - 시스템 날짜 변경 및 데이터 갱신");
 					// 데이터 갱신 로직
 				}
 			}
