@@ -94,6 +94,20 @@ public class MemberDao {
 		return result;
 	}
 	
+	public int insertOne(Connection conn, Member m)
+	{
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("insertOne");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, arg1);
+			pstmt.setString(2, arg1);
+			pstmt.setString(3, arg1);
+			pstmt.setString(4, arg1);
+			pstmt.setString(5, arg1);
+		}
+	}
+	
 	
 	public int updateMember(Connection conn, Member m)
 	{

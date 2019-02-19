@@ -38,7 +38,7 @@
             <p class="login-title frm-title-active">로그인</p><p class="signup-title">회원가입</p>
         </div>
         <div class="login-msg"></div>
-        <form action="<%=request.getContextPath()%>/login" method="post" name="signin-frm" class="signin-frm frm-active">
+        <form action="<%=request.getContextPath()%>/login" method="post" name="signin-frm" class="signin-frm frm-active" autocomplete="off">
             <label for="login-id">아이디<br><input type="text" name="memberId" id="login-id"></label>
             <label for="login-pw">비밀번호<br><input type="password" name="memberPw" id="login-pw"></label>
             <input type="checkbox" name="saveId" id="saveId"><label for="saveId"><span></span></label>
@@ -47,7 +47,7 @@
             <p>회원정보 분실</p>
             <p class="not-member">회원이 아니신가요?</p>
         </form>
-        <form action="#" method="post" class="signup-frm">
+        <form action="#" method="post" class="signup-frm" autocomplete="off">
             <label for="member-id">아이디<span></span></label>
             <input type="text" name="memberId" id="member-id" placeholder="영문 대소문자와 숫자로 4자이상 12자미만">
             <label for="member-name">이름<span></span></label>

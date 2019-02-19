@@ -7,20 +7,19 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.b4.model.vo.Member;
+import javax.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class MemberEnrollServlet
+ * Servlet implementation class LogoutServlet
  */
-@WebServlet(name="MemberEnrollServlet", urlPatterns="/memberEnroll")
-public class MemberEnrollServlet extends HttpServlet {
+@WebServlet("/logout")
+public class LogoutServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MemberEnrollServlet() {
+    public LogoutServlet() {
         super();
 
     }
@@ -29,19 +28,18 @@ public class MemberEnrollServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		String memberId = request.getParameter("memberId");
-		String memberPw = request.getParameter("memberPw");
-		String memberName = request.getParameter("memberName");
-		String memberEmail = request.getParameter("memberEmail");
-		String memberPhone = request.getParameter("memberPhone");
-		
-		Member m = new Member();
-		m.setMemberId(memberId);
-		m.setMemberPw(memberPw);
-		m.setMemberName(memberName);
-		m.setMemberEmail(memberEmail);
-		m.setMemberPhone(memberPhone);
+		HttpSession session = request.getSession(false);
+
+		if(session != null)
+		{
+			session.invalidate();
+			response.sendRedirect(request.getContextPath());
+		}
+		else
+		{
+			request.setAttribute("msg", "세션이 만료되었습니다.");
+			request.setAttribute("loc", "");
+		}
 	}
 
 	/**

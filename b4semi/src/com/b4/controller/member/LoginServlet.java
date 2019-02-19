@@ -35,11 +35,14 @@ public class LoginServlet extends HttpServlet {
 		String memberId = request.getParameter("memberId");
 		String memberPw = request.getParameter("memberPw");
 		
+		
 		Member m = new Member();
 		m.setMemberId(memberId);
 		m.setMemberPw(memberPw);
 		
 		Member loginMember = new MemberService().selectOne(m);
+		
+		System.out.println(loginMember);
 		
 		if(loginMember != null)
 		{
