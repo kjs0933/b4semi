@@ -72,15 +72,13 @@ public class DataGen {
 		System.out.println("일대일문의, 답변 생성중");
 		createQNA(plist, memberSeqStart, cn);
 		System.out.println("일대일문의, 답변 생성완료");
-		System.out.println("입고, 주문결제내역, 주문상품내역, 취소환불, 상품리뷰, 마일리지변경log 생성중 - 오래 걸림");
-		createOrder(plist, dpListSeqStart, memberSeqStart, cn);
-		System.out.println("입고, 주문결제내역, 주문상품내역, 취소환불, 상품리뷰, 마일리지변경log 생성완료");
-/*		System.out.println("쿠폰마스터 생성중");
-		CouponGen.createCoupon(cn);
+		System.out.println("쿠폰마스터 생성중");
+		ArrayList<String> couponCodes = CouponGen.createCoupon(cn);
 		System.out.println("쿠폰마스터 생성완료");
-		System.out.println("생성된 쿠폰 회원에게 발급 중");
-		
-		System.out.println("생성된 쿠폰 회원에게 발급 완료");*/
+		System.out.println("입고, 주문결제내역, 주문상품내역, 취소환불, 상품리뷰, 상품문의, 댓글, 마일리지변경log, 쿠폰발급 생성중 - 오래 걸림");
+		createOrder(plist, dpListSeqStart, memberSeqStart, cn, couponCodes);
+		System.out.println("입고, 주문결제내역, 주문상품내역, 취소환불, 상품리뷰, 상품문의, 댓글, 마일리지변경log, 쿠폰발급 생성완료");
+
 		
 		
 		JDBCTemplate.commit(cn);
@@ -1199,7 +1197,7 @@ public class DataGen {
 		return result;
 	}
 	
-	public void createOrder(ArrayList<ProductPrice> plist,int dpListSeqStart,int memberSeqStart,Connection cn)
+	public void createOrder(ArrayList<ProductPrice> plist,int dpListSeqStart,int memberSeqStart, Connection cn, ArrayList<String> couponCodes)
 	{
 		Order order;
 		MemberAddress member;
@@ -1226,6 +1224,34 @@ public class DataGen {
 			//회원가입 마일리지 적용
 			addMileageLog(cn, "MPN",member.getMemberSeq(),member.getMemberEnrollDate(),0,100);
 			member.addMemberMileage(100);
+			
+			//쿠폰 발급 로직
+			PreparedStatement ps = null;
+			try {
+				ps = cn.prepareStatement("INSERT INTO ISSUEDCOUPON VALUES (COUPON_SEQ.NEXTVAL,?,?,'Y',?,?)");
+				for(int j=0; j<couponCodes.size(); j++)
+				{
+					ps.setInt(1,i);
+					ps.setString(2,couponCodes.get(j));
+					ps.setTimestamp(3,member.getMemberEnrollDate());
+					ps.setTimestamp(4,new Timestamp(member.getMemberEnrollDate().getTime() + howOld));
+					ps.executeUpdate();
+				}
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+			finally
+			{
+				try{
+					ps.close();
+				}
+				catch(SQLException e)
+				{
+					e.printStackTrace();
+				}
+			}
 			
 			//주문 반복
 			for(int j=0; j<orderCount ; j++)

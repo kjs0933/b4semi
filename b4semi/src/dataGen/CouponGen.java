@@ -21,16 +21,16 @@ public class CouponGen {
 		
 		//쿠폰코드, 쿠폰명, 쿠폰할인율, 최소주문금액, 최대할인금액
 		
-		code="NEW-0.1-5000";
+		code="NEW-20K-0.1-5000";
 		ps.setString(1,code);
 		ps.setString(2,"신규가입쿠폰");
 		ps.setDouble(3,0.1);
-		ps.setInt(4,10000);
+		ps.setInt(4,20000);
 		ps.setInt(5,5000);
 		ps.executeUpdate();
 		list.add(code);
 		
-		code="SHIP-FREE";
+		code="FREE-5K";
 		ps.setString(1,code);
 		ps.setString(2,"배송비 무료 쿠폰");
 		ps.setDouble(3,0);
@@ -39,12 +39,21 @@ public class CouponGen {
 		ps.executeUpdate();
 		list.add(code);
 		
-		code="SHIP-FREE";
+		code="LCP-30K-1-3000";
 		ps.setString(1,code);
-		ps.setString(2,"5000원 할인 쿠폰");
-		ps.setDouble(3,0);
-		ps.setInt(4,5000);
-		ps.setInt(5,0);
+		ps.setString(2,"3000원 할인 쿠폰");
+		ps.setDouble(3,1);
+		ps.setInt(4,30000);
+		ps.setInt(5,3000);
+		ps.executeUpdate();
+		list.add(code);
+		
+		code="FCP-0-0.07-7000";
+		ps.setString(1,code);
+		ps.setString(2,"7% 할인 쿠폰");
+		ps.setDouble(3,0.07);
+		ps.setInt(4,0);
+		ps.setInt(5,7000);
 		ps.executeUpdate();
 		list.add(code);
 		
