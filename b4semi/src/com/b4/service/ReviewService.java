@@ -15,20 +15,38 @@ public class ReviewService {
 
 	ReviewDao dao = new ReviewDao();
 	
-	//판매게시별 리뷰리스트 검색
-	public List<Review> selectAllByDP(Review r, int cPage)
+	//판매게시별 리뷰 count 검색
+	public int selectCountByDP(int displayListSeq)
 	{
 		Connection conn = getConnection();
-		List<Review> list = dao.selectAllByDP(conn, r, cPage);
+		int result = dao.selectCountByDP(conn, displayListSeq);
+		close(conn);
+		return result;
+	}
+	
+	//판매게시별 리뷰리스트 검색
+	public List<Review> selectAllByDP(int displayListSeq, int cPage)
+	{
+		Connection conn = getConnection();
+		List<Review> list = dao.selectAllByDP(conn, displayListSeq, cPage);
 		close(conn);
 		return list;
 	}
 	
-	//개인별 리뷰리스트 검색
-	public List<Review> selectAllByMember(Review r, int cPage)
+	//개인별 리뷰 count 검색
+	public int selectCountByMember(int memberSeq)
 	{
 		Connection conn = getConnection();
-		List<Review> list = dao.selectAllByMember(conn, r, cPage);
+		int result = dao.selectCountByMember(conn, memberSeq);
+		close(conn);
+		return result;
+	}
+	
+	//개인별 리뷰리스트 검색
+	public List<Review> selectAllByMember(int memberSeq, int cPage)
+	{
+		Connection conn = getConnection();
+		List<Review> list = dao.selectAllByMember(conn, memberSeq, cPage);
 		close(conn);
 		return list;
 	}
@@ -64,5 +82,14 @@ public class ReviewService {
 		else rollback(conn);
 		close(conn);
 		return result;
+	}
+	
+	//판매게시별 평점 평균 구하기
+	public double avgReviewScore(int displayListSeq)
+	{
+		Connection conn = getConnection();
+		double avg = dao.avgReviewScore(conn, displayListSeq);
+		close(conn);
+		return avg;
 	}
 }
