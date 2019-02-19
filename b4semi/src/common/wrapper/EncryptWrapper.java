@@ -15,7 +15,6 @@ public class EncryptWrapper extends HttpServletRequestWrapper{
 		// TODO Auto-generated constructor stub
 	}
 
-	//��ȣȭ�� ���� getParameter�޼ҵ带 �������̵���.
 	@Override
 	public String getParameter(String key) {
 		// TODO Auto-generated method stub
@@ -34,7 +33,7 @@ public class EncryptWrapper extends HttpServletRequestWrapper{
 	private String getSha512(String value)
 	{
 		String encryPw = "";
-		//��ȣȭ��ü ���� : MessageDigest
+		
 		MessageDigest md = null;
 		try
 		{
