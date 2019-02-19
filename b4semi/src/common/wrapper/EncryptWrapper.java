@@ -15,16 +15,14 @@ public class EncryptWrapper extends HttpServletRequestWrapper{
 		// TODO Auto-generated constructor stub
 	}
 
-	//¾ÏÈ£È­¸¦ À§ÇØ getParameter¸Þ¼Òµå¸¦ ¿À¹ö¶óÀÌµùÇÔ.
+	//ï¿½ï¿½È£È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ getParameterï¿½Þ¼Òµå¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½ï¿½ï¿½.
 	@Override
 	public String getParameter(String key) {
 		// TODO Auto-generated method stub
 		String value="";
-		if(key!=null && (key.equals("password") || key.equals("password_new")))
+		if(key!=null && (key.equals("memberPw") || key.equals("memberPw_new")))
 		{
-			System.out.println(super.getParameter(key));
 			value = getSha512(super.getParameter(key));
-			System.out.println("¾ÏÈ£È­µÈ°ª : " + value);
 		}
 		else
 		{
@@ -36,7 +34,7 @@ public class EncryptWrapper extends HttpServletRequestWrapper{
 	private String getSha512(String value)
 	{
 		String encryPw = "";
-		//¾ÏÈ£È­°´Ã¼ »ý¼º : MessageDigest
+		//ï¿½ï¿½È£È­ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½ : MessageDigest
 		MessageDigest md = null;
 		try
 		{
