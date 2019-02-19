@@ -15,7 +15,6 @@ public class EncryptWrapper extends HttpServletRequestWrapper{
 		// TODO Auto-generated constructor stub
 	}
 
-	//암호화를 위해 getParameter메소드를 오버라이딩함.
 	@Override
 	public String getParameter(String key) {
 		// TODO Auto-generated method stub
@@ -24,7 +23,6 @@ public class EncryptWrapper extends HttpServletRequestWrapper{
 		{
 			System.out.println(super.getParameter(key));
 			value = getSha512(super.getParameter(key));
-			System.out.println("암호화된값 : " + value);
 		}
 		else
 		{
@@ -36,7 +34,7 @@ public class EncryptWrapper extends HttpServletRequestWrapper{
 	private String getSha512(String value)
 	{
 		String encryPw = "";
-		//암호화객체 생성 : MessageDigest
+
 		MessageDigest md = null;
 		try
 		{

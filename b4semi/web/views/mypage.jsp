@@ -121,7 +121,7 @@
 				type:"post",
 				data:{"usermenu":$('#user-menu>div').text()},
 				success:function(data){
-					console.log(data);
+					//console.log(data);
 				}
 			})
 		});
