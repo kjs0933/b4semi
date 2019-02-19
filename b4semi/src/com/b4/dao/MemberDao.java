@@ -27,6 +27,34 @@ public class MemberDao {
 		}
 	}
 	
+	public boolean checkId(Connection conn, String memberId)
+	{
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = prop.getProperty("checkId");
+		boolean result = false;
+		try
+		{
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, memberId);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+			{
+				result = true;
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(rs);
+			close(pstmt);
+		}
+		return result;
+	}
+	
 	public Member selectOne(Connection conn, Member m)
 	{
 		PreparedStatement pstmt = null;
@@ -41,17 +69,17 @@ public class MemberDao {
 			if(rs.next())
 			{
 				result = new Member();
-				m.setMemberSeq(rs.getInt("memberSeq"));
-				m.setMemberId(rs.getString("memberId"));
-				m.setMemberGradeName(rs.getString("memberGradeName"));
-				m.setMemberPw(rs.getString("memberPw"));
-				m.setMemberName(rs.getString("memberName"));
-				m.setMemberEmail(rs.getString("memberEmail"));
-				m.setMemberPhone(rs.getString("memberPhone"));
-				m.setMemberComment(rs.getString("memberComment"));
-				m.setMemberEnrollDate(rs.getTimestamp("memberEnrollDate"));
-				m.setMemberQuitDate(rs.getTimestamp("memberQuitDate"));
-				m.setMemberMileage(rs.getInt("memberMileage"));
+				result.setMemberSeq(rs.getInt("memberSeq"));
+				result.setMemberId(rs.getString("memberId"));
+				result.setMemberGradeName(rs.getString("memberGradeName"));
+				result.setMemberPw(rs.getString("memberPw"));
+				result.setMemberName(rs.getString("memberName"));
+				result.setMemberEmail(rs.getString("memberEmail"));
+				result.setMemberPhone(rs.getString("memberPhone"));
+				result.setMemberComment(rs.getString("memberComment"));
+				result.setMemberEnrollDate(rs.getTimestamp("memberEnrollDate"));
+				result.setMemberQuitDate(rs.getTimestamp("memberQuitDate"));
+				result.setMemberMileage(rs.getInt("memberMileage"));
 			}
 		}
 		catch(SQLException e)

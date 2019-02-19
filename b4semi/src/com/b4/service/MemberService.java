@@ -13,6 +13,15 @@ public class MemberService {
 	
 	MemberDao dao = new MemberDao();
 
+	//id로 해당 아이디가 존재하는지 여부만 체크
+	public boolean checkId(String memberId)
+	{
+		Connection conn = getConnection();
+		boolean result = dao.checkId(conn, memberId);
+		close(conn);
+		return result;
+	}
+	
 	//id로 회원 찾기 메소드
 	public Member selectOne(Member m)
 	{
