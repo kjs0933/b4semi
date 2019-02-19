@@ -7,18 +7,21 @@ public class AddressList {
 	private String addressTag;
 	private String address;
 	private String addressPhone;
+	private String receiverName;
 	
 	public AddressList() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public AddressList(int addressSeq, int memberSeq, String addressTag, String address, String addressPhone) {
+	public AddressList(int addressSeq, int memberSeq, String addressTag, String address, String addressPhone,
+			String receiverName) {
 		super();
 		this.addressSeq = addressSeq;
 		this.memberSeq = memberSeq;
 		this.addressTag = addressTag;
 		this.address = address;
 		this.addressPhone = addressPhone;
+		this.receiverName = receiverName;
 	}
 
 	public int getAddressSeq() {
@@ -61,14 +64,19 @@ public class AddressList {
 		this.addressPhone = addressPhone;
 	}
 
+	public String getReceiverName() {
+		return receiverName;
+	}
+
+	public void setReceiverName(String receiverName) {
+		this.receiverName = receiverName;
+	}
+
 	@Override
 	public String toString() {
 		return "AddressList [addressSeq=" + addressSeq + ", memberSeq=" + memberSeq + ", addressTag=" + addressTag
-				+ ", address=" + address + ", addressPhone=" + addressPhone + "]";
+				+ ", address=" + address + ", addressPhone=" + addressPhone + ", receiverName=" + receiverName + "]";
 	}
-	
-	
-	
-	
 
+	
 }
