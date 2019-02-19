@@ -75,7 +75,13 @@ public class DataGen {
 		System.out.println("입고, 주문결제내역, 주문상품내역, 취소환불, 상품리뷰, 마일리지변경log 생성중 - 오래 걸림");
 		createOrder(plist, dpListSeqStart, memberSeqStart, cn);
 		System.out.println("입고, 주문결제내역, 주문상품내역, 취소환불, 상품리뷰, 마일리지변경log 생성완료");
-		System.out.println("쿠폰마스터, 발행된 쿠폰 생성 아직 불가");
+/*		System.out.println("쿠폰마스터 생성중");
+		CouponGen.createCoupon(cn);
+		System.out.println("쿠폰마스터 생성완료");
+		System.out.println("생성된 쿠폰 회원에게 발급 중");
+		
+		System.out.println("생성된 쿠폰 회원에게 발급 완료");*/
+		
 		
 		JDBCTemplate.commit(cn);
 		JDBCTemplate.close(cn);
@@ -760,6 +766,9 @@ public class DataGen {
 			ps4.executeUpdate();
 			ps5=cn.prepareStatement("DELETE FROM INSTOCK CASCADE");
 			ps5.executeUpdate();
+			ps6=cn.prepareStatement("DELETE FROM ISSUEDCOUPON CASCADE");
+			ps6.executeUpdate();
+
 
 		}
 		catch(SQLException e)
@@ -774,6 +783,7 @@ public class DataGen {
 				ps3.close();
 				ps4.close();
 				ps5.close();
+				ps6.close();
 			}
 			catch(SQLException e)
 			{
@@ -825,6 +835,8 @@ public class DataGen {
 			ps1.executeUpdate();
 			ps2=cn.prepareStatement("DELETE FROM MEMBER CASCADE");
 			ps2.executeUpdate();
+			ps3=cn.prepareStatement("DELETE FROM COUPONMASTER CASCADE");
+			ps3.executeUpdate();
 
 		}
 		catch(SQLException e)
@@ -836,6 +848,7 @@ public class DataGen {
 			try{
 				ps1.close();
 				ps2.close();
+				ps3.close();
 			}
 			catch(SQLException e)
 			{
