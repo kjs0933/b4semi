@@ -11,13 +11,14 @@ public class QueryBoard {
 	private String queryContents;
 	private Timestamp queryDate;
 	private Timestamp queryDeleteDate;
+	private int orderSeq;
 
 	public QueryBoard() {
 		// TODO Auto-generated constructor stub
 	}
 
 	public QueryBoard(int querySeq, int memberSeq, String queryTitle, String queryContents, Timestamp queryDate,
-			Timestamp queryDeleteDate) {
+			Timestamp queryDeleteDate, int orderSeq) {
 		super();
 		this.querySeq = querySeq;
 		this.memberSeq = memberSeq;
@@ -25,6 +26,7 @@ public class QueryBoard {
 		this.queryContents = queryContents;
 		this.queryDate = queryDate;
 		this.queryDeleteDate = queryDeleteDate;
+		this.orderSeq = orderSeq;
 	}
 
 	public int getQuerySeq() {
@@ -75,13 +77,20 @@ public class QueryBoard {
 		this.queryDeleteDate = queryDeleteDate;
 	}
 
+	public int getOrderSeq() {
+		return orderSeq;
+	}
+
+	public void setOrderSeq(int orderSeq) {
+		this.orderSeq = orderSeq;
+	}
+
 	@Override
 	public String toString() {
 		return "QueryBoard [querySeq=" + querySeq + ", memberSeq=" + memberSeq + ", queryTitle=" + queryTitle
 				+ ", queryContents=" + queryContents + ", queryDate=" + queryDate + ", queryDeleteDate="
-				+ queryDeleteDate + "]";
+				+ queryDeleteDate + ", orderSeq=" + orderSeq + "]";
 	}
-
 	
 	
 	}
