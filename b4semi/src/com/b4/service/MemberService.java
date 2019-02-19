@@ -1,9 +1,10 @@
 package com.b4.service;
 
-import static common.JDBCTemplate.getConnection;
 import static common.JDBCTemplate.close;
 import static common.JDBCTemplate.commit;
+import static common.JDBCTemplate.getConnection;
 import static common.JDBCTemplate.rollback;
+
 import java.sql.Connection;
 
 import com.b4.dao.MemberDao;
@@ -41,6 +42,15 @@ public class MemberService {
 		return result;
 	}
 	
+	public int insertOne(Member m)
+	{
+		Connection conn = getConnection();
+		int result = dao.insertOne(conn, m);
+		if(result > 0) commit(conn);
+		else rollback(conn);
+		return result;
+	}
+	
 	//마이페이지 - 회원탈퇴 : 프론트에서 memberQuitDate에 값이 있으면 탈퇴한 회원으로 처리
 	public int quitMember(Member m)
 	{
@@ -50,6 +60,5 @@ public class MemberService {
 		else rollback(conn);
 		return result;
 	}
-	
 
 }

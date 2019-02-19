@@ -16,6 +16,7 @@
     	idInput.val('');
         pwInput.val('');
         
+        loginMsg.text('');
         signupInputs.prev().children('span').text('');
         
         body.toggleClass('body-inactive');
@@ -51,7 +52,8 @@
     const notMember = $('.not-member');
     const signupInputs = signupFrm.children('label').next();
     const signinInputs = $('.signin-frm label input');
-   
+    const loginMsg = $('.login-msg');
+    
     const toggleFrm = (e) => {
         if($(e.target).hasClass('frm-title-active')) return;
         loginTitle.toggleClass('frm-title-active');
@@ -60,6 +62,7 @@
         signupFrm.toggleClass('frm-active');
         
         signupInputs.prev().children('span').text('');
+        loginMsg.text('');
     }
 
     $(() => {
@@ -92,8 +95,8 @@
                 success: data => {
                 	if(data == null)
                 	{
-                		$('.login-msg').text('아이디/비밀번호가 일치하지 않습니다.');
-                		$('.login-msg').css('color', 'crimson');
+                		loginMsg.text('아이디/비밀번호가 일치하지 않습니다.');
+                		loginMsg.css('color', 'crimson');
                 	}
                 	else
                     {
@@ -189,11 +192,23 @@
     	const signupPwCkVal = signupPwCk.val();
     	if(signupPwVal.trim() != signupPwCkVal.trim())
     	{
+    		signupPwCk.prev().children('span').css('color', 'crimson');
     		signupPwCk.prev().children('span').text('패스워드가 일치하지 않습니다.');
     		return false;
     	}
-    	return true;
+    	else
+    	{
+    		signupPwCk.prev().children('span').css('color', 'green');
+    		signupPwCk.prev().children('span').text('패스워드가 일치합니다.');
+    		return true;
+    	}
     }
+    
+    $(() => {
+    	signupPwCk.on('blur', pwCkValid);
+    });
+    
+    
     
     //이메일 정규식
     const emailRegExpValid = () => {
@@ -216,3 +231,11 @@
 
         return result;
     }
+    
+    //회원가입 시 ajax로 중복 여부 nudge
+    $(() => {
+    	signupInputs.on('blur', e => {
+    		
+    	});
+    });
+    
