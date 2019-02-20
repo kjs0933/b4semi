@@ -10,11 +10,19 @@ import java.util.List;
 
 import com.b4.dao.DPListDao;
 import com.b4.model.vo.DPList;
-import com.b4.model.vo.Notice;
 
 public class DPListService {
 	
 	private DPListDao dao = new DPListDao();
+	
+	public int searchListCount(String type, String keyword, String category, String sortType)
+	{
+		Connection conn=getConnection();
+		int result = dao.searchListCount(conn,type,keyword,category,sortType);
+		close(conn);
+		
+		return result;
+	}
 	
 	public List<DPList> selectList(int cPage, int numPerPage)
 	{

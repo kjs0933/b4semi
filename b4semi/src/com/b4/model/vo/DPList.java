@@ -18,7 +18,6 @@ public class DPList {
 
 	public DPList(int displayListSeq, String displayListTitle, String displayListContents, String dPListAvailable,
 			Timestamp displayDate, String dPListOriginalFileName, String dPListRenameFilename) {
-		super();
 		this.displayListSeq = displayListSeq;
 		this.displayListTitle = displayListTitle;
 		this.displayListContents = displayListContents;
