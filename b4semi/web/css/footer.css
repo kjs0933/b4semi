@@ -137,6 +137,8 @@
             font-size: 13px;
             color: #bbb;
         }
+        
+        .main-form-wrapper input{font-family: 'Noto Sans KR';}
 
         .main-form-wrapper.active{display: flex;}
 
@@ -312,6 +314,11 @@
         {
             outline: none;
         }
+        
+        .signup-frm > label :
+        {
+        	height: 13px;
+        }
 
         .frm-title-active
         {
@@ -338,6 +345,7 @@
         {
             opacity: 0.3;
         }
+        
 
         @keyframes invalid
         {

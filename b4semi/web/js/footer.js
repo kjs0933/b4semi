@@ -1,25 +1,23 @@
-    //로그인 모달 창 띄우기
-    
-    const mainFrmBox = $('.main-form-wrapper');
-    const loginBtn = $('#login-btn');
-    const idInput = $('.signin-frm #login-id');
-    const pwInput = $('.signin-frm #login-pw');
-    const body = $('body');
-    const wholeWrapper = $('.whole-wrapper');
+//로그인 모달 창 띄우기
 
-    
-    $(() => {
-        loginBtn.on('click', popUpLoginBox)
-    })
+const mainFrmBox = $('.main-form-wrapper');
+const loginBtn = $('#login-btn');
+const idInput = $('.signin-frm #login-id');
+const pwInput = $('.signin-frm #login-pw');
+const body = $('body');
+const wholeWrapper = $('.whole-wrapper');
 
-    const toggleSet = () => {
-    	idInput.val('');
-        pwInput.val('');
-        
-        loginMsg.text('');
-        signupInputs.prev().children('span').text('');
-        
-        body.toggleClass('body-inactive');
+$(() => {
+    loginBtn.on('click', popUpLoginBox)
+});
+
+const toggleSet = () => {
+	idInput.val('');
+	pwInput.val('');
+    loginMsg.text('');
+    signupInputs.prev().children('span').text('');
+
+    body.toggleClass('body-inactive');
         wholeWrapper.toggleClass('whole-wrapper-inactive');
         mainFrmBox.toggleClass('active');
         mainFrmBox.addClass('main-frm-anim');
@@ -53,6 +51,7 @@
     const signupInputs = signupFrm.children('label').next();
     const signinInputs = $('.signin-frm label input');
     const loginMsg = $('.login-msg');
+    
     
     const toggleFrm = (e) => {
         if($(e.target).hasClass('frm-title-active')) return;
@@ -123,6 +122,7 @@
     
             checkBlank();
             if(!idRegExpValid()) invalidCount++;
+            if($('#idAvail').val() == 'false') invalidCount++;
             if(!pwRegExpValid()) invalidCount++;
             if(!emailRegExpValid()) invalidCount++;
             if(!pwCkValid()) invalidCount++;
@@ -130,6 +130,23 @@
             
             if(invalidCount == 0)
             {
+                $.ajax({
+                    url: 'memberEnroll',
+                    type: 'post',
+                    data: signupFrm.serialize(),
+                    dataType: 'text',
+                    success: data => {
+                        if(data > 0)
+                        {
+                            alert('회원가입이 완료되었습니다.');
+                            location.reload();
+                        }
+                        else
+                        {
+                            alert('회원가입에 실패하였습니다.')
+                        }
+                    }
+                });
                 return true;
             }
             else
@@ -148,7 +165,7 @@
 
     });
 
-    //회원가입란 빈칸 체크
+    //회원가입란 공백 체크
     const checkBlank = () => {
         for(let i = 0 ; i < signupInputs.length ; i++)
         {
@@ -167,18 +184,38 @@
         mainFrmBox.addClass('frm-invalid-anim');
     }
 
-    //아이디 정규식
+    //아이디 정규식 + 중복여부 확인
     const idRegExpValid = () => {
         const signupIdVal = signupId.val();
+        if(signupIdVal.length == 0) return;
+        
         const regex = new RegExp('^[a-zA-Z][a-zA-Z0-9]{3,11}$');
         const result = regex.test(signupIdVal);
         if(!result) signupId.prev().children('span').text('아이디가 올바른 형식이 아닙니다.');
+        $.ajax({
+        	url: 'checkId?memberId='+signupIdVal,
+        	type: 'get',
+        	dataTpe: 'text',
+        	success: data => {
+        		if(data)
+        		{
+            		$('#idAvail').val('false');
+            		signupId.prev().children('span').text('해당 아이디가 이미 존재합니다.');
+        		}
+        		else 
+        		{
+        			$('#idAvail').val('true');
+            		signupId.prev().children('span').text('사용가능한 아이디 입니다.');        			
+        		}
+        	}
+        });
         return result;
     }
 
     //패스워드 정규식
     const pwRegExpValid = () => {
         const signupPwVal = signupPw.val();
+        if(signupPwVal.length == 0) return;
         const regex = new RegExp('(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,16}$');
         const result = regex.test(signupPwVal);
         if(!result) signupPw.prev().children('span').text('패스워드가 올바른 형식이 아닙니다.');
@@ -198,6 +235,7 @@
     	}
     	else
     	{
+    		if(signupPwVal.trim().length == 0) return false;
     		signupPwCk.prev().children('span').css('color', 'green');
     		signupPwCk.prev().children('span').text('패스워드가 일치합니다.');
     		return true;
@@ -205,14 +243,14 @@
     }
     
     $(() => {
-    	signupPwCk.on('blur', pwCkValid);
+    	
     });
-    
-    
     
     //이메일 정규식
     const emailRegExpValid = () => {
         const signupEmailVal = signupEmail.val();
+        if(signupEmailVal.length == 0) return;
+        
         const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
         const result = regex.test(signupEmailVal);
         if(!result) signupEmail.prev().children('span').text('이메일이 올바른 형식이 아닙니다.');
@@ -221,10 +259,11 @@
         return result;
     }
 
-
     //휴대전화 정규식
     const phoneRegExpValid = () => {
         const signupPhoneVal = signupPhone.val();
+        if(signupPhoneVal.length == 0) return;
+        
         const regex = /^01([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$/;
         const result = regex.test(signupPhoneVal);
         if(!result) signupPhone.prev().children('span').text('전화번호가 올바른 형식이 아닙니다.');
@@ -232,10 +271,13 @@
         return result;
     }
     
-    //회원가입 시 ajax로 중복 여부 nudge
-    $(() => {
-    	signupInputs.on('blur', e => {
-    		
-    	});
-    });
+    //키입력시 유효성 체크 이벤트
     
+    $(() => {
+    	signupId.on('blur', idRegExpValid);
+    	signupPw.on('blur', pwRegExpValid);
+    	signupPwCk.on('blur', pwCkValid);
+    	signupEmail.on('blur', emailRegExpValid);
+    	signupPhone.on('blur', phoneRegExpValid);
+    	
+    });

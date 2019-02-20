@@ -47,8 +47,8 @@
             <p>회원정보 분실</p>
             <p class="not-member">회원이 아니신가요?</p>
         </form>
-        <form action="#" method="post" class="signup-frm" autocomplete="off">
-            <label for="member-id">아이디<span></span></label>
+        <form action="memberEnroll" method="post" class="signup-frm" autocomplete="off">
+            <label for="<%=request.getContextPath()%>/member-id">아이디<span></span></label>
             <input type="text" name="memberId" id="member-id" placeholder="영문 대소문자와 숫자로 4자이상 12자미만">
             <label for="member-name">이름<span></span></label>
             <input type="text" name="memberName" id="member-name">
@@ -60,6 +60,7 @@
             <input type="email" name="memberEmail" id="member-email">
             <label for="member-phone">전화번호<span></span></label>
             <input type="tel" name="memberPhone" id="member-phone" placeholder="- 포함하여 입력">
+          	<input type="hidden" name="idAvail" id="idAvail">
             <input type="submit" value="회원가입">
         </form>
     </div>
