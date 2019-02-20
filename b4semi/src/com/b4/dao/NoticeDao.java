@@ -22,7 +22,6 @@ public class NoticeDao {
 		ResultSet rs=null;
 		List<Notice> list = new ArrayList<>();
 		String sql = prop.getProperty("selectList");
-		System.out.println(sql);
 		
 		try {
 			pstmt=conn.prepareStatement(sql);
@@ -124,7 +123,7 @@ public class NoticeDao {
 		return result;
 	}
 	
-	public int insertNotice(Connection conn, Notice n)//수정
+	public int insertNotice(Connection conn, Notice n)//입력
 	{
 		PreparedStatement pstmt=null;
 		int result=0;
