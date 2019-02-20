@@ -39,6 +39,7 @@ public class LogoutServlet extends HttpServlet {
 		{
 			request.setAttribute("msg", "세션이 만료되었습니다.");
 			request.setAttribute("loc", "");
+			request.getRequestDispatcher(request.getContextPath()+"views/common/msg.jsp").forward(request, response);
 		}
 	}
 

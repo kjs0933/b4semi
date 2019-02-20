@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>마켓컬리</title>
+<title>더 푸드 포럼</title>
 </head>
 <body>
 
