@@ -8,26 +8,25 @@ import static common.JDBCTemplate.rollback;
 import java.sql.Connection;
 import java.util.List;
 
-import com.b4.dao.DPListDao;
-import com.b4.model.vo.DPList;
+import com.b4.dao.SupplierDao;
+import com.b4.model.vo.Supplier;
 
+public class SupplierService {
 
-public class DPListService {
+	private SupplierDao dao = new SupplierDao();
 	
-	private DPListDao dao = new DPListDao();
-	
-	public List<DPList> selectList(int cPage, int numPerPage)
+	public List<Supplier> selectList(int cPage, int numPerPage)
 	{
 		Connection conn=getConnection();
-		List<DPList> list = dao.selectList(conn,cPage,numPerPage);
+		List<Supplier> list = dao.selectList(conn,cPage,numPerPage);
 		close(conn);
 		return list;
 	}
 	
-	public int insertDPList(DPList d)
+	public int insertSupplier(Supplier d)
 	{
 		Connection conn=getConnection();
-		int result=dao.insertDPList(conn,d);
+		int result=dao.insertSupplier(conn,d);
 		if(result>0)
 		{
 			commit(conn);
@@ -38,10 +37,10 @@ public class DPListService {
 		return result;
 	}
 	
-	public int updateDPList(DPList d)
+	public int updateSupplier(Supplier d)
 	{
 		Connection conn=getConnection();
-		int result=dao.updateDPList(conn, d);
+		int result=dao.updateSupplier(conn, d);
 		if(result>0)
 		{
 			commit(conn);
@@ -54,10 +53,10 @@ public class DPListService {
 		return result;
 	}
 	
-	public int deleteDPList(DPList d)
+	public int deleteSupplier(Supplier d)
 	{
 		Connection conn=getConnection();
-		int result=dao.deleteDPList(conn, d);
+		int result=dao.deleteSupplier(conn, d);
 		
 		if(result>0)
 		{
@@ -70,5 +69,5 @@ public class DPListService {
 		close(conn);
 		return result;
 	}
-
+	
 }

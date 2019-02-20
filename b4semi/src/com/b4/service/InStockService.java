@@ -8,40 +8,39 @@ import static common.JDBCTemplate.rollback;
 import java.sql.Connection;
 import java.util.List;
 
-import com.b4.dao.DPListDao;
-import com.b4.model.vo.DPList;
+import com.b4.dao.InStockDao;
+import com.b4.model.vo.InStock;
 
+public class InStockService {
 
-public class DPListService {
+private InStockDao dao = new InStockDao();
 	
-	private DPListDao dao = new DPListDao();
-	
-	public List<DPList> selectList(int cPage, int numPerPage)
+	public List<InStock> selectList(int cPage, int numPerPage)
 	{
 		Connection conn=getConnection();
-		List<DPList> list = dao.selectList(conn,cPage,numPerPage);
+		List<InStock> list = dao.selectList(conn,cPage,numPerPage);
 		close(conn);
 		return list;
 	}
 	
-	public int insertDPList(DPList d)
+	public int insertInStock(InStock d)
 	{
 		Connection conn=getConnection();
-		int result=dao.insertDPList(conn,d);
+		int result=dao.insertInStock(conn,d);
 		if(result>0)
 		{
 			commit(conn);
-			result=dao.displayListSeq(conn);
+			result=dao.instockSeq(conn);
 		}
 		else{rollback(conn);}
 		close(conn);
 		return result;
 	}
 	
-	public int updateDPList(DPList d)
+	public int updateInStock(InStock d)
 	{
 		Connection conn=getConnection();
-		int result=dao.updateDPList(conn, d);
+		int result=dao.updateInStock(conn, d);
 		if(result>0)
 		{
 			commit(conn);
@@ -54,10 +53,10 @@ public class DPListService {
 		return result;
 	}
 	
-	public int deleteDPList(DPList d)
+	public int deleteInStock(InStock d)
 	{
 		Connection conn=getConnection();
-		int result=dao.deleteDPList(conn, d);
+		int result=dao.deleteInStock(conn, d);
 		
 		if(result>0)
 		{
