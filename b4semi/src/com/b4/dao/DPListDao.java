@@ -10,7 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 import com.b4.model.vo.DPList;
@@ -30,69 +29,18 @@ public class DPListDao {
 		}
 	}
 	
-	public int searchListCount(Connection conn, String type, String keyword, String category, String sortType)
+	public int searchDPCount(Connection cn, String keyword, String category)
 	{
-		PreparedStatement pstmt = null;
+		PreparedStatement ps = null;
 		ResultSet rs=null;
-		String sql=null;
+		String sql=prop.getProperty("searchDPCount");
 		int result = 0;
-		/* 실행 쿼리문 참고
-		 * 
-SELECT * FROM (SELECT ROWNUM AS "RNUM", A.* FROM
-(select * from dplist left join
-    (select displayListSeq, min(displayOptionPrice) as "MINPRICE", min(discountRate) as "DISCOUNTRATE",  min(subCategoryCode) as "SUBCATEGORYCODE", min(majorCategoryCode) as "MAJORCATEGORYCODE" , trunc(avg(reviewScore),2) as "AVGREVIEWSCORE" from DPOption
-        left join discount using(discountCode)
-        join product using(productCode)
-        join subCategory using(subCategoryCode)
-        left join review using(productCode, displayListSeq)
-        group by displayListSeq
-        ) using(displayListSeq) where 
-            검색컬럼명 like ? -- 키워드 + 검색어
-        AND (SUBCATEGORYCODE like ? OR MAJORCATEGORYCODE like ?) -- 소분류 카테고리 혹은 대분류 카테고리 구분
-        order by dplistavailable DESC, 정렬컬럼명 (DESC,ASC) -- 정렬방식 + 정렬순서
-) A WHERE ROWNUM <= ? ) WHERE RNUM >= ?; -- 표시 최대번호, 표시 최소번호
-		*/
-		return result;
-	}
-	
-	public List<DPList> selectList(Connection conn, int cPage, int numPerPage)
-	{
-		PreparedStatement pstmt = null;
-		ResultSet rs=null;
-		List<DPList> list = new ArrayList<>();
-		String sql=prop.getProperty("selectList");
 		try {
-			pstmt=conn.prepareStatement(sql);
-			pstmt.setInt(1, (cPage-1)*numPerPage+1);
-			pstmt.setInt(2, cPage*numPerPage);
-			rs=pstmt.executeQuery();
-			while(rs.next())
-			{
-				DPList d = new DPList();
-				d.setDisplayListSeq(rs.getInt("diplayListSeq"));
-				d.setDisplayListTitle(rs.getString("diplayListTitle"));
-				d.setDisplayListContents(rs.getString("displayListContents"));
-				d.setDPListAvailable(rs.getString("DPListAvailable"));
-				d.setDisplayDate(rs.getTimestamp("displayDate"));
-				d.setDPListOriginalFileName(rs.getString("dplistoriginalfilename"));
-				d.setDPListRenameFilename(rs.getString("DPListRenameFilename"));
-			}
-		}
-		catch(SQLException e)
-		{e.printStackTrace();}
-		finally {close(rs);close(pstmt);}
-		return list;	
-	}
-	
-	public int displayListSeq(Connection conn)
-	{
-		PreparedStatement pstmt=null;
-		ResultSet rs=null;
-		int result=0;
-		String sql=prop.getProperty("displayListSeq");
-		try {
-			pstmt=conn.prepareStatement(sql);
-			rs=pstmt.executeQuery();
+			ps=cn.prepareStatement(sql);
+			ps.setString(1, "%"+keyword+"%");
+			ps.setString(2, "%"+category+"%");
+			ps.setString(3, "%"+category+"%");
+			rs=ps.executeQuery();
 			if(rs.next())
 			{
 				result=rs.getInt(1);
@@ -102,68 +50,54 @@ SELECT * FROM (SELECT ROWNUM AS "RNUM", A.* FROM
 		{
 			e.printStackTrace();
 		}
-		finally {close(rs);close(pstmt);}
+		finally
+		{
+			close(rs);
+			close(ps);
+		}
 		return result;
 	}
 	
-	public int insertDPList(Connection conn, DPList d)//입력
+	public ArrayList<DPList> searchDPList(Connection cn, int cPage, int numPerPage, String keyword, String category, String sort)
 	{
-		PreparedStatement pstmt=null;
-		int result=0;
-		String sql=prop.getProperty("insertDPList");
+		PreparedStatement ps = null;
+		ResultSet rs=null;
+		ArrayList<DPList> result = new ArrayList<DPList>();
+		DPList dplist;
+		String sql=prop.getProperty("searchDPList1") +" "+ sort + prop.getProperty("searchDPList2");
 		try {
-			pstmt=conn.prepareStatement(sql);
-			pstmt.setInt(1, d.getDisplayListSeq());
-			pstmt.setString(2, d.getDisplayListTitle());
-			pstmt.setString(3, d.getDisplayListContents());
-			pstmt.setString(4, d.getDPListAvailable());
-			pstmt.setTimestamp(5, d.getDisplayDate());
-			pstmt.setString(6, d.getDPListOriginalFileName());
-			pstmt.setString(7, d.getDPListRenameFilename());
-			result=pstmt.executeUpdate();
+			ps=cn.prepareStatement(sql);
+			ps.setString(1, "%"+keyword+"%");
+			ps.setString(2, "%"+category+"%");
+			ps.setString(3, "%"+category+"%");
+			ps.setInt(4, (cPage)*numPerPage); //최대값이 먼저 와야 한다
+			ps.setInt(5, (cPage-1)*numPerPage+1);
+			rs=ps.executeQuery();
+			while(rs.next())
+			{
+				dplist = new DPList();
+				dplist.setDisplayListSeq(rs.getInt("DISPLAYLISTSEQ"));
+				dplist.setDisplayListTitle(rs.getString("DISPLAYLISTTITLE"));
+				dplist.setDpListAvailable(rs.getString("DPLISTAVAILABLE"));
+				dplist.setDisplayDate(rs.getTimestamp("DISPLAYDATE"));
+				dplist.setMinPrice(rs.getInt("MINPRICE"));
+				dplist.setDiscountRate(rs.getDouble("DISCOUNTRATE"));
+				dplist.setReviewScore(rs.getString("REVIEWSCORE"));
+				dplist.setImg(rs.getString("IMG"));
+				result.add(dplist);
+			}
 		}
 		catch(SQLException e)
-		{e.printStackTrace();}
-		finally {close(pstmt);}
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(rs);
+			close(ps);
+		}
 		return result;
 	}
 	
-	public int updateDPList(Connection conn, DPList d)//수정
-	{
-		PreparedStatement pstmt=null;
-		int result=0;
-		String sql=prop.getProperty("updateDPList");
-		try {
-			pstmt=conn.prepareStatement(sql);
-			pstmt.setInt(1,d.getDisplayListSeq());
-			pstmt.setString(2, d.getDisplayListTitle());
-			pstmt.setString(3, d.getDisplayListContents());
-			pstmt.setString(4, d.getDPListAvailable());
-			pstmt.setTimestamp(5, d.getDisplayDate());
-			pstmt.setString(6, d.getDPListOriginalFileName());
-			pstmt.setString(7, d.getDPListRenameFilename());
-			result=pstmt.executeUpdate();
-		}
-		catch(SQLException e)
-		{e.printStackTrace();}
-		finally {close(pstmt);}
-		return result;
-	}
-	
-	public int deleteDPList(Connection conn, DPList d)//삭제
-	{
-		PreparedStatement pstmt=null;
-		int result=0;
-		String sql=prop.getProperty("deleteDPList");
-		try {
-			pstmt=conn.prepareStatement(sql);
-			pstmt.setInt(1, d.getDisplayListSeq());
-			result=pstmt.executeUpdate();
-		}
-		catch(SQLException e)
-		{e.printStackTrace();}
-		finally {close(pstmt);}
-		return result;
-	}
 
 }
