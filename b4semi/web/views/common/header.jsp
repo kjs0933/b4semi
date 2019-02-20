@@ -117,12 +117,13 @@
         }
 
         .nav ul li:nth-of-type(1){flex: 1 1 0;}
-        .nav ul li:nth-of-type(2){flex: 2 1 0;}
+        .nav ul li:nth-of-type(2){flex: 1 1 0;}
         .nav ul li:nth-of-type(3){flex: 1 1 0;}
-        .nav ul li:nth-of-type(4){flex: 15 1 0;}
-        .nav ul li:nth-of-type(5){flex: 2 1 0;}
-        .nav ul li:nth-of-type(6){flex: 2 1 0;}
+        .nav ul li:nth-of-type(4){flex: 8 1 0;}
+        .nav ul li:nth-of-type(5){flex: 1 1 0;}
+        .nav ul li:nth-of-type(6){flex: 1 1 0;}
         .nav ul li:nth-of-type(7){flex: 1 1 0;}
+		.nav ul li:nth-of-type(8){flex: 1 1 0; justify-content: flex-end;}
 		
         .nav svg
         {
@@ -250,6 +251,8 @@
         }
 
 
+/* 		카테고리 메뉴 토글 버튼 */
+
         #category-toggle-btn
         {
             width: auto;
@@ -283,7 +286,7 @@
             top: 100%;
             background-color: white;
             font-family: 'Noto Sans KR';
-            border: 1px solid #eee;
+            border: 1px solid #ccc;
 
             z-index: 5;
             display: none;
@@ -372,10 +375,20 @@
 
         footer
         {
-            min-width: 1024px;
+            width: 100%;
             margin: 30px 0;
             font-family: 'Noto Sans KR';
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+            
+            border-top: 1px solid #ccc;
         }
+        
+       	.footer-wrapper
+       	{
+       		width: 1024px;
+       	}
 
         .footer > h2
         {
@@ -514,9 +527,9 @@
 
         .main-frm-anim{animation: mainFrmPop 150ms linear forwards;}
 
-        .frm-title
+        .login-frm-title
         {
-            color: #ccc;
+            color: rgb(38, 85, 139);
             font-size: 2em;
             text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
             display: flex;
@@ -524,11 +537,11 @@
             width: 250px;
         }
 
-        .frm-title > p{cursor: pointer;}
+        .login-frm-title > p{cursor: pointer;}
 
         .signin-frm
         {
-            display: none;
+            display: flex;
             flex-flow: column nowrap;
             align-items: center;
             margin-top: 30px;
@@ -630,77 +643,6 @@
             color: gray;
         }
 
-        .signup-frm
-        {
-            flex-flow: column nowrap;
-            align-items: center;
-            margin-top: 25px;
-
-            display: none;
-
-            width: 250px;
-        }
-
-        .signup-frm input
-        {
-            width: 250px;
-            height: 30px;
-            border: none;
-            font-size: 16px;
-        }
-
-        .signup-frm input:not(:last-of-type)
-        {
-            border-bottom: 1px solid #ccc;
-        }
-
-        .signup-frm input[type="submit"]
-        {
-            height: 45px;
-            background-color: rgb(38, 85, 139);
-            color: white;
-            margin-top: 50px;
-            margin-bottom: 40px;
-            border-radius: 1px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            cursor: pointer;
-        }
-
-        .signup-frm > label
-        {
-            font-size: 14px;
-            color: #666;
-            align-self: flex-start;
-            margin-top: 15px;
-        }
-
-        .signup-frm > label > span
-        {
-            color: crimson;
-            display: block;
-        }
-
-        .signup-frm input:focus
-        {
-            outline: none;
-        }
-        
-        .signup-frm > label :
-        {
-        	height: 13px;
-        }
-
-        .frm-title-active
-        {
-            color: rgb(38, 85, 139);
-            font-weight: bold;
-        }
-
-        .frm-active
-        {
-            display: flex;
-        }
-
         .frm-invalid-anim
         {
             animation: invalid 150ms ease forwards;
@@ -793,6 +735,12 @@
 			        </div>
 			    </li>
                	<% } %>
+                <%if(loginMember == null){%>
+               	<li>
+                	<a href="<%=request.getContextPath()%>/views/member/signup.jsp">회원가입</a>
+                </li>
+                <%} %>
+          
                 <li>
                 	<div class="support-wrapper">
         				<span id="support-btn">고객센터</span>

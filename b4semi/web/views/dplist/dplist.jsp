@@ -17,7 +17,7 @@
             width: 100%;
             display: flex;
             flex-flow: row wrap;
-            justify-content: space-evenly;
+            justify-content: space-around;
         }
 
         .plist-board > div
