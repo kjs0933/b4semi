@@ -32,7 +32,7 @@ public class MemberService {
 		return result;
 	}
 	
-	//마이페이지 - 회원정보수정
+	//회원정보수정
 	public int updateMember(Member m)
 	{
 		Connection conn = getConnection();
@@ -42,6 +42,7 @@ public class MemberService {
 		return result;
 	}
 	
+	//회원 추가
 	public int insertOne(Member m)
 	{
 		Connection conn = getConnection();

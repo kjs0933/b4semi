@@ -41,7 +41,7 @@
         #logo
         {
             font-family: 'Marcellus SC';
-            font-size: 21px;
+            font-size: 25px;
         }
 
         /* 네비게이션 */
@@ -71,11 +71,19 @@
 
         .nav > ul > li
         {
-            display: inline-block;
+            display: flex;
+            height: 100%;
+            align-items: center;
             padding: 0 10px;
             margin: 0;
-
             cursor: pointer;
+        }
+        
+        .nav > ul > li > div
+        {
+        	display: flex;
+        	flex-flow: column;
+        	justify-content: center;
         }
 
         .nav > ul > li > a
@@ -122,8 +130,8 @@
             height: auto;
             border: 1px solid #eee;
             font-size: 13px;
-            left: -32%;
-            top : 7px;
+            left: -82px;
+            top : 30px;
             background-color: white;
         }
         
@@ -179,7 +187,7 @@
             font-size: 13px;
             position: absolute;
             left: -20px;
-            top: 30px;
+            top: 40px;
             
             background-color: white;
         }
