@@ -82,12 +82,15 @@ public class DisplayListServlet extends HttpServlet {
 
 		ArrayList<DPList> dplist = service.searchDPList(cPage,numPerPage,keyword,sub,major,sortText);
 		
+		
 		String subText = service.getSubText(sub);
+		ArrayList<String> subTextAll = service.getSubTextAll(major);
 		String majorText = service.getMajorText(major);
 		
+		
 		//페이징 처리를 위한 값!!!
-		int totalContent = service.searchDPCount(keyword,sub,major); //총 자료의 갯수
-		int totalPage=(int)Math.ceil((double)totalContent/numPerPage);
+		int totalCount = service.searchDPCount(keyword,sub,major); //총 자료의 갯수
+		int totalPage=(int)Math.ceil((double)totalCount/numPerPage);
 		int pageBarSize = 5; //bar의 출력할 페이지 수!
 		int pageStart= ((cPage-1)/pageBarSize)*pageBarSize+1;//시작지점
 		int pageEnd= Math.min(pageStart+pageBarSize-1,totalPage); //끝지점
@@ -100,7 +103,7 @@ public class DisplayListServlet extends HttpServlet {
 		}
 		else {
 			pageBar +="<div><a href='"+ request.getContextPath() +"/dpList?cPage="+(pageStart-1)+
-					"&keyword="+keyword+"&sub="+sub+"&sort="+sort+"'><img src='"+
+					"&keyword="+keyword+"&sub="+sub+"&major="+major+"&sort="+sort+"'><img src='"+
 					request.getContextPath()+"/images/board-arrow-left.png'></a></div>";
 		}
 		for(int i=pageStart; i<=pageEnd; i++)
@@ -112,7 +115,7 @@ public class DisplayListServlet extends HttpServlet {
 			else
 			{
 				pageBar +="<div><a href='"+ request.getContextPath() +"/dpList?cPage="+i+
-						"&keyword="+keyword+"&sub="+sub+"&sort="+sort+"'>"+i+"</a></div>";
+						"&keyword="+keyword+"&sub="+sub+"&major="+major+"&sort="+sort+"'>"+i+"</a></div>";
 			}
 		}
 		if(pageEnd>=totalPage)
@@ -122,17 +125,18 @@ public class DisplayListServlet extends HttpServlet {
 		else
 		{
 			pageBar +="<div><a href='"+ request.getContextPath() +"/dpList?cPage="+(pageEnd+1)+
-					"&keyword="+keyword+"&sub="+sub+"&sort="+sort+"'><img src='"+
+					"&keyword="+keyword+"&sub="+sub+"&major="+major+"&sort="+sort+"'><img src='"+
 					request.getContextPath()+"/images/board-arrow-left.png'></a></div>";
 		}
 		pageBar+="</div>";
 		
-		request.setAttribute("totalContent", totalContent);
+		request.setAttribute("totalCount", totalCount);
 		request.setAttribute("subText", subText);
+		request.setAttribute("subTextAll", subTextAll);
 		request.setAttribute("majorText", majorText);
 		request.setAttribute("dplist", dplist);
 		request.setAttribute("pageBar", pageBar);
-		request.getRequestDispatcher("/views/dplist/dplist.jsp?cPage="+cPage+"&keyword="+keyword+ "&sub="+sub+"&sort="+sort).forward(request, response);
+		request.getRequestDispatcher("/views/dplist/dplist.jsp?cPage="+cPage+"&keyword="+keyword+ "&sub="+sub+"&major="+major+"&sort="+sort).forward(request, response);
 	}
 
 	/**

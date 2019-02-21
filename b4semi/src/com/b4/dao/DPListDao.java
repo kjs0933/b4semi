@@ -85,6 +85,33 @@ public class DPListDao {
 		}
 		return result;
 	}
+	public ArrayList<String> getSubTextAll(Connection cn, String major)
+	{
+		PreparedStatement ps = null;
+		ResultSet rs=null;
+		String sql=prop.getProperty("getSubTextAll");
+		ArrayList<String> result = new ArrayList<String>();
+		try {
+			ps=cn.prepareStatement(sql);
+			ps.setString(1, major);
+			rs=ps.executeQuery();
+			while(rs.next())
+			{
+				result.add(rs.getString(1));
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(rs);
+			close(ps);
+		}
+		return result;
+	}
+	
 	public String getMajorText(Connection cn, String major)
 	{
 		PreparedStatement ps = null;

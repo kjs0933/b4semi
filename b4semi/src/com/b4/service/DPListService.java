@@ -43,5 +43,12 @@ public class DPListService {
 		close(cn);
 		return result;
 	}
+	public ArrayList<String> getSubTextAll(String major)
+	{
+		Connection cn=getConnection();
+		ArrayList<String> result = dao.getSubTextAll(cn,major);
+		close(cn);
+		return result;
+	}
 
 }

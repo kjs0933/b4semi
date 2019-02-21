@@ -1,6 +1,91 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/views/common/header.jsp"%>
+<%@ page import="com.b4.model.vo.DPList"%>
+<%@ page import="java.util.ArrayList"%>
+
+<%
+	int cPage;
+	try {
+		cPage = Integer.parseInt(request.getParameter("cPage"));
+	} catch (NumberFormatException e) {
+		cPage = 1;
+	}
+/* 	String keyword= request.getParameter("keyword");
+	if(keyword == null)
+	{
+		keyword ="";
+	} 헤더에 있어야 하므로 일단 주석 */
+	String sort= request.getParameter("sort");
+	if(sort == null)
+	{
+		sort="";
+	}
+	String subText;
+	try {
+		subText= (String)request.getAttribute("subText");
+		if(subText == null)
+		{
+			subText="";
+		}
+	} catch (ClassCastException e) {
+		subText="";
+	}
+	ArrayList<String> subTextAll;
+	try {
+		subTextAll= (ArrayList<String>)request.getAttribute("subTextAll");
+		if(subTextAll == null)
+		{
+			subTextAll=new ArrayList<String>();
+		}
+	} catch (ClassCastException e) {
+		subTextAll=new ArrayList<String>();
+	}
+	
+	String majorText;
+	try {
+		majorText = (String)request.getAttribute("majorText");
+		if(majorText == null)
+		{
+			majorText="";
+		}
+	} catch (ClassCastException e) {
+		majorText="";
+	}
+	String totalCount;
+	try {
+		totalCount = String.valueOf((int)request.getAttribute("totalCount"));
+		if(totalCount == null)
+		{
+			totalCount="0";
+		}
+	} catch (Exception e) {
+		totalCount="0";
+	}
+	
+	String pageBar;
+	try {
+		pageBar = (String)request.getAttribute("pageBar");
+		if(pageBar == null)
+		{
+			pageBar ="";
+		}
+	} catch (ClassCastException e) {
+		pageBar ="";
+	}
+	
+	ArrayList<DPList> dplist;
+	try {
+		dplist = (ArrayList<DPList>)request.getAttribute("dpList");
+		if(dplist == null)
+		{
+			dplist = new ArrayList<DPList>();
+		}
+	} catch (ClassCastException e) {
+		dplist = new ArrayList<DPList>();
+	}
+
+%>
     <style>
         .dp-list-wrapper
         {
@@ -210,7 +295,7 @@
     <div class="dp-list-wrapper">
 	    <div class="search-result">
 	        <div class="search-result-msg">
-	           	총 100개 상품
+	           	총 <%=totalCount%>개 상품
 	        </div>
 	        <div id="orderby">
 	            <select>
@@ -223,17 +308,20 @@
 	        </div>
 	    </div>
     
-        <div class="major-category">채소</div>
+        <div class="major-category"><%=majorText%></div>
         <div class="sub-category-wrapper">
             <div class="sub-category">
                 <ul>
-                    <li class="current-sub-category"><a href="#">잎채소</a><span></span></li>
-                    <li><a href="#">마늘·파·양파</a><span></span></li>
-                    <li><a href="#">뿌리채소</a><span></span></li>
-                    <li><a href="#">고추·호박·오이·가지</a><span></span></li>
-                    <li><a href="#">나물</a><span></span></li>
-                    <li><a href="#">버섯</a><span></span></li>
-                    <li><a href="#">기타</a><span></span></li>
+                	<%for(int i=0; i<subTextAll.size(); i++){
+                	if(subTextAll.get(i).equals(subText))
+                	{%>
+                		<li class="current-sub-category"><a href="#"><%=subTextAll.get(i)%></a><span></span></li>
+                	<%}
+                	else
+                	{%>
+                		<li><a href="<%=request.getContextPath()%>/dplist?sub="><%=subTextAll.get(i)%></a><span></span></li>
+                	<%}
+                	}%>
                 </ul>
             </div>
         </div>
@@ -272,7 +360,7 @@
             </div>
             <div>
                 <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>images/add_to_cart.png"></div>
+                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
                 <p>농약 팍팍 독버섯</p>
                 <p>10,000 원</p>
             </div>
