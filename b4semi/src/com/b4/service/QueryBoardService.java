@@ -13,6 +13,8 @@ import com.b4.model.vo.QueryBoard;
 import com.b4.model.vo.Reply;
 
 public class QueryBoardService {
+	//1대1문의 게시판 및 댓글 테이블에 대한 메소드정의.
+	
 	
 	QueryBoardDao dao = new QueryBoardDao();
 
@@ -76,6 +78,28 @@ public class QueryBoardService {
 	{
 		Connection conn = getConnection();
 		int result = dao.insertReply(conn, re);
+		if(result>0) commit(conn);
+		else rollback(conn);
+		close(conn);
+		return result;
+	}
+	
+	//댓글 수정
+	public int updateReply(Reply re)
+	{
+		Connection conn = getConnection();
+		int result = dao.updateReply(conn, re);
+		if(result>0) commit(conn);
+		else rollback(conn);
+		close(conn);
+		return result;
+	}
+	
+	//댓글삭제 - 프런트에서 deleteDate있을 경우 삭제된 것으로 처리
+	public int deleteReply(Reply re)
+	{
+		Connection conn = getConnection();
+		int result = dao.deleteReply(conn, re);
 		if(result>0) commit(conn);
 		else rollback(conn);
 		close(conn);
