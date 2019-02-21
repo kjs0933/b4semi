@@ -175,8 +175,49 @@ public class QueryBoardDao {
 			pstmt.setInt(3, re.getCommentRef());
 			pstmt.setTimestamp(4, re.getCommentDate());
 			pstmt.setString(5, re.getCommentText());
-			pstmt.setInt(6, re.getCommentLevel());
-			pstmt.setTimestamp(7, re.getCommentDeleteDate());
+			result = pstmt.executeUpdate();
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(pstmt);
+		}
+		return result;
+	}
+	
+	public int updateReply(Connection conn, Reply re) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		String sql = prop.getProperty("updateReply");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setTimestamp(1, re.getCommentDate());
+			pstmt.setString(2, re.getCommentText());
+			pstmt.setInt(3, re.getCommentSeq());
+			result = pstmt.executeUpdate();
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(pstmt);
+		}
+		return result;
+	}
+	
+	public int deleteReply(Connection conn, Reply re) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		String sql = prop.getProperty("deleteReply");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setTimestamp(1, re.getCommentDeleteDate());
+			pstmt.setInt(2, re.getCommentSeq());
 			result = pstmt.executeUpdate();
 		}
 		catch(SQLException e)
