@@ -54,7 +54,7 @@ public class NoticeDeleteServlet extends HttpServlet {
 			loc="/notice/noticeList";
 		}
 		else {
-			msg="공지사항 삭제 실패";
+			msg="공지사항 삭제실패";
 			loc="/notice/noticeView?noticeno="+deleteNo;
 		}
 		request.setAttribute("msg", msg);

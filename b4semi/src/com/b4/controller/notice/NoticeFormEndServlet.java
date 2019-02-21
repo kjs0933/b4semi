@@ -2,6 +2,9 @@ package com.b4.controller.notice;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -48,7 +51,7 @@ public class NoticeFormEndServlet extends HttpServlet {
 		dir+="upload/notice";
 		
 		
-		int maxSize=1024*1024*10;
+		int maxSize=1024*1024*100;
 		
 
 		MultipartRequest mr=new MultipartRequest(request,dir,maxSize,"UTF-8",new DefaultFileRenamePolicy());
@@ -57,6 +60,14 @@ public class NoticeFormEndServlet extends HttpServlet {
 		String contents=mr.getParameter("noticeContents");
 		Timestamp date=new Timestamp(System.currentTimeMillis());
 		int readCount=Integer.parseInt(mr.getFilesystemName("noticeReadCount"));
+		
+		//ajax파일 다중 업로드
+		Enumeration e=mr.getFileNames();
+		List<String> fileNames=new ArrayList();
+		while(e.hasMoreElements())
+		{
+			fileNames.add(mr.getFilesystemName((String)e.nextElement()));
+		}
 		
 		Notice n=new Notice();
 		n.setNoticeTitle(title);
@@ -81,6 +92,8 @@ public class NoticeFormEndServlet extends HttpServlet {
 		request.setAttribute("msg", msg);
 		request.setAttribute("loc", loc);
 		request.getRequestDispatcher(view).forward(request, response);
+		
+		
 		
 	}
 
