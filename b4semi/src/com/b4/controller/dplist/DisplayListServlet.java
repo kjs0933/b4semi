@@ -75,7 +75,7 @@ public class DisplayListServlet extends HttpServlet {
 		
 		DPListService service = new DPListService();
 
-		ArrayList<DPList> dplist = service.searchDPList(cPage,numPerPage,keyword,category,sort);
+		ArrayList<DPList> dplist = service.searchDPList(cPage,numPerPage,keyword,category,sortText);
 		
 		//페이징 처리를 위한 값!!!
 		int totalContent = service.searchDPCount(keyword,category); //총 자료의 갯수
@@ -99,7 +99,7 @@ public class DisplayListServlet extends HttpServlet {
 		{
 			if(cPage==i)
 			{
-				pageBar+="<div>"+cPage+"</div>";
+				pageBar+="<div><b>"+cPage+"</b></div>";
 			}
 			else
 			{

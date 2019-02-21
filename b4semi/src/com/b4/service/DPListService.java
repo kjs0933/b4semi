@@ -21,10 +21,10 @@ public class DPListService {
 		return result;
 	}
 	
-	public ArrayList<DPList> searchDPList(int cPage,int numPerPage,String keyword,String category,String sort)
+	public ArrayList<DPList> searchDPList(int cPage,int numPerPage,String keyword,String category,String sortText)
 	{
 		Connection cn=getConnection();
-		ArrayList<DPList> result = dao.searchDPList(cn, cPage, numPerPage, keyword, category, sort);
+		ArrayList<DPList> result = dao.searchDPList(cn, cPage, numPerPage, keyword, category, sortText);
 		close(cn);
 		return result;
 	}

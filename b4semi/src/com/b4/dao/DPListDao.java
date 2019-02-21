@@ -58,13 +58,13 @@ public class DPListDao {
 		return result;
 	}
 	
-	public ArrayList<DPList> searchDPList(Connection cn, int cPage, int numPerPage, String keyword, String category, String sort)
+	public ArrayList<DPList> searchDPList(Connection cn, int cPage, int numPerPage, String keyword, String category, String sortText)
 	{
 		PreparedStatement ps = null;
 		ResultSet rs=null;
 		ArrayList<DPList> result = new ArrayList<DPList>();
 		DPList dplist;
-		String sql=prop.getProperty("searchDPList1") +" "+ sort + prop.getProperty("searchDPList2");
+		String sql=prop.getProperty("searchDPList1") +" "+ sortText + prop.getProperty("searchDPList2");
 		try {
 			ps=cn.prepareStatement(sql);
 			ps.setString(1, "%"+keyword+"%");
