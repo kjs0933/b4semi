@@ -256,8 +256,6 @@
             flex-flow: column nowrap;
             align-items: center;
             padding-bottom: 42px;
-
-            border-bottom: 1px solid #ccc;
         }
 
         .promotion-products > p

@@ -32,7 +32,11 @@ public class CheckIdServlet extends HttpServlet {
 		String memberId = request.getParameter("memberId");
 		boolean isExsist = new MemberService().checkId(memberId);
 		
-		response.getWriter().println(isExsist);
+		if(isExsist)
+		{
+			response.getWriter().print("true");			
+		}
+		
 	}
 
 	/**
