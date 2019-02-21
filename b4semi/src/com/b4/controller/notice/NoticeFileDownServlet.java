@@ -35,9 +35,6 @@ public class NoticeFileDownServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String fname=request.getParameter("fname");
-	
-		
-		
 		String dir=request.getServletContext().getRealPath("/upload/notice");
 		
 
