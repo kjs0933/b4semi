@@ -285,29 +285,29 @@
     </div>
     
     
-<!--         <div class="major-category">채소</div> -->
-<!--         <div class="sub-category-wrapper"> -->
-<!--             <div class="sub-category"> -->
-<!--                 <ul> -->
-<!--                     <li class="current-sub-category"><a href="#">잎채소</a><span></span></li> -->
-<!--                     <li><a href="#">마늘·파·양파</a><span></span></li> -->
-<!--                     <li><a href="#">뿌리채소</a><span></span></li> -->
-<!--                     <li><a href="#">고추·호박·오이·가지</a><span></span></li> -->
-<!--                     <li><a href="#">나물</a><span></span></li> -->
-<!--                     <li><a href="#">버섯</a><span></span></li> -->
-<!--                     <li><a href="#">기타</a><span></span></li> -->
-<!--                 </ul> -->
-<!--             </div> -->
-<!--             <div id="orderby"> -->
-<!--                 <select> -->
-<!--                     <option value="descRate">평점순</option> -->
-<!--                     <option value="descDate">신상품순</option> -->
-<!--                     <option value="descPopular">인기상품순</option> -->
-<!--                     <option value="ascPrice">낮은가격순</option> -->
-<!--                     <option value="descPrice">높은가격순</option> -->
-<!--                 </select> -->
-<!--             </div> -->
-<!--         </div> -->
+     <div class="major-category">채소</div>
+        <div class="sub-category-wrapper">
+            <div class="sub-category">
+                <ul>
+                    <li class="current-sub-category"><a href="#">잎채소</a><span></span></li>
+                    <li><a href="#">마늘·파·양파</a><span></span></li>
+                    <li><a href="#">뿌리채소</a><span></span></li>
+                    <li><a href="#">고추·호박·오이·가지</a><span></span></li>
+                    <li><a href="#">나물</a><span></span></li>
+                    <li><a href="#">버섯</a><span></span></li>
+                    <li><a href="#">기타</a><span></span></li>
+                </ul>
+            </div>
+            <div id="orderby">
+                <select>
+                    <option value="descRate">평점순</option>
+                    <option value="descDate">신상품순</option>
+                    <option value="descPopular">인기상품순</option>
+                    <option value="ascPrice">낮은가격순</option>
+                    <option value="descPrice">높은가격순</option>
+                </select>
+            </div>
+        </div>
         
         
         <div class="plist-board">

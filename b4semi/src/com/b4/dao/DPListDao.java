@@ -29,7 +29,8 @@ public class DPListDao {
 		}
 	}
 	
-	public int searchDPCount(Connection cn, String keyword, String category)
+	
+	public int searchDPCount(Connection cn, String keyword, String sub, String major)
 	{
 		PreparedStatement ps = null;
 		ResultSet rs=null;
@@ -38,8 +39,8 @@ public class DPListDao {
 		try {
 			ps=cn.prepareStatement(sql);
 			ps.setString(1, "%"+keyword+"%");
-			ps.setString(2, "%"+category+"%");
-			ps.setString(3, "%"+category+"%");
+			ps.setString(2, "%"+sub+"%");
+			ps.setString(3, "%"+major+"%");
 			rs=ps.executeQuery();
 			if(rs.next())
 			{
@@ -58,7 +59,60 @@ public class DPListDao {
 		return result;
 	}
 	
-	public ArrayList<DPList> searchDPList(Connection cn, int cPage, int numPerPage, String keyword, String category, String sortText)
+	public String getSubText(Connection cn, String sub)
+	{
+		PreparedStatement ps = null;
+		ResultSet rs=null;
+		String sql=prop.getProperty("getSubText");
+		String result = "";
+		try {
+			ps=cn.prepareStatement(sql);
+			ps.setString(1, sub);
+			rs=ps.executeQuery();
+			if(rs.next())
+			{
+				result=rs.getString(1);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(rs);
+			close(ps);
+		}
+		return result;
+	}
+	public String getMajorText(Connection cn, String major)
+	{
+		PreparedStatement ps = null;
+		ResultSet rs=null;
+		String sql=prop.getProperty("getMajorText");
+		String result = "전체";
+		try {
+			ps=cn.prepareStatement(sql);
+			ps.setString(1, major);
+			rs=ps.executeQuery();
+			if(rs.next())
+			{
+				result=rs.getString(1);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(rs);
+			close(ps);
+		}
+		return result;
+	}
+	
+	public ArrayList<DPList> searchDPList(Connection cn, int cPage, int numPerPage, String keyword, String sub, String major, String sortText)
 	{
 		PreparedStatement ps = null;
 		ResultSet rs=null;
@@ -68,8 +122,8 @@ public class DPListDao {
 		try {
 			ps=cn.prepareStatement(sql);
 			ps.setString(1, "%"+keyword+"%");
-			ps.setString(2, "%"+category+"%");
-			ps.setString(3, "%"+category+"%");
+			ps.setString(2, "%"+sub+"%");
+			ps.setString(3, "%"+major+"%");
 			ps.setInt(4, (cPage)*numPerPage); //최대값이 먼저 와야 한다
 			ps.setInt(5, (cPage-1)*numPerPage+1);
 			rs=ps.executeQuery();
