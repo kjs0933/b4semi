@@ -1,6 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="/views/common/header.jsp" %>    
+<%@ page import="java.util.*, com.b4.model.vo.Cart" %>
+<%@ include file="/views/common/header.jsp" %>
+<%
+	List<Cart> list = (List<Cart>)request.getAttribute("cartList");
+	int[] price = new int[list.size()];
+	for(int i=0; i<list.size(); i++){
+		if(list.get(i).getDiscountRate()!=0.0)
+		{
+			price[i] = (int)Math.ceil((list.get(i).getDisplayOptionPrice()*list.get(i).getDiscountRate())/10)*10;
+		}else
+		{
+			price[i] = list.get(i).getDisplayOptionPrice();
+		}
+	}
+%>    
 	<style>
 	
 		.cart-wrapper
@@ -295,34 +309,24 @@
                     <div>금액</div>
                     <div>취소</div>
                 </div>
+             	<%if(!list.isEmpty()) {
+             		for(int i=0; i<list.size(); i++){
+             	%>
                 <div class="cart-col">
-                    <div><input type="checkbox" name="products" id="product1" class="products"><label for="product1"><span></span></label></div>
-                    <div><img src="<%=request.getContextPath() %>/images/tit_md_goods_3.jpg"></div>
-                    <div><div><p>맛없는 음식</p><br><p>3000 원</p></div></div>
+                    <div><input type="checkbox" name="products" id="product<%=i+1 %>" class="products"><label for="product<%=i+1 %>"><span></span></label></div>
+                    <div><img src="<%=request.getContextPath() %>/upload/product/<%=list.get(i).getProductName()%>.jpg"></div>
+                    <div><div><p><%=list.get(i).getProductName() %></p><br><p><%=price[i] %>원</p></div></div>
                     <div>
                         <div class="quantity-box">
                             <div><img src="<%=request.getContextPath() %>/images/arrow_left_black.png"></div>
-                            <input type="text" name="quantity1" id="quantity1" value="1"/>
+                            <input type="text" name="quantity<%=i+1 %>" id="quantity<%=i+1 %>" value="<%=list.get(i).getProductCount() %>"/>
                             <div><img src="<%=request.getContextPath() %>/images/arrow_right_black.png"></div>
                         </div>
                     </div>
                     <div></div>
                     <div><img src="<%=request.getContextPath() %>/images/btn_close.png"></div>
                 </div>
-                <div class="cart-col">
-                    <div><input type="checkbox" name="products" id="product2" class="products"><label for="product2"><span></span></label></div>
-                    <div><img src="<%=request.getContextPath() %>/images/tit_md_goods_3.jpg"></div>
-                    <div><div><p>맛있는 음식</p><br><p>3000 원</p></div></div>
-                    <div>
-                        <div class="quantity-box">
-                            <div><img src="<%=request.getContextPath() %>/images/arrow_left_black.png"></div>
-                            <input type="text" name="quantity2" id="quantity2" value="1"/>
-                            <div><img src="<%=request.getContextPath() %>/images/arrow_right_black.png"></div>
-                        </div>
-                    </div>
-                    <div></div>
-                    <div><img src="<%=request.getContextPath() %>/images/btn_close.png"></div>
-                </div>
+                <%}} %>
             </div>
             <div class="checkbox-control">
                 <input type="button" value="선택 삭제"/>
@@ -374,5 +378,27 @@
                 });
             }
         }
+        
+        
+        const leftArrow = $('.quantity-box > input').prev().children();
+        const rightArrow = $('.quantity-box > input').next().children();
+
+		$(function(){
+			leftArrow.on ('click', (e) => {
+				var decre = $(e.target).parent().next().val();
+				var denum = parseInt(decre);
+				denum--;
+				if(denum<=0)denum=1;
+				$(e.target).parent().next().val(denum);
+				
+			});
+			rightArrow.on('click', (e) => {
+				var incre = $(e.target).parent().prev().val();
+				var innum = parseInt(incre);
+				innum++;
+				$(e.target).parent().prev().val(innum);
+			});
+		});
+              
     </script>
 <%@ include file="/views/common/footer.jsp" %>
