@@ -89,8 +89,7 @@
             align-items: center;
             justify-content: space-between;
             width: 1024px;
-            
-             position: relative;
+            position: relative;
         }
 
         .nav > ul > li
@@ -122,8 +121,9 @@
         .nav ul li:nth-of-type(4){flex: 8 1 0;}
         .nav ul li:nth-of-type(5){flex: 1 1 0;}
         .nav ul li:nth-of-type(6){flex: 1 1 0;}
-        .nav ul li:nth-of-type(7){flex: 1 1 0;}
-		.nav ul li:nth-of-type(8){flex: 1 1 0; justify-content: flex-end;}
+        .nav ul li:nth-of-type(7){flex: 2 1 0;}
+        .nav ul li:nth-of-type(8){flex: 2 1 0;}
+		.nav ul li:nth-of-type(9){flex: 1 1 0; justify-content: flex-end;}
 		
         .nav svg
         {
@@ -132,6 +132,37 @@
             fill: rgb(80, 80, 90);
             margin-bottom: -5px;
         }
+
+        
+       	/*헤더 검색창*/
+       	
+       	
+        .search-box > input
+        {
+            box-sizing: border-box;
+            width: 180px;
+            height: 35px;
+            width: 160px;
+            border: none;
+            border-bottom: 1px solid #aaa;
+        }
+        
+        .search-box > input::placeholder
+        {
+            font-family: 'Noto Sans KR';
+            font-size: 13px;
+        }
+
+        .search-box > input:focus
+        {
+            outline: none;
+        }
+
+        .search-box
+        {
+            position: relative;
+        }
+        
         
 /*      마이 어카운트 토글 박스 */
 
@@ -658,6 +689,10 @@
             opacity: 0.3;
         }
         
+        
+        
+        
+        
 
         @keyframes invalid
         {
@@ -719,7 +754,11 @@
                 <li><a href="#">베스트</a></li>
                 <li><a href="#">할인</a></li>
                 <li><div id="logo"><a href="<%=request.getContextPath()%>">The Food Forum</a></div></li>
-                
+                <li>
+                	<div class="search-box">
+                        <input type="text" name="keyword" id="header-keyword" placeholder="상품검색">
+                    </div>
+                </li>
                 <% if(loginMember == null) { %>
                 <li id="login-btn">로그인</li>
                 <% } else { %>

@@ -193,56 +193,7 @@
             border-left: 1px solid rgb(220, 220, 220);
         }
         
-        
-        
-        .dplist-search-wrapper
-        {
-            width: 1024px;
-            display: flex;
-            flex-flow: column nowrap;
-            font-family: 'Noto Sans KR';
-            font-size: 14px;
-            align-items: center;
-        }
-
-        .dplist-search-wrapper input
-        {
-            font-family: 'Noto Sans KR';
-            font-size: 14px;
-            box-sizing: border-box;
-        }
-
-        .dplist-search-header
-        {
-            font-size: 30px;
-            margin: 25px;
-            color: rgb(38, 85, 139);
-        }
-
-        .dplist-search-frm
-        {
-            width: 1024px;
-            align-self: center;
-            display: flex;
-
-            border-top: 2px solid rgb(38, 85, 139);
-            border-bottom: 1px solid #ccc;
-        }
-
-        .dplist-search-frm > div
-        {
-            display: flex;
-            margin: 25px;
-            align-items: center;
-        }
-
-        .dplist-search-frm > div:nth-of-type(1){flex: 1 1 0;}
-        .dplist-search-frm > div:nth-of-type(2){flex: 5 1 0;}
-        .dplist-search-frm > div:nth-of-type(3){flex: 1 1 0;}
-
-        .dplist-search-frm > div:nth-of-type(2) > input{width: 100%; height: 40px; padding: 10px;}
-        .dplist-search-frm > div:nth-of-type(3) > input{width: 100%; height: 40px; background-color: rgb(38, 85, 139); border: none; color: white;}
-        
+       
         .search-result
         {
             display: flex;
@@ -250,64 +201,42 @@
             width: 1024px;
             font-size: 13px;
             border-bottom: 1px solid #ccc;
-            margin-top: 100px;
+            margin-top: 50px;
 
         }
 
 </style>
 <section>
     <div class="dp-list-wrapper">
+	    <div class="search-result">
+	        <div class="search-result-msg">
+	           	총 100개 상품
+	        </div>
+	        <div id="orderby">
+	            <select>
+	                <option value="descRate">평점순</option>
+	                <option value="descDate">신상품순</option>
+	                <option value="descPopular">인기상품순</option>
+	                <option value="ascPrice">낮은가격순</option>
+	                <option value="descPrice">높은가격순</option>
+	            </select>
+	        </div>
+	    </div>
     
-    
-        <div class="dplist-search-wrapper">
-        <div class="dplist-search-header">
-            	상품검색
+        <div class="major-category">채소</div>
+        <div class="sub-category-wrapper">
+            <div class="sub-category">
+                <ul>
+                    <li class="current-sub-category"><a href="#">잎채소</a><span></span></li>
+                    <li><a href="#">마늘·파·양파</a><span></span></li>
+                    <li><a href="#">뿌리채소</a><span></span></li>
+                    <li><a href="#">고추·호박·오이·가지</a><span></span></li>
+                    <li><a href="#">나물</a><span></span></li>
+                    <li><a href="#">버섯</a><span></span></li>
+                    <li><a href="#">기타</a><span></span></li>
+                </ul>
+            </div>
         </div>
-        <form action="#" method="get" class="dplist-search-frm">
-            <div>검색조건</div>
-            <div><input type="text" name="" id=""></div>
-            <div><input type="submit" value="검색"></div>
-        </form>
-    </div>
-    <div class="search-result">
-        <div class="search-result-msg">
-           	총 100개 검색되었습니다.
-        </div>
-        <div id="orderby">
-            <select>
-                <option value="descRate">평점순</option>
-                <option value="descDate">신상품순</option>
-                <option value="descPopular">인기상품순</option>
-                <option value="ascPrice">낮은가격순</option>
-                <option value="descPrice">높은가격순</option>
-            </select>
-        </div>
-    </div>
-    
-    
-<!--         <div class="major-category">채소</div> -->
-<!--         <div class="sub-category-wrapper"> -->
-<!--             <div class="sub-category"> -->
-<!--                 <ul> -->
-<!--                     <li class="current-sub-category"><a href="#">잎채소</a><span></span></li> -->
-<!--                     <li><a href="#">마늘·파·양파</a><span></span></li> -->
-<!--                     <li><a href="#">뿌리채소</a><span></span></li> -->
-<!--                     <li><a href="#">고추·호박·오이·가지</a><span></span></li> -->
-<!--                     <li><a href="#">나물</a><span></span></li> -->
-<!--                     <li><a href="#">버섯</a><span></span></li> -->
-<!--                     <li><a href="#">기타</a><span></span></li> -->
-<!--                 </ul> -->
-<!--             </div> -->
-<!--             <div id="orderby"> -->
-<!--                 <select> -->
-<!--                     <option value="descRate">평점순</option> -->
-<!--                     <option value="descDate">신상품순</option> -->
-<!--                     <option value="descPopular">인기상품순</option> -->
-<!--                     <option value="ascPrice">낮은가격순</option> -->
-<!--                     <option value="descPrice">높은가격순</option> -->
-<!--                 </select> -->
-<!--             </div> -->
-<!--         </div> -->
         
         
         <div class="plist-board">
