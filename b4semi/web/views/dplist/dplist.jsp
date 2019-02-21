@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ include file="/views/common/header.jsp"%>
 <%@ page import="com.b4.model.vo.DPList"%>
+<%@ page import="com.b4.model.vo.Category"%>
 <%@ page import="java.util.ArrayList"%>
 
 <%
@@ -11,11 +12,21 @@
 	} catch (NumberFormatException e) {
 		cPage = 1;
 	}
-/* 	String keyword= request.getParameter("keyword");
+ 	String keyword= request.getParameter("keyword");
 	if(keyword == null)
 	{
 		keyword ="";
-	} 헤더에 있어야 하므로 일단 주석 */
+	}
+ 	String sub= request.getParameter("sub");
+	if(sub == null)
+	{
+		sub ="";
+	}
+ 	String major= request.getParameter("major");
+	if(major == null)
+	{
+		major ="";
+	}
 	String sort= request.getParameter("sort");
 	if(sort == null)
 	{
@@ -31,26 +42,26 @@
 	} catch (ClassCastException e) {
 		subText="";
 	}
-	ArrayList<String> subTextAll;
+	ArrayList<Category> subTextAll;
 	try {
-		subTextAll= (ArrayList<String>)request.getAttribute("subTextAll");
+		subTextAll= (ArrayList<Category>)request.getAttribute("subTextAll");
 		if(subTextAll == null)
 		{
-			subTextAll=new ArrayList<String>();
+			subTextAll=new ArrayList<Category>();
 		}
 	} catch (ClassCastException e) {
-		subTextAll=new ArrayList<String>();
+		subTextAll=new ArrayList<Category>();
 	}
 	
-	String majorText;
+	Category majorText;
 	try {
-		majorText = (String)request.getAttribute("majorText");
+		majorText = (Category)request.getAttribute("majorText");
 		if(majorText == null)
 		{
-			majorText="";
+			majorText=new Category("","","전체 검색");
 		}
 	} catch (ClassCastException e) {
-		majorText="";
+		majorText=new Category("","","전체 검색");
 	}
 	String totalCount;
 	try {
@@ -76,7 +87,7 @@
 	
 	ArrayList<DPList> dplist;
 	try {
-		dplist = (ArrayList<DPList>)request.getAttribute("dpList");
+		dplist = (ArrayList<DPList>)request.getAttribute("dplist");
 		if(dplist == null)
 		{
 			dplist = new ArrayList<DPList>();
@@ -261,7 +272,7 @@
             font-size: 12px;
         }
 
-        .pagebar > div
+        .pagebar div
         {
             width: 33px;
             height: 33px;
@@ -273,7 +284,7 @@
             cursor: pointer;
         }
 
-        .pagebar > div:first-of-type
+        .pagebar div:first-of-type
         {
             border-left: 1px solid rgb(220, 220, 220);
         }
@@ -298,136 +309,58 @@
 	           	총 <%=totalCount%>개 상품
 	        </div>
 	        <div id="orderby">
-	            <select>
-	                <option value="descRate">평점순</option>
-	                <option value="descDate">신상품순</option>
-	                <option value="descPopular">인기상품순</option>
-	                <option value="ascPrice">낮은가격순</option>
-	                <option value="descPrice">높은가격순</option>
+	            <select onchange='fn_dplist_sort();'>
+	                <option value="score" <%="score".equals(sort)?"selected":""%>>평점순</option>
+	                <option value="new" <%="new".equals(sort)?"selected":""%>>신상품순</option>
+	                <option value="popularity" <%="popularity".equals(sort)?"selected":""%>>인기상품순</option>
+	                <option value="priceAsc" <%="priceAsc".equals(sort)?"selected":""%>>낮은가격순</option>
+	                <option value="priceDesc" <%="priceDesc".equals(sort)?"selected":""%>>높은가격순</option>
 	            </select>
 	        </div>
 	    </div>
+	    <script>
+	    	function fn_dplist_sort(){
+	    		location.href="<%=request.getContextPath()%>/dplist?keyword=<%=keyword%>&sub=<%=sub%>&major=<%=major%>&sort="+event.target.options[event.target.selectedIndex].value;
+	    	}
+	    	$(function(){
+	    		$("#header-keyword").val("<%=keyword%>").on("keyup",function(){
+	    			if(window.event.keyCode == 13)
+	    			{
+	    				location.href="<%=request.getContextPath()%>/dplist?keyword="+event.target.value;
+	    			}
+	    		});
+	    	});
+	    </script>
     
-        <div class="major-category"><%=majorText%></div>
+        <div class="major-category"><a href="<%=request.getContextPath()%>/dplist?keyword=<%=keyword%>&sub=<%=majorText.getSubCode()%>&major=<%=majorText.getMajorCode()%>&sort=<%=sort%>" style="text-decoration: none;"><%=majorText.getCategoryName()%></a></div>
         <div class="sub-category-wrapper">
             <div class="sub-category">
                 <ul>
                 	<%for(int i=0; i<subTextAll.size(); i++){
-                	if(subTextAll.get(i).equals(subText))
+                	if(subTextAll.get(i).getCategoryName().equals(subText))
                 	{%>
-                		<li class="current-sub-category"><a href="#"><%=subTextAll.get(i)%></a><span></span></li>
+                		<li class="current-sub-category"><a href="<%=request.getContextPath()%>/dplist?keyword=<%=keyword%>&sub=<%=subTextAll.get(i).getSubCode()%>&major=<%=subTextAll.get(i).getMajorCode()%>&sort=<%=sort%>"><%=subTextAll.get(i).getCategoryName()%></a><span></span></li>
                 	<%}
                 	else
                 	{%>
-                		<li><a href="<%=request.getContextPath()%>/dplist?sub="><%=subTextAll.get(i)%></a><span></span></li>
+                		<li><a href="<%=request.getContextPath()%>/dplist?keyword=<%=keyword%>&sub=<%=subTextAll.get(i).getSubCode()%>&major=<%=subTextAll.get(i).getMajorCode()%>&sort=<%=sort%>"><%=subTextAll.get(i).getCategoryName()%></a><span></span></li>
                 	<%}
                 	}%>
                 </ul>
             </div>
         </div>
-
         
         <div class="plist-board">
+        <%for(int i=0; i< dplist.size();i++) {%>
             <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
+                <img src="<%=request.getContextPath()%>/upload/product/<%=dplist.get(i).getImg()%>" onError="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';">
                 <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
+                <p><%=dplist.get(i).getDisplayListTitle()%></p>
+                <p><%=dplist.get(i).getMinPrice()%> 원</p>
             </div>
-            <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
-            </div>
-            <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
-            </div>
-            <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
-            </div>
-            <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
-            </div>
-            <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
-            </div>
-            <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
-            </div>
-            <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
-            </div>
-            <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
-            </div>
-            <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
-            </div>
-            <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
-            </div>
-            <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
-            </div>
-            <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
-            </div>
-            <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
-            </div>
-            <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
-            </div>
+        <%} %>
         </div>
-        <div class="pagebar">
-            <div><img src="<%=request.getContextPath()%>/images/board-arrow-left.png"></div>
-            <div>1</div>
-            <div>2</div>
-            <div>3</div>
-            <div>4</div>
-            <div>5</div>
-            <div><img src="<%=request.getContextPath()%>/images/board-arrow-right.png"></div>
-        </div>
+        <%=pageBar%>
     </div>
 </section>
 <%@ include file="/views/common/footer.jsp" %>

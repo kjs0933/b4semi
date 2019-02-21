@@ -804,103 +804,38 @@
         </nav>
         <div class="category-menu">
             <div>
-                <p>채소</p>
+                <p><a href="<%=request.getContextPath()%>/dplist?major=01" style="text-decoration: none;">채소</a></p>
                 <span></span>
                 <ul>
-                    <li><a href="#">잎채소</a></li>
-                    <li><a href="#">마늘·파·양파</a></li>
-                    <li><a href="#">뿌리채소</a></li>
-                    <li><a href="#">고추·호박·오이·가지</a></li>
-                    <li><a href="#">나물</a></li>
-                    <li><a href="#">버섯</a></li>
-                    <li><a href="#">기타</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=01&sub=V01">잎채소</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=01&sub=V02">마늘·파·양파</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=01&sub=V03">뿌리채소</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=01&sub=V04">고추·호박·오이·가지</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=01&sub=V05">나물</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=01&sub=V06">버섯</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=01&sub=V07">기타</a></li>
                 </ul>
             </div>
             <div>
-                <p>과일</p>
+                <p><a href="<%=request.getContextPath()%>/dplist?major=02" style="text-decoration: none;">과일</a></p>
                 <span></span>
                 <ul>
-                    <li><a href="#">생과일</a></li>
-                    <li><a href="#">냉동과일</a></li>
-                    <li><a href="#">건과일</a></li>
-                    <li><a href="#">잼·주스·통조림</a></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                </ul>
-            </div>
-            <div>
-                <p>견과·곡류</p>
-                <span></span>
-                <ul>
-                    <li><a href="#">쌀</a></li>
-                    <li><a href="#">잡곡</a></li>
-                    <li><a href="#">견과</a></li>
-                    <li></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=02&sub=F01">생과일</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=02&sub=F02">냉동과일</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=02&sub=F03">건과일</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=02&sub=F04">잼·주스·통조림</a></li>
                     <li></li>
                     <li></li>
                     <li></li>
                 </ul>
             </div>
             <div>
-                <p>수산</p>
+                <p><a href="<%=request.getContextPath()%>/dplist?major=03" style="text-decoration: none;">견과·곡류</a></p>
                 <span></span>
                 <ul>
-                    <li><a href="#">생선류</a></li>
-                    <li><a href="#">조개류</a></li>
-                    <li><a href="#">해조류</a></li>
-                    <li><a href="#">건어물</a></li>
-                    <li><a href="#">오징어·낙지·문어</a></li>
-                    <li><a href="#">새우·게·랍스터</a></li>
-                    <li></li>
-                </ul>
-            </div>
-            <div>
-                <p>정육·계란</p>
-                <span></span>
-                <ul>
-                    <li><a href="#">돼지고기</a></li>
-                    <li><a href="#">소고기</a></li>
-                    <li><a href="#">닭고기·오리고기</a></li>
-                    <li><a href="#">계란</a></li>
-                    <li><a href="#">양념육</a></li>
-                    <li></li>
-                    <li></li>
-                </ul>
-            </div>
-            <div>
-                <p>유제품</p>
-                <span></span>
-                <ul>
-                    <li><a href="#">우유</a></li>
-                    <li><a href="#">치즈</a></li>
-                    <li><a href="#">버터</a></li>
-                    <li><a href="#">요거트</a></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                </ul>
-            </div>
-            <div>
-                <p>반찬</p>
-                <span></span>
-                <ul>
-                    <li><a href="#">젓갈</a></li>
-                    <li><a href="#">국·탕·찌개</a></li>
-                    <li><a href="#">햄·소세지</a></li>
-                    <li><a href="#">두부·어묵</a></li>
-                    <li><a href="#">통조림</a></li>
-                    <li></li>
-                    <li></li>
-                </ul>
-            </div>
-            <div>
-                <p>소스·장류</p>
-                <span></span>
-                <ul>
-                    <li><a href="#">액젓</a></li>
-                    <li><a href="#">장류</a></li>
-                    <li><a href="#">양념·소스</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=03&sub=G01">쌀</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=03&sub=G02">잡곡</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=03&sub=G03">견과</a></li>
                     <li></li>
                     <li></li>
                     <li></li>
@@ -908,12 +843,64 @@
                 </ul>
             </div>
             <div>
-                <p>오일·식초·면</p>
+                <p><a href="<%=request.getContextPath()%>/dplist?major=04" style="text-decoration: none;">수산</a></p>
                 <span></span>
                 <ul>
-                    <li><a href="#">오일</a></li>
-                    <li><a href="#">식초</a></li>
-                    <li><a href="#">면</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=04&sub=S01">생선류</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=04&sub=S02">조개류</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=04&sub=S03">해조류</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=04&sub=S04">건어물</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=04&sub=S05">오징어·낙지·문어</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=04&sub=S06">새우·게·랍스터</a></li>
+                    <li></li>
+                </ul>
+            </div>
+            <div>
+                <p><a href="<%=request.getContextPath()%>/dplist?major=05" style="text-decoration: none;">정육·계란</a></p>
+                <span></span>
+                <ul>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=05&sub=M01">돼지고기</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=05&sub=M02">소고기</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=05&sub=M03">닭고기·오리고기</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=05&sub=M04">계란</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=05&sub=M05">양념육</a></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
+            <div>
+                <p><a href="<%=request.getContextPath()%>/dplist?major=06" style="text-decoration: none;">유제품</a></p>
+                <span></span>
+                <ul>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=06&sub=D01">우유</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=06&sub=D02">치즈</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=06&sub=D03">버터</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=06&sub=D04">요거트</a></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
+            <div>
+                <p><a href="<%=request.getContextPath()%>/dplist?major=07" style="text-decoration: none;">반찬</a></p>
+                <span></span>
+                <ul>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=07&sub=C01">젓갈</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=07&sub=C02">국·탕·찌개</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=07&sub=C03">햄·소세지</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=07&sub=C04">두부·어묵</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=07&sub=C05">통조림</a></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
+            <div>
+                <p><a href="<%=request.getContextPath()%>/dplist?major=08" style="text-decoration: none;">소스·장류</a></p>
+                <span></span>
+                <ul>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=08&sub=P01">액젓</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=08&sub=P02">장류</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=08&sub=P03">양념·소스</a></li>
                     <li></li>
                     <li></li>
                     <li></li>
@@ -921,12 +908,25 @@
                 </ul>
             </div>
             <div>
-                <p>향신료·조미료</p>
+                <p><a href="<%=request.getContextPath()%>/dplist?major=09" style="text-decoration: none;">오일·식초·면</a></p>
                 <span></span>
                 <ul>
-                    <li><a href="#">소금</a></li>
-                    <li><a href="#">허브</a></li>
-                    <li><a href="#">시즈닝·스탁</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=09&sub=I01">오일</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=09&sub=I02">식초</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=09&sub=I03">면</a></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
+            <div>
+                <p><a href="<%=request.getContextPath()%>/dplist?major=10" style="text-decoration: none;">향신료·조미료</a></p>
+                <span></span>
+                <ul>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=10&sub=H01">소금</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=10&sub=H02">허브</a></li>
+                    <li><a href="<%=request.getContextPath()%>/dplist?major=10&sub=H03">시즈닝·스탁</a></li>
                     <li></li>
                     <li></li>
                     <li></li>

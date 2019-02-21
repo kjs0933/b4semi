@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.b4.model.vo.Category;
 import com.b4.model.vo.DPList;
 import com.b4.service.DPListService;
 
@@ -72,7 +73,13 @@ public class DisplayListServlet extends HttpServlet {
 		case "popularity" : sortText="POPULARITY DESC"; break;
 		case "priceAsc" : sortText="MINPRICE ASC"; break;
 		case "priceDesc" : sortText="MINPRICE DESC"; break;
-		default : sortText="REVIEWSCORE DESC";
+		default : sortText="DISPLAYLISTSEQ DESC";
+		}
+		
+		if(major.length()==0 && sub.length()>0)
+		{
+			System.out.println("[주의] 어딘가에서 major코드 없이 sub코드로만 요청을 했습니다!");
+			sub = "";
 		}
 		
 		
@@ -83,9 +90,29 @@ public class DisplayListServlet extends HttpServlet {
 		ArrayList<DPList> dplist = service.searchDPList(cPage,numPerPage,keyword,sub,major,sortText);
 		
 		
-		String subText = service.getSubText(sub);
-		ArrayList<String> subTextAll = service.getSubTextAll(major);
-		String majorText = service.getMajorText(major);
+		String subText; 
+		ArrayList<Category> subTextAll;
+		Category majorText;
+		
+		if(major.length() == 0)
+		{
+			subText = "";
+			subTextAll = service.getMajorTextAll();
+			majorText = new Category("","","전체 검색");
+		}
+		else if(sub.length() == 0 && keyword.length() > 0)
+		{
+			subText = service.getMajorText(major).getCategoryName();
+			subTextAll = service.getMajorTextAll();
+			majorText = new Category("","","전체 검색");
+		}
+		else
+		{
+			subText = service.getSubText(sub);
+			subTextAll = service.getSubTextAll(major);
+			majorText = service.getMajorText(major);
+		}
+
 		
 		
 		//페이징 처리를 위한 값!!!
@@ -102,7 +129,7 @@ public class DisplayListServlet extends HttpServlet {
 			pageBar+="<div><img src='"+request.getContextPath()+"/images/board-arrow-left.png'></div>";
 		}
 		else {
-			pageBar +="<div><a href='"+ request.getContextPath() +"/dpList?cPage="+(pageStart-1)+
+			pageBar +="<div><a href='"+ request.getContextPath() +"/dplist?cPage="+(pageStart-1)+
 					"&keyword="+keyword+"&sub="+sub+"&major="+major+"&sort="+sort+"'><img src='"+
 					request.getContextPath()+"/images/board-arrow-left.png'></a></div>";
 		}
@@ -114,7 +141,7 @@ public class DisplayListServlet extends HttpServlet {
 			}
 			else
 			{
-				pageBar +="<div><a href='"+ request.getContextPath() +"/dpList?cPage="+i+
+				pageBar +="<div><a href='"+ request.getContextPath() +"/dplist?cPage="+i+
 						"&keyword="+keyword+"&sub="+sub+"&major="+major+"&sort="+sort+"'>"+i+"</a></div>";
 			}
 		}
@@ -124,9 +151,9 @@ public class DisplayListServlet extends HttpServlet {
 		}
 		else
 		{
-			pageBar +="<div><a href='"+ request.getContextPath() +"/dpList?cPage="+(pageEnd+1)+
+			pageBar +="<div><a href='"+ request.getContextPath() +"/dplist?cPage="+(pageEnd+1)+
 					"&keyword="+keyword+"&sub="+sub+"&major="+major+"&sort="+sort+"'><img src='"+
-					request.getContextPath()+"/images/board-arrow-left.png'></a></div>";
+					request.getContextPath()+"/images/board-arrow-right.png'></a></div>";
 		}
 		pageBar+="</div>";
 		
@@ -136,7 +163,7 @@ public class DisplayListServlet extends HttpServlet {
 		request.setAttribute("majorText", majorText);
 		request.setAttribute("dplist", dplist);
 		request.setAttribute("pageBar", pageBar);
-		request.getRequestDispatcher("/views/dplist/dplist.jsp?cPage="+cPage+"&keyword="+keyword+ "&sub="+sub+"&major="+major+"&sort="+sort).forward(request, response);
+		request.getRequestDispatcher("/views/dplist/dplist.jsp?cPage="+cPage+"&keyword="+keyword+"&sub="+sub+"&major="+major+"&sort="+sort).forward(request, response);
 	}
 
 	/**

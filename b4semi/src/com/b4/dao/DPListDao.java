@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import com.b4.model.vo.Category;
 import com.b4.model.vo.DPList;
 
 public class DPListDao {
@@ -71,7 +72,7 @@ public class DPListDao {
 			rs=ps.executeQuery();
 			if(rs.next())
 			{
-				result=rs.getString(1);
+				result=rs.getString("SUBCATEGORYNAME");
 			}
 		}
 		catch(SQLException e)
@@ -85,19 +86,19 @@ public class DPListDao {
 		}
 		return result;
 	}
-	public ArrayList<String> getSubTextAll(Connection cn, String major)
+	public ArrayList<Category> getSubTextAll(Connection cn, String major)
 	{
 		PreparedStatement ps = null;
 		ResultSet rs=null;
 		String sql=prop.getProperty("getSubTextAll");
-		ArrayList<String> result = new ArrayList<String>();
+		ArrayList<Category> result = new ArrayList<Category>();
 		try {
 			ps=cn.prepareStatement(sql);
 			ps.setString(1, major);
 			rs=ps.executeQuery();
 			while(rs.next())
 			{
-				result.add(rs.getString(1));
+				result.add(new Category(rs.getString("MAJORCATEGORYCODE"),rs.getString("SUBCATEGORYCODE"),rs.getString("SUBCATEGORYNAME")));
 			}
 		}
 		catch(SQLException e)
@@ -112,19 +113,44 @@ public class DPListDao {
 		return result;
 	}
 	
-	public String getMajorText(Connection cn, String major)
+	public Category getMajorText(Connection cn, String major)
 	{
 		PreparedStatement ps = null;
 		ResultSet rs=null;
 		String sql=prop.getProperty("getMajorText");
-		String result = "";
+		Category result=null;
 		try {
 			ps=cn.prepareStatement(sql);
 			ps.setString(1, major);
 			rs=ps.executeQuery();
 			if(rs.next())
 			{
-				result=rs.getString(1);
+				result=new Category(rs.getString("MAJORCATEGORYCODE"),"",rs.getString("MAJORCATEGORYNAME"));
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(rs);
+			close(ps);
+		}
+		return result;
+	}
+	public ArrayList<Category> getMajorTextAll(Connection cn)
+	{
+		PreparedStatement ps = null;
+		ResultSet rs=null;
+		String sql=prop.getProperty("getMajorTextAll");
+		ArrayList<Category> result = new ArrayList<Category>();
+		try {
+			ps=cn.prepareStatement(sql);
+			rs=ps.executeQuery();
+			while(rs.next())
+			{
+				result.add(new Category(rs.getString("MAJORCATEGORYCODE"),"",rs.getString("MAJORCATEGORYNAME")));
 			}
 		}
 		catch(SQLException e)
@@ -180,5 +206,4 @@ public class DPListDao {
 		return result;
 	}
 	
-
 }

@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.util.ArrayList;
 
 import com.b4.dao.DPListDao;
+import com.b4.model.vo.Category;
 import com.b4.model.vo.DPList;
 
 public class DPListService {
@@ -36,19 +37,26 @@ public class DPListService {
 		close(cn);
 		return result;
 	}
-	public String getMajorText(String major)
+	public Category getMajorText(String major)
 	{
 		Connection cn=getConnection();
-		String result = dao.getMajorText(cn,major);
+		Category result = dao.getMajorText(cn,major);
 		close(cn);
 		return result;
 	}
-	public ArrayList<String> getSubTextAll(String major)
+	public ArrayList<Category> getSubTextAll(String major)
 	{
 		Connection cn=getConnection();
-		ArrayList<String> result = dao.getSubTextAll(cn,major);
+		ArrayList<Category> result = dao.getSubTextAll(cn,major);
 		close(cn);
 		return result;
 	}
-
+	
+	public ArrayList<Category> getMajorTextAll()
+	{
+		Connection cn=getConnection();
+		ArrayList<Category> result = dao.getMajorTextAll(cn);
+		close(cn);
+		return result;
+	}
 }
