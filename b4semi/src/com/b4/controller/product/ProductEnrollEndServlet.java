@@ -13,6 +13,8 @@ import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 import com.b4.model.vo.Member;
 import com.b4.model.vo.Product;
 import com.b4.service.ProductService;
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 /**
  * Servlet implementation class ProductEnrollEndServlet
@@ -42,7 +44,7 @@ public class ProductEnrollEndServlet extends HttpServlet {
 			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
 		}
 		
-		
+		//파일형식 전송 확인
 		if(!ServletFileUpload.isMultipartContent(request))
 		{
 			response.sendRedirect("/index.jsp");
@@ -53,14 +55,15 @@ public class ProductEnrollEndServlet extends HttpServlet {
 		int maxSize=1024*1024*100;
 		
 		
-		request.setCharacterEncoding("UTF-8");
+		MultipartRequest mr=new MultipartRequest(request,dir,maxSize,"UTF-8",new DefaultFileRenamePolicy());
 		String productCode=request.getParameter("productCode");
 		String supplierCode=request.getParameter("supplierCode");
 		String productName=request.getParameter("productName");
 		String originCountry=request.getParameter("originCountry");
 		String subCategoryCode=request.getParameter("subCategoryCode");
 		String productUnit=request.getParameter("productUnit");
-		String originalFilename=request.getParameter("originalFileName");
+		String productOriginalFileName=request.getParameter("originalFileName");
+		String reNameFilename=request.getParameter("renameFileName");
 		
 		Product p=new Product();
 		p.setProductCode(productCode);
@@ -69,6 +72,8 @@ public class ProductEnrollEndServlet extends HttpServlet {
 		p.setOriginCountry(originCountry);
 		p.setSubCategoryCode(subCategoryCode);
 		p.setProductUnit(productUnit);
+		p.setProductOriginalFileName(productOriginalFileName);
+		p.setProductRenameFilename(reNameFilename);
 
 		
 		int result = new ProductService().insertProduct(p);
