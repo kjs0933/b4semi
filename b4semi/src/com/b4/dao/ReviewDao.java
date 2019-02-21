@@ -32,7 +32,7 @@ public class ReviewDao {
 	
 	
 	
-	public int selectCountByDP(Connection conn, Review r)
+	public int selectCountByDP(Connection conn, int displayListSeq)
 	{
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -40,7 +40,7 @@ public class ReviewDao {
 		String sql = prop.getProperty("selectCountByDP");
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, r.getDisplayListSeq());
+			pstmt.setInt(1, displayListSeq);
 			rs = pstmt.executeQuery();
 			if(rs.next())
 			{
@@ -59,7 +59,7 @@ public class ReviewDao {
 		return result;
 	}
 	
-	public List<Review> selectAllByDP(Connection conn, Review r, int cPage)
+	public List<Review> selectAllByDP(Connection conn, int displayListSeq, int cPage)
 	{
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -69,7 +69,7 @@ public class ReviewDao {
 		int numPerPage = 15;
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, r.getMemberSeq());
+			pstmt.setInt(1, displayListSeq);
 			pstmt.setInt(2, (cPage-1)*numPerPage+1);
 			pstmt.setInt(3, cPage*numPerPage);
 			rs = pstmt.executeQuery();
@@ -92,10 +92,42 @@ public class ReviewDao {
 		{
 			e.printStackTrace();
 		}
+		finally
+		{
+			close(rs);
+			close(pstmt);
+		}
 		return list;
 	}
 	
-	public List<Review> selectAllByMember(Connection conn, Review r, int cPage)
+	public int selectCountByMember(Connection conn, int memberSeq) 
+	{
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int result = 0;
+		String sql = prop.getProperty("selectCountByMember");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, memberSeq);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+			{
+				result = rs.getInt("cnt");
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(rs);
+			close(pstmt);
+		}
+		return result;		
+	}
+
+	public List<Review> selectAllByMember(Connection conn, int memberSeq, int cPage)
 	{
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -105,7 +137,7 @@ public class ReviewDao {
 		int numPerPage = 15;
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, r.getDisplayListSeq());
+			pstmt.setInt(1, memberSeq);
 			pstmt.setInt(2, (cPage-1)*numPerPage+1);
 			pstmt.setInt(3, cPage*numPerPage);
 			rs = pstmt.executeQuery();
@@ -127,6 +159,11 @@ public class ReviewDao {
 		catch(SQLException e)
 		{
 			e.printStackTrace();
+		}
+		finally
+		{
+			close(rs);
+			close(pstmt);
 		}
 		return list;
 	}
@@ -207,5 +244,37 @@ public class ReviewDao {
 		}
 		return result;
 	}
+
+
+
+	public double avgReviewScore(Connection conn, int displayListSeq) 
+	{
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("avgReviewScore");
+		ResultSet rs = null;
+		double avg = 0.0;
+		try
+		{
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, displayListSeq);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+			{
+				avg = rs.getDouble("cnt");
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(pstmt);
+		}
+		return avg;
+	}
+
+
+
 
 }

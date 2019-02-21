@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="views/common/header.jsp" %>
-    
     <style>
         /*메인 슬라이드*/
 
@@ -155,11 +154,7 @@
             
         }
 
-
-
         /*이벤트, 새로운 상품 슬라이드*/
-
-
 
         .event-and-new
         {
@@ -257,8 +252,6 @@
             flex-flow: column nowrap;
             align-items: center;
             padding-bottom: 42px;
-
-            border-bottom: 1px solid #ccc;
         }
 
         .promotion-products > p
@@ -352,7 +345,6 @@
             right: 0;
         }
     </style>
-
 
     <div class="section-wrapper">
         <section class="main-slide">

@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Properties;
 
 import com.b4.model.vo.Member;
@@ -26,6 +27,7 @@ public class MemberDao {
 			e.printStackTrace();
 		}
 	}
+	
 	
 	public boolean checkId(Connection conn, String memberId)
 	{
@@ -94,6 +96,31 @@ public class MemberDao {
 		return result;
 	}
 	
+	public int insertOne(Connection conn, Member m)
+	{
+		PreparedStatement pstmt = null;
+		int result = 0;
+		String sql = prop.getProperty("insertOne");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, m.getMemberId());
+			pstmt.setString(2, m.getMemberPw());
+			pstmt.setString(3, m.getMemberName());
+			pstmt.setString(4, m.getMemberEmail());
+			pstmt.setString(5, m.getMemberPhone());
+			pstmt.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
+			result = pstmt.executeUpdate();
+		} 
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(pstmt);
+		}
+		return result;
+	}
 	
 	public int updateMember(Connection conn, Member m)
 	{

@@ -9,21 +9,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.b4.model.vo.Member;
-import com.b4.service.MemberService;
-import com.google.gson.Gson;
-
 /**
- * Servlet implementation class LoginServlet
+ * Servlet implementation class LogoutServlet
  */
-@WebServlet(name="LoginServlet", urlPatterns="/login")
-public class LoginServlet extends HttpServlet {
+@WebServlet("/logout")
+public class LogoutServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LoginServlet() {
+    public LogoutServlet() {
         super();
 
     }
@@ -32,27 +28,19 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String memberId = request.getParameter("memberId");
-		String memberPw = request.getParameter("memberPw");
-		
-		
-		Member m = new Member();
-		m.setMemberId(memberId);
-		m.setMemberPw(memberPw);
-		
-		Member loginMember = new MemberService().selectOne(m);
-		
-		System.out.println(loginMember);
-		
-		if(loginMember != null)
+		HttpSession session = request.getSession(false);
+
+		if(session != null)
 		{
-			HttpSession session = request.getSession();
-			session.setAttribute("loginMember", loginMember);
+			session.invalidate();
+			response.sendRedirect(request.getContextPath());
 		}
-		
-		Gson gson = new Gson();
-		response.setContentType("application/json;charset=utf-8");
-		response.getWriter().println(gson.toJson(loginMember));
+		else
+		{
+			request.setAttribute("msg", "세션이 만료되었습니다.");
+			request.setAttribute("loc", "");
+			request.getRequestDispatcher(request.getContextPath()+"views/common/msg.jsp").forward(request, response);
+		}
 	}
 
 	/**

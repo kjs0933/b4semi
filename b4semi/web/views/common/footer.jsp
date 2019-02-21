@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <footer class="footer">
+    	<div class="footer-wrapper">
         <h2>고객센터</h2>
         <div class="ask-wrapper">
             <p><span>전화문의(1644 - 1107)</span><br><br>평일 오전 8시-오후4시<br>[점심시간 오후12시-오후1시]<br>토요일, 일요일&공휴일 오전8시-오후12시</p>
@@ -15,9 +16,9 @@
                 <li><a href="#">이용약관</a></li>
                 <li><a href="#">개인정보처리방침</a></li>
                 <li><a href="#">인재채용</a></li>
-                <li><a href="#"><img src="images/ico_fb.png" alt="" width="30" height="30"
-                ></a><a href="#"><img src="images/ico_instagram.png" alt="" width="30" height="30"
-                ></a><a href="#"><img src="images/ico_blog.png" alt="" width="30" height="30"
+                <li><a href="#"><img src="<%=request.getContextPath() %>/images/ico_fb.png" alt="" width="30" height="30"
+                ></a><a href="#"><img src="<%=request.getContextPath() %>/images/ico_instagram.png" alt="" width="30" height="30"
+                ></a><a href="#"><img src="<%=request.getContextPath() %>/images/ico_blog.png" alt="" width="30" height="30"
                 ></a></li>
             </ul>
         </div>
@@ -29,16 +30,18 @@
             채용문의: recruit@kh.com<br>
             팩스: 012-3456-7890<br>
             주소: 서울특별시 강남구 테헤란로 14길 6, 남도빌딩 4F</p></div>
-            <div><img src="images/logo_footer.png" width="144" height="72"><p>THE FOOD FORUM ALL RIGHT RESERVED</p></div>
+            <div><img src="<%=request.getContextPath()%>/images/logo_footer.png" width="144" height="72"><p>THE FOOD FORUM ALL RIGHT RESERVED</p></div>
         </div>
+    </div>
     </footer>
+
 </div>
     <div class="main-form-wrapper">
-        <div class="frm-title">
-            <p class="login-title frm-title-active">로그인</p><p class="signup-title">회원가입</p>
+        <div class="login-frm-title">
+            <p>로그인</p>
         </div>
         <div class="login-msg"></div>
-        <form action="<%=request.getContextPath()%>/login" method="post" name="signin-frm" class="signin-frm frm-active">
+        <form action="<%=request.getContextPath()%>/login" method="post" name="signin-frm" class="signin-frm" autocomplete="off">
             <label for="login-id">아이디<br><input type="text" name="memberId" id="login-id"></label>
             <label for="login-pw">비밀번호<br><input type="password" name="memberPw" id="login-pw"></label>
             <input type="checkbox" name="saveId" id="saveId"><label for="saveId"><span></span></label>
@@ -47,23 +50,167 @@
             <p>회원정보 분실</p>
             <p class="not-member">회원이 아니신가요?</p>
         </form>
-        <form action="#" method="post" class="signup-frm">
-            <label for="member-id">아이디<span></span></label>
-            <input type="text" name="memberId" id="member-id" placeholder="영문 대소문자와 숫자로 4자이상 12자미만">
-            <label for="member-name">이름<span></span></label>
-            <input type="text" name="memberName" id="member-name">
-            <label for="member-pw">비밀번호<span></span></label>
-            <input type="password" name="memberPw" id="member-pw" placeholder="영문 대소문자 특수문자 하나씩 포함 8자이상">
-            <label for="member-pw-ck">비밀번호확인<span></span></label>
-            <input type="password" name="memberPwCk" id="member-pw-ck">
-            <label for="member-email">이메일<span></span></label>
-            <input type="email" name="memberEmail" id="member-email">
-            <label for="member-phone">전화번호<span></span></label>
-            <input type="tel" name="memberPhone" id="member-phone" placeholder="- 포함하여 입력">
-            <input type="submit" value="회원가입">
-        </form>
     </div>
 </body>
-    <script type="text/javascript" src="js/header.js"></script>
-    <script type="text/javascript" src="js/footer.js"></script>
+<script>
+//카테고리 호출 로직
+
+const categoryBtn = $('#category-toggle-btn');
+const categoryMenu = $('.category-menu');
+
+$(() => {
+	categoryBtn.on('click', showCategory)
+});
+
+const showCategory = (e) => {
+	e.stopPropagation()
+	if(categoryMenu.hasClass('active'))
+	{
+		categoryMenu.toggleClass('active');
+		$('body').off('click');
+		return;
+	}
+        
+	categoryMenu.toggleClass('active');
+	$('body').on('click', closeCategory)
+}
+
+const closeCategory = (e) => {
+	if(e.currentTarget == categoryBtn[0] || categoryMenu[0].contains(e.target)) return;
+	categoryMenu.toggleClass('active');
+    if(e.target == loginBtn[0]) return;
+	$('body').off('click');
+}
+
+//로그인 유저 my account 토글
+const myAccountBtn = $('#my-account-btn');
+const myAccountBox = $('.my-account-box');
+$(() => {
+    myAccountBtn.on('click', () => {
+        myAccountBox.fadeToggle(200);
+    });
+    
+    myAccountBox.find('li').on('click', (e) => {
+    	e.stopPropagation();
+    	myAccountBox.fadeToggle(200);
+    });
+});
+
+//공지사항 my account 토글
+const supportBtn = $('#support-btn');
+const supportBox = $('.support-box');
+
+$(() => {
+    supportBtn.on('click', () => {
+        supportBox.fadeToggle(200);
+    });
+    
+    supportBox.find('li').on('click', () => {
+    	supportBox.fadeToggle(200);
+    });
+});
+
+//ESC 누를시 로그인 모달 창 나가기
+$(() => {
+    $('body').on('keydown', (e) => {
+        if(e.key == 'Escape') $('body').trigger('click');
+    });
+});
+
+
+//로그인 모달 창 띄우기
+
+const mainFrmBox = $('.main-form-wrapper');
+const loginBtn = $('#login-btn');
+const idInput = $('.signin-frm #login-id');
+const pwInput = $('.signin-frm #login-pw');
+const body = $('body');
+const wholeWrapper = $('.whole-wrapper');
+
+$(() => {
+    loginBtn.on('click', popUpLoginBox)
+});
+
+const toggleSet = () => {
+	idInput.val('');
+	pwInput.val('');
+    loginMsg.text('');
+
+    body.toggleClass('body-inactive');
+        wholeWrapper.toggleClass('whole-wrapper-inactive');
+        mainFrmBox.toggleClass('active');
+        mainFrmBox.addClass('main-frm-anim');
+        setTimeout(() => {mainFrmBox.removeClass('main-frm-anim')}, 150);
+    }
+
+    const popUpLoginBox = () => {
+        if (mainFrmBox.hasClass('active')) {
+            toggleSet();
+            $('body').off('click');
+            return;
+        }
+        toggleSet();
+
+        $('body').on('click', (e) => {
+
+            if (e.target.closest('li') == loginBtn[0] || mainFrmBox[0].contains(e.target)) return;
+            toggleSet();
+            $('body').off('click');
+        });
+    }
+
+    //로그인-회원가입 간 전환
+
+    const signinFrm = $('.signin-frm');
+    const frmTitle = $('.frm-title');
+    const loginTitle = $('.login-title');
+
+    const notMember = $('.not-member');
+
+    const signinInputs = $('.signin-frm label input');
+    const loginMsg = $('.login-msg');
+
+
+    //로그인 유효성 검사 및 로그인 ajax 처리
+    $(() => {
+        signinFrm.on('submit', e => {
+        	e.preventDefault();
+        	
+            for(let i = 0 ; i < signinInputs.length ; i++)
+            {
+                if(signinInputs[i].value.trim().length == 0)
+                {
+                	runInvaldAnim();
+                    signinInputs[i].focus();
+                    return;
+                }
+            }
+
+            $.ajax({
+                url: '<%=request.getContextPath()%>/login',
+                type: 'post',
+                data: {'memberId' : signinInputs[0].value, 'memberPw' : signinInputs[1].value},
+                dataType: 'json',
+                success: data => {
+                	if(data == null)
+                	{
+                		runInvaldAnim();
+                		loginMsg.text('아이디/비밀번호가 일치하지 않습니다.');
+                		loginMsg.css('color', 'crimson');
+                	}
+                	else
+                    {
+                    	location.reload();
+                    }
+                }
+            });
+        });
+    });
+    
+    //invalid시 애니메이션
+    const runInvaldAnim = () => {
+        mainFrmBox.addClass('frm-invalid-anim');
+        setTimeout(() => {mainFrmBox.removeClass('frm-invalid-anim')}, 200);
+    }
+</script>
 </html>
