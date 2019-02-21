@@ -27,7 +27,7 @@ public class InStockDao {
 		{
 			e.printStackTrace();
 		}
-}
+	}
 	
 	public List<InStock> selectList(Connection conn, int cPage, int numPerPage)
 	{
