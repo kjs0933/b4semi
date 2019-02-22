@@ -49,7 +49,7 @@
             align-items: center;
             justify-content: center;
             font-family: 'Noto Sans KR';
-            font-size: 14px;
+            font-size: 13px;
             background-color: white;
             position: fixed;
             z-index: 3;
@@ -788,8 +788,8 @@
         				<span id="support-btn">고객센터</span>
 	        			<div class="support-box">
 		            		<ul>
-		                		<li>공지사항</li>
-		                		<li>1:1문의</li>
+		                		<li><a href="<%=request.getContextPath()%>/views/support/support_notice">공지사항</a></li>
+		                		<li><a href="<%=request.getContextPath()%>/views/support/support_query">1:1문의</a></li>
 		                		<li>상품제안</li>
 		            		</ul>
 	        			</div>

@@ -36,7 +36,6 @@ public class CheckIdServlet extends HttpServlet {
 		{
 			response.getWriter().print("true");			
 		}
-		
 	}
 
 	/**
