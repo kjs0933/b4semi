@@ -322,14 +322,7 @@
 	    	function fn_dplist_sort(){
 	    		location.href="<%=request.getContextPath()%>/dplist?keyword=<%=keyword%>&sub=<%=sub%>&major=<%=major%>&sort="+event.target.options[event.target.selectedIndex].value;
 	    	}
-	    	$(function(){
-	    		$("#header-keyword").val("<%=keyword%>").on("keyup",function(){
-	    			if(window.event.keyCode == 13)
-	    			{
-	    				location.href="<%=request.getContextPath()%>/dplist?keyword="+event.target.value;
-	    			}
-	    		});
-	    	});
+	    	$("#header-keyword").val("<%=keyword%>");
 	    </script>
     
         <div class="major-category"><a href="<%=request.getContextPath()%>/dplist?keyword=<%=keyword%>&sub=<%=majorText.getSubCode()%>&major=<%=majorText.getMajorCode()%>&sort=<%=sort%>" style="text-decoration: none;"><%=majorText.getCategoryName()%></a></div>

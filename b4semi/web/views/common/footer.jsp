@@ -118,6 +118,17 @@ $(() => {
 });
 
 
+//검색어 입력 후 엔터키를 누를 때
+$(function(){
+	$("#header-keyword").on("keyup",function(){
+		if(window.event.keyCode == 13)
+		{
+			location.href="<%=request.getContextPath()%>/dplist?keyword="+event.target.value;
+		}
+	});
+});
+
+
 //로그인 모달 창 띄우기
 
 const mainFrmBox = $('.main-form-wrapper');
