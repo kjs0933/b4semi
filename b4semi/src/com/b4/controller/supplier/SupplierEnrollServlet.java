@@ -1,4 +1,4 @@
-package com.b4.controller.instock;
+package com.b4.controller.supplier;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -8,16 +8,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class InStockEnrollServlet
+ * Servlet implementation class SupplierEnrollServlet
  */
-@WebServlet("/InStockEnrollServlet")
-public class InStockEnrollServlet extends HttpServlet {
+@WebServlet("/SupplierEnrollServlet")
+public class SupplierEnrollServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public InStockEnrollServlet() {
+    public SupplierEnrollServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -27,8 +27,7 @@ public class InStockEnrollServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
-		request.getRequestDispatcher("/views/instock/instockEnroll.jsp").forward(request, response);
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**

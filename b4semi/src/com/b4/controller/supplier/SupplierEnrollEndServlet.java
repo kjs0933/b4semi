@@ -1,4 +1,4 @@
-package com.b4.controller.instock;
+package com.b4.controller.supplier;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -7,17 +7,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.b4.model.vo.Member;
+
 /**
- * Servlet implementation class InStockEnrollServlet
+ * Servlet implementation class SupplierEnrollEndServlet
  */
-@WebServlet("/InStockEnrollServlet")
-public class InStockEnrollServlet extends HttpServlet {
+@WebServlet("/SupplierEnrollEndServlet")
+public class SupplierEnrollEndServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public InStockEnrollServlet() {
+    public SupplierEnrollEndServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -26,9 +28,16 @@ public class InStockEnrollServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		
-		request.getRequestDispatcher("/views/instock/instockEnroll.jsp").forward(request, response);
+		Member loginMember=(Member)request.getSession(false).getAttribute("loginMember");
+		if(loginMember==null||!"admin".equals(loginMember.getMemberId()))
+		{
+			request.setAttribute("msg", "잘못된 경로로 이동하셨습니다.");
+			request.setAttribute("loc", "/");
+			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
+		}
+		
+		
 	}
 
 	/**

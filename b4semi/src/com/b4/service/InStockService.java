@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.b4.dao.InStockDao;
 import com.b4.model.vo.InStock;
+import com.b4.model.vo.Product;
 
 public class InStockService {
 
@@ -66,6 +67,14 @@ private InStockDao dao = new InStockDao();
 		{
 			rollback(conn);
 		}
+		close(conn);
+		return result;
+	}
+	
+	public InStock selectOne(int i)
+	{
+		Connection conn = getConnection();
+		InStock result = dao.selectOne(conn, i);
 		close(conn);
 		return result;
 	}

@@ -142,5 +142,40 @@ public class InStockDao {
 		finally {close(pstmt);}
 		return result;
 	}
+	
+	public InStock selectOne(Connection conn, int no)
+	{
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		InStock i=null;
+		String sql=prop.getProperty("selectOne");
+		try
+		{
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			rs=pstmt.executeQuery();
+			if(rs.next())
+			{
+				i=new InStock();
+				i.setInstockSeq(rs.getInt("InStockseq"));
+				i.setProductCode(rs.getString("productCode"));
+				i.setInStockDate(rs.getTimestamp("InStockDate"));
+				i.setInStockCount(rs.getInt("InStockCount"));
+				i.setInStockPrice(rs.getInt("inStockPrice"));
+				i.setExpiryDate(rs.getTimestamp("expiryDate"));
+				i.setRemainStockCount(rs.getInt("remainStockCount"));
+				i.setExpiredStockCount(rs.getInt("expiredStockCount"));
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally {
+			close(rs);
+			close(pstmt);
+		}
+		return i;
 
+	}
 }
