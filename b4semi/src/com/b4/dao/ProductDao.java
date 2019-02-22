@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import com.b4.model.vo.Member;
 import com.b4.model.vo.Product;
 
 public class ProductDao {
@@ -140,6 +141,42 @@ public class ProductDao {
 		catch(SQLException e)
 		{e.printStackTrace();}
 		finally {close(pstmt);}
+		return result;
+	}
+	
+	public Product selectOne(Connection conn, Product p)
+	{
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = prop.getProperty("selectOne");
+		Product result = null;
+		try
+		{
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, p.getProductCode());
+			rs = pstmt.executeQuery();
+			if(rs.next())
+			{
+				result = new Product();
+				result.setProductCode(rs.getString("productCode"));
+				result.setSupplierCode(rs.getString("supplierCode"));
+				result.setProductName(rs.getString("productName"));
+				result.setOriginCountry(rs.getString("originCountry"));
+				result.setSubCategoryCode(rs.getString("subCategoryCode"));
+				result.setProductUnit(rs.getString("productUnit"));
+				result.setProductOriginalFileName(rs.getString("productOriginaFileName"));
+				result.setProductRenameFilename(rs.getString("productRenameFilename"));
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally 
+		{
+			close(rs);
+			close(pstmt);
+		}
 		return result;
 	}
 

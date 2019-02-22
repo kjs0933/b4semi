@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.util.List;
 
 import com.b4.dao.ProductDao;
+import com.b4.model.vo.Member;
 import com.b4.model.vo.Product;
 
 public class ProductService {
@@ -66,6 +67,14 @@ private ProductDao dao = new ProductDao();
 		{
 			rollback(conn);
 		}
+		close(conn);
+		return result;
+	}
+	
+	public Product selectOne(Product p)
+	{
+		Connection conn = getConnection();
+		Product result = dao.selectOne(conn, p);
 		close(conn);
 		return result;
 	}
