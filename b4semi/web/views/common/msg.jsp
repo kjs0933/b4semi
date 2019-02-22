@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <% 
-	String msg = request.getParameter("msg");
-	String loc = request.getParameter("loc");
+	String msg = (String)request.getAttribute("msg");
+	String loc = (String)request.getAttribute("loc");
 %>
 <!DOCTYPE html>
 <html>
@@ -14,7 +14,7 @@
 
 </body>
 	<script>
-		alert(msg);
-		location.assign(<%=request.getContextPath()%>/loc);
+		alert("<%=msg%>");
+		location.assign("<%=request.getContextPath()%><%=loc%>");
 	</script>
 </html>

@@ -32,8 +32,8 @@ public class NoticeViewServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		Member logginMember=(Member)request.getSession(false).getAttribute("logginMember");
-		if(logginMember==null||!"admin".equals(logginMember.getMemberId()))
+		Member loginMember=(Member)request.getSession(false).getAttribute("loginMember");
+		if(loginMember==null||!"admin".equals(loginMember.getMemberId()))
 		{
 			request.setAttribute("msg", "잘못된 경로로 이동하셨습니다.");
 			request.setAttribute("loc", "/");

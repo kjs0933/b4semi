@@ -144,7 +144,7 @@ public class ProductDao {
 		return result;
 	}
 	
-	public Product selectOne(Connection conn, Product p)
+	public Product selectOne(Connection conn, String code)
 	{
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -153,7 +153,7 @@ public class ProductDao {
 		try
 		{
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, p.getProductCode());
+			pstmt.setString(1, code);
 			rs = pstmt.executeQuery();
 			if(rs.next())
 			{
