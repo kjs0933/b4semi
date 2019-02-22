@@ -118,11 +118,11 @@
         .nav ul li:nth-of-type(1){flex: 1 1 0;}
         .nav ul li:nth-of-type(2){flex: 1 1 0;}
         .nav ul li:nth-of-type(3){flex: 1 1 0;}
-        .nav ul li:nth-of-type(4){flex: 8 1 0;}
-        .nav ul li:nth-of-type(5){flex: 1 1 0;}
+        .nav ul li:nth-of-type(4){flex: 7 1 0;}
+        .nav ul li:nth-of-type(5){flex: 2 1 0;}
         .nav ul li:nth-of-type(6){flex: 1 1 0;}
-        .nav ul li:nth-of-type(7){flex: 2 1 0;}
-        .nav ul li:nth-of-type(8){flex: 2 1 0;}
+        .nav ul li:nth-of-type(7){flex: 1 1 0;}
+        .nav ul li:nth-of-type(8){flex: 1 1 0;}
 		.nav ul li:nth-of-type(9){flex: 1 1 0; justify-content: flex-end;}
 		
         .nav svg
@@ -140,7 +140,7 @@
         .search-box > input
         {
             box-sizing: border-box;
-            width: 180px;
+            width: 200px;
             height: 35px;
             width: 160px;
             border: none;
@@ -174,7 +174,7 @@
         
 		#my-account-btn > span
 		{
-			font-size: 17px;
+			font-size: 15px;
 			font-weight: bold;
 		}
 		
@@ -217,6 +217,11 @@
         {
             text-decoration: none;
             color: black;
+            display: block;
+            width: 100%;
+            height: 100%;
+            
+            text-align: center;
         }
 
         #my-account-btn
@@ -237,7 +242,7 @@
         .support-box
         {
             display: none;
-            width: 95px;
+            width: 75px;
             height: auto;
             border: 1px solid #eee;
             font-size: 13px;
@@ -271,8 +276,12 @@
 
         .support-box > ul > li > a
         {
+            display: block;
             text-decoration: none;
             color: black;
+            width: 100%;
+            height: 100%;
+            text-align: center;
         }
 
         #support-btn
@@ -323,6 +332,11 @@
             display: none;
             flex-flow: row wrap;
             justify-content: center;
+        }
+        
+        .category-menu a
+        {
+        	color: #333;
         }
 
         .category-menu.active
@@ -788,9 +802,9 @@
         				<span id="support-btn">고객센터</span>
 	        			<div class="support-box">
 		            		<ul>
-		                		<li><a href="<%=request.getContextPath()%>/views/support/support_notice">공지사항</a></li>
-		                		<li><a href="<%=request.getContextPath()%>/views/support/support_query">1:1문의</a></li>
-		                		<li>상품제안</li>
+		                		<li><a href="<%=request.getContextPath()%>/views/support/support_notice.jsp">공지사항</a></li>
+		                		<li><a href="<%=request.getContextPath()%>/views/support/support_query.jsp">1:1문의</a></li>
+		                		<li><a href="#">상품제안</a></li>
 		            		</ul>
 	        			</div>
     				</div>

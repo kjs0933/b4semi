@@ -117,13 +117,14 @@
             width: 100%;
             display: flex;
             flex-flow: row wrap;
-            justify-content: space-around;
+            justify-content: flex-start;
         }
 
         .plist-board > div
         {
             position: relative;
-            width: 305px;
+            width: 300px;
+            margin: 20px;
             margin-top: 20px;
             margin-bottom: 70px;
         }
@@ -181,10 +182,16 @@
         .major-category
         {
             font-size: 35px;
-            margin: 15px 0px 5px 27px;
+            margin: 15px 0px 5px 21px;
             font-family: 'Noto Sans KR';
             color: rgb(38, 85, 139);
             align-self: flex-start;
+        }
+        
+        .major-category a
+        {
+        	font-size: 35px;
+        	color: rgb(42, 71, 114);
         }
 
         .sub-category
@@ -266,8 +273,6 @@
             height: 40%;
         }
 
-
-
         .pagebar
         {
             display: flex;
@@ -291,6 +296,18 @@
         .pagebar div:first-of-type
         {
             border-left: 1px solid rgb(220, 220, 220);
+        }
+        
+        .pagebar a
+        {
+        	display: flex;
+        	width: 100%;
+        	height: 100%;
+        	align-items: center;
+        	justify-content: center;
+        	text-decoration: none;
+        	color: black;
+        	
         }
         
        
