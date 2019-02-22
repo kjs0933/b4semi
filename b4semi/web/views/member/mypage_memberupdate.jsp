@@ -1,8 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/views/common/header.jsp"%>
-
+<%@ page import="com.b4.model.vo.Member"%>	
+<% Member lm = (Member)request.getAttribute("loginMember"); 
+	String memberPw = lm.getMemberPw();
+%>	
+	
     <style>
+    
+    	section
+    	{
+    		position: relative;
+    	}
+    	
 		.mypage-wrapper
         {
             width: 1024px;
@@ -143,7 +153,6 @@
         {
             font-family: 'Noto Sans KR';
             width: 1024px;
-            border-bottom: 1px solid #ccc;
             
         }
 
@@ -151,7 +160,7 @@
         {
             font-size: 21px;
             margin: 25px 0;
-            border-bottom: 2px solid rgb(38, 85, 139);
+            border-bottom: 2px solid rgb(42, 71, 114);
             padding-bottom: 25px;
         }
 
@@ -161,6 +170,7 @@
             border: 1px solid #ccc;
             padding: 5px;
             box-sizing: border-box;
+            border-radius: 2px;
         }
 
         #member-id
@@ -172,7 +182,6 @@
         {
             height: 40px;
             width: 255px;
-            
         }
 
         .member-update-frm > div > input
@@ -182,11 +191,13 @@
             border: 1px solid #ccc;
             background-color: white;
             margin: 10px;
+            cursor: pointer;
+            color: black;
         }
 
         .member-update-wrapper input[type="submit"]
         {
-            background-color: rgb(38, 85, 139);
+            background-color: rgb(42, 71, 114);
             border: none;
             color: white;
         }
@@ -234,7 +245,8 @@
             justify-content: center;
             margin: 30px 0;
         }
-
+        
+     
     </style>
 </head>
 <body>
@@ -270,7 +282,7 @@
                 <div><a href="<%=request.getContextPath() %>/views/member/mypage_review_before.jsp">상품후기</a></div>
                 <div><a href="<%=request.getContextPath() %>/views/member/mypage_mileage.jsp">적립금</a></div>
                 <div><a href="<%=request.getContextPath() %>/views/member/mypage_coupon.jsp">쿠폰</a></div>
-                <div class="mypage-tab-current"><a href="<%=request.getContextPath() %>/views/member/mypage_memberupdate.jsp">개인정보수정</a></div>
+                <div class="mypage-tab-current"><a href="<%=request.getContextPath() %>/memberUpdate">개인정보수정</a></div>
             </div>
             <div class="mypage-body">
                 <div class="member-update-wrapper">
@@ -281,7 +293,7 @@
                         <div>
                             <div>아이디</div>
                             <div>
-                                <input type="text" name="memberId" id="member-id" value="jwj3955" readonly="readonly">
+                                <input type="text" name="memberId" id="member-id" value="<%=lm.getMemberId() %>" readonly="readonly">
                             </div>
                         </div>
                         <div>
@@ -297,9 +309,9 @@
                                 <input type="password" name="memberPwNew" id="member-pw-new">
                                 <div class="valid-msg"></div>                                         
                                 <span class="member-update-input-msg">
-                                    현재 비밀번호와 다르게 입력<br>
+                                	현재 비밀번호와 다르게 입력<br>
                                     8자 이상 입력<br>
-                                    숫자/특수문자 각1회, 영문 2개이상 조합
+                                                          숫자/특수문자 각1회, 영문 2개이상 조합
                                 </span>
                             </div>
                         </div>
@@ -314,7 +326,7 @@
                         <div>
                             <div>이름</div>
                             <div>
-                                <input type="text" name="memberName" id="member-name">
+                                <input type="text" name="memberName" id="member-name" value="<%=lm.getMemberName()%>">
                                 <div class="valid-msg"></div>                                         
                             </div>
                             
@@ -322,7 +334,7 @@
                         <div>
                             <div>이메일</div>
                             <div>
-                                <input type="email" name="memberEmail" id="member-email">
+                                <input type="email" name="memberEmail" id="member-email" value="<%=lm.getMemberEmail()%>">
                                 <div class="valid-msg"></div>                                         
                             </div>
                             
@@ -330,14 +342,14 @@
                         <div>
                             <div>휴대폰</div>
                             <div>
-                                <input type="tel" name="memberPhone" id="memberPhone">
+                                <input type="tel" name="memberPhone" id="memberPhone" value="<%=lm.getMemberPhone()%>">
                                 <div class="valid-msg"></div>                 
                                 
                             </div>
                         </div>
                         <div class="update-btn-set">
-                            <input type="button" value="취소">
-                            <input type="button" value="탈퇴">
+                            <input id="cancel" type="button" value="취소">
+                            <input id="leave" type="button" value="탈퇴">
                             <input type="submit" value="수정">
                         </div>
                     </form>
@@ -345,7 +357,6 @@
             </div>
         </div>
     </section>
-
 <script>
     const memberUpdateFrm = $('.member-update-frm');
     const memberUpdatePw = $('.member-update-frm #member-pw');
@@ -354,7 +365,7 @@
     const memberUpdateName = $('.member-update-frm #member-name');
     const memberUpdateEmail = $('.member-update-frm #member-email');
     const memberUpdatePhone = $('.member-update-frm #member-phone');
-
+    
     const validationMsg = $('.valid-msg');
 
     const memberUpdateInputs = $('.valid-msg').prev();
@@ -374,9 +385,9 @@
 
     //각 input blur시 체크 이벤트
     $(() => {
-
+    	memberUpdatePw.on('blur', checkCurrentPw);
         memberUpdatePwNew.on('blur', pwRegExpValid);
-        memberUpdatePwNewCk.on('blur', pwCkValid);
+        memberUpdatePwNewCk.on('blur', pwCkNewValid);
         memberUpdateEmail.on('blur', emailRegExpValid);
         memberUpdatePhone.on('blur', phoneRegExpValid);
     });
@@ -398,7 +409,7 @@
     }
     
     //새 패스워드 확인 일치여부
-    const pwCkValid = (e) => {
+    const pwCkNewValid = (e) => {
     	if(memberUpdatePwNew.val().trim() != memberUpdatePwNewCk.val().trim())
     	{
     		$(e.target).next().css('color', 'crimson').text('패스워드가 일치하지 않습니다.');
@@ -445,6 +456,60 @@
         }
         return result;
     }
+    
+    //기존 비밀번호 일치 여부 확인
+    const checkCurrentPw = (e) => {
+    	
+    	$.ajax({
+    		url: '<%=request.getContextPath()%>/checkPwServlet',
+    		type: 'post',
+    		data: {'memberPwCk' : memberUpdatePw.val(), 'memberPw' : '<%=memberPw%>'},
+    		dataType: 'text',
+    		success: data => {
+    			if(data == 1)
+    			{
+    				$(e.target).next().css('color', 'green').text('패스워드가 일치합니다.');
+    			}
+    			else
+    			{
+    				$(e.target).next().css('color', 'crimson').text('패스워드가 일치하지 않습니다.');	
+    			}
+    		}
+    	});
+    }
+    
+    //취소
+    $(() => {
+    	const cancel = $('#cancel');
+    	cancel.on('click', () => {
+    	   	memberUpdatePw.val('');
+    	    memberUpdatePwNew.val('');
+    	    memberUpdatePwNewCk.val('');
+    	    memberUpdateName.val('<%=lm.getMemberName()%>');
+    	    memberUpdateEmail.val('<%=lm.getMemberEmail()%>');
+    	    memberUpdatePhone.val('<%=lm.getMemberPhone()%>');
+    	    validationMsg.text('');
+    	});
+    });
+
+    
+    
+    
+
+    
+    //수정
+    
+    
+    
+    
+    //세션 만료시 메인으로 이동
+    $(() => {
+    	if(<%=lm==null%>){
+    		alert("세션이 만료되었습니다.");
+    		location.assign('<%=request.getContextPath()%>');
+    	}
+    });
+    
 </script>
 
 <%@ include file="/views/common/footer.jsp" %>

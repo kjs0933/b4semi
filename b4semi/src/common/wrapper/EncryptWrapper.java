@@ -19,7 +19,7 @@ public class EncryptWrapper extends HttpServletRequestWrapper{
 	public String getParameter(String key) {
 		// TODO Auto-generated method stub
 		String value="";
-		if(key!=null && (key.equals("memberPw") || key.equals("memberPw_new")))
+		if(key!=null && (key.equals("memberPw") || key.equals("memberPwNew") || key.equals("memberPwCk")))
 		{
 			value = getSha512(super.getParameter(key));
 		}

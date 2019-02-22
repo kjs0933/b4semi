@@ -123,8 +123,8 @@
         .plist-board > div
         {
             position: relative;
-            width: 300px;
-            margin: 20px;
+            width: 310px;
+            margin: 15px;
             margin-top: 20px;
             margin-bottom: 70px;
         }
@@ -182,7 +182,7 @@
         .major-category
         {
             font-size: 35px;
-            margin: 15px 0px 5px 21px;
+            margin: 15px 0px 5px 14px;
             font-family: 'Noto Sans KR';
             color: rgb(38, 85, 139);
             align-self: flex-start;
@@ -372,12 +372,27 @@
                 <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
                 <p><%=dplist.get(i).getDisplayListTitle()%></p>
                 <p><%=dplist.get(i).getMinPrice()%> 원</p>
+                
+                
+<%--            //할인률 분기 처리부분
+				<% if(dplist.get(i).getDiscountRate() == 1.0) 
+                {%>
+                	<p><%=dplist.get(i).getMinPrice()%> 원</p>
+                <% } 
+                else 
+                {%> 
+                	<s><%=dplist.get(i).getMinPrice()%>원</s><p><%=(Math.round((dplist.get(i).getMinPrice()*dplist.get(i).getDiscountRate())/10))*10 %> 원</p>
+            	<%} %> 
+--%>
+            	
+            	
             </div>
         <%} %>
         </div>
         <%=pageBar%>
     </div>
 </section>
+
 
 <script>
 	const addCart = $('.plist-board > div > div').children();

@@ -14,7 +14,7 @@ public class MemberService {
 	
 	MemberDao dao = new MemberDao();
 
-	//id로 해당 아이디가 존재하는지 여부만 체크
+	//ID 존재 여부 체크
 	public boolean checkId(String memberId)
 	{
 		Connection conn = getConnection();
@@ -23,7 +23,7 @@ public class MemberService {
 		return result;
 	}
 	
-	//id로 회원 찾기 메소드
+	//ID로 회원 정보 객체 리턴
 	public Member selectOne(Member m)
 	{
 		Connection conn = getConnection();
