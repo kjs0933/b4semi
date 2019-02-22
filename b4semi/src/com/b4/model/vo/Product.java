@@ -10,6 +10,7 @@ public class Product {
 	private String productUnit;
 	private String productOriginalFileName;
 	private String productRenameFilename;
+	private String majorCategoryCode;
 	
 	
 	public Product() {
@@ -18,7 +19,8 @@ public class Product {
 
 
 	public Product(String productCode, String supplierCode, String productName, String originCountry,
-			String subCategoryCode, String productUnit, String productOriginalFileName, String productRenameFilename) {
+			String subCategoryCode, String productUnit, String productOriginalFileName, String productRenameFilename,
+			String majorCategoryCode) {
 		super();
 		this.productCode = productCode;
 		this.supplierCode = supplierCode;
@@ -28,6 +30,7 @@ public class Product {
 		this.productUnit = productUnit;
 		this.productOriginalFileName = productOriginalFileName;
 		this.productRenameFilename = productRenameFilename;
+		this.majorCategoryCode = majorCategoryCode;
 	}
 
 
@@ -111,14 +114,26 @@ public class Product {
 	}
 
 
+	public String getMajorCategoryCode() {
+		return majorCategoryCode;
+	}
+
+
+	public void setMajorCategoryCode(String majorCategoryCode) {
+		this.majorCategoryCode = majorCategoryCode;
+	}
+
+
 	@Override
 	public String toString() {
 		return "Product [productCode=" + productCode + ", supplierCode=" + supplierCode + ", productName=" + productName
 				+ ", originCountry=" + originCountry + ", subCategoryCode=" + subCategoryCode + ", productUnit="
 				+ productUnit + ", productOriginalFileName=" + productOriginalFileName + ", productRenameFilename="
-				+ productRenameFilename + "]";
+				+ productRenameFilename + ", majorCategoryCode=" + majorCategoryCode + "]";
 	}
+
 
 	
-
-	}
+	
+	
+		}

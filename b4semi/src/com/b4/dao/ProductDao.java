@@ -52,6 +52,7 @@ public class ProductDao {
 				d.setProductUnit(rs.getString("productUnit"));
 				d.setProductOriginalFileName(rs.getString("productOriginalFileName"));
 				d.setProductRenameFilename(rs.getString("productRenameFilename"));
+				d.setMajorCategoryCode(rs.getString("majorCategoryCode"));
 			}
 		}
 		catch(SQLException e)
@@ -97,6 +98,7 @@ public class ProductDao {
 			pstmt.setString(6, d.getProductUnit());
 			pstmt.setString(7, d.getProductOriginalFileName());
 			pstmt.setString(8, d.getProductRenameFilename());
+			pstmt.setString(9, d.getMajorCategoryCode());
 			result=pstmt.executeUpdate();
 		}
 		catch(SQLException e)
@@ -120,6 +122,7 @@ public class ProductDao {
 			pstmt.setString(6, d.getProductUnit());
 			pstmt.setString(7, d.getProductOriginalFileName());
 			pstmt.setString(8, d.getProductRenameFilename());
+			pstmt.setString(9, d.getMajorCategoryCode());
 			result=pstmt.executeUpdate();
 		}
 		catch(SQLException e)
@@ -166,6 +169,7 @@ public class ProductDao {
 				result.setProductUnit(rs.getString("productUnit"));
 				result.setProductOriginalFileName(rs.getString("productOriginaFileName"));
 				result.setProductRenameFilename(rs.getString("productRenameFilename"));
+				result.setMajorCategoryCode(rs.getString("majorCategoryCode"));
 			}
 		}
 		catch(SQLException e)
