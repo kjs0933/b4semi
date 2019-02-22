@@ -26,6 +26,18 @@ public class Cart {
 		this.productCount = productCount;
 	}
 
+	public Cart(String productName, int displayListSeq, int productCount, int displayOptionPrice,
+			boolean optionAvailable, String discountName, double discountRate) {
+		super();
+		this.productName = productName;
+		this.displayListSeq = displayListSeq;
+		this.productCount = productCount;
+		this.displayOptionPrice = displayOptionPrice;
+		this.optionAvailable = optionAvailable;
+		this.discountName = discountName;
+		this.discountRate = discountRate;
+	}
+
 	public Cart(int memberSeq, String productName, String productCode, int displayListSeq, int productCount,
 			String discountCode, int displayOptionPrice, boolean optionAvailable, String discountName,
 			double discountRate) {

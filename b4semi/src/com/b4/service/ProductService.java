@@ -79,7 +79,13 @@ private ProductDao dao = new ProductDao();
 		return result;
 	}
 
-	
+	public Product selectByDpListSeq(int dpseq)
+	{
+		Connection conn = getConnection();
+		Product p = dao.selectByDpListSeq(conn, dpseq);
+		close(conn);
+		return p;
+	}
 	
 
 }

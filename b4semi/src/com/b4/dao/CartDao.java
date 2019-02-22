@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Properties;
 
 import com.b4.model.vo.Cart;
+import com.b4.model.vo.Product;
 
 public class CartDao {
 
@@ -64,5 +65,25 @@ public class CartDao {
 			close(pstmt);
 		}
 		return list;
+	}
+
+	public int insertCart(Connection conn, int memberSeq, int dpseq, Product p) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		String sql = prop.getProperty("insertCart");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, memberSeq);
+			pstmt.setString(2, p.getProductCode());
+			pstmt.setInt(3, dpseq);
+			pstmt.setInt(4, 1);
+			result = pstmt.executeUpdate();			
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}return result;
 	}
 }

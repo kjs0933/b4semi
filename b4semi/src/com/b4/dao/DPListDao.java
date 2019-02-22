@@ -14,6 +14,7 @@ import java.util.Properties;
 
 import com.b4.model.vo.Category;
 import com.b4.model.vo.DPList;
+import com.b4.model.vo.DPOptionCount;
 
 public class DPListDao {
 	
@@ -192,6 +193,35 @@ public class DPListDao {
 				dplist.setReviewScore(rs.getString("REVIEWSCORE"));
 				dplist.setImg(rs.getString("IMG"));
 				result.add(dplist);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(rs);
+			close(ps);
+		}
+		return result;
+	}
+
+
+	public ArrayList<DPOptionCount> dpOptionCount(Connection cn) {
+		PreparedStatement ps = null;
+		ResultSet rs=null;
+		ArrayList<DPOptionCount> result = new ArrayList<>();
+		String sql=prop.getProperty("dpOptionCount");
+		try {
+			ps=cn.prepareStatement(sql);
+			rs=ps.executeQuery();
+			while(rs.next())
+			{
+				DPOptionCount dpc = new DPOptionCount();
+				dpc.setDisplayListSeq(rs.getInt("DISPLAYLISTSEQ"));
+				dpc.setCount(rs.getInt("CNT"));
+				result.add(dpc);
 			}
 		}
 		catch(SQLException e)
