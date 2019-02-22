@@ -56,6 +56,9 @@ public class DataGen {
 		System.out.println("상품마스터 생성중");
 		ArrayList<ProductPrice> plist = ProductGen.createProduct(cn);
 		System.out.println("상품마스터 생성 완료");
+		System.out.println("판매자할인 생성중");
+		DiscountGen.createDiscount(cn);
+		System.out.println("판매자할인 생성 완료");
 		dpListSeqStart = getDPListSeq(cn);
 		System.out.println("판매상품리스트, 이미지DB 생성중");
 		createDPList(plist, dpListSeqStart, cn);
@@ -393,7 +396,7 @@ public class DataGen {
 						//공지사항 제목
 						ps.setString(2, date + " 서버 점검 안내");
 						//공지사항 내용
-						ps.setString(3, "<img class='NoticeImages' src='...imgpath...no.jpg'><br>안녕하세요. The Food Forum 입니다.<br><br><br>보다 나은 서비스 제공을 위한 시스템 작업으로 서비스가 중단될 예정입니다.<br><br><br>최대한 빠른 시간 내에 작업을 마칠 수 있도록 최선을 다하겠습니다.<br><br><br>감사합니다.");
+						ps.setString(3, "안녕하세요. The Food Forum 입니다.<br><br><br>보다 나은 서비스 제공을 위한 시스템 작업으로 서비스가 중단될 예정입니다.<br><br><br>최대한 빠른 시간 내에 작업을 마칠 수 있도록 최선을 다하겠습니다.<br><br><br>감사합니다.");
 					}
 					else
 					{
@@ -402,7 +405,7 @@ public class DataGen {
 							//공지사항 제목
 							ps.setString(2, plist.get((int)(plist.size()*Math.random())).getProductName() + " 상품 일시 품절 안내");
 							//공지사항 내용
-							ps.setString(3, "<img class='NoticeImages' src='...imgpath...no.jpg'> <br>안녕하세요. The Food Forum 입니다.<br><br>최대한 빠른 시일 내에 상품 판매를 재개할 수 있도록 하겠습니다.<br><br><br>감사합니다.");
+							ps.setString(3, "안녕하세요. The Food Forum 입니다.<br><br>최대한 빠른 시일 내에 상품 판매를 재개할 수 있도록 하겠습니다.<br><br><br>감사합니다.");
 						}
 						else
 						{
@@ -411,7 +414,7 @@ public class DataGen {
 							//공지사항 제목
 							ps.setString(2, date + " " +p.getProductName() + " 할인 이벤트!");
 							//공지사항 내용
-							ps.setString(3, "<img class='NoticeImages' src='...imgpath...no.jpg'> <br>안녕하세요. The Food Forum 입니다.<br><br>오늘 단 하루! "+p.getProductName()+"를 "+(p.getOutPrice()-10)+"원에 구매하실 수 있습니다.<br><br><br>감사합니다.");
+							ps.setString(3, "<br>안녕하세요. The Food Forum 입니다.<br><br>오늘 단 하루! "+p.getProductName()+"를 "+(p.getOutPrice()-10)+"원에 구매하실 수 있습니다.<br><br><br>감사합니다.");
 						}
 					}
 
@@ -471,7 +474,7 @@ public class DataGen {
 					//게시글 제목
 					ps1.setString(2, date + "에 방문 수령 가능한가요?");
 					//게시글 내용
-					ps1.setString(3, "<img class='QNAImages' src='...imgpath...no.jpg'><br>알려주세요");
+					ps1.setString(3, "알려주세요");
 				}
 				else
 				{
@@ -480,7 +483,7 @@ public class DataGen {
 						//게시글 제목
 						ps1.setString(2, plist.get((int)(plist.size()*Math.random())).getProductName() + " 대량 구매하려고 하는데 재고가 어느정도 있나요?");
 						//게시글 내용
-						ps1.setString(3, "<img class='NoticeImages' src='...imgpath...no.jpg'><br>빨리 답변해주세요");
+						ps1.setString(3, "빨리 답변해주세요");
 					}
 					else
 					{
@@ -489,7 +492,7 @@ public class DataGen {
 						//게시글 제목
 						ps1.setString(2, date + "일에 " +p.getProductName() + " 구매하면 언제 배송가능한가요");
 						//게시글 내용
-						ps1.setString(3, "<img class='NoticeImages' src='...imgpath...no.jpg'><br>답변해주시면 감사하겠습니다");
+						ps1.setString(3, "답변해주시면 감사하겠습니다");
 					}
 				}
 
@@ -833,6 +836,8 @@ public class DataGen {
 			ps2.executeUpdate();
 			ps3=cn.prepareStatement("DELETE FROM COUPONMASTER CASCADE");
 			ps3.executeUpdate();
+			ps4=cn.prepareStatement("DELETE FROM DISCOUNT CASCADE");
+			ps4.executeUpdate();
 
 		}
 		catch(SQLException e)
@@ -845,6 +850,7 @@ public class DataGen {
 				ps1.close();
 				ps2.close();
 				ps3.close();
+				ps4.close();
 			}
 			catch(SQLException e)
 			{
@@ -1020,7 +1026,7 @@ public class DataGen {
 	public void createDPOption(ArrayList<ProductPrice> plist, int dpListSeqStart, Connection cn)
 	{
 		PreparedStatement ps3 =null;
-		String sql3 = "INSERT INTO DPOPTION VALUES (?,?,null,?,'Y')";
+		String sql3 = "INSERT INTO DPOPTION VALUES (?,?,?,?,'Y')";
 		
 		try {
 		ProductPrice p;
@@ -1036,7 +1042,8 @@ public class DataGen {
 				
 				ps3.setString(1, p.getProductCode());
 				ps3.setInt(2, dpListSeqStart+p.getDpNo());
-				ps3.setInt(3, p.getOutPrice());
+				ps3.setString(3, p.getDiscountCode());
+				ps3.setInt(4, p.getOutPrice());
 				ps3.executeUpdate();
 				
 			}
@@ -1501,7 +1508,7 @@ public class DataGen {
 									//게시글 제목
 									ps3.setString(2, date + "까지 배송 가능할까요?");
 									//게시글 내용
-									ps3.setString(3, "<img class='QNAImages' src='...imgpath...no.jpg'><br>꼭 부탁합니다");
+									ps3.setString(3, "꼭 부탁합니다");
 								}
 								else
 								{
@@ -1510,7 +1517,7 @@ public class DataGen {
 										//게시글 제목
 										ps3.setString(2, orderList.get(z).getpp().getProductName() + " 상품에 대해 문의 드립니다");
 										//게시글 내용
-										ps3.setString(3, "<img class='NoticeImages' src='...imgpath...no.jpg'><br>겉에 흠집이 조금 있는 것 같은데 교환 가능한가요");
+										ps3.setString(3, "겉에 흠집이 조금 있는 것 같은데 교환 가능한가요");
 									}
 									else
 									{
@@ -1518,7 +1525,7 @@ public class DataGen {
 										//게시글 제목
 										ps3.setString(2, date + "에 구매한 " +orderList.get(z).getpp().getProductName()+ " 환불에 대해 문의 드립니다");
 										//게시글 내용
-										ps3.setString(3, "<img class='NoticeImages' src='...imgpath...no.jpg'><br>받은 물건이 마음에 안 드는데 환불 가능한가요");
+										ps3.setString(3, "받은 물건이 마음에 안 드는데 환불 가능한가요");
 									}
 								}
 
@@ -1634,12 +1641,12 @@ public class DataGen {
 								if(Math.random()>0.5)
 								{
 									title = "최고에요!";
-									text = "<img class='ReviewImages' src='...imgpath...no.jpg'><br>"+orderList.get(z).getpp().getProductName()+" 최고입니다!";
+									text = orderList.get(z).getpp().getProductName()+" 최고입니다!";
 								}
 								else
 								{
 									title = "생각보다 배송이 빨라서 좋았어요";
-									text = "<img class='ReviewImages' src='...imgpath...no.jpg'><br>"+sdf.format(new Date(order.getOrderTime()))+"에 주문했는데 뜻밖에도 오늘 "+sdf.format(new Date(reviewTime)) +"에 왔네요";
+									text = sdf.format(new Date(order.getOrderTime()))+"에 주문했는데 뜻밖에도 오늘 "+sdf.format(new Date(reviewTime)) +"에 왔네요";
 								}
 							}
 							else if(reviewPoint > 3.5)
@@ -1647,12 +1654,12 @@ public class DataGen {
 								if(Math.random()>0.5)
 								{
 									title = "마음에 듭니다!";
-									text = "<img class='ReviewImages' src='...imgpath...no.jpg'><br>마음에 들어요!";
+									text = "마음에 들어요!";
 								}
 								else
 								{
 									title = "만족합니다.";
-									text = "<img class='ReviewImages' src='...imgpath...no.jpg'><br>상품 만족스럽네요";
+									text = "상품 만족스럽네요";
 								}
 							}
 							else if(reviewPoint > 2.5)
@@ -1660,12 +1667,12 @@ public class DataGen {
 								if(Math.random()>0.5)
 								{
 									title = "별로입니다";
-									text = "<img class='ReviewImages' src='...imgpath...no.jpg'><br>별로지만 마일리지 얻기위해 작성합니다";
+									text = "별로지만 마일리지 얻기위해 작성합니다";
 								}
 								else
 								{
 									title = "무난합니다";
-									text = "<img class='ReviewImages' src='...imgpath...no.jpg'><br>그냥 저냥 괜찮네요";
+									text = "그냥 저냥 괜찮네요";
 								}
 							}
 							else if(reviewPoint > 1.5)
@@ -1673,12 +1680,12 @@ public class DataGen {
 								if(Math.random()>0.5)
 								{
 									title = "사진을 믿지 마세요";
-									text = "<img class='ReviewImages' src='...imgpath...no.jpg'><br>이거 완전 사기 아닌가요... 생각보다 품질이 안 좋습니다";
+									text = "이거 완전 사기 아닌가요... 생각보다 품질이 안 좋습니다";
 								}
 								else
 								{
 									title = "배송이 너무 늦어요";
-									text = "<img class='ReviewImages' src='...imgpath...no.jpg'><br>"+sdf.format(new Date(order.getOrderTime()))+"에 주문했는데 오늘 "+sdf.format(new Date(reviewTime)) +"에 오다니 너무하네요";
+									text = sdf.format(new Date(order.getOrderTime()))+"에 주문했는데 오늘 "+sdf.format(new Date(reviewTime)) +"에 오다니 너무하네요";
 								}
 							}
 							else
@@ -1686,12 +1693,12 @@ public class DataGen {
 								if(Math.random()>0.5)
 								{
 									title = "다시는 안 삽니다";
-									text = "<img class='ReviewImages' src='...imgpath...no.jpg'><br>환불 신청 했습니다";
+									text = "환불 신청 했습니다";
 								}
 								else
 								{
 									title = "최악이네요";
-									text = "<img class='ReviewImages' src='...imgpath...no.jpg'><br>"+orderList.get(z).getpp().getProductName()+" 이거 사지 마세요";
+									text = orderList.get(z).getpp().getProductName()+" 이거 사지 마세요";
 								}
 							}
 							
