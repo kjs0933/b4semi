@@ -1,5 +1,6 @@
 package com.b4.model.vo;
 
+//장바구니, DPList 모달창에 표시하기 위한 객체
 public class DPOption {
 	
 	private String productCode;
@@ -7,19 +8,13 @@ public class DPOption {
 	private String discountCode;
 	private int displayOptionPrice;
 	private String OptionAvailable;
+	private String discountName;
+	private double discountRate;
+	private String productName;
+	private String productUnit;
 	
 	public DPOption() {
 		// TODO Auto-generated constructor stub
-	}
-
-	public DPOption(String productCode, int displayListSeq, String discountCode, int displayOptionPrice,
-			String optionAvailable) {
-		super();
-		this.productCode = productCode;
-		this.displayListSeq = displayListSeq;
-		this.discountCode = discountCode;
-		this.displayOptionPrice = displayOptionPrice;
-		OptionAvailable = optionAvailable;
 	}
 
 	public String getProductCode() {
@@ -62,13 +57,36 @@ public class DPOption {
 		OptionAvailable = optionAvailable;
 	}
 
-	@Override
-	public String toString() {
-		return "DPOption [productCode=" + productCode + ", displayListSeq=" + displayListSeq + ", discountCode="
-				+ discountCode + ", displayOptionPrice=" + displayOptionPrice + ", OptionAvailable=" + OptionAvailable
-				+ "]";
+	public String getDiscountName() {
+		return discountName;
 	}
-	
-	
+
+	public void setDiscountName(String discountName) {
+		this.discountName = discountName;
+	}
+
+	public double getDiscountRate() {
+		return discountRate;
+	}
+
+	public void setDiscountRate(double discountRate) {
+		this.discountRate = discountRate;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	public String getProductUnit() {
+		return productUnit;
+	}
+
+	public void setProductUnit(String productUnit) {
+		this.productUnit = productUnit;
+	}
 
 }

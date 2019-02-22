@@ -14,7 +14,7 @@ import java.util.Properties;
 
 import com.b4.model.vo.Category;
 import com.b4.model.vo.DPList;
-import com.b4.model.vo.DPOptionCount;
+import com.b4.model.vo.DPOption;
 
 public class DPListDao {
 	
@@ -192,6 +192,8 @@ public class DPListDao {
 				dplist.setDiscountRate(rs.getDouble("DISCOUNTRATE"));
 				dplist.setReviewScore(rs.getString("REVIEWSCORE"));
 				dplist.setImg(rs.getString("IMG"));
+				dplist.setOptionCount(rs.getInt("OPTIONCOUNT"));
+				dplist.setProductUnit(rs.getString("PRODUCTUNIT"));
 				result.add(dplist);
 			}
 		}
@@ -206,22 +208,31 @@ public class DPListDao {
 		}
 		return result;
 	}
-
-
-	public ArrayList<DPOptionCount> dpOptionCount(Connection cn) {
+	
+	public ArrayList<DPOption> searchDPOption(Connection cn, int dpSeq)
+	{
 		PreparedStatement ps = null;
 		ResultSet rs=null;
-		ArrayList<DPOptionCount> result = new ArrayList<>();
-		String sql=prop.getProperty("dpOptionCount");
+		ArrayList<DPOption> result = new ArrayList<DPOption>();
+		DPOption dpoption;
+		String sql=prop.getProperty("searchDPOption");
 		try {
 			ps=cn.prepareStatement(sql);
+			ps.setInt(1, dpSeq);
 			rs=ps.executeQuery();
 			while(rs.next())
 			{
-				DPOptionCount dpc = new DPOptionCount();
-				dpc.setDisplayListSeq(rs.getInt("DISPLAYLISTSEQ"));
-				dpc.setCount(rs.getInt("CNT"));
-				result.add(dpc);
+				dpoption = new DPOption();
+				dpoption.setProductCode(rs.getString("PRODUCTCODE"));
+				dpoption.setProductName(rs.getString("PRODUCTNAME"));
+				dpoption.setDisplayListSeq(rs.getInt("DISPLAYLISTSEQ"));
+				dpoption.setDisplayOptionPrice(rs.getInt("DISPLAYOPTIONPRICE"));
+				dpoption.setOptionAvailable(rs.getString("OPTIONAVAILABLE"));
+				dpoption.setProductUnit(rs.getString("PRODUCTUNIT"));
+				dpoption.setDiscountRate(rs.getDouble("DISCOUNTRATE"));
+				dpoption.setDiscountName(rs.getString("DISCOUNTNAME"));
+				dpoption.setDiscountCode(rs.getString("DISCOUNTCODE"));
+				result.add(dpoption);
 			}
 		}
 		catch(SQLException e)
@@ -235,5 +246,6 @@ public class DPListDao {
 		}
 		return result;
 	}
-	
+
+
 }

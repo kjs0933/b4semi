@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.b4.model.vo.Category;
 import com.b4.model.vo.DPList;
-import com.b4.model.vo.DPOptionCount;
 import com.b4.service.DPListService;
 
 /**
@@ -158,11 +157,6 @@ public class DisplayListServlet extends HttpServlet {
 		}
 		pageBar+="</div>";
 		
-		
-		//dplist중에 옵션이 있는 dplistseq를 받아오기.
-		ArrayList<DPOptionCount> optionList = service.dpOptionCount();
-		
-		request.setAttribute("optionList", optionList);
 		request.setAttribute("totalCount", totalCount);
 		request.setAttribute("subText", subText);
 		request.setAttribute("subTextAll", subTextAll);

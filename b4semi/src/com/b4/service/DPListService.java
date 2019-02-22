@@ -5,12 +5,11 @@ import static common.JDBCTemplate.getConnection;
 
 import java.sql.Connection;
 import java.util.ArrayList;
-import java.util.List;
 
 import com.b4.dao.DPListDao;
 import com.b4.model.vo.Category;
 import com.b4.model.vo.DPList;
-import com.b4.model.vo.DPOptionCount;
+import com.b4.model.vo.DPOption;
 
 public class DPListService {
 	
@@ -28,6 +27,17 @@ public class DPListService {
 	{
 		Connection cn=getConnection();
 		ArrayList<DPList> result = dao.searchDPList(cn, cPage, numPerPage, keyword, sub, major, sortText);
+		int size=result.size();
+		ArrayList<DPOption> options;
+		for(int i =0; i<size;i++)
+		{
+			if(result.get(i).getOptionCount() >= 2)
+			{
+				options = new ArrayList<DPOption>();
+				options = dao.searchDPOption(cn, result.get(i).getDisplayListSeq());
+				result.get(i).setOptions(options);
+			}
+		}
 		close(cn);
 		return result;
 	}
@@ -58,13 +68,6 @@ public class DPListService {
 	{
 		Connection cn=getConnection();
 		ArrayList<Category> result = dao.getMajorTextAll(cn);
-		close(cn);
-		return result;
-	}
-
-	public ArrayList<DPOptionCount> dpOptionCount() {
-		Connection cn = getConnection();
-		ArrayList<DPOptionCount> result = dao.dpOptionCount(cn);
 		close(cn);
 		return result;
 	}
