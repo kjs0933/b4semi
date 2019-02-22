@@ -766,8 +766,11 @@
 			        <div class="my-account-wrapper">
 			        	<div class="my-account-box">
 				           	<ul>
-				               	<li><a href="#">주문내역</a></li>
-				               	<li><a href="#">개인정보수정</a></li>
+				               	<li><a href="<%=request.getContextPath() %>/views/member/mypage_orderlist.jsp">주문내역</a></li>
+				               	<li><a href="<%=request.getContextPath() %>/views/member/mypage_review_before.jsp">상품리뷰</a></li>
+				               	<li><a href="<%=request.getContextPath() %>/views/member/mypage_mileage.jsp">적립금</a></li>
+				               	<li><a href="<%=request.getContextPath() %>/views/member/mypage_coupon.jsp">쿠폰</a></li>
+				               	<li><a href="<%=request.getContextPath() %>/views/member/mypage_memberupdate.jsp">개인정보수정</a></li>
 				               	<li><a href="<%=request.getContextPath()%>/logout">로그아웃</a></li>
 				           	</ul>
 			        	</div>

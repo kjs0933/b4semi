@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/views/common/header.jsp"%>
+<%@ page import="com.b4.model.vo.Member"%>
+<% Member m = (Member)session.getAttribute("loginMember");%>
 	<style>
         .signup-frm-wrapper
         {
@@ -193,6 +195,12 @@
 </section>
 <script>
 
+$(() => {
+	<% if (m != null) {%>
+		location.assign('<%=request.getContextPath()%>');
+	<%}%>
+});
+
 //회원가입 유효성 검사
 const signupFrm = $('.signup-frm');
 const signupPw = $('.signup-frm #member-pw');
@@ -203,10 +211,9 @@ const signupEmail = $('.signup-frm #member-email');
 const signupPhone = $('.signup-frm #member-phone');
 
 const validationMsg = $('.validation-msg');
-
 const signupInputs = $('.validation-msg').prev();
-
 const idAvail = $('#idAvail');
+
 
 	//회원가입 submit시 체크
 	$(() => {
@@ -236,7 +243,7 @@ const idAvail = $('#idAvail');
                         if(data > 0)
                         {
                             alert('회원가입이 완료되었습니다.');
-                            location.reload();
+                            location.assign('<%=request.getContextPath()%>');
                         }
                         else
                         {
