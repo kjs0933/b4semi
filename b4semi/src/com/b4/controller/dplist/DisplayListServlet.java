@@ -129,9 +129,9 @@ public class DisplayListServlet extends HttpServlet {
 			pageBar+="<div><img src='"+request.getContextPath()+"/images/board-arrow-left.png'></div>";
 		}
 		else {
-			pageBar +="<a href='"+ request.getContextPath() +"/dplist?cPage="+(pageStart-1)+
-					"&keyword="+keyword+"&sub="+sub+"&major="+major+"&sort="+sort+"'><div><img src='"+
-					request.getContextPath()+"/images/board-arrow-left.png'></div></a>";
+			pageBar +="<div><a href='"+ request.getContextPath() +"/dplist?cPage="+(pageStart-1)+
+					"&keyword="+keyword+"&sub="+sub+"&major="+major+"&sort="+sort+"'><img src='"+
+					request.getContextPath()+"/images/board-arrow-left.png'></a></div>";
 		}
 		for(int i=pageStart; i<=pageEnd; i++)
 		{
@@ -141,8 +141,8 @@ public class DisplayListServlet extends HttpServlet {
 			}
 			else
 			{
-				pageBar +="<a href='"+ request.getContextPath() +"/dplist?cPage="+i+
-						"&keyword="+keyword+"&sub="+sub+"&major="+major+"&sort="+sort+"'><div>"+i+"</div></a>";
+				pageBar +="<div><a href='"+ request.getContextPath() +"/dplist?cPage="+i+
+						"&keyword="+keyword+"&sub="+sub+"&major="+major+"&sort="+sort+"'>"+i+"</a></div>";
 			}
 		}
 		if(pageEnd>=totalPage)
@@ -151,9 +151,9 @@ public class DisplayListServlet extends HttpServlet {
 		}
 		else
 		{
-			pageBar +="<a href='"+ request.getContextPath() +"/dplist?cPage="+(pageEnd+1)+
-					"&keyword="+keyword+"&sub="+sub+"&major="+major+"&sort="+sort+"'><div><img src='"+
-					request.getContextPath()+"/images/board-arrow-right.png'></div></a>";
+			pageBar +="<div><a href='"+ request.getContextPath() +"/dplist?cPage="+(pageEnd+1)+
+					"&keyword="+keyword+"&sub="+sub+"&major="+major+"&sort="+sort+"'><img src='"+
+					request.getContextPath()+"/images/board-arrow-right.png'></a></div>";
 		}
 		pageBar+="</div>";
 		
