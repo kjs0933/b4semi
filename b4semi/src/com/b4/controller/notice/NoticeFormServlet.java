@@ -1,7 +1,6 @@
 package com.b4.controller.notice;
 
 import java.io.IOException;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,16 +10,16 @@ import javax.servlet.http.HttpServletResponse;
 import com.b4.model.vo.Member;
 
 /**
- * Servlet implementation class NoticeListServlet
+ * Servlet implementation class NoticeFormServlet
  */
-@WebServlet("/NoticeListServlet")
-public class NoticeListServlet extends HttpServlet {
+@WebServlet("/NoticeFormServlet")
+public class NoticeFormServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public NoticeListServlet() {
+    public NoticeFormServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -38,6 +37,7 @@ public class NoticeListServlet extends HttpServlet {
 			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
 		}
 		
+		request.getRequestDispatcher("/views/notice/noticeForm.jsp").forward(request, response);
 	}
 
 	/**

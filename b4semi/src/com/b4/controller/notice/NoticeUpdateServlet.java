@@ -9,18 +9,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.b4.model.vo.Member;
+import com.b4.model.vo.Notice;
+import com.b4.service.NoticeService;
 
 /**
- * Servlet implementation class NoticeListServlet
+ * Servlet implementation class NoticeUpdateServlet
  */
-@WebServlet("/NoticeListServlet")
-public class NoticeListServlet extends HttpServlet {
+@WebServlet("/NoticeUpdateServlet")
+public class NoticeUpdateServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public NoticeListServlet() {
+    public NoticeUpdateServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -38,6 +40,23 @@ public class NoticeListServlet extends HttpServlet {
 			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
 		}
 		
+		int no = Integer.parseInt(request.getParameter("no"));
+		Notice notice = new NoticeService().NoticeOne(no);
+		String view="";
+		String msg="";
+		if(notice!=null)
+		{
+			request.setAttribute("notice", notice);
+			view="/views/notice/noticeUpdate.jsp";
+		}
+		else
+		{
+			msg="조회한 공지사항이 없습니다.";
+			view="/views/common/msg.jsp";
+			request.setAttribute("msg", msg);
+			request.setAttribute("loc", "/notice/noticeList");
+		}
+		request.getRequestDispatcher(view).forward(request, response);
 	}
 
 	/**

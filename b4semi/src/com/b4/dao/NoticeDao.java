@@ -36,6 +36,9 @@ public class NoticeDao {
 				n.setNoticeTitle(rs.getString("noticetitle"));
 				n.setNoticeContents(rs.getString("noticecontents"));
 				n.setNoticeDate(rs.getTimestamp("noticedate"));
+				n.setNoticeReadCount(rs.getInt("noticereadcount"));
+				n.setNoticeOriginalFilename(rs.getString("noticeoriginalfilename"));
+				n.setNoticeRenameFilename(rs.getString("noticerenamefilename"));
 			}
 		}
 		catch(SQLException e)
@@ -88,6 +91,7 @@ public class NoticeDao {
 				n.setNoticeTitle(rs.getString("noticetitle"));
 				n.setNoticeContents(rs.getString("noticeContents"));
 				n.setNoticeDate(rs.getTimestamp("noticeDate"));
+				n.setNoticeReadCount(rs.getInt("noticereadcount"));
 			}
 		}
 		catch(SQLException e)
@@ -134,8 +138,9 @@ public class NoticeDao {
 			pstmt.setInt(2, n.getMemberSeq());
 			pstmt.setString(3, n.getNoticeTitle());
 			pstmt.setString(4, n.getNoticeContents());
-			pstmt.setString(5, n.getNoticeOriginalFilename());
-			pstmt.setString(6, n.getNoticeRenameFilename());
+			pstmt.setTimestamp(5, n.getNoticeDate());
+			pstmt.setString(6, n.getNoticeOriginalFilename());
+			pstmt.setString(7, n.getNoticeRenameFilename());
 			result=pstmt.executeUpdate();
 		}
 		catch(SQLException e)
@@ -148,15 +153,27 @@ public class NoticeDao {
 	{
 		PreparedStatement pstmt=null;
 		int result=0;
-		String sql=prop.getProperty("updatenotice");
-		try {
+		String sql=prop.getProperty("updateNotice");
+		try
+		{
 			pstmt=conn.prepareStatement(sql);
-			
+			pstmt.setInt(1, n.getNoticeSeq());
+			pstmt.setInt(2, n.getMemberSeq());
+			pstmt.setString(3, n.getNoticeTitle());
+			pstmt.setString(4, n.getNoticeContents());
+			pstmt.setTimestamp(5, n.getNoticeDate());
+			pstmt.setInt(6, n.getNoticeReadCount());
 			result=pstmt.executeUpdate();
 		}
 		catch(SQLException e)
-		{e.printStackTrace();}
-		finally {close(pstmt);}
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(pstmt);
+			close(conn);
+		}
 		return result;
 	}
 	
