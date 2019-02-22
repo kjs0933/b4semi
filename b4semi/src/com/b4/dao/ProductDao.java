@@ -20,7 +20,7 @@ public class ProductDao {
 
 	public ProductDao() {
 		try {
-			String fileName = MemberDao.class.getResource("/sql/Product/Product-query.properties").getPath();
+			String fileName = MemberDao.class.getResource("/sql/product/product-query.properties").getPath();
 			prop.load(new FileReader(fileName));
 		}
 		catch(IOException e)
@@ -141,6 +141,28 @@ public class ProductDao {
 		{e.printStackTrace();}
 		finally {close(pstmt);}
 		return result;
+	}
+
+	public Product selectByDpListSeq(Connection conn, int dpseq) 
+	{
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = prop.getProperty("selectByDpListSeq");
+		Product p = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, dpseq);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				p = new Product();
+				p.setProductName(rs.getString("productName"));
+				p.setProductCode(rs.getString("productCode"));
+			}
+		}
+		catch(SQLException e)
+		{e.printStackTrace();}
+		finally {close(rs); close(pstmt);}
+		return p;
 	}
 
 }

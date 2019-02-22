@@ -4,14 +4,27 @@
 <%@ include file="/views/common/header.jsp" %>
 <%
 	List<Cart> list = (List<Cart>)request.getAttribute("cartList");
-	int[] price = new int[list.size()];
-	for(int i=0; i<list.size(); i++){
-		if(list.get(i).getDiscountRate()!=0.0)
-		{
-			price[i] = (int)Math.ceil((list.get(i).getDisplayOptionPrice()*list.get(i).getDiscountRate())/10)*10;
-		}else
-		{
-			price[i] = list.get(i).getDisplayOptionPrice();
+	int[] price = new int[10];
+	if(session.getAttribute("loginMember")!=null){
+		price = new int[list.size()];
+		for(int i=0; i<list.size(); i++){
+			if(list.get(i).getDiscountRate()!=0.0)
+			{
+				price[i] = (int)Math.ceil((list.get(i).getDisplayOptionPrice()*list.get(i).getDiscountRate())/10)*10;
+			}else
+			{
+				price[i] = list.get(i).getDisplayOptionPrice();
+			}
+		}
+	}
+	Cookie[] cookies = request.getCookies();
+	if(cookies!=null){
+		for(int i=0; i<cookies.length ; i++){
+			Cookie c = cookies[i];
+			String cName = c.getName();
+			if(cName.equals("cartCookie")){
+				//cookie에 장바구니가 담겨있습니다.
+			}
 		}
 	}
 %>    
@@ -23,7 +36,7 @@
 			margin-top: 60px;
 			display: flex;
 			flex-flow: column nowrap;
-			aling-items: center;
+			align-items: center;
 		}
 	
         #cart-frm
@@ -81,12 +94,18 @@
         .cart-header > div:nth-of-type(5){flex:3 1 0;}
         .cart-header > div:nth-of-type(6){flex:2 1 0;}
 
-        .cart-col
+        .cart-col, #emptycart
         {
             width: 1024px;
             display: flex;
             flex-flow: row nowrap;
             border-bottom: 1px solid #ccc;
+        }
+        
+        #emptycart
+        {
+        	height:120px;
+        	align-items: center;        	
         }
 
         .cart-col > div:nth-of-type(2) > img{width: 80px;height: auto;}
@@ -309,8 +328,11 @@
                     <div>금액</div>
                     <div>취소</div>
                 </div>
-             	<%if(!list.isEmpty()) {
-             		for(int i=0; i<list.size(); i++){
+             	<%if(session.getAttribute("loginMember")!=null) {
+             		if(list.size()==0){%>
+            		<div id='emptycart'>장바구니에 담긴 상품이 없습니다.</div>
+             		<%}else{
+             			for(int i=0; i<list.size(); i++){
              	%>
                 <div class="cart-col">
                     <div><input type="checkbox" name="products" id="product<%=i+1 %>" class="products"><label for="product<%=i+1 %>"><span></span></label></div>
@@ -326,7 +348,26 @@
                     <div></div>
                     <div><img src="<%=request.getContextPath() %>/images/btn_close.png"></div>
                 </div>
-                <%}} %>
+                <%}}} 
+             	else{
+             		for(int i=0; i<3; i++){
+             	%>
+                <div class="cart-col">
+                    <div><input type="checkbox" name="products" id="product<%=i+1 %>" class="products"><label for="product<%=i+1 %>"><span></span></label></div>
+                    <div><img src="<%=request.getContextPath() %>/upload/product/양파.jpg"></div>
+                    <div><div><p>상품이름</p><br><p>0000원</p></div></div>
+                    <div>
+                        <div class="quantity-box">
+                            <div><img src="<%=request.getContextPath() %>/images/arrow_left_black.png"></div>
+                            <input type="text" name="quantity<%=i+1 %>" id="quantity<%=i+1 %>" value="1"/>
+                            <div><img src="<%=request.getContextPath() %>/images/arrow_right_black.png"></div>
+                        </div>
+                    </div>
+                    <div></div>
+                    <div><img src="<%=request.getContextPath() %>/images/btn_close.png"></div>
+                </div>
+                <%}
+                } %>
             </div>
             <div class="checkbox-control">
                 <input type="button" value="선택 삭제"/>

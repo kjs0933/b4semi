@@ -3,6 +3,8 @@
 <%@ include file="/views/common/header.jsp"%>
 <%@ page import="com.b4.model.vo.DPList"%>
 <%@ page import="com.b4.model.vo.Category"%>
+<%@ page import="com.b4.model.vo.DPOptionCount"%>
+<%@ page import="java.util.*" %>
 <%@ page import="java.util.ArrayList"%>
 
 <%
@@ -95,6 +97,8 @@
 	} catch (ClassCastException e) {
 		dplist = new ArrayList<DPList>();
 	}
+
+	ArrayList<DPOptionCount> optionList = (ArrayList<DPOptionCount>)request.getAttribute("optionList");
 
 %>
     <style>
@@ -354,6 +358,7 @@
         <%for(int i=0; i< dplist.size();i++) {%>
             <div>
                 <img src="<%=request.getContextPath()%>/upload/product/<%=dplist.get(i).getImg()%>" onError="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';">
+                <input type='hidden' name='plist-index' value="<%=dplist.get(i).getDisplayListSeq()%>"/>
                 <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
                 <p><%=dplist.get(i).getDisplayListTitle()%></p>
                 <p><%=dplist.get(i).getMinPrice()%> 원</p>
@@ -363,4 +368,27 @@
         <%=pageBar%>
     </div>
 </section>
+
+<script>
+	const addCart = $('.plist-board > div > div').children();
+	
+	$(function(){
+		addCart.on('click',(e) => {
+			//displayListSeq받아옴.
+			var dpseq = $(e.target).parents().prev().val();
+			//카트 아이콘에 장바구니에 추가되었습니다 문구 넣어주세요
+			//if문으로 dpseq가 optionList의 displayListSeq중에 해당될 경우 옵션창을 띄워 보여줌.
+			$.ajax({
+				url:"<%=request.getContextPath()%>/js/cartAdd.do",
+				type:"post",
+				data:{"dpseq":dpseq},
+				success:function(data){
+					console.log(data);		
+			}
+		});
+	});
+});
+
+</script>
+
 <%@ include file="/views/common/footer.jsp" %>

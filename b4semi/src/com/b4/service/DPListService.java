@@ -5,10 +5,12 @@ import static common.JDBCTemplate.getConnection;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.b4.dao.DPListDao;
 import com.b4.model.vo.Category;
 import com.b4.model.vo.DPList;
+import com.b4.model.vo.DPOptionCount;
 
 public class DPListService {
 	
@@ -56,6 +58,13 @@ public class DPListService {
 	{
 		Connection cn=getConnection();
 		ArrayList<Category> result = dao.getMajorTextAll(cn);
+		close(cn);
+		return result;
+	}
+
+	public ArrayList<DPOptionCount> dpOptionCount() {
+		Connection cn = getConnection();
+		ArrayList<DPOptionCount> result = dao.dpOptionCount(cn);
 		close(cn);
 		return result;
 	}
