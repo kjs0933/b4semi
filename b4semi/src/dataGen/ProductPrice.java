@@ -1,5 +1,7 @@
 package dataGen;
 
+import java.sql.Timestamp;
+
 // 상품 추가시 필요한 추가 정보들을 담기 위한 객체
 public class ProductPrice {
 	
@@ -11,6 +13,7 @@ public class ProductPrice {
 	int dpNo; // 디스플레이 넘버 - 동일한 숫자를 넣으면 세부옵션으로 선택하게 됨
 	String url; //이미지 경로 - null이면 이미지 저장 없음, "default" 이면 제품명.jpg
 	String discountCode; //할인코드
+	Timestamp displayDate;
 	
 	public ProductPrice(String productCode, String productName, int inPrice, int outPrice, int dayLife, int dpNo) {
 		this.productCode = productCode;
@@ -91,5 +94,11 @@ public class ProductPrice {
 	}
 	public void setDiscountCode(String discountCode) {
 		this.discountCode = discountCode;
+	}
+	public Timestamp getDisplayDate() {
+		return displayDate;
+	}
+	public void setDisplayDate(Timestamp displayDate) {
+		this.displayDate = displayDate;
 	}
 }

@@ -991,7 +991,14 @@ public class DataGen {
 					//내용
 					ps1.setString(2, html);
 					//작성일
-					ps1.setTimestamp(3, new Timestamp(System.currentTimeMillis()-howOld));
+					if(p.getDisplayDate() == null)
+					{
+						ps1.setTimestamp(3, new Timestamp(System.currentTimeMillis()-howOld));
+					}
+					else
+					{
+						ps1.setTimestamp(3,p.getDisplayDate());
+					}
 					ps1.executeUpdate();
 					
 					

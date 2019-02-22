@@ -29,9 +29,9 @@ public class DiscountGen {
 		ps.setDouble(3, 0.1);
 		ps.executeQuery();
 		
-		ps.setString(1, "04-20");
+		ps.setString(1, "04-15");
 		ps.setString(2, "해물 최대 20% 할인");
-		ps.setDouble(3, 0.2);
+		ps.setDouble(3, 0.15);
 		ps.executeQuery();
 		
 		ps.setString(1, "10H03-20");

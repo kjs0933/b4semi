@@ -3,7 +3,6 @@
 <%@ include file="/views/common/header.jsp"%>
 <%@ page import="com.b4.model.vo.DPList"%>
 <%@ page import="com.b4.model.vo.Category"%>
-<%@ page import="com.b4.model.vo.DPOptionCount"%>
 <%@ page import="java.util.*" %>
 <%@ page import="java.util.ArrayList"%>
 
@@ -98,7 +97,6 @@
 		dplist = new ArrayList<DPList>();
 	}
 
-	ArrayList<DPOptionCount> optionList = (ArrayList<DPOptionCount>)request.getAttribute("optionList");
 
 %>
     <style>
