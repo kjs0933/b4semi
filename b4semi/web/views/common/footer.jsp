@@ -200,7 +200,14 @@ const toggleSet = () => {
                 	}
                 	else
                     {
-                    	location.reload();
+                		if(location.pathName == '<%=request.getContextPath()%>/views/member/signup.jsp')
+                		{
+                			location.assign('<%=request.getContextPath()%>');
+                		}
+                		else
+                		{
+                			location.reload();
+                		}
                     }
                 }
             });
