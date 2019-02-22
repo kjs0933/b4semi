@@ -1,4 +1,4 @@
-package com.b4.controller.notice;
+package com.b4.controller.product;
 
 import java.io.IOException;
 
@@ -9,20 +9,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.b4.model.vo.Member;
-import com.b4.model.vo.Notice;
-import com.b4.service.NoticeService;
+import com.b4.model.vo.Product;
+import com.b4.service.ProductService;
 
 /**
- * Servlet implementation class NoticeUpdateServlet
+ * Servlet implementation class ProductViewServlet
  */
-@WebServlet("/NoticeUpdateServlet")
-public class NoticeUpdateServlet extends HttpServlet {
+@WebServlet("/ProductViewServlet")
+public class ProductViewServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public NoticeUpdateServlet() {
+    public ProductViewServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -32,7 +32,8 @@ public class NoticeUpdateServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		Member loginMember=(Member)request.getSession(false).getAttribute("loginMember");
+		Member loginMember=(Member)request.getSession().getAttribute("loginMember");
+		System.out.println("찍혀라"+loginMember);
 		if(loginMember==null||!"admin".equals(loginMember.getMemberId()))
 		{
 			request.setAttribute("msg", "잘못된 경로로 이동하셨습니다.");
@@ -40,23 +41,13 @@ public class NoticeUpdateServlet extends HttpServlet {
 			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
 		}
 		
-		int no = Integer.parseInt(request.getParameter("no"));
-		Notice notice = new NoticeService().NoticeOne(no);
-		String view="";
-		String msg="";
-		if(notice!=null)
-		{
-			request.setAttribute("notice", notice);
-			view="/views/notice/noticeUpdate.jsp";
-		}
-		else
-		{
-			msg="조회한 공지사항이 없습니다.";
-			view="/views/common/msg.jsp";
-			request.setAttribute("msg", msg);
-			request.setAttribute("loc", "/notice/noticeList");
-		}
-		request.getRequestDispatcher(view).forward(request, response);
+		String code=request.getParameter("productCode");
+		
+		Product p=new ProductService().selectOne(code);
+		
+		System.out.println(p.toString());
+		request.setAttribute("product", p);
+		request.getRequestDispatcher("/views/product/productView.jsp").forward(request, response);
 	}
 
 	/**

@@ -1,5 +1,6 @@
 package com.b4.controller.product;
 
+import java.io.File;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -8,21 +9,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.b4.model.vo.Member;
 import com.b4.model.vo.Product;
 import com.b4.service.ProductService;
 
 /**
- * Servlet implementation class ProductUpdateServlet
+ * Servlet implementation class ProductDeleteServlet
  */
-@WebServlet("/ProductUpdateServlet")
-public class ProductUpdateServlet extends HttpServlet {
+@WebServlet("/ProductDeleteServlet")
+public class ProductDeleteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ProductUpdateServlet() {
+    public ProductDeleteServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,44 +31,38 @@ public class ProductUpdateServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+
+		String deleteNo=request.getParameter("deleteNo");
+		String deleteFile=request.getParameter("deleteFile");
 		
-		Member loginMember=(Member)request.getSession(false).getAttribute("loginMember");
-		if(loginMember==null||!"admin".equals(loginMember.getMemberId()))
-		{
-			request.setAttribute("msg", "잘못된 경로로 이동하셨습니다.");
-			request.setAttribute("loc", "/");
-			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
-		}
+		Product p = new Product();
+		p.setProductCode(deleteNo);
 		
+		String dir=getServletContext().getRealPath("/");
+		String filePath=dir+File.separator+"upload"+File.separator+"notice";
 		
+		int result=new ProductService().deleteProduct(p);
 		
-		//상품코드를 가져와서 그 정보를 출력해주는 view화면을 선택
-		String pCode = request.getParameter("productCode");
-		
-		Product p=new Product();
-		p.setProductCode(pCode);
-		
-		//비즈니스 로직
-		Product result=new ProductService().selectOne(pCode);
-		
-		//view 선택
 		String msg="";
 		String loc="";
-		String view="";
-		if(result==null)
+		String view="/views/common/msg.jsp";
+		if(result>0)
 		{
-			msg="해당상품이 존재하지 않습니다.";
-			view="/views/common/msg.jsp";
-			request.setAttribute("msg", msg);
-			request.setAttribute("loc", loc);
+			File deleteFile2=new File(filePath+"/"+deleteFile);
+			deleteFile2.delete();
+			msg="상품 삭제완료.";
+			loc="/product/productList";
 		}
-		else
-		{
-			view="/views/product/productView.jsp";
-			request.setAttribute("member", result);			
+		else {
+			msg="상품 삭제실패";
+			loc="/product/productView?productcode="+deleteNo;
 		}
+		request.setAttribute("msg", msg);
+		request.setAttribute("loc", loc);
 		request.getRequestDispatcher(view).forward(request, response);
 	}
+	
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

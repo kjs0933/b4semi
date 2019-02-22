@@ -71,10 +71,10 @@ private ProductDao dao = new ProductDao();
 		return result;
 	}
 	
-	public Product selectOne(Product p)
+	public Product selectOne(String code)
 	{
 		Connection conn = getConnection();
-		Product result = dao.selectOne(conn, p);
+		Product result = dao.selectOne(conn, code);
 		close(conn);
 		return result;
 	}

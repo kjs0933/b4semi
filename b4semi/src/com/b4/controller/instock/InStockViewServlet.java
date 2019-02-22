@@ -1,28 +1,29 @@
-package com.b4.controller.notice;
+package com.b4.controller.instock;
 
 import java.io.IOException;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.b4.model.vo.InStock;
 import com.b4.model.vo.Member;
-import com.b4.model.vo.Notice;
-import com.b4.service.NoticeService;
+import com.b4.model.vo.Product;
+import com.b4.service.InStockService;
+import com.b4.service.ProductService;
 
 /**
- * Servlet implementation class NoticeUpdateServlet
+ * Servlet implementation class InStockViewServlet
  */
-@WebServlet("/NoticeUpdateServlet")
-public class NoticeUpdateServlet extends HttpServlet {
+@WebServlet("/InStockViewServlet")
+public class InStockViewServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public NoticeUpdateServlet() {
+    public InStockViewServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,8 +32,9 @@ public class NoticeUpdateServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		Member loginMember=(Member)request.getSession().getAttribute("loginMember");
 		
-		Member loginMember=(Member)request.getSession(false).getAttribute("loginMember");
 		if(loginMember==null||!"admin".equals(loginMember.getMemberId()))
 		{
 			request.setAttribute("msg", "잘못된 경로로 이동하셨습니다.");
@@ -40,23 +42,13 @@ public class NoticeUpdateServlet extends HttpServlet {
 			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
 		}
 		
-		int no = Integer.parseInt(request.getParameter("no"));
-		Notice notice = new NoticeService().NoticeOne(no);
-		String view="";
-		String msg="";
-		if(notice!=null)
-		{
-			request.setAttribute("notice", notice);
-			view="/views/notice/noticeUpdate.jsp";
-		}
-		else
-		{
-			msg="조회한 공지사항이 없습니다.";
-			view="/views/common/msg.jsp";
-			request.setAttribute("msg", msg);
-			request.setAttribute("loc", "/notice/noticeList");
-		}
-		request.getRequestDispatcher(view).forward(request, response);
+		int no=Integer.parseInt(request.getParameter("instockseq"));
+		
+		InStock p=new InStockService().selectOne(no);
+		
+		
+		request.setAttribute("instock", p);
+		request.getRequestDispatcher("/views/instock/instockView.jsp").forward(request, response);
 	}
 
 	/**
