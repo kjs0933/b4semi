@@ -23,7 +23,7 @@ public class AddressListDao {
 	
 	public AddressListDao() {
 		try {
-			String fileName = MemberDao.class.getResource("/sql/AddressList/AddressList-query.properties").getPath();
+			String fileName = MemberDao.class.getResource("/sql/addressList/addressList-query.properties").getPath();
 			prop.load(new FileReader(fileName));
 		}
 		catch(IOException e)

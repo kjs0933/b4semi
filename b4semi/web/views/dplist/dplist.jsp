@@ -1,6 +1,102 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/views/common/header.jsp"%>
+<%@ page import="com.b4.model.vo.DPList"%>
+<%@ page import="com.b4.model.vo.Category"%>
+<%@ page import="java.util.ArrayList"%>
+
+<%
+	int cPage;
+	try {
+		cPage = Integer.parseInt(request.getParameter("cPage"));
+	} catch (NumberFormatException e) {
+		cPage = 1;
+	}
+ 	String keyword= request.getParameter("keyword");
+	if(keyword == null)
+	{
+		keyword ="";
+	}
+ 	String sub= request.getParameter("sub");
+	if(sub == null)
+	{
+		sub ="";
+	}
+ 	String major= request.getParameter("major");
+	if(major == null)
+	{
+		major ="";
+	}
+	String sort= request.getParameter("sort");
+	if(sort == null)
+	{
+		sort="";
+	}
+	String subText;
+	try {
+		subText= (String)request.getAttribute("subText");
+		if(subText == null)
+		{
+			subText="";
+		}
+	} catch (ClassCastException e) {
+		subText="";
+	}
+	ArrayList<Category> subTextAll;
+	try {
+		subTextAll= (ArrayList<Category>)request.getAttribute("subTextAll");
+		if(subTextAll == null)
+		{
+			subTextAll=new ArrayList<Category>();
+		}
+	} catch (ClassCastException e) {
+		subTextAll=new ArrayList<Category>();
+	}
+	
+	Category majorText;
+	try {
+		majorText = (Category)request.getAttribute("majorText");
+		if(majorText == null)
+		{
+			majorText=new Category("","","전체 검색");
+		}
+	} catch (ClassCastException e) {
+		majorText=new Category("","","전체 검색");
+	}
+	String totalCount;
+	try {
+		totalCount = String.valueOf((int)request.getAttribute("totalCount"));
+		if(totalCount == null)
+		{
+			totalCount="0";
+		}
+	} catch (Exception e) {
+		totalCount="0";
+	}
+	
+	String pageBar;
+	try {
+		pageBar = (String)request.getAttribute("pageBar");
+		if(pageBar == null)
+		{
+			pageBar ="";
+		}
+	} catch (ClassCastException e) {
+		pageBar ="";
+	}
+	
+	ArrayList<DPList> dplist;
+	try {
+		dplist = (ArrayList<DPList>)request.getAttribute("dplist");
+		if(dplist == null)
+		{
+			dplist = new ArrayList<DPList>();
+		}
+	} catch (ClassCastException e) {
+		dplist = new ArrayList<DPList>();
+	}
+
+%>
     <style>
         .dp-list-wrapper
         {
@@ -176,7 +272,7 @@
             font-size: 12px;
         }
 
-        .pagebar > div
+        .pagebar div
         {
             width: 33px;
             height: 33px;
@@ -188,61 +284,12 @@
             cursor: pointer;
         }
 
-        .pagebar > div:first-of-type
+        .pagebar div:first-of-type
         {
             border-left: 1px solid rgb(220, 220, 220);
         }
         
-        
-        
-        .dplist-search-wrapper
-        {
-            width: 1024px;
-            display: flex;
-            flex-flow: column nowrap;
-            font-family: 'Noto Sans KR';
-            font-size: 14px;
-            align-items: center;
-        }
-
-        .dplist-search-wrapper input
-        {
-            font-family: 'Noto Sans KR';
-            font-size: 14px;
-            box-sizing: border-box;
-        }
-
-        .dplist-search-header
-        {
-            font-size: 30px;
-            margin: 25px;
-            color: rgb(38, 85, 139);
-        }
-
-        .dplist-search-frm
-        {
-            width: 1024px;
-            align-self: center;
-            display: flex;
-
-            border-top: 2px solid rgb(38, 85, 139);
-            border-bottom: 1px solid #ccc;
-        }
-
-        .dplist-search-frm > div
-        {
-            display: flex;
-            margin: 25px;
-            align-items: center;
-        }
-
-        .dplist-search-frm > div:nth-of-type(1){flex: 1 1 0;}
-        .dplist-search-frm > div:nth-of-type(2){flex: 5 1 0;}
-        .dplist-search-frm > div:nth-of-type(3){flex: 1 1 0;}
-
-        .dplist-search-frm > div:nth-of-type(2) > input{width: 100%; height: 40px; padding: 10px;}
-        .dplist-search-frm > div:nth-of-type(3) > input{width: 100%; height: 40px; background-color: rgb(38, 85, 139); border: none; color: white;}
-        
+       
         .search-result
         {
             display: flex;
@@ -250,167 +297,63 @@
             width: 1024px;
             font-size: 13px;
             border-bottom: 1px solid #ccc;
-            margin-top: 100px;
+            margin-top: 50px;
 
         }
 
 </style>
 <section>
     <div class="dp-list-wrapper">
+	    <div class="search-result">
+	        <div class="search-result-msg">
+	           	총 <%=totalCount%>개 상품
+	        </div>
+	        <div id="orderby">
+	            <select onchange='fn_dplist_sort();'>
+	                <option value="score" <%="score".equals(sort)?"selected":""%>>평점순</option>
+	                <option value="new" <%="new".equals(sort)?"selected":""%>>신상품순</option>
+	                <option value="popularity" <%="popularity".equals(sort)?"selected":""%>>인기상품순</option>
+	                <option value="priceAsc" <%="priceAsc".equals(sort)?"selected":""%>>낮은가격순</option>
+	                <option value="priceDesc" <%="priceDesc".equals(sort)?"selected":""%>>높은가격순</option>
+	            </select>
+	        </div>
+	    </div>
+	    <script>
+	    	function fn_dplist_sort(){
+	    		location.href="<%=request.getContextPath()%>/dplist?keyword=<%=keyword%>&sub=<%=sub%>&major=<%=major%>&sort="+event.target.options[event.target.selectedIndex].value;
+	    	}
+	    	$("#header-keyword").val("<%=keyword%>");
+	    </script>
     
-    
-        <div class="dplist-search-wrapper">
-        <div class="dplist-search-header">
-            	상품검색
+        <div class="major-category"><a href="<%=request.getContextPath()%>/dplist?keyword=<%=keyword%>&sub=<%=majorText.getSubCode()%>&major=<%=majorText.getMajorCode()%>&sort=<%=sort%>" style="text-decoration: none;"><%=majorText.getCategoryName()%></a></div>
+        <div class="sub-category-wrapper">
+            <div class="sub-category">
+                <ul>
+                	<%for(int i=0; i<subTextAll.size(); i++){
+                	if(subTextAll.get(i).getCategoryName().equals(subText))
+                	{%>
+                		<li class="current-sub-category"><a href="<%=request.getContextPath()%>/dplist?keyword=<%=keyword%>&sub=<%=subTextAll.get(i).getSubCode()%>&major=<%=subTextAll.get(i).getMajorCode()%>&sort=<%=sort%>"><%=subTextAll.get(i).getCategoryName()%></a><span></span></li>
+                	<%}
+                	else
+                	{%>
+                		<li><a href="<%=request.getContextPath()%>/dplist?keyword=<%=keyword%>&sub=<%=subTextAll.get(i).getSubCode()%>&major=<%=subTextAll.get(i).getMajorCode()%>&sort=<%=sort%>"><%=subTextAll.get(i).getCategoryName()%></a><span></span></li>
+                	<%}
+                	}%>
+                </ul>
+            </div>
         </div>
-        <form action="#" method="get" class="dplist-search-frm">
-            <div>검색조건</div>
-            <div><input type="text" name="" id=""></div>
-            <div><input type="submit" value="검색"></div>
-        </form>
-    </div>
-    <div class="search-result">
-        <div class="search-result-msg">
-           	총 100개 검색되었습니다.
-        </div>
-        <div id="orderby">
-            <select>
-                <option value="descRate">평점순</option>
-                <option value="descDate">신상품순</option>
-                <option value="descPopular">인기상품순</option>
-                <option value="ascPrice">낮은가격순</option>
-                <option value="descPrice">높은가격순</option>
-            </select>
-        </div>
-    </div>
-    
-    
-<!--         <div class="major-category">채소</div> -->
-<!--         <div class="sub-category-wrapper"> -->
-<!--             <div class="sub-category"> -->
-<!--                 <ul> -->
-<!--                     <li class="current-sub-category"><a href="#">잎채소</a><span></span></li> -->
-<!--                     <li><a href="#">마늘·파·양파</a><span></span></li> -->
-<!--                     <li><a href="#">뿌리채소</a><span></span></li> -->
-<!--                     <li><a href="#">고추·호박·오이·가지</a><span></span></li> -->
-<!--                     <li><a href="#">나물</a><span></span></li> -->
-<!--                     <li><a href="#">버섯</a><span></span></li> -->
-<!--                     <li><a href="#">기타</a><span></span></li> -->
-<!--                 </ul> -->
-<!--             </div> -->
-<!--             <div id="orderby"> -->
-<!--                 <select> -->
-<!--                     <option value="descRate">평점순</option> -->
-<!--                     <option value="descDate">신상품순</option> -->
-<!--                     <option value="descPopular">인기상품순</option> -->
-<!--                     <option value="ascPrice">낮은가격순</option> -->
-<!--                     <option value="descPrice">높은가격순</option> -->
-<!--                 </select> -->
-<!--             </div> -->
-<!--         </div> -->
-        
         
         <div class="plist-board">
+        <%for(int i=0; i< dplist.size();i++) {%>
             <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
+                <img src="<%=request.getContextPath()%>/upload/product/<%=dplist.get(i).getImg()%>" onError="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';">
                 <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
+                <p><%=dplist.get(i).getDisplayListTitle()%></p>
+                <p><%=dplist.get(i).getMinPrice()%> 원</p>
             </div>
-            <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
-            </div>
-            <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
-            </div>
-            <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
-            </div>
-            <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
-            </div>
-            <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
-            </div>
-            <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
-            </div>
-            <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
-            </div>
-            <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
-            </div>
-            <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
-            </div>
-            <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
-            </div>
-            <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
-            </div>
-            <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
-            </div>
-            <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
-            </div>
-            <div>
-                <img src="<%=request.getContextPath()%>/images/dp_sample.jpg" alt="">
-                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>농약 팍팍 독버섯</p>
-                <p>10,000 원</p>
-            </div>
+        <%} %>
         </div>
-        <div class="pagebar">
-            <div><img src="<%=request.getContextPath()%>/images/board-arrow-left.png"></div>
-            <div>1</div>
-            <div>2</div>
-            <div>3</div>
-            <div>4</div>
-            <div>5</div>
-            <div><img src="<%=request.getContextPath()%>/images/board-arrow-right.png"></div>
-        </div>
+        <%=pageBar%>
     </div>
 </section>
 <%@ include file="/views/common/footer.jsp" %>
