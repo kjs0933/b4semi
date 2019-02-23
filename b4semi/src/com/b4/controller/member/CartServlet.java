@@ -42,13 +42,10 @@ public class CartServlet extends HttpServlet {
 			List<Cart> list = new CartService().selectByMember(m.getMemberSeq());
 			request.setAttribute("cartList", list);
 		}
-		else {
-			String cartString = new ArrayList<Cart>().toString();
-			Cookie cartCookie = new Cookie("cartCookie",cartString);
-			cartCookie.setMaxAge(14*24*60*60);
-			response.addCookie(cartCookie);
+		else
+		{
+
 		}
-		
 		
 		String view = "/views/cart/cart.jsp";
 		request.getRequestDispatcher(view).forward(request,response);

@@ -4,12 +4,14 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.b4.model.vo.Member;
+import com.b4.service.CartService;
 import com.b4.service.MemberService;
 import com.google.gson.Gson;
 
@@ -45,6 +47,10 @@ public class LoginServlet extends HttpServlet {
 		{
 			HttpSession session = request.getSession();
 			session.setAttribute("loginMember", loginMember);
+			
+			//쿠키 장바구니를 DB 장바구니로 옮겼는지 여부를 체크하기 위한 플래그
+			session.setAttribute("cartUpdate", null);
+			
 		}
 		
 		Gson gson = new Gson();

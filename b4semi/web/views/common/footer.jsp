@@ -230,5 +230,25 @@ const toggleSet = () => {
         mainFrmBox.addClass('frm-invalid-anim');
         setTimeout(() => {mainFrmBox.removeClass('frm-invalid-anim')}, 200);
     }
+    
+    
+    //로그인시 쿠키에 저장된 장바구니 업데이트 체크
+	<%if(session.getAttribute("loginMember") !=null &&session.getAttribute("cartUpdate")==null){%>
+	$.ajax({
+		url:"<%=request.getContextPath()%>/js/cartAdd.do",
+		type:"post",
+		data:{"cartUpdate":"yes"},
+		success:function(data){
+			if(data>0)
+			{
+				alert("장바구니를 업데이트 하였습니다");
+			}
+			else if(data<0)
+			{
+				alert("장바구니 업데이트 중 에러가 발생하였습니다");
+			}
+		}
+	});
+	<%}%>
 </script>
 </html>

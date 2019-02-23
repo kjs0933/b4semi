@@ -6,6 +6,8 @@
 <%@ page import="java.util.ArrayList"%>
 
 <%
+
+
 	int cPage;
 	try {
 		cPage = Integer.parseInt(request.getParameter("cPage"));
@@ -365,6 +367,7 @@
         <%for(int i=0; i< dplist.size();i++) {%>
             <div>
                 <img src="<%=request.getContextPath()%>/upload/product/<%=dplist.get(i).getImg()%>" onError="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';">
+                <input type='hidden' name='plist-index' value="<%=dplist.get(i).getOptionCount()==1?dplist.get(i).getProductCode():""%>"/>
                 <input type='hidden' name='plist-index' value="<%=dplist.get(i).getDisplayListSeq()%>"/>
                 <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
                 <p><%=dplist.get(i).getDisplayListTitle()%></p>
@@ -393,24 +396,32 @@
 
 <script>
 	const addCart = $('.plist-board > div > div').children();
-	
 	$(function(){
 		addCart.on('click',(e) => {
 			//displayListSeq받아옴.
 			var dpseq = $(e.target).parents().prev().val();
+			var pcode = $(e.target).parents().prev().prev().val();
 			//카트 아이콘에 장바구니에 추가되었습니다 문구 넣어주세요
 			//if문으로 dpseq가 optionList의 displayListSeq중에 해당될 경우 옵션창을 띄워 보여줌.
-			$.ajax({
-				url:"<%=request.getContextPath()%>/js/cartAdd.do",
-				type:"post",
-				data:{"dpseq":dpseq},
-				success:function(data){
-					console.log(data);		
+			if(pcode != "")
+			{
+				$.ajax({
+					url:"<%=request.getContextPath()%>/js/cartAdd.do",
+					type:"post",
+					data:{"dpseq":dpseq,"pcode":pcode},
+					success:function(data){
+						alert("상품을 장바구니에 담았습니다. 해당상품 "+data[1]+"개, 총 " + data[0] +" 종류")
+						//여기다 코드를 써주세요
+					}
+				});
 			}
+			else
+			{
+				//상품 종류가 많을 때 옵션창 로직
+			}
+				
 		});
 	});
-});
-
 </script>
 
 <%@ include file="/views/common/footer.jsp" %>

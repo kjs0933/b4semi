@@ -194,6 +194,7 @@ public class DPListDao {
 				dplist.setImg(rs.getString("IMG"));
 				dplist.setOptionCount(rs.getInt("OPTIONCOUNT"));
 				dplist.setProductUnit(rs.getString("PRODUCTUNIT"));
+				dplist.setProductCode(rs.getString("PRODUCTCODE"));
 				result.add(dplist);
 			}
 		}

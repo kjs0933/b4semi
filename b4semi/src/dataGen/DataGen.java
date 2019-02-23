@@ -934,6 +934,7 @@ public class DataGen {
 		String sql2 = "INSERT INTO IMAGES VALUES (?,?,'BL',?)";
 		try {
 		String[] prefixs = {"","신선한 ","맛있는 ","깨끗한 ","고급 ","실속있는 ","오리지널 ","친환경 ","부드러운 ","찰진 ","푸짐한 ", "향긋한 "};
+		String[] text = {"냉무","사은품으로 쥐를 드립니다","믿고 먹을 수 있는 상품","테스트123asd","영양 듬뿍","먹음직스럽습니다","단백질이 풍부해요","MSG무첨가","달콤쌉싸름","당신은 이 상품을 구매할 것입니다.","개발자에게 딱 좋은 상품"};
 		String prefix = prefixs[(int)(Math.random()*prefixs.length)];
 		String title = prefix;
 		String html = "";
@@ -957,8 +958,8 @@ public class DataGen {
 				
 				if("default".equals(p.getUrl()))
 				{
-					html +="<div class='DPListImages'><p>"+ prefix + p.getProductName() +
-					"</p><img src='...imgpath..."+p.getProductName()+".jpg'></div>";
+					html +="<p>"+ prefix + p.getProductName() +
+					"</p>"+text[(int)(text.length*Math.random())];
 
 					//저장파일명
 					ps2.setString(1, p.getProductName()+".jpg");
@@ -970,8 +971,8 @@ public class DataGen {
 				}
 				else if(p.getUrl() != null)
 				{
-					html +="<div class='DPListImages'><p>"+ prefix + p.getProductName() +
-					"</p><img src='...imgpath..."+p.getUrl()+"'></div>";
+					html +="<p>"+ prefix + p.getProductName() +
+					"</p>"+text[(int)(text.length*Math.random())];
 					
 					//저장파일명
 					ps2.setString(1, p.getUrl());

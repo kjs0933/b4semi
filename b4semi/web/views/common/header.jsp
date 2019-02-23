@@ -768,8 +768,8 @@
                         <span></span>
                     </div>
                 </li>
-                <li><a href="#">베스트</a></li>
-                <li><a href="#">할인</a></li>
+                <li><a href="<%=request.getContextPath()%>/dplist?sort=score">베스트</a></li>
+                <li><a href="<%=request.getContextPath()%>/dplist?sort=event">할인</a></li>
                 <li><div id="logo"><a href="<%=request.getContextPath()%>">The Food Forum</a></div></li>
                 <li>
                 	<div class="search-box">
