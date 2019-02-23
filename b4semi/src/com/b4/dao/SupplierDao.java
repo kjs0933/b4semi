@@ -135,5 +135,39 @@ public class SupplierDao {
 		finally {close(pstmt);}
 		return result;
 	}
+	
+	public Supplier selectOne(Connection conn, String no)
+	{
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		Supplier s=null;
+		String sql=prop.getProperty("selectOne");
+		try
+		{
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, no);
+			rs=pstmt.executeQuery();
+			if(rs.next())
+			{
+				s=new Supplier();
+				s.setSupplierCode(rs.getString("supplierCode"));
+				s.setSupplierName(rs.getString("supplierName"));
+				s.setSupplierPhone(rs.getString("supplierPhone"));
+				s.setSupplierAddress(rs.getString("supplierAddress"));
+				s.setSupplierEmail(rs.getString("supplierEmail"));
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally {
+			close(rs);
+			close(pstmt);
+		}
+		return s;
+
+	}
+
 
 }

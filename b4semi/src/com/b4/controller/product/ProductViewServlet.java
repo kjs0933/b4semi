@@ -33,7 +33,7 @@ public class ProductViewServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		Member loginMember=(Member)request.getSession().getAttribute("loginMember");
-		System.out.println("찍혀라"+loginMember);
+		
 		if(loginMember==null||!"admin".equals(loginMember.getMemberId()))
 		{
 			request.setAttribute("msg", "잘못된 경로로 이동하셨습니다.");
@@ -45,7 +45,7 @@ public class ProductViewServlet extends HttpServlet {
 		
 		Product p=new ProductService().selectOne(code);
 		
-		System.out.println(p.toString());
+		
 		request.setAttribute("product", p);
 		request.getRequestDispatcher("/views/product/productView.jsp").forward(request, response);
 	}

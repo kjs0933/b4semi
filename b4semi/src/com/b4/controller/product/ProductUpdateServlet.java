@@ -32,42 +32,7 @@ public class ProductUpdateServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		Member loginMember=(Member)request.getSession(false).getAttribute("loginMember");
-		if(loginMember==null||!"admin".equals(loginMember.getMemberId()))
-		{
-			request.setAttribute("msg", "잘못된 경로로 이동하셨습니다.");
-			request.setAttribute("loc", "/");
-			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
-		}
-		
-		
-		
-		//상품코드를 가져와서 그 정보를 출력해주는 view화면을 선택
-		String pCode = request.getParameter("productCode");
-		
-		Product p=new Product();
-		p.setProductCode(pCode);
-		
-		//비즈니스 로직
-		Product result=new ProductService().selectOne(pCode);
-		
-		//view 선택
-		String msg="";
-		String loc="";
-		String view="";
-		if(result==null)
-		{
-			msg="해당상품이 존재하지 않습니다.";
-			view="/views/common/msg.jsp";
-			request.setAttribute("msg", msg);
-			request.setAttribute("loc", loc);
-		}
-		else
-		{
-			view="/views/product/productView.jsp";
-			request.setAttribute("member", result);			
-		}
-		request.getRequestDispatcher(view).forward(request, response);
+		request.getRequestDispatcher("/views/product/productEnroll.jsp").forward(request, response);
 	}
 
 	/**

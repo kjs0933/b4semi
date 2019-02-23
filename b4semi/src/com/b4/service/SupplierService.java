@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.util.List;
 
 import com.b4.dao.SupplierDao;
+import com.b4.model.vo.InStock;
 import com.b4.model.vo.Supplier;
 
 public class SupplierService {
@@ -69,5 +70,15 @@ public class SupplierService {
 		close(conn);
 		return result;
 	}
+	
+	public Supplier selectOne(String no)
+	{
+		Connection conn = getConnection();
+		Supplier result = dao.selectOne(conn, no);
+		close(conn);
+		return result;
+	}
+	
+	
 	
 }
