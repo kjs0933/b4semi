@@ -1,6 +1,7 @@
 package com.b4.controller.supplier;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.b4.model.vo.Member;
+import com.b4.model.vo.Supplier;
+import com.b4.service.SupplierService;
 
 /**
  * Servlet implementation class SupplierEnrollEndServlet
@@ -36,6 +39,43 @@ public class SupplierEnrollEndServlet extends HttpServlet {
 			request.setAttribute("loc", "/");
 			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
 		}
+		
+		request.setCharacterEncoding("UTF-8");
+		String supplierCode=request.getParameter("supplierCode");
+		String supplierName=request.getParameter("supplierName");
+		String supplierPhone=request.getParameter("supplierPhone");
+		String supplierAddress=request.getParameter("supplierAddress");
+		String supplierEmail=request.getParameter("supplierEmail");
+		
+		
+		
+		Supplier i=new Supplier();
+		i.setSupplierCode(supplierCode);
+		i.setSupplierName(supplierName);
+		i.setSupplierPhone(supplierAddress);
+		i.setSupplierAddress(supplierAddress);
+		i.setSupplierEmail(supplierEmail);
+		
+
+		int result = new SupplierService().insertSupplier(i);
+		
+		String msg="";
+		String loc="";
+		String view="/views/common/msg.jsp";
+		if(result>0)
+		{
+			msg="입고등록을 성공하였습니다.";
+			loc="/";
+		}
+		else
+		{
+			msg="입고등록을 실패하였습니다.";
+			loc="/views/supplier/supplierEnroll.jsp";
+			
+		}
+		request.setAttribute("msg", msg);
+		request.setAttribute("loc", loc);
+		request.getRequestDispatcher(view).forward(request, response);
 		
 		
 	}
