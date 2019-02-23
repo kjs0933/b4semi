@@ -1,6 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/views/common/header.jsp"%>
+<%@ page import="com.b4.model.vo.MileageLog"%>
+<%@ page import="java.util.*" %>
+
+<%
+	List<MileageLog> list = (List<MileageLog>)request.getAttribute("list");
+	String pageBar = (String)request.getAttribute("pageBar");
+	int cPage = (int)request.getAttribute("cPage");
+%>
+
+
 	<style>
 	     .mypage-wrapper
         {
@@ -233,6 +243,10 @@
         .mypage-mileage-cols > div:nth-of-type(4){flex: 1 1 0;}
         .mypage-mileage-cols > div:nth-of-type(5){flex: 1 1 0;}
 
+		
+		.no-mileage-log-msg{padding: 50px; display:flex; justify-content: center;}
+		
+
         .pagebar img
         {
             width: 40%;
@@ -247,7 +261,7 @@
             font-size: 12px;
         }
 
-        .pagebar > div
+        .pagebar div
         {
             width: 33px;
             height: 33px;
@@ -259,10 +273,22 @@
             cursor: pointer;
         }
 
-        .pagebar > div:first-of-type
+        .pagebar div:first-of-type
         {
             border-left: 1px solid rgb(220, 220, 220);
         }
+        
+        .pagebar a
+        {
+        	display: flex;
+        	width: 100%;
+        	height: 100%;
+        	align-items: center;
+        	justify-content: center;
+        	text-decoration: none;
+        	color: black;
+        }
+        
 	</style>
     <section>
         <div class="mypage-wrapper">
@@ -304,9 +330,10 @@
                         <p><span>적립금</span>보유하고 계신 적립금의 내역을 한 눈에 확인 하실수 있습니다.</p>
                     </div>
                     <div class="mypage-mileage-info">
-                    <div><p>현재적립금</p><span>0 원</span></div>
-                    <div><p>누적사용금액</p><span>0 원</span></div> 
+                    <div><p>현재적립금</p><span>원</span></div>
+                    <div><p>누적사용금액</p><span>원</span></div> 
                     </div>
+                    
                     <div class="mypage-mileage-log">
                         <div class="mypage-mileage-header">
                             <div>날짜</div>
@@ -315,23 +342,24 @@
                             <div>이전</div>
                             <div>이후</div>
                         </div>
+                        
+                    <%if(list.isEmpty()){ %>
+                   		<div class="no-mileage-log-msg">사용내역이 없습니다.</div>
+                    <%} else {
+               		for (MileageLog ml : list) {%>
                         <div class="mypage-mileage-cols">
-                            <div>2019-03-03 [ 0시 20분 ]</div>
-                            <div>결제</div>
-                            <div>-1000 원</div>
-                            <div>1000 원</div>
-                            <div>0 원</div>
+                            <div><%=ml.getLogDate()%></div>
+                            <div><%=ml.getLogTypeName()%></div>
+                            <div><%=ml.getNextMileage()-ml.getPreMileage()%> 원</div>
+                            <div><%=ml.getPreMileage()%> 원</div>
+                            <div><%=ml.getNextMileage()%> 원</div>
                         </div>
+                    <%} %>
+                    <%} %>
                     </div>
-                    <div class="pagebar">
-                        <div><img src="images/board-arrow-left.png"></div>
-                        <div>1</div>
-                        <div>2</div>
-                        <div>3</div>
-                        <div>4</div>
-                        <div>5</div>
-                        <div><img src="images/board-arrow-right.png"></div>
-                    </div>
+                    
+                    <%=pageBar %>
+
                 </div>
             </div>
         </div>

@@ -307,7 +307,6 @@
         	justify-content: center;
         	text-decoration: none;
         	color: black;
-        	
         }
         
        

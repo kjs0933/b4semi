@@ -12,7 +12,7 @@ import com.b4.model.vo.Member;
 
 public class MemberService {
 	
-	MemberDao dao = new MemberDao();
+	private MemberDao dao = new MemberDao();
 
 	//ID 존재 여부 체크
 	public boolean checkId(String memberId)

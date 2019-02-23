@@ -48,7 +48,7 @@
             <p id="remember-id">비밀번호 기억</p>
             <input type="submit" value="로그인">
             <p>회원정보 분실</p>
-            <p class="not-member">회원이 아니신가요?</p>
+            <p class="not-member"><a href="<%=request.getContextPath()%>/memberEnroll">회원이 아니신가요?</a></p>
         </form>
     </div>
 </body>
@@ -78,15 +78,10 @@ const myAccountBtn = $('#my-account-btn');
 const myAccountBox = $('.my-account-box');
 
 $(() => {
-    myAccountBtn.on('click', e => {
+	myAccountBtn.on('click', e => {
     	if(myAccountBox.is(':animated')) return;
+    	if(supportBtn)
     	myAccountBox.fadeToggle(200);
-        
-        $('body').on('click', e => {
-        	if(e.target == myAccountBtn[0]) return;
-        	myAccountBox.fadeToggle(200).clearQueue();
-        	$('body').off('click');
-        });
     });
 });
 
@@ -98,11 +93,6 @@ $(() => {
     supportBtn.on('click', e => {
     	if(supportBox.is(':animated')) return;
         supportBox.fadeToggle(200);
-        $('body').on('click', e => {
-        	if(e.target == supportBtn[0]) return;
-        	supportBox.fadeToggle(200).clearQueue();
-        	$('body').off('click');
-        });
     });
 });
 
@@ -172,7 +162,6 @@ const toggleSet = () => {
 
     //로그인 유효성 검사 및 로그인 ajax 처리
     const saveId = $('#saveId');
-    console.log(saveId);
     
     $(() => {
         signinFrm.on('submit', e => {

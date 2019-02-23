@@ -411,23 +411,21 @@
         	$(e.target).next().css('color', 'green').text('사용 가능한 패스워드 입니다.');
         }
         
+        if(!result) return false;
         pwCkDifference(e);
         if(checkPwDif.val() == 'false'){result = false;}
-        console.log(result);
         return result;
     }
     
     //새 패스워드가 기존패스워드와 다른지 여부를 판단
     const pwCkDifference = e => {
     	
-    	console.log(memberUpdatePwNew.val());
     	$.ajax({
     		url: '<%=request.getContextPath()%>/checkPw',
     		type: 'post',
     		data: {'memberPwCk':memberUpdatePwNew.val(), 'memberPwOri':'<%=lm.getMemberPw()%>'},
     		dataType: 'text',
     		success: data => {
-    			console.log(data);
     			if(data == 1)
     			{
     				$(e.target).next().css('color', 'crimson').text('기존 패스워드와 동일한 패스워드입니다.');
@@ -444,6 +442,7 @@
     
     //새 패스워드 확인 일치여부
     const pwCkNewValid = (e) => {
+    	if(memberUpdatePwNewCk.val().trim().length == 0) return;
     	if(memberUpdatePwNew.val().trim() != memberUpdatePwNewCk.val().trim())
     	{
     		$(e.target).next().css('color', 'crimson').text('패스워드가 일치하지 않습니다.');
@@ -533,20 +532,18 @@
     //회원정보 수정 submit시
     $(() => {
     	memberUpdateFrm.on('submit', (e) => {
-    		e.preventDefault();
     		checkBlank();
     		
     		let invalidCount = 0;
     		
     		if(checkPw.val() != 'true') invalidCount++;
-    		console.log(invalidCount);
-        	if(checkCurrentPw) invalidCount++;
-            if(pwRegExpValid) invalidCount++;
-            if(pwCkNewValid) invalidCount++;
-            if(emailRegExpValid) invalidCount++;
-            if(phoneRegExpValid) invalidCount++;
-            
-            if(invalidCount==0) memberUpdateFrm.submit();
+        	if(!checkCurrentPw) invalidCount++;
+        	if(!pwRegExpValid) invalidCount++;
+        	if(!pwCkNewValid) invalidCount++;
+        	if(!emailRegExpValid) invalidCount++;
+        	if(!phoneRegExpValid) invalidCount++;
+            if(invalidCount==0) {memberUpdateFrm.submit();}
+            else{alert("입력정보가 조건에 맞지 않습니다.")};
     	});
     });
     
