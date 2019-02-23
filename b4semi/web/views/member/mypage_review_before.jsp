@@ -152,6 +152,12 @@
             font-size: 13px;
         }
         
+        .mypage-review-title > p
+        {
+        	font-size: 25px;
+        	margin: 30px 0;
+        }
+        
         .review-tab
         {
             position: relative;
@@ -269,7 +275,7 @@
             <div class="mypage-body">
                 <div class="mypage-review-wrapper">
                     <div class="mypage-review-title">
-                        <h2>상품후기</h2>    
+                        <p>상품후기</p>  
                         <ul>
                             <li>포토 리뷰는 <b>100원</b> 텍스트 리뷰는 <b>50원</b>을 적립해 드립니다.</li>
                             <li>플래티넘·다이아몬드는 <b>2배</b> 적립 (사진 200원, 글 100원)</li>

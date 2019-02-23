@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class CheckPwServlet
  */
-@WebServlet("/checkPwServlet")
+@WebServlet(name="CheckPwServlet", urlPatterns="/checkPw")
 public class CheckPwServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -25,14 +25,10 @@ public class CheckPwServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String memberPw = request.getParameter("memberPw");
+		String memberPwOri = request.getParameter("memberPwOri");
 		String memberPwCk = request.getParameter("memberPwCk");
 		
-		System.out.println(memberPw);
-		System.out.println(memberPwCk);
-		System.out.println(memberPwCk == memberPw);
-		
-		if(memberPw == memberPwCk) {response.getWriter().println(1);}
+		if(memberPwOri.equals(memberPwCk)) {response.getWriter().println(1);}
 		else {response.getWriter().println(0);}
 	}
 

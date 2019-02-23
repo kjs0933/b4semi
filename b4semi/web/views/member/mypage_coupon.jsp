@@ -148,6 +148,13 @@
             flex-flow: column nowrap;
             font-family: 'Noto Sans KR';
         }
+        
+        .coupon-title
+        {
+            font-size: 25px;
+            margin: 30px 0;
+        }
+        
 
         .coupon-table-caption
         {
@@ -278,6 +285,9 @@
             </div>
             <div class="mypage-body">
                 <div class="mypage-coupon-wrapper">
+                	<div class="coupon-title">
+                                     쿠폰
+                    </div>
                     <div class="coupon-table-caption">
                         <ul>
                             <li>쿠폰은 적용 가능한 상품이 따로 적용되어 있는 경우 해당 상품 구매 시에만 사용이 가능합니다.</li>

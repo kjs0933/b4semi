@@ -28,7 +28,6 @@ public class MemberDao {
 		}
 	}
 	
-	
 	public boolean checkId(Connection conn, String memberId)
 	{
 		PreparedStatement pstmt = null;
@@ -156,7 +155,7 @@ public class MemberDao {
 		try
 		{
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setTimestamp(1, m.getMemberQuitDate());
+			pstmt.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
 			pstmt.setString(2, m.getMemberId());
 			result = pstmt.executeUpdate();
 		}

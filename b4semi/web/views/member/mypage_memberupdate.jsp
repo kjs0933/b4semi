@@ -2,7 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ include file="/views/common/header.jsp"%>
 <%@ page import="com.b4.model.vo.Member"%>	
-<% Member lm = (Member)request.getAttribute("loginMember"); 
+<% 
+	Member lm = (Member)request.getAttribute("loginMember");
 	String memberPw = lm.getMemberPw();
 %>	
 	
@@ -158,8 +159,8 @@
 
         .member-update-header
         {
-            font-size: 21px;
-            margin: 25px 0;
+            font-size: 25px;
+            margin: 30px 0;
             border-bottom: 2px solid rgb(42, 71, 114);
             padding-bottom: 25px;
         }
@@ -289,7 +290,7 @@
                     <div class="member-update-header">
                         회원 정보 수정
                     </div>
-                    <form action="#" method="post" class="member-update-frm" autocomplete="off">
+                    <form action="<%=request.getContextPath()%>/memberUpdateEnd" method="post" class="member-update-frm" autocomplete="off">
                         <div>
                             <div>아이디</div>
                             <div>
@@ -299,6 +300,7 @@
                         <div>
                             <div>현재 비밀번호</div>
                             <div>
+                            	<input type="hidden" name="checkPw" id="checkPw">
                                 <input type="password" name="memberPw" id="member-pw">
                                 <div class="valid-msg"></div>                 
                             </div>
@@ -365,6 +367,7 @@
     const memberUpdateName = $('.member-update-frm #member-name');
     const memberUpdateEmail = $('.member-update-frm #member-email');
     const memberUpdatePhone = $('.member-update-frm #member-phone');
+    const checkPw = $('#checkPw');
     
     const validationMsg = $('.valid-msg');
 
@@ -459,26 +462,28 @@
     
     //기존 비밀번호 일치 여부 확인
     const checkCurrentPw = (e) => {
-    	
+    	if(memberUpdatePw.val().trim().length == 0) return;
     	$.ajax({
-    		url: '<%=request.getContextPath()%>/checkPwServlet',
+    		url: '<%=request.getContextPath()%>/checkPw',
     		type: 'post',
-    		data: {'memberPwCk' : memberUpdatePw.val(), 'memberPw' : '<%=memberPw%>'},
+    		data: {'memberPwCk' : memberUpdatePw.val(), 'memberPwOri' : '<%=memberPw%>'},
     		dataType: 'text',
     		success: data => {
     			if(data == 1)
     			{
     				$(e.target).next().css('color', 'green').text('패스워드가 일치합니다.');
+    				$('#checkPw').val('true');
     			}
     			else
     			{
     				$(e.target).next().css('color', 'crimson').text('패스워드가 일치하지 않습니다.');	
+    				$('#checkPw').val('false');
     			}
     		}
     	});
     }
     
-    //취소
+    //취소버튼 클릭시
     $(() => {
     	const cancel = $('#cancel');
     	cancel.on('click', () => {
@@ -491,16 +496,38 @@
     	    validationMsg.text('');
     	});
     });
-
+   
+    //회원정보 수정 submit시
+    $(() => {
+    	memberUpdateFrm.on('submit', (e) => {
+    		e.preventDefault();
+    		checkBlank();
+    		
+    		let invalidCount = 0;
+    		
+    		if(checkPw.val() != 'true') invalidCount++;
+    		console.log(invalidCount);
+        	if(checkCurrentPw) invalidCount++;
+            if(pwRegExpValid) invalidCount++;
+            if(pwCkNewValid) invalidCount++;
+            if(emailRegExpValid) invalidCount++;
+            if(phoneRegExpValid) invalidCount++;
+            
+            if(invalidCount==0) memberUpdateFrm.submit();
+    	});
+    });
     
-    
-    
-
-    
-    //수정
-    
-    
-    
+    //탈퇴버튼 클릭시
+    const leaveBtn = $('#leave');
+    $(() => {
+    	leaveBtn.on('click', () => {
+    		flag = confirm('정말로 탈퇴하시겠습니까?');
+    		if(flag)
+    		{
+    			location.href='<%=request.getContextPath()%>/memberDelete';
+    		}
+    	});
+    });
     
     //세션 만료시 메인으로 이동
     $(() => {
