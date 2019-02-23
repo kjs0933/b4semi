@@ -9,6 +9,7 @@
             width: 100%;
             font-family: 'Noto Sans KR';
             font-size: 14px;
+            margin-top: 100px;
         }
 
         .notice-form input

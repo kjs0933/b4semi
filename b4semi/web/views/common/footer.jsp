@@ -42,7 +42,7 @@
         </div>
         <div class="login-msg"></div>
         <form action="<%=request.getContextPath()%>/login" method="post" name="signin-frm" class="signin-frm" autocomplete="off">
-            <label for="login-id">아이디<br><input type="text" name="memberId" id="login-id"></label>
+            <label for="login-id">아이디<br><input type="text" name="memberId" id="login-id" value=""/></label>
             <label for="login-pw">비밀번호<br><input type="password" name="memberPw" id="login-pw"></label>
             <input type="checkbox" name="saveId" id="saveId"><label for="saveId"><span></span></label>
             <p id="remember-id">비밀번호 기억</p>
@@ -53,64 +53,60 @@
     </div>
 </body>
 <script>
+
 //카테고리 호출 로직
 
 const categoryBtn = $('#category-toggle-btn');
 const categoryMenu = $('.category-menu');
 
 $(() => {
-	categoryBtn.on('click', showCategory)
+	categoryBtn.on('click', e => {
+		e.stopPropagation();
+		categoryMenu.toggleClass('active');
+		
+		$('body').on('click', e => {
+			if(e.target == categoryBtn[0] || categoryMenu[0].contains(e.target)) return;
+			categoryMenu.toggleClass('active');
+			$('body').off('click');
+		});
+	});
 });
 
-const showCategory = (e) => {
-	e.stopPropagation()
-	if(categoryMenu.hasClass('active'))
-	{
-		categoryMenu.toggleClass('active');
-		$('body').off('click');
-		return;
-	}
-        
-	categoryMenu.toggleClass('active');
-	$('body').on('click', closeCategory)
-}
-
-const closeCategory = (e) => {
-	if(e.currentTarget == categoryBtn[0] || categoryMenu[0].contains(e.target)) return;
-	categoryMenu.toggleClass('active');
-    if(e.target == loginBtn[0]) return;
-	$('body').off('click');
-}
 
 //로그인 유저 my account 토글
 const myAccountBtn = $('#my-account-btn');
 const myAccountBox = $('.my-account-box');
+
 $(() => {
-    myAccountBtn.on('click', () => {
-        myAccountBox.fadeToggle(200);
-    });
-    
-    myAccountBox.find('li').on('click', (e) => {
-    	e.stopPropagation();
+    myAccountBtn.on('click', e => {
+    	if(myAccountBox.is(':animated')) return;
     	myAccountBox.fadeToggle(200);
+        
+        $('body').on('click', e => {
+        	if(e.target == myAccountBtn[0]) return;
+        	myAccountBox.fadeToggle(200).clearQueue();
+        	$('body').off('click');
+        });
     });
 });
 
-//공지사항 my account 토글
+//supportBox 토글
 const supportBtn = $('#support-btn');
 const supportBox = $('.support-box');
 
 $(() => {
-    supportBtn.on('click', () => {
+    supportBtn.on('click', e => {
+    	if(supportBox.is(':animated')) return;
         supportBox.fadeToggle(200);
-    });
-    
-    supportBox.find('li').on('click', () => {
-    	supportBox.fadeToggle(200);
+        $('body').on('click', e => {
+        	if(e.target == supportBtn[0]) return;
+        	supportBox.fadeToggle(200).clearQueue();
+        	$('body').off('click');
+        });
     });
 });
 
-//ESC 누를시 로그인 모달 창 나가기
+//ESC body 에 클릭 이벤트 트리거
 $(() => {
     $('body').on('keydown', (e) => {
         if(e.key == 'Escape') $('body').trigger('click');
@@ -137,6 +133,10 @@ const idInput = $('.signin-frm #login-id');
 const pwInput = $('.signin-frm #login-pw');
 const body = $('body');
 const wholeWrapper = $('.whole-wrapper');
+const signinFrm = $('.signin-frm');
+const loginMsg = $('.login-msg');
+const signinInputs = signinFrm.find('input');
+
 
 $(() => {
     loginBtn.on('click', popUpLoginBox)
@@ -170,19 +170,10 @@ const toggleSet = () => {
         });
     }
 
-    //로그인-회원가입 간 전환
-
-    const signinFrm = $('.signin-frm');
-    const frmTitle = $('.frm-title');
-    const loginTitle = $('.login-title');
-
-    const notMember = $('.not-member');
-
-    const signinInputs = $('.signin-frm label input');
-    const loginMsg = $('.login-msg');
-
-
     //로그인 유효성 검사 및 로그인 ajax 처리
+    const saveId = $('#saveId');
+    console.log(saveId);
+    
     $(() => {
         signinFrm.on('submit', e => {
         	e.preventDefault();
@@ -200,7 +191,7 @@ const toggleSet = () => {
             $.ajax({
                 url: '<%=request.getContextPath()%>/login',
                 type: 'post',
-                data: {'memberId' : signinInputs[0].value, 'memberPw' : signinInputs[1].value},
+                data: {'memberId' : signinInputs[0].value, 'memberPw' : signinInputs[1].value, 'saveId' : saveId.prop('checked')},
                 dataType: 'json',
                 success: data => {
                 	if(data == null)
