@@ -7,6 +7,7 @@
             display: flex;
             font-family: 'Noto Sans KR';
             width: 1024px;
+            margin-top: 100px;
         }
 
         .support-wrapper > div:first-of-type

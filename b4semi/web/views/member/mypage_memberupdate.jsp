@@ -288,7 +288,7 @@
             <div class="mypage-body">
                 <div class="member-update-wrapper">
                     <div class="member-update-header">
-                        회원 정보 수정
+                        	회원 정보 수정
                     </div>
                     <form action="<%=request.getContextPath()%>/memberUpdateEnd" method="post" class="member-update-frm" autocomplete="off">
                         <div>
@@ -300,7 +300,7 @@
                         <div>
                             <div>현재 비밀번호</div>
                             <div>
-                            	<input type="hidden" name="checkPw" id="checkPw">
+                            	<input type="hidden" name="checkPw" id="check-pw">
                                 <input type="password" name="memberPw" id="member-pw">
                                 <div class="valid-msg"></div>                 
                             </div>
@@ -308,6 +308,7 @@
                         <div>
                             <div>새 비밀번호</div>
                             <div>
+                                <input type="hidden" name="checkPwDif" id="check-pw-dif">
                                 <input type="password" name="memberPwNew" id="member-pw-new">
                                 <div class="valid-msg"></div>                                         
                                 <span class="member-update-input-msg">
@@ -367,7 +368,8 @@
     const memberUpdateName = $('.member-update-frm #member-name');
     const memberUpdateEmail = $('.member-update-frm #member-email');
     const memberUpdatePhone = $('.member-update-frm #member-phone');
-    const checkPw = $('#checkPw');
+    const checkPw = $('#check-pw');
+    const checkPwDif = $('#check-pw-dif');
     
     const validationMsg = $('.valid-msg');
 
@@ -395,11 +397,11 @@
         memberUpdatePhone.on('blur', phoneRegExpValid);
     });
 
-    //패스워드 정규식
+    //새 패스워드 정규식
     const pwRegExpValid = (e) => {
         if(memberUpdatePwNew.val().length == 0) return;
         const regex = new RegExp('(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,16}$');
-        const result = regex.test(memberUpdatePwNew.val());
+        let result = regex.test(memberUpdatePwNew.val());
         if(!result)
        	{
         	$(e.target).next().css('color', 'crimson').text('잘못된 패스워드 조합입니다.');
@@ -408,7 +410,36 @@
         {
         	$(e.target).next().css('color', 'green').text('사용 가능한 패스워드 입니다.');
         }
+        
+        pwCkDifference(e);
+        if(checkPwDif.val() == 'false'){result = false;}
+        console.log(result);
         return result;
+    }
+    
+    //새 패스워드가 기존패스워드와 다른지 여부를 판단
+    const pwCkDifference = e => {
+    	
+    	console.log(memberUpdatePwNew.val());
+    	$.ajax({
+    		url: '<%=request.getContextPath()%>/checkPw',
+    		type: 'post',
+    		data: {'memberPwCk':memberUpdatePwNew.val(), 'memberPwOri':'<%=lm.getMemberPw()%>'},
+    		dataType: 'text',
+    		success: data => {
+    			console.log(data);
+    			if(data == 1)
+    			{
+    				$(e.target).next().css('color', 'crimson').text('기존 패스워드와 동일한 패스워드입니다.');
+    				checkPwDif.val('false');
+    			}
+    			else
+    			{
+    				$(e.target).next().css('color', 'green').text('사용 가능한 패스워드 입니다.');
+    				checkPwDif.val('true');
+    			}
+    		}
+    	});
     }
     
     //새 패스워드 확인 일치여부
@@ -472,12 +503,12 @@
     			if(data == 1)
     			{
     				$(e.target).next().css('color', 'green').text('패스워드가 일치합니다.');
-    				$('#checkPw').val('true');
+    				checkPw.val('true');
     			}
     			else
     			{
+    				checkPw.val('false');
     				$(e.target).next().css('color', 'crimson').text('패스워드가 일치하지 않습니다.');	
-    				$('#checkPw').val('false');
     			}
     		}
     	});
@@ -494,6 +525,8 @@
     	    memberUpdateEmail.val('<%=lm.getMemberEmail()%>');
     	    memberUpdatePhone.val('<%=lm.getMemberPhone()%>');
     	    validationMsg.text('');
+    	    checkPwDif.val('');
+    	    checkPw.val('');
     	});
     });
    
