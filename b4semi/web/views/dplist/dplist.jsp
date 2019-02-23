@@ -3,7 +3,6 @@
 <%@ include file="/views/common/header.jsp"%>
 <%@ page import="com.b4.model.vo.DPList"%>
 <%@ page import="com.b4.model.vo.Category"%>
-<%@ page import="java.util.*" %>
 <%@ page import="java.util.ArrayList"%>
 
 <%

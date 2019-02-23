@@ -1720,8 +1720,8 @@ public class DataGen {
 							
 
 							//리뷰 마일리지 작성 코드
-							addMileageLog(cn, "MPR",member.getMemberSeq(),new Timestamp(reviewTime),member.getMemberMileage(),member.getMemberMileage()+(int)(orderList.get(z).getpp().getOutPrice()*orderList.get(z).getProductCount()*0.005));
-							member.addMemberMileage((int)(orderList.get(z).getpp().getOutPrice()*orderList.get(z).getProductCount()*0.005));
+							addMileageLog(cn, "MPR",member.getMemberSeq(),new Timestamp(reviewTime),member.getMemberMileage(),member.getMemberMileage()+50);
+							member.addMemberMileage(50);
 							
 						}
 					}

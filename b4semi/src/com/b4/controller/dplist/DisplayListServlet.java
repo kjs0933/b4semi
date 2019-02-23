@@ -73,6 +73,7 @@ public class DisplayListServlet extends HttpServlet {
 		case "popularity" : sortText="POPULARITY DESC"; break;
 		case "priceAsc" : sortText="MINPRICE ASC"; break;
 		case "priceDesc" : sortText="MINPRICE DESC"; break;
+		case "event" : sortText="DISCOUNTRATE DESC NULLS LAST"; break;
 		default : sortText="DISPLAYLISTSEQ DESC";
 		}
 		
@@ -87,7 +88,7 @@ public class DisplayListServlet extends HttpServlet {
 		
 		DPListService service = new DPListService();
 
-		ArrayList<DPList> dplist = service.searchDPList(cPage,numPerPage,keyword,sub,major,sortText);
+		ArrayList<DPList> dplist = service.searchDPList(cPage,numPerPage,keyword,sub,major,sortText,true);
 		
 		
 		String subText; 

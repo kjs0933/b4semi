@@ -23,19 +23,22 @@ public class DPListService {
 		return result;
 	}
 	
-	public ArrayList<DPList> searchDPList(int cPage,int numPerPage,String keyword,String sub, String major, String sortText)
+	public ArrayList<DPList> searchDPList(int cPage,int numPerPage,String keyword,String sub, String major, String sortText, boolean getOption)
 	{
 		Connection cn=getConnection();
 		ArrayList<DPList> result = dao.searchDPList(cn, cPage, numPerPage, keyword, sub, major, sortText);
 		int size=result.size();
-		ArrayList<DPOption> options;
-		for(int i =0; i<size;i++)
+		if(getOption)
 		{
-			if(result.get(i).getOptionCount() >= 2)
+			ArrayList<DPOption> options;
+			for(int i =0; i<size;i++)
 			{
-				options = new ArrayList<DPOption>();
-				options = dao.searchDPOption(cn, result.get(i).getDisplayListSeq());
-				result.get(i).setOptions(options);
+				if(result.get(i).getOptionCount() >= 2)
+				{
+					options = new ArrayList<DPOption>();
+					options = dao.searchDPOption(cn, result.get(i).getDisplayListSeq());
+					result.get(i).setOptions(options);
+				}
 			}
 		}
 		close(cn);
