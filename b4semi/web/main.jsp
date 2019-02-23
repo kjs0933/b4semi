@@ -1,6 +1,74 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="views/common/header.jsp" %>
+<%@ page import="com.b4.model.vo.DPList"%>
+<%@ page import="java.util.ArrayList"%>
+<%
+ArrayList<DPList> best;
+ArrayList<DPList> promotion;
+try {
+	best = (ArrayList<DPList>)request.getAttribute("best");
+	if(best == null)
+	{
+		best = new ArrayList<DPList>();
+	}
+} catch (ClassCastException e) {
+	best = new ArrayList<DPList>();
+}
+try {
+	promotion = (ArrayList<DPList>)request.getAttribute("promotion");
+	if(promotion == null)
+	{
+		promotion = new ArrayList<DPList>();
+	}
+} catch (ClassCastException e) {
+	promotion = new ArrayList<DPList>();
+}
+
+String[] eventImage;
+String[] eventURL;
+String[] newImage;
+String[] newURL;
+try {
+	eventImage= (String[])request.getAttribute("eventImage");
+	if(eventImage == null)
+	{
+		eventImage=new String[0];
+	}
+} catch (ClassCastException e) {
+	eventImage=new String[0];
+}
+try {
+	eventURL= (String[])request.getAttribute("eventURL");
+	if(eventURL == null)
+	{
+		eventURL=new String[0];
+	}
+} catch (ClassCastException e) {
+	eventURL=new String[0];
+}
+try {
+	newImage= (String[])request.getAttribute("newImage");
+	if(newImage == null)
+	{
+		newImage=new String[0];
+	}
+} catch (ClassCastException e) {
+	newImage=new String[0];
+}
+try {
+	newURL= (String[])request.getAttribute("newURL");
+	if(newURL == null)
+	{
+		newURL=new String[0];
+	}
+} catch (ClassCastException e) {
+	newURL=new String[0];
+}
+
+
+
+%>
     <style>
         /*메인 슬라이드*/
 
@@ -135,14 +203,14 @@
             background-color: black;
         }
 
-        .best-products-box > div > div > img
+        .best-products-box > div > div img
         {
             width: 100%;
             height: 100%;
             object-fit: fill;
         }
 
-        .best-products-box > div > div > img:hover
+        .best-products-box > div > div img:hover
         {
             opacity: 0.8;
         }
@@ -298,13 +366,13 @@
             background-color: black;
         }
         
-        .promotion-products-image-box > div > img
+        .promotion-products-image-box > div img
         {
             width: 330px;
             height: auto;
         }
 
-        .promotion-products-image-box > div > img:hover
+        .promotion-products-image-box > div img:hover
         {
             opacity: 0.8;
         }
@@ -372,10 +440,9 @@
         <section class="best-products">
             <p>베스트 상품</p>
             <div class="best-products-box">
-                <div><div><img src="images/tit_md_goods_1.jpg"></div><p><b>완도 햇매생이 (냉장)</b><br>3,400원</p></div>
-                <div><div><img src="images/tit_md_goods_2.jpg"></div><p><b>[피그인더가든] 샐러드 5종</b><br>4,800</p></div>
-                <div><div><img src="images/tit_md_goods_3.jpg"></div><p><b>[닥터아사한] 유산군 저염 김치</b><br>3,600원</p></div>
-                <div><div><img src="images/tit_md_goods_4.jpg"></div><p><b>호박고구마 800g/봉</b><br>5,900원</p></div>
+            <%for(int i=0;i<best.size();i++) {%>
+                <div><div><a href="#"><img src="<%=request.getContextPath()%>/upload/product/<%=best.get(i).getImg()%>" onError="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';"></a></div><p><b><%=best.get(i).getDisplayListTitle()%></b><br><%=best.get(i).getMinPrice()%>원</p></div>
+             <%}%>
             </div>
         </section>
         <br>
@@ -385,12 +452,12 @@
                 <div class="event-slide-container">
                     <img src="images/arrow-left-white-bold.png" alt="" class="event-slide-btn event-slide-btn--left">
                     <div class="event-image-track"
-                        ><img src="images/event_slide_01.jpg" alt=""
-                        ><img src="images/event_slide_02.jpg" alt="" class="event-current-slide"
-                        ><img src="images/event_slide_03.jpg" alt=""
-                        ><img src="images/event_slide_04.jpg" alt=""
-                        ><img src="images/event_slide_05.jpg" alt=""
-                        ></div>
+                    	<%for(int i=0; i<Math.min(eventURL.length,eventImage.length);i++){ 
+                    	if(i==0){%>
+                        ><a href="<%=request.getContextPath()%>/<%=eventURL[i]%>"><img src="<%=request.getContextPath()%>/images/<%=eventImage[i]%>" alt="" class="event-current-slide"></a
+                        <%}else{%>
+                        ><a href="<%=request.getContextPath()%>/<%=eventURL[i]%>"><img src="<%=request.getContextPath()%>/images/<%=eventImage[i]%>" alt=""></a
+                        <%} }%>></div>
                     <img src="images/arrow-right-white-bold.png" alt="" class="event-slide-btn event-slide-btn--right">
                 </div>
             </div>
@@ -399,12 +466,12 @@
                 <div class="new-slide-container">
                     <img src="images/arrow-left-white-bold.png" alt="" class="new-slide-btn new-slide-btn--left">
                     <div class="new-image-track"
-                        ><img src="images/new_slide_01.jpg" alt=""
-                        ><img src="images/new_slide_02.jpg" alt="" class="new-current-slide"
-                        ><img src="images/new_slide_03.jpg" alt=""
-                        ><img src="images/new_slide_04.jpg" alt=""
-                        ><img src="images/new_slide_05.jpg" alt=""
-                        ></div>
+                        <%for(int i=0; i<Math.min(newURL.length,newImage.length);i++){ 
+                    	if(i==0){%>
+                        ><a href="<%=request.getContextPath()%>/<%=newURL[i]%>"><img src="<%=request.getContextPath()%>/images/<%=newImage[i]%>" alt="" class="new-current-slide"></a
+                        <%}else{%>
+                        ><a href="<%=request.getContextPath()%>/<%=newURL[i]%>"><img src="<%=request.getContextPath()%>/images/<%=newImage[i]%>" alt=""></a
+                        <%} }%>></div>
                     <img src="images/arrow-right-white-bold.png" alt="" class="new-slide-btn new-slide-btn--right">
                 </div>
             </div>
@@ -413,13 +480,9 @@
             <p>프로모션 상품</p>
             <div class="promotion-products-container">
                 <div class="promotion-products-image-track"
-                    ><div class="promotion-products-image-box"><div><img src="images/kurly-loves-slide_01.jpg"></div><p><b>[콜린스그린] 더 자몽</b><br>16,660원</p></div
-                    ><div class="promotion-products-image-box"><div><img src="images/kurly-loves-slide_02.jpg"></div><p><b>[존 쿡 델리미트] 팜 후레시 부어스첸 2종</b><br>4,500원</p></div
-                    ><div class="promotion-products-image-box"><div><img src="images/kurly-loves-slide_03.jpg"></div><p><b>[우드앤브릭] 호두 크림치즈 바게트</b><br>7,500원</p></div
-                    ><div class="promotion-products-image-box"><div><img src="images/kurly-loves-slide_04.jpg"></div><p><b>[오뗄두스] 구움과자 2종</b><br>2,000원</p></div
-                    ><div class="promotion-products-image-box"><div><img src="images/kurly-loves-slide_05.jpg"></div><p><b>[콜린스그린] 콜드프레스 주스 6종</b><br>8,500dnjs</p></div
-                    ><div class="promotion-products-image-box"><div><img src="images/kurly-loves-slide_06.jpg"></div><p><b>[존쿡 델리미트] 델리미트 4종</b></b><br>3,980원</p></div
-                    ></div>
+                <%for(int i=0; i< promotion.size();i++){%>
+                	><div class="promotion-products-image-box"><div><a href="#"><img src="<%=request.getContextPath()%>/upload/product/<%=promotion.get(i).getImg()%>" onError="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';"></a></div><p><b><%=promotion.get(i).getDisplayListTitle()%></b><br><%=promotion.get(i).getMinPrice()%>원</p></div
+               	<%}%>></div>
                 <img src="images/arrow-left-white-bold.png" class="promotion-products-slide-btn promotion-products-slide-btn--left">
                 <img src="images/arrow-right-white-bold.png" class="promotion-products-slide-btn promotion-products-slide-btn--right">
             </div>

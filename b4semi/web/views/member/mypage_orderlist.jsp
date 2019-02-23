@@ -9,6 +9,7 @@
             font-family: 'Noto Sans KR';
             display: flex;
             flex-flow: column nowrap;
+            margin-top: 100px;
         }
 
         .mypage-header
@@ -440,7 +441,7 @@
                 <div><a href="<%=request.getContextPath() %>/views/member/mypage_review_before.jsp">상품후기</a></div>
                 <div><a href="<%=request.getContextPath() %>/views/member/mypage_mileage.jsp">적립금</a></div>
                 <div><a href="<%=request.getContextPath() %>/views/member/mypage_coupon.jsp">쿠폰</a></div>
-                <div><a href="<%=request.getContextPath() %>/views/member/mypage_memberupdate.jsp">개인정보수정</a></div>
+                <div><a href="<%=request.getContextPath() %>/memberUpdate">개인정보수정</a></div>
             </div>
             <div class="mypage-body">
                 <div class="mypage-orderlist-wrapper">

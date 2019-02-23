@@ -176,6 +176,7 @@
             width: 100%;
             resize: none;
             border: 1px solid #ccc;
+            padding: 5px;
         }
 
         .query-form-content textarea:focus
@@ -188,6 +189,7 @@
         {
             width: 82px;
             height: 82px;
+            margin-right: 10px;
         }
 
         .added-image-box > img
@@ -275,7 +277,7 @@
             width: 600px;
             height: 367px;
             border: 1px solid black;
-            left: 156px;
+            left: 157px;
             top: 60px;
             background-color: white;
             display: flex;
@@ -338,6 +340,47 @@
         .order-seq-list-cols > div:nth-of-type(4){flex: 1 1 0;}        
         .order-seq-list-cols > div:nth-of-type(5){flex: 2 1 0;}        
         .order-seq-list-cols > div:nth-of-type(6){flex: 1 1 0;}        
+
+
+		
+        /* 체크박스 CSS */
+        input[type="checkbox"]
+        {
+            display: none;
+        }
+
+        input[type="checkbox"] + label
+        {
+            position: relative;
+            width: 17px;
+            height: 17px;
+            background-color: rgb(38, 85, 139);
+            cursor: pointer;
+            border-radius: 1px;
+        }
+
+        input[type="checkbox"] + label span
+        {
+            position: absolute;
+            display: none;
+            left: 5px;
+            top: 1px;
+            width: 4px;
+            height: 10px;
+            border-right: 2px solid white;
+            border-bottom: 2px solid white;
+            transform: rotateZ(40deg);
+        }
+
+        input[type="checkbox"] + label:hover
+        {
+            background-color: rgb(47, 105, 172);
+        }
+
+        input[type="checkbox"]:checked + label span
+        {
+            display: inline-block;
+        }
 
     </style>
     
@@ -416,35 +459,35 @@
     </div>
     </section>
 <script>
-
-    //주문 조회창 토글
-    const showOrderSeqBtn = $('input[type="button"');
-    const orderSeqList = $('.order-seq-list');
-
-    $(() => {
-        showOrderSeqBtn.on('click', () => {
-            orderSeqList.fadeToggle(150);
-            
-            $('body').on('click', (e) => {
-                if(e.target == showOrderSeqBtn[0] || orderSeqList[0].contains(e.target)) return;
-                orderSeqList.fadeToggle(150);
-                $('body').off('click');
-            });
-        });
-    });
-
-    //주문번호 선택시 입력
-    const orderSeqRadio = $('.order-seq-radio');
-    const orderSeqInput = $('#order-seq');
-
-    $(() => {
-        orderSeqRadio.on('change', (e) => {
-            const selectedOrderSeq = $(e.target).parent().siblings().first().text();
-            orderSeqInput.val(selectedOrderSeq);
-            orderSeqList.fadeToggle(150);
-            $('body').off('click');
-        });
-    });
+	//주문 조회창 토글
+	const showOrderSeqBtn = $('input[type="button"');
+	const orderSeqList = $('.order-seq-list');
+	
+	$(() => {
+	    showOrderSeqBtn.on('click', (e) => {
+	        if(orderSeqList.is(':animated')) return;
+	        orderSeqList.fadeToggle(150);
+	        
+	        $('body').on('click', (e) => {
+	            if(e.target == showOrderSeqBtn[0] || orderSeqList[0].contains(e.target)) return;
+	            orderSeqList.fadeToggle(150).clearQueue();
+	            $('body').off('click');
+	        });
+	    });
+	});
+	
+	//주문번호 선택시 입력
+	const orderSeqRadio = $('.order-seq-radio');
+	const orderSeqInput = $('#order-seq');
+	
+	$(() => {
+	    orderSeqRadio.on('click', (e) => {
+	        const selectedOrderSeq = $(e.target).parent().siblings().first().text();
+	        orderSeqInput.val(selectedOrderSeq);
+	        orderSeqList.fadeToggle(150);
+	        $('body').off('click');
+	    });
+	});
 </script>
 
 <%@ include file="/views/common/footer.jsp" %>

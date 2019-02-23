@@ -10,53 +10,48 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.b4.model.vo.Member;
-import com.b4.service.MemberService;
-import com.google.gson.Gson;
 
 /**
- * Servlet implementation class LoginServlet
+ * Servlet implementation class MemberUpdateServlet
  */
-@WebServlet(name="LoginServlet", urlPatterns="/login")
-public class LoginServlet extends HttpServlet {
+@WebServlet(name="memberUpdateServlet", urlPatterns="/memberUpdate")
+public class MemberUpdateServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LoginServlet() {
+    public MemberUpdateServlet() {
         super();
-
+        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String memberId = request.getParameter("memberId");
-		String memberPw = request.getParameter("memberPw");
+		HttpSession session = request.getSession();
+		Member loginMember = (Member)session.getAttribute("loginMember");
 		
-		Member m = new Member();
-		m.setMemberId(memberId);
-		m.setMemberPw(memberPw);
-		
-		Member loginMember = new MemberService().selectOne(m);
-		
-		if(loginMember != null)
+		if(loginMember == null)
 		{
-			HttpSession session = request.getSession();
-			session.setAttribute("loginMember", loginMember);
+			request.setAttribute("msg", "세션이 만료되었습니다.");
+			request.setAttribute("loc", "/");
+			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
+		}
+		else
+		{
+			request.setAttribute("loginMember", loginMember);
+			request.getRequestDispatcher("/views/member/mypage_memberupdate.jsp").forward(request, response);
 		}
 		
-		Gson gson = new Gson();
-		response.setContentType("application/json;charset=utf-8");
-		response.getWriter().println(gson.toJson(loginMember));
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

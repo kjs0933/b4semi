@@ -118,8 +118,8 @@
         .nav ul li:nth-of-type(1){flex: 1 1 0;}
         .nav ul li:nth-of-type(2){flex: 1 1 0;}
         .nav ul li:nth-of-type(3){flex: 1 1 0;}
-        .nav ul li:nth-of-type(4){flex: 7 1 0;}
-        .nav ul li:nth-of-type(5){flex: 2 1 0;}
+        .nav ul li:nth-of-type(4){flex: 5 1 0;}
+        .nav ul li:nth-of-type(5){flex: 3 1 0;}
         .nav ul li:nth-of-type(6){flex: 1 1 0;}
         .nav ul li:nth-of-type(7){flex: 1 1 0;}
         .nav ul li:nth-of-type(8){flex: 1 1 0;}
@@ -182,11 +182,11 @@
         {
             display: none;
             position: absolute;
-            width: 95px;
+            width: 85px;
             height: auto;
-            border: 1px solid #eee;
+            border: 1px solid #ccc;
             font-size: 13px;
-            left: -82px;
+            left: -74px;
             top : 30px;
             background-color: white;
         }
@@ -233,7 +233,7 @@
 /*         고객지원 토글 박스        */
 		
 		
-		.support-wrapper
+		.header-support-wrapper
         {
             position: relative;
 
@@ -244,11 +244,11 @@
             display: none;
             width: 75px;
             height: auto;
-            border: 1px solid #eee;
+            border: 1px solid #ccc;
             font-size: 13px;
             position: absolute;
-            left: -20px;
-            top: 40px;
+            left: -17px;
+            top: 39px;
             
             background-color: white;
         }
@@ -650,6 +650,7 @@
             cursor: pointer;
             border-radius: 1px;
         }
+        
 
         #saveId + label span
         {
@@ -672,6 +673,11 @@
         #saveId:checked + label span
         {
             display: inline-block;
+        }
+        
+        #saveId + label span:last-of-type
+        {
+        	position: absolute !important;
         }
 
         .signin-frm > p
@@ -704,10 +710,7 @@
         }
         
         
-        
-        
-        
-
+-
         @keyframes invalid
         {
             0%
@@ -784,7 +787,7 @@
 				               	<li><a href="<%=request.getContextPath() %>/views/member/mypage_review_before.jsp">상품리뷰</a></li>
 				               	<li><a href="<%=request.getContextPath() %>/views/member/mypage_mileage.jsp">적립금</a></li>
 				               	<li><a href="<%=request.getContextPath() %>/views/member/mypage_coupon.jsp">쿠폰</a></li>
-				               	<li><a href="<%=request.getContextPath() %>/views/member/mypage_memberupdate.jsp">개인정보수정</a></li>
+				               	<li><a href="<%=request.getContextPath() %>/memberUpdate">계정정보</a></li>
 				               	<li><a href="<%=request.getContextPath()%>/logout">로그아웃</a></li>
 				           	</ul>
 			        	</div>
@@ -798,7 +801,7 @@
                 <%} %>
           
                 <li>
-                	<div class="support-wrapper">
+                	<div class="header-support-wrapper">
         				<span id="support-btn">고객센터</span>
 	        			<div class="support-box">
 		            		<ul>

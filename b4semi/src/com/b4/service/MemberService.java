@@ -14,7 +14,7 @@ public class MemberService {
 	
 	MemberDao dao = new MemberDao();
 
-	//id로 해당 아이디가 존재하는지 여부만 체크
+	//ID 존재 여부 체크
 	public boolean checkId(String memberId)
 	{
 		Connection conn = getConnection();
@@ -23,7 +23,7 @@ public class MemberService {
 		return result;
 	}
 	
-	//id로 회원 찾기 메소드
+	//ID로 회원 정보 객체 리턴
 	public Member selectOne(Member m)
 	{
 		Connection conn = getConnection();
@@ -42,7 +42,7 @@ public class MemberService {
 		return result;
 	}
 	
-	//회원 추가
+	//회원추가
 	public int insertOne(Member m)
 	{
 		Connection conn = getConnection();
@@ -52,7 +52,7 @@ public class MemberService {
 		return result;
 	}
 	
-	//마이페이지 - 회원탈퇴 : 프론트에서 memberQuitDate에 값이 있으면 탈퇴한 회원으로 처리
+	//회원탈퇴(memberQuitDate입력)
 	public int quitMember(Member m)
 	{
 		Connection conn = getConnection();

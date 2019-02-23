@@ -266,7 +266,7 @@ const idAvail = $('#idAvail');
         $.ajax({
         	url: '<%=request.getContextPath()%>/checkId?memberId='+signupId.val(),
         	type: 'get',
-        	dataTpe: 'text',
+        	dataType: 'text',
         	success: data => {
         		if(data == 'true')
         		{
