@@ -443,7 +443,7 @@ try {
             <%for(int i=0;i<best.size();i++) {%>
                 <div><div><a href="#"><img src="<%=request.getContextPath()%>/upload/product/<%=best.get(i).getImg()%>" onError="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';"></a></div><p><b><%=best.get(i).getDisplayListTitle()%></b>
                   <%if(best.get(i).getDiscountRate()>0){%>
-                  <br><strike><%=best.get(i).getMinPrice()%>원</strike> → <b><%=best.get(i).getDiscountMinPrice()%>원</b>
+                  <br><del><%=best.get(i).getMinPrice()%>원</del> → <b><%=best.get(i).getDiscountMinPrice()%>원</b>
                   <%}else{ %>
                   <br><%=best.get(i).getMinPrice()%>원
                   <%}%>
@@ -489,7 +489,7 @@ try {
                 <%for(int i=0; i< promotion.size();i++){%>
                 	><div class="promotion-products-image-box"><div><a href="#"><img src="<%=request.getContextPath()%>/upload/product/<%=promotion.get(i).getImg()%>" onError="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';"></a></div><p><b>★<%=promotion.get(i).getReviewScore()%> <%=promotion.get(i).getDisplayListTitle()%></b>
                 <%if(promotion.get(i).getDiscountRate()>0){%>
-                  <br><strike><%=promotion.get(i).getMinPrice()%>원</strike> → <b><%=promotion.get(i).getDiscountMinPrice()%>원</b>&nbsp;&nbsp;&nbsp;&nbsp;(단위:<%=promotion.get(i).getProductUnit()%>)
+                  <br><del><%=promotion.get(i).getMinPrice()%>원</del> → <b><%=promotion.get(i).getDiscountMinPrice()%>원</b>&nbsp;&nbsp;&nbsp;&nbsp;(단위:<%=promotion.get(i).getProductUnit()%>)
                   <%}else{ %>
                   <br><%=promotion.get(i).getMinPrice()%>원&nbsp;&nbsp;&nbsp;&nbsp;(단위:<%=promotion.get(i).getProductUnit()%>)
                   <%}%>

@@ -6,8 +6,6 @@
 <%@ page import="java.util.ArrayList"%>
 
 <%
-
-
 	int cPage;
 	try {
 		cPage = Integer.parseInt(request.getParameter("cPage"));
@@ -97,8 +95,6 @@
 	} catch (ClassCastException e) {
 		dplist = new ArrayList<DPList>();
 	}
-
-
 %>
     <style>
         .dp-list-wrapper
@@ -170,6 +166,9 @@
         {
             font-size: 20px;
             color: #222;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
         }
 
         .plist-board  > div p:last-of-type
@@ -319,6 +318,9 @@
             margin-top: 50px;
 
         }
+        
+        .plist-price
+        .plist-rate
 
 </style>
 <section>
@@ -369,24 +371,36 @@
                 <input type='hidden' name='plist-index' value="<%=dplist.get(i).getOptionCount()==1?dplist.get(i).getProductCode():""%>"/>
                 <input type='hidden' name='plist-index' value="<%=dplist.get(i).getDisplayListSeq()%>"/>
                 <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p>★<%=dplist.get(i).getReviewScore()%> <%=dplist.get(i).getDisplayListTitle()%></p>
+                <p><%=dplist.get(i).getDisplayListTitle()%></p>
                  <%if(dplist.get(i).getDiscountRate()>0){%>
-                  <p><strike><%=dplist.get(i).getMinPrice()%>원</strike> → <b><%=dplist.get(i).getDiscountMinPrice()%>원</b>&nbsp;&nbsp;&nbsp;&nbsp;(단위:<%=dplist.get(i).getProductUnit()%>)</p>
+                  <p class="plist-price"><del><%=dplist.get(i).getMinPrice()%>원</del> → <b><%=dplist.get(i).getDiscountMinPrice()%>원</b>&nbsp;&nbsp;&nbsp;&nbsp;(단위:<%=dplist.get(i).getProductUnit()%>)<span class="plist-rate">★<%=dplist.get(i).getReviewScore()%></span></p>
                   <%}else{ %>
-                  <p><%=dplist.get(i).getMinPrice()%>원&nbsp;&nbsp;&nbsp;&nbsp;(단위:<%=dplist.get(i).getProductUnit()%>)</p>
+                  <p class="plist-price"><%=dplist.get(i).getMinPrice()%>원&nbsp;&nbsp;&nbsp;&nbsp;(단위:<%=dplist.get(i).getProductUnit()%>)<span class="plist-rate">★<%=dplist.get(i).getReviewScore()%></span></p>
                   <%}%>
             </div>
         <%} %>
         </div>
         <%=pageBar%>
     </div>
+    
+
+    
 </section>
 
 
 <script>
+	
+	const cartMsgWrapper = $('.cart-msg-wrapper');
+	const addedProdImage = $('.added-prod-image').children();
+	const addedProdName = $('.added-prod-name');
+	const addedProdAmount = $('.added-prod-amount');
+	const cartCount = $('#cart-count');
+	
 	const addCart = $('.plist-board > div > div').children();
 	$(function(){
 		addCart.on('click',(e) => {
+			if(cartMsgWrapper.is(':animated')||cartMsgWrapper.is(':visible')) return;
+			
 			//displayListSeq받아옴.
 			var dpseq = $(e.target).parents().prev().val();
 			var pcode = $(e.target).parents().prev().prev().val();
@@ -399,8 +413,14 @@
 					type:"post",
 					data:{"dpseq":dpseq,"pcode":pcode},
 					success:function(data){
-						alert("상품을 장바구니에 담았습니다. 해당상품 "+data[1]+"개, 총 " + data[0] +" 종류")
-						//여기다 코드를 써주세요
+// 						alert("상품을 장바구니에 담았습니다. 해당상품 "+data[1]+"개, 총 " + data[0] +" 종류");
+
+						addedProdImage.prop('src', $(e.target).parent().siblings().first().prop('src'));
+						addedProdName.text($(e.target).parent().next().text());
+						addedProdAmount.text(data[1]+'개');
+						if(data[1] == 1) {cartCount.text(parseInt(cartCount.text())+1);}
+						cartMsgWrapper.fadeIn(600);
+						setTimeout(()=>{cartMsgWrapper.fadeOut(600)}, 2000);
 					}
 				});
 			}
