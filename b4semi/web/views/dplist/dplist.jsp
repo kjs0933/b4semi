@@ -370,7 +370,7 @@
                 <input type='hidden' name='plist-index' value="<%=dplist.get(i).getOptionCount()==1?dplist.get(i).getProductCode():""%>"/>
                 <input type='hidden' name='plist-index' value="<%=dplist.get(i).getDisplayListSeq()%>"/>
                 <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p><%=dplist.get(i).getDisplayListTitle()%>&nbsp;★<%=dplist.get(i).getReviewScore()%></p>
+                <p>★<%=dplist.get(i).getReviewScore()%> <%=dplist.get(i).getDisplayListTitle()%></p>
                  <%if(dplist.get(i).getDiscountRate()>0){%>
                   <p><strike><%=dplist.get(i).getMinPrice()%>원</strike> → <b><%=dplist.get(i).getDiscountMinPrice()%>원</b>&nbsp;&nbsp;&nbsp;&nbsp;(단위:<%=dplist.get(i).getProductUnit()%>)</p>
                   <%}else{ %>

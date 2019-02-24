@@ -487,7 +487,7 @@ try {
             <div class="promotion-products-container">
                 <div class="promotion-products-image-track"
                 <%for(int i=0; i< promotion.size();i++){%>
-                	><div class="promotion-products-image-box"><div><a href="#"><img src="<%=request.getContextPath()%>/upload/product/<%=promotion.get(i).getImg()%>" onError="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';"></a></div><p><b><%=promotion.get(i).getDisplayListTitle()%>&nbsp;★<%=promotion.get(i).getReviewScore()%></b>
+                	><div class="promotion-products-image-box"><div><a href="#"><img src="<%=request.getContextPath()%>/upload/product/<%=promotion.get(i).getImg()%>" onError="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';"></a></div><p><b>★<%=promotion.get(i).getReviewScore()%> <%=promotion.get(i).getDisplayListTitle()%></b>
                 <%if(promotion.get(i).getDiscountRate()>0){%>
                   <br><strike><%=promotion.get(i).getMinPrice()%>원</strike> → <b><%=promotion.get(i).getDiscountMinPrice()%>원</b>&nbsp;&nbsp;&nbsp;&nbsp;(단위:<%=promotion.get(i).getProductUnit()%>)
                   <%}else{ %>
