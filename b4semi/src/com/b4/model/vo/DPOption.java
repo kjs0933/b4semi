@@ -12,6 +12,7 @@ public class DPOption {
 	private double discountRate;
 	private String productName;
 	private String productUnit;
+	private int discountOptionPrice; //할인 가격
 	
 	public DPOption() {
 		// TODO Auto-generated constructor stub
@@ -88,5 +89,17 @@ public class DPOption {
 	public void setProductUnit(String productUnit) {
 		this.productUnit = productUnit;
 	}
+
+	public int getDiscountOptionPrice() {
+		return discountOptionPrice;
+	}
+
+	public void setDiscountOptionPrice(int discountOptionPrice) {
+		this.discountOptionPrice = discountOptionPrice;
+	}
+	public void setDiscountOptionPrice() {
+		this.discountOptionPrice = (int)Math.round(displayOptionPrice*(1-discountRate)/10)*10;
+	}
+	
 
 }

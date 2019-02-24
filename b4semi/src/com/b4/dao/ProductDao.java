@@ -184,26 +184,5 @@ public class ProductDao {
 		return result;
 	}
 
-	public Product selectByDpListSeq(Connection conn, int dpseq) 
-	{
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		String sql = prop.getProperty("selectByDpListSeq");
-		Product p = null;
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, dpseq);
-			rs = pstmt.executeQuery();
-			if(rs.next()) {
-				p = new Product();
-				p.setProductName(rs.getString("productName"));
-				p.setProductCode(rs.getString("productCode"));
-			}
-		}
-		catch(SQLException e)
-		{e.printStackTrace();}
-		finally {close(rs); close(pstmt);}
-		return p;
-	}
 
 }

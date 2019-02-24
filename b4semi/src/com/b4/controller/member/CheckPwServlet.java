@@ -1,11 +1,11 @@
 package com.b4.controller.member;
-
-import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
 
 /**
  * Servlet implementation class CheckPwServlet
@@ -27,7 +27,7 @@ public class CheckPwServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String memberPwOri = request.getParameter("memberPwOri");
 		String memberPwCk = request.getParameter("memberPwCk");
-		
+				
 		if(memberPwOri.equals(memberPwCk)) {response.getWriter().println(1);}
 		else {response.getWriter().println(0);}
 	}

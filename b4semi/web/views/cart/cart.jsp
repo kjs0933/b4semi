@@ -1,31 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.util.*, com.b4.model.vo.Cart" %>
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="com.b4.model.vo.Cart"%>
 <%@ include file="/views/common/header.jsp" %>
 <%
-	List<Cart> list = (List<Cart>)request.getAttribute("cartList");
-	int[] price = new int[10];
-	if(session.getAttribute("loginMember")!=null){
-		price = new int[list.size()];
-		for(int i=0; i<list.size(); i++){
-			if(list.get(i).getDiscountRate()!=0.0)
-			{
-				price[i] = (int)Math.ceil((list.get(i).getDisplayOptionPrice()*list.get(i).getDiscountRate())/10)*10;
-			}else
-			{
-				price[i] = list.get(i).getDisplayOptionPrice();
-			}
+	ArrayList<Cart> cartList;
+	try {
+		cartList = (ArrayList<Cart>)request.getAttribute("cartList");
+		if(cartList == null)
+		{
+			cartList=new ArrayList<Cart>();
 		}
-	}
-	Cookie[] cookies = request.getCookies();
-	if(cookies!=null){
-		for(int i=0; i<cookies.length ; i++){
-			Cookie c = cookies[i];
-			String cName = c.getName();
-			if(cName.equals("cartCookie")){
-				//cookie에 장바구니가 담겨있습니다.
-			}
-		}
+	} catch (ClassCastException e) {
+		cartList=new ArrayList<Cart>();
 	}
 %>    
 	<style>
@@ -328,46 +315,34 @@
                     <div>금액</div>
                     <div>취소</div>
                 </div>
-             	<%if(session.getAttribute("loginMember")!=null) {
-             		if(list.size()==0){%>
+             	<%
+             		if(cartList.size()==0){%>
             		<div id='emptycart'>장바구니에 담긴 상품이 없습니다.</div>
              		<%}else{
-             			for(int i=0; i<list.size(); i++){
+             			for(int i=0; i<cartList.size(); i++){
              	%>
                 <div class="cart-col">
                     <div><input type="checkbox" name="products" id="product<%=i+1 %>" class="products"><label for="product<%=i+1 %>"><span></span></label></div>
-                    <div><img src="<%=request.getContextPath() %>/upload/product/<%=list.get(i).getProductName()%>.jpg"></div>
-                    <div><div><p><%=list.get(i).getProductName() %></p><br><p><%=price[i] %>원</p></div></div>
+                    <div><img src="<%=request.getContextPath() %>/upload/product/<%=cartList.get(i).getImg()%>"></div>
+                    <div><div>
+                    <p><a href="#"><%=cartList.get(i).getDisplayListTitle()%></a> (옵션 - <%=cartList.get(i).getProductName()%>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;단위:<%=cartList.get(i).getProductUnit()%></p><br>
+                    <% if(cartList.get(i).getDiscountRate()>0){%>
+                    <p><strike><%=cartList.get(i).getDisplayOptionPrice()%>원</strike> → <b><%=cartList.get(i).getDiscountOptionPrice()%>원</b></p>
+                    <%}else{ %>
+                    <p><%=cartList.get(i).getDisplayOptionPrice()%>원</p>
+                    <%}%>
+                    </div></div>
                     <div>
                         <div class="quantity-box">
                             <div><img src="<%=request.getContextPath() %>/images/arrow_left_black.png"></div>
-                            <input type="text" name="quantity<%=i+1 %>" id="quantity<%=i+1 %>" value="<%=list.get(i).getProductCount() %>"/>
+                            <input type="text" name="quantity<%=i+1 %>" id="quantity<%=i+1 %>" value="<%=cartList.get(i).getProductCount()%>"/>
                             <div><img src="<%=request.getContextPath() %>/images/arrow_right_black.png"></div>
                         </div>
                     </div>
                     <div></div>
                     <div><img src="<%=request.getContextPath() %>/images/btn_close.png"></div>
                 </div>
-                <%}}} 
-             	else{
-             		for(int i=0; i<3; i++){
-             	%>
-                <div class="cart-col">
-                    <div><input type="checkbox" name="products" id="product<%=i+1 %>" class="products"><label for="product<%=i+1 %>"><span></span></label></div>
-                    <div><img src="<%=request.getContextPath() %>/upload/product/양파.jpg"></div>
-                    <div><div><p>상품이름</p><br><p>0000원</p></div></div>
-                    <div>
-                        <div class="quantity-box">
-                            <div><img src="<%=request.getContextPath() %>/images/arrow_left_black.png"></div>
-                            <input type="text" name="quantity<%=i+1 %>" id="quantity<%=i+1 %>" value="1"/>
-                            <div><img src="<%=request.getContextPath() %>/images/arrow_right_black.png"></div>
-                        </div>
-                    </div>
-                    <div></div>
-                    <div><img src="<%=request.getContextPath() %>/images/btn_close.png"></div>
-                </div>
-                <%}
-                } %>
+                <%}}%>
             </div>
             <div class="checkbox-control">
                 <input type="button" value="선택 삭제"/>

@@ -18,6 +18,8 @@ public class DPList {
 	private String productUnit; //상품 단위
 	private int optionCount; //세부옵션 수
 	private ArrayList<DPOption> options; //세부옵션 내용들 - 세부옵션 수가 2 이상일때 저장한다
+	private String productCode; // 주의 - 세부옵션이 하나일때 이용해야 합니다
+	private int discountMinPrice; //할인 가격
 	
 	public DPList () {}
 	
@@ -92,5 +94,20 @@ public class DPList {
 	}
 	public void setProductUnit(String productUnit) {
 		this.productUnit = productUnit;
+	}
+	public String getProductCode() {
+		return productCode;
+	}
+	public void setProductCode(String productCode) {
+		this.productCode = productCode;
+	}
+	public int getDiscountMinPrice() {
+		return discountMinPrice;
+	}
+	public void setDiscountMinPrice(int discountMinPrice) {
+		this.discountMinPrice = discountMinPrice;
+	}
+	public void setDiscountMinPrice() {
+		this.discountMinPrice = (int)Math.round(minPrice*(1-discountRate)/10)*10;
 	}
 }

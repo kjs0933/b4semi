@@ -2,7 +2,6 @@ package com.b4.controller.member;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -36,22 +35,48 @@ public class CartServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		CartService cart = new CartService();
 		HttpSession session = request.getSession();
 		Member m = (Member)session.getAttribute("loginMember");
 		if(session.getAttribute("loginMember")!=null) {
-			List<Cart> list = new CartService().selectByMember(m.getMemberSeq());
+			ArrayList<Cart> list = cart.selectByMember(m.getMemberSeq());
 			request.setAttribute("cartList", list);
 		}
-		else {
-			String cartString = new ArrayList<Cart>().toString();
-			Cookie cartCookie = new Cookie("cartCookie",cartString);
-			cartCookie.setMaxAge(14*24*60*60);
-			response.addCookie(cartCookie);
+		else
+		{
+			//비로그인 데이터 전송 로직
+			String cookieString=null;
+			Cookie[] cookies=request.getCookies();
+			ArrayList<Cart> list;
+			
+			if(cookies != null)
+			{
+				for(Cookie c : cookies)
+				{
+					if("cartSave".equals(c.getName()))
+					{
+						cookieString = c.getValue();
+					}
+				}
+			}
+			if(cookieString != null && cookieString.length() > 0)
+			{
+				String[] cartData = cookieString.split("/");
+				String[][] data = new String[cartData.length][];
+				for(int i=0; i<cartData.length; i++)
+				{
+					data[i] = cartData[i].split("\\&");
+				}
+				list = cart.getListByCookie(data);
+			}
+			else
+			{
+				list = new ArrayList<Cart>();
+			}
+			
+			request.setAttribute("cartList", list);
 		}
-		
-		
-		String view = "/views/cart/cart.jsp";
-		request.getRequestDispatcher(view).forward(request,response);
+		request.getRequestDispatcher("/views/cart/cart.jsp").forward(request,response);
 		
 	}
 
