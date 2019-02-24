@@ -1,6 +1,43 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="java.util.*, com.b4.model.vo.*, java.text.SimpleDateFormat, java.sql.Timestamp" %>
 <%@ include file="/views/common/header.jsp"%>
+<%
+	int cPage;
+	try {
+		cPage = Integer.parseInt(request.getParameter("cPage"));
+	} catch (NumberFormatException e) {
+		cPage = 1;
+	}
+	String pageBar;
+	try {
+		pageBar = (String)request.getAttribute("pageBar");
+		if(pageBar == null)
+		{
+			pageBar ="";
+		}
+	} catch (ClassCastException e) {
+		pageBar ="";
+	}
+
+
+	List<OrderList> orderList = (List<OrderList>)request.getAttribute("orderList");
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd [HH시 mm분]");
+	List<OrderPDetail> orderPList = (List<OrderPDetail>)request.getAttribute("orderProductList");
+	
+	String gradeCode = "";
+	double gradeRate = 0;
+	switch(loginMember.getMemberGradeName()){
+	case "일반" : gradeCode="new"; gradeRate=0.5; break;
+	case "브론즈" : gradeCode="bronze"; gradeRate=1; break;
+	case "실버" : gradeCode="silver"; gradeRate=3;break;
+	case "골드" : gradeCode="gold"; gradeRate=5;break;
+	case "플래티넘" : gradeCode="platinum"; gradeRate=7;break;
+	case "다이아" : gradeCode="diamond"; gradeRate=7;break;
+	default : gradeCode="new"; gradeRate=0.5;break;
+	};
+	int couponCount = (Integer)request.getAttribute("couponCount");
+%>
     <style>
         .mypage-wrapper
         {
@@ -405,6 +442,18 @@
         {
             border-left: 1px solid rgb(220, 220, 220);
         }
+        
+        .pagebar a
+        {
+        	display: flex;
+        	width: 100%;
+        	height: 100%;
+        	align-items: center;
+        	justify-content: center;
+        	text-decoration: none;
+        	color: black;
+        	
+        }
 
         .mypage-tab-current{border-bottom: 2px solid rgb(42, 71, 114) !important;}
 
@@ -415,32 +464,34 @@
                 <div class="mypage-title">마이페이지</div>
                 <div class="my-account-info">
                     <div>
-                        <img src="images/member_grade_diamond.png">
-                        <p>다이아</p>
+                        <img src="<%=request.getContextPath() %>/images/member_grade_<%=gradeCode %>.png">
+                        <p><%=loginMember.getMemberGradeName()%></p>
                     </div>
                     <span></span>
                     <div>
-                        <p><span>정우진</span> 님</p>
-                        <p>적립 9%</p>
-                        <p>무료배송</p>
+                        <p><span><%=loginMember.getMemberName() %></span> 님</p>
+                        <p>적립 <%=gradeRate%>%</p>
+                       	<%if(loginMember.getMemberGradeName().equals("다이아")) {%>
+                       	<p>무료배송</p>
+                       	<%} %>
                     </div>
                     <span></span>
                     <div>
                         <p>적립금</p>
-                        <a href="#">0 원</a>
+                        <a href="#"><%=loginMember.getMemberMileage() %> 원</a>
                     </div>
                     <span></span>
                     <div>
                         <p>쿠폰</p>
-                        <a href="#">0 개</a>
+                        <a href="#"><%=couponCount %> 개</a>
                     </div>
                 </div>
             </div>
             <div class="mypage-tab">
-                <div class="mypage-tab-current"><a href="<%=request.getContextPath() %>/views/member/mypage_orderlist.jsp">주문내역</a></div>
-                <div><a href="<%=request.getContextPath() %>/views/member/mypage_review_before.jsp">상품후기</a></div>
-                <div><a href="<%=request.getContextPath() %>/views/member/mypage_mileage.jsp">적립금</a></div>
-                <div><a href="<%=request.getContextPath() %>/views/member/mypage_coupon.jsp">쿠폰</a></div>
+                <div class="mypage-tab-current"><a href="<%=request.getContextPath() %>/mypage/mypage_orderlist">주문내역</a></div>
+                <div><a href="<%=request.getContextPath() %>/mypage/mypage_reviewb">상품후기</a></div>
+                <div><a href="<%=request.getContextPath() %>/mypage/mypage_mileage">적립금</a></div>
+                <div><a href="<%=request.getContextPath() %>/mypage/mypage_coupon">쿠폰</a></div>
                 <div><a href="<%=request.getContextPath() %>/memberUpdate">개인정보수정</a></div>
             </div>
             <div class="mypage-body">
@@ -451,24 +502,25 @@
 
                         </div>
                     </div>
+                    <%for(int i=0;i<orderList.size();i++) {%>
                     <div class="order">
-                        <p class="order-date">2019.02.18 [23시 27분]</p>
+                        <p class="order-date"><%=sdf.format(new Date(orderList.get(i).getOrderTime().getTime()))%></p>
                         <div>
                             <div>
-                                <div class="order-title"><a href="#">[몽상클레르] 커스터드 크림빵 2종 외 1건</a><img
+                                <div class="order-title"><a href="#"><%=orderPList.get(i).getProductName() %> 외 <%=(orderPList.get(i).getCountByOrderList())-1 %>건</a><img
                                         src="images/arrow_right_black.png" alt=""></div>
                             </div>
                             <span></span>
                             <div class="order-body">
-                                <div><img src="images/order_sample_3.jpg"></div>
+                                <div><img src="<%=request.getContextPath() %>/upload/product/<%=orderPList.get(i).getProductName() %>.jpg"></div>
                                 <div>
                                     <div>주문번호</div>
                                     <div>결제금액</div>
                                     <div>주문상태</div>
                                 </div>
                                 <div>
-                                    <div>1550500008708</div>
-                                    <div>11,868 원</div>
+                                    <div><%=orderList.get(i).getOrderSeq() %></div>
+                                    <div><%=(orderList.get(i).getTotalPrice())+(orderList.get(i).getShipmentFee())%> 원</div>
                                     <div>배송완료</div>
                                 </div>
                                 <div>
@@ -478,34 +530,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="order">
-                        <p class="order-date">2019.02.17 [0시 17분]</p>
-                        <div>
-                            <div>
-                                <div class="order-title"><a href="#">[갈바니나] 유기농 과일 탄산수 6종 외 2건</a><img
-                                        src="images/arrow_right_black.png" alt=""></div>
-                            </div>
-                            <span></span>
-                            <div class="order-body">
-                                <div><img src="images/order_sample_1.jpg"></div>
-                                <div>
-                                    <div>주문번호</div>
-                                    <div>결제금액</div>
-                                    <div>주문상태</div>
-                                </div>
-                                <div>
-                                    <div>1550328316414</div>
-                                    <div>9,030원</div>
-                                    <div>배송준비중</div>
-                                </div>
-                                <div>
-                                    <input type="button" value="후기 작성">
-                                    <input type="button" value="1:1 문의">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="pagebar">
+                    <%} %>
+					<%=pageBar %>
+<!--                     <div class="pagebar">
                         <div><img src="images/board-arrow-left.png"></div>
                         <div>1</div>
                         <div>2</div>
@@ -513,7 +540,7 @@
                         <div>4</div>
                         <div>5</div>
                         <div><img src="images/board-arrow-right.png"></div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>

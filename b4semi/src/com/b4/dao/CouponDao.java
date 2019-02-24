@@ -129,6 +129,35 @@ private Properties prop = new Properties();
 		}
 		return list;
 	}
+
+	public int couponCountByMember(Connection conn, String id) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int couponCount = 0;
+		String sql = prop.getProperty("couponCountByMember");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+			{
+				couponCount = rs.getInt("CNT");
+			}
+		}		
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(rs);
+			close(pstmt);
+		}
+		return couponCount;
+		
+		
+		
+	}
 	
 	
 

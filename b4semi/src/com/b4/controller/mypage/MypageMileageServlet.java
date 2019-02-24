@@ -1,6 +1,8 @@
-package com.b4.controller.member;
+package com.b4.controller.mypage;
 
 import java.io.IOException;
+import static common.PagingTemplate.pageBar2;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,19 +12,21 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.b4.model.vo.Member;
+import com.b4.model.vo.MileageLog;
 import com.b4.service.CouponService;
+import com.b4.service.MileageLogService;
 
 /**
- * Servlet implementation class MemberUpdateServlet
+ * Servlet implementation class MileageServlet
  */
-@WebServlet(name="memberUpdateServlet", urlPatterns="/memberUpdate")
-public class MemberUpdateServlet extends HttpServlet {
+@WebServlet("/mypage/mypage_mileage")
+public class MypageMileageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MemberUpdateServlet() {
+    public MypageMileageServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -44,11 +48,28 @@ public class MemberUpdateServlet extends HttpServlet {
 		else
 		{
 			int couponCount = new CouponService().couponCountByMember(loginMember.getMemberId());
+			int logCount = new MileageLogService().logCountByMember(loginMember.getMemberSeq());
+			
+			
+			int cPage;
+			try {
+				cPage=Integer.parseInt(request.getParameter("cPage"));
+			}
+			catch(NumberFormatException e)
+			{
+				cPage=1;
+			}
+			String pageBar = pageBar2(request.getContextPath()+"/mypage/mypage_mileage",cPage,logCount);
+			List<MileageLog> mlList = new MileageLogService().mileageLogByMember(cPage,loginMember.getMemberSeq());
+			
+		
+			request.setAttribute("pageBar", pageBar);
+			request.setAttribute("logCount", logCount);
+			request.setAttribute("mlList", mlList);
 			request.setAttribute("couponCount", couponCount);
 			request.setAttribute("loginMember", loginMember);
-			request.getRequestDispatcher("/views/member/mypage_memberupdate.jsp").forward(request, response);
+			request.getRequestDispatcher("/views/member/mypage_mileage.jsp?cPage="+cPage).forward(request, response);
 		}
-		
 	}
 
 	/**

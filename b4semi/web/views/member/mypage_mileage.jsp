@@ -1,6 +1,45 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/views/common/header.jsp"%>
+<%@ page import="java.util.*, com.b4.model.vo.*" %>
+<%
+	int cPage;
+	try {
+		cPage = Integer.parseInt(request.getParameter("cPage"));
+	} catch (NumberFormatException e) {
+		cPage = 1;
+	}
+	String pageBar;
+	try {
+		pageBar = (String)request.getAttribute("pageBar");
+		if(pageBar == null)
+		{
+			pageBar ="";
+		}
+	} catch (ClassCastException e) {
+		pageBar ="";
+	}
+	List<MileageLog> mlList = (List<MileageLog>)request.getAttribute("mlList");
+	int totalUseMile = 0;
+	for(int i=0; i<mlList.size(); i++){
+		if(mlList.get(i).getLogTypeName().equals("상품결제사용")){
+			totalUseMile += -(mlList.get(i).getNextMileage())-(mlList.get(i).getPreMileage());
+		}
+	}
+	
+	String gradeCode = "";
+	double gradeRate = 0;
+	switch(loginMember.getMemberGradeName()){
+	case "일반" : gradeCode="new"; gradeRate=0.5; break;
+	case "브론즈" : gradeCode="bronze"; gradeRate=1; break;
+	case "실버" : gradeCode="silver"; gradeRate=3;break;
+	case "골드" : gradeCode="gold"; gradeRate=5;break;
+	case "플래티넘" : gradeCode="platinum"; gradeRate=7;break;
+	case "다이아" : gradeCode="diamond"; gradeRate=7;break;
+	default : gradeCode="new"; gradeRate=0.5;break;
+	};
+	int couponCount = (Integer)request.getAttribute("couponCount");
+%>
 	<style>
 	     .mypage-wrapper
         {
@@ -263,6 +302,18 @@
         {
             border-left: 1px solid rgb(220, 220, 220);
         }
+        
+         .pagebar a
+        {
+        	display: flex;
+        	width: 100%;
+        	height: 100%;
+        	align-items: center;
+        	justify-content: center;
+        	text-decoration: none;
+        	color: black;
+        	
+        }
 	</style>
     <section>
         <div class="mypage-wrapper">
@@ -270,32 +321,34 @@
                 <div class="mypage-title">마이페이지</div>
                 <div class="my-account-info">
                     <div>
-                        <img src="images/member_grade_diamond.png">
-                        <p>다이아</p>
+                        <img src="<%=request.getContextPath() %>/images/member_grade_<%=gradeCode %>.png">
+                        <p><%=loginMember.getMemberGradeName()%></p>
                     </div>
                     <span></span>
                     <div>
-                        <p><span>정우진</span> 님</p>
-                        <p>적립 9%</p>
-                        <p>무료배송</p>
+                        <p><span><%=loginMember.getMemberName() %></span> 님</p>
+                        <p>적립 <%=gradeRate%>%</p>
+                        <%if(loginMember.getMemberGradeName().equals("다이아")) {%>
+                       	<p>무료배송</p>
+                       	<%} %>
                     </div>
                     <span></span>
                     <div>
                         <p>적립금</p>
-                        <a href="#">0 원</a>
+                        <a href="#"><%=loginMember.getMemberMileage() %> 원</a>
                     </div>
                     <span></span>
                     <div>
                         <p>쿠폰</p>
-                        <a href="#">0 개</a>
+                        <a href="#"><%=couponCount %> 개</a>
                     </div>
                 </div>
             </div>
             <div class="mypage-tab">
-                <div><a href="<%=request.getContextPath() %>/views/member/mypage_orderlist.jsp">주문내역</a></div>
-                <div><a href="<%=request.getContextPath() %>/views/member/mypage_review_before.jsp">상품후기</a></div>
-                <div class="mypage-tab-current"><a href="<%=request.getContextPath() %>/views/member/mypage_mileage.jsp">적립금</a></div>
-                <div><a href="<%=request.getContextPath() %>/views/member/mypage_coupon.jsp">쿠폰</a></div>
+                <div><a href="<%=request.getContextPath() %>/mypage/mypage_orderlist">주문내역</a></div>
+                <div><a href="<%=request.getContextPath() %>/mypage/mypage_reviewb">상품후기</a></div>
+                <div class="mypage-tab-current"><a href="<%=request.getContextPath() %>/mypage/mypage_mileage">적립금</a></div>
+                <div><a href="<%=request.getContextPath() %>/mypage/mypage_coupon">쿠폰</a></div>
                 <div><a href="<%=request.getContextPath() %>/memberUpdate">개인정보수정</a></div>
             </div>
             <div class="mypage-body">
@@ -304,8 +357,8 @@
                         <p><span>적립금</span>보유하고 계신 적립금의 내역을 한 눈에 확인 하실수 있습니다.</p>
                     </div>
                     <div class="mypage-mileage-info">
-                    <div><p>현재적립금</p><span>0 원</span></div>
-                    <div><p>누적사용금액</p><span>0 원</span></div> 
+                    <div><p>현재적립금</p><span><%=loginMember.getMemberMileage() %> 원</span></div>
+                    <div><p>누적사용금액</p><span><%=totalUseMile %> 원</span></div> 
                     </div>
                     <div class="mypage-mileage-log">
                         <div class="mypage-mileage-header">
@@ -315,15 +368,18 @@
                             <div>이전</div>
                             <div>이후</div>
                         </div>
+                    <%for(int i=0; i<mlList.size(); i++) {%>
                         <div class="mypage-mileage-cols">
-                            <div>2019-03-03 [ 0시 20분 ]</div>
-                            <div>결제</div>
-                            <div>-1000 원</div>
-                            <div>1000 원</div>
-                            <div>0 원</div>
+                            <div>2019-03-03 [ 0시 20분 ]common으로불러올것.</div>
+                            <div><%=mlList.get(i).getLogTypeName() %></div>
+                            <div><%=(mlList.get(i).getNextMileage())-(mlList.get(i).getPreMileage()) %> 원</div>
+                            <div><%=mlList.get(i).getPreMileage() %> 원</div>
+                            <div><%=mlList.get(i).getNextMileage() %> 원</div>
                         </div>
+                    <%} %>
                     </div>
-                    <div class="pagebar">
+                    <%=pageBar %>
+<!--                     <div class="pagebar">
                         <div><img src="images/board-arrow-left.png"></div>
                         <div>1</div>
                         <div>2</div>
@@ -331,7 +387,7 @@
                         <div>4</div>
                         <div>5</div>
                         <div><img src="images/board-arrow-right.png"></div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>

@@ -5,7 +5,22 @@
 <% 
 	Member lm = (Member)request.getAttribute("loginMember");
 	String memberPw = lm.getMemberPw();
-%>	
+
+	String gradeCode = "";
+	double gradeRate = 0;
+	switch(lm.getMemberGradeName()){
+	case "일반" : gradeCode="new"; gradeRate=0.5; break;
+	case "브론즈" : gradeCode="bronze"; gradeRate=1; break;
+	case "실버" : gradeCode="silver"; gradeRate=3;break;
+	case "골드" : gradeCode="gold"; gradeRate=5;break;
+	case "플래티넘" : gradeCode="platinum"; gradeRate=7;break;
+	case "다이아" : gradeCode="diamond"; gradeRate=7;break;
+	default : gradeCode="new"; gradeRate=0.5;break;
+	};
+	int couponCount = (Integer)request.getAttribute("couponCount");
+
+%>
+	
 	
     <style>
     
@@ -257,32 +272,34 @@
                 <div class="mypage-title">마이페이지</div>
                 <div class="my-account-info">
                     <div>
-                        <img src="images/member_grade_diamond.png">
-                        <p>다이아</p>
+                        <img src="<%=request.getContextPath() %>/images/member_grade_<%=gradeCode %>.png">
+                        <p><%=lm.getMemberGradeName() %></p>
                     </div>
                     <span></span>
                     <div>
-                        <p><span>정우진</span> 님</p>
-                        <p>적립 9%</p>
+                        <p><span><%=lm.getMemberName() %></span> 님</p>
+                        <p>적립 <%=gradeRate%>%</p>
+                        <%if(lm.getMemberName().equals("다이아")) { %>
                         <p>무료배송</p>
+                        <%} %>
                     </div>
                     <span></span>
                     <div>
                         <p>적립금</p>
-                        <a href="#">0 원</a>
+                        <a href="#"><%=lm.getMemberMileage() %> 원</a>
                     </div>
                     <span></span>
                     <div>
                         <p>쿠폰</p>
-                        <a href="#">0 개</a>
+                        <a href="#"><%=couponCount %> 개</a>
                     </div>
                 </div>
             </div>
             <div class="mypage-tab">
-                <div><a href="<%=request.getContextPath() %>/views/member/mypage_orderlist.jsp">주문내역</a></div>
-                <div><a href="<%=request.getContextPath() %>/views/member/mypage_review_before.jsp">상품후기</a></div>
-                <div><a href="<%=request.getContextPath() %>/views/member/mypage_mileage.jsp">적립금</a></div>
-                <div><a href="<%=request.getContextPath() %>/views/member/mypage_coupon.jsp">쿠폰</a></div>
+                <div><a href="<%=request.getContextPath() %>/mypage/mypage_orderlist">주문내역</a></div>
+                <div><a href="<%=request.getContextPath() %>/mypage/mypage_reviewb">상품후기</a></div>
+                <div><a href="<%=request.getContextPath() %>/mypage/mypage_mileage">적립금</a></div>
+                <div><a href="<%=request.getContextPath() %>/mypage/mypage_coupon">쿠폰</a></div>
                 <div class="mypage-tab-current"><a href="<%=request.getContextPath() %>/memberUpdate">개인정보수정</a></div>
             </div>
             <div class="mypage-body">

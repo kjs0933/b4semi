@@ -783,16 +783,16 @@
 			        <div class="my-account-wrapper">
 			        	<div class="my-account-box">
 				           	<ul>
-				               	<li><a href="<%=request.getContextPath() %>/views/member/mypage_orderlist.jsp">주문내역</a></li>
-				               	<li><a href="<%=request.getContextPath() %>/views/member/mypage_review_before.jsp">상품리뷰</a></li>
-				               	<li><a href="<%=request.getContextPath() %>/views/member/mypage_mileage.jsp">적립금</a></li>
-				               	<li><a href="<%=request.getContextPath() %>/views/member/mypage_coupon.jsp">쿠폰</a></li>
+				               	<li><a href="<%=request.getContextPath() %>/mypage/mypage_orderlist">주문내역</a></li>
+				               	<li><a href="<%=request.getContextPath() %>/mypage/mypage_reviewb">상품리뷰</a></li>
+				               	<li><a href="<%=request.getContextPath() %>/mypage/mypage_mileage">적립금</a></li>
+				               	<li><a href="<%=request.getContextPath() %>/mypage/mypage_coupon">쿠폰</a></li>
 				               	<li><a href="<%=request.getContextPath() %>/memberUpdate">계정정보</a></li>
 				               	<li><a href="<%=request.getContextPath()%>/logout">로그아웃</a></li>
 				           	</ul>
 			        	</div>
 			        </div>
-			    </li>
+			    </li>			    
                	<% } %>
                 <%if(loginMember == null){%>
                	<li>
@@ -955,3 +955,9 @@
             </div>
         </div>
     </header>
+    
+    <script>
+    	$(function(){
+    		$('.my-account-box').
+    	});
+    </script>

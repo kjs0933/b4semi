@@ -6,18 +6,22 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.b4.model.vo.Member;
+import com.b4.service.CouponService;
 
 /**
- * Servlet implementation class OrderListAjaxServlet
+ * Servlet implementation class ReviewBeforeServlet
  */
-@WebServlet("/mypage/mypage_orderlist.do")
-public class OrderListAjaxServlet extends HttpServlet {
+@WebServlet("/mypage/mypage_reviewb")
+public class MypageReviewBeforeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public OrderListAjaxServlet() {
+    public MypageReviewBeforeServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -26,9 +30,23 @@ public class OrderListAjaxServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		Member loginMember = (Member)session.getAttribute("loginMember");
 		
 		
-		request.getRequestDispatcher("/views/member/mypage_orderlist.jsp").forward(request, response);
+		if(loginMember == null)
+		{
+			request.setAttribute("msg", "세션이 만료되었습니다.");
+			request.setAttribute("loc", "/");
+			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
+		}
+		else
+		{
+			int couponCount = new CouponService().couponCountByMember(loginMember.getMemberId());
+			request.setAttribute("couponCount", couponCount);
+			request.setAttribute("loginMember", loginMember);
+			request.getRequestDispatcher("/views/member/mypage_review_before.jsp").forward(request, response);
+		}
 	}
 
 	/**
