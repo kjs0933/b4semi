@@ -13,7 +13,7 @@ import com.b4.model.vo.Member;
 /**
  * Servlet implementation class NoticeListServlet
  */
-@WebServlet("/NoticeListServlet")
+@WebServlet("/support/support_notice")
 public class NoticeListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -30,13 +30,7 @@ public class NoticeListServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		Member loginMember=(Member)request.getSession(false).getAttribute("loginMember");
-		if(loginMember==null||!"admin".equals(loginMember.getMemberId()))
-		{
-			request.setAttribute("msg", "잘못된 경로로 이동하셨습니다.");
-			request.setAttribute("loc", "/");
-			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
-		}
+		request.getRequestDispatcher("/views/support/support_notice.jsp").forward(request, response);
 		
 	}
 
