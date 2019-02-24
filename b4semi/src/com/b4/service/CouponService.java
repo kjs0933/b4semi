@@ -70,4 +70,12 @@ public class CouponService {
 		close(conn);
 		return result;
 	}
+
+/*	public int couponCountByMember(String id) {
+		Connection conn = getConnection();
+		int couponCount = dao.couponCountByMember(conn, id);
+		close(conn);
+		return couponCount;
+	}*/
+	
 }
