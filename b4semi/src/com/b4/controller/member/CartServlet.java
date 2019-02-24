@@ -38,16 +38,15 @@ public class CartServlet extends HttpServlet {
 		CartService cart = new CartService();
 		HttpSession session = request.getSession();
 		Member m = (Member)session.getAttribute("loginMember");
+		ArrayList<Cart> list;
 		if(session.getAttribute("loginMember")!=null) {
-			ArrayList<Cart> list = cart.selectByMember(m.getMemberSeq());
-			request.setAttribute("cartList", list);
+			list = cart.selectByMember(m.getMemberSeq());
 		}
 		else
 		{
 			//비로그인 데이터 전송 로직
 			String cookieString=null;
 			Cookie[] cookies=request.getCookies();
-			ArrayList<Cart> list;
 			
 			if(cookies != null)
 			{
@@ -73,11 +72,9 @@ public class CartServlet extends HttpServlet {
 			{
 				list = new ArrayList<Cart>();
 			}
-			
-			request.setAttribute("cartList", list);
 		}
+		request.setAttribute("cartList", list);
 		request.getRequestDispatcher("/views/cart/cart.jsp").forward(request,response);
-		
 	}
 
 	/**

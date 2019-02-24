@@ -14,6 +14,7 @@
 	} catch (ClassCastException e) {
 		cartList=new ArrayList<Cart>();
 	}
+	
 %>    
 	<style>
 	
@@ -323,7 +324,7 @@
              	%>
                 <div class="cart-col">
                     <div><input type="checkbox" name="products" id="product<%=i+1 %>" class="products"><label for="product<%=i+1 %>"><span></span></label></div>
-                    <div><img src="<%=request.getContextPath() %>/upload/product/<%=cartList.get(i).getImg()%>"></div>
+                    <div><img src="<%=request.getContextPath() %>/upload/product/<%=cartList.get(i).getImg()%>" onError="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';"></div>
                     <div><div>
                     <p><a href="#"><%=cartList.get(i).getDisplayListTitle()%></a> (옵션 - <%=cartList.get(i).getProductName()%>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;단위:<%=cartList.get(i).getProductUnit()%></p><br>
                     <% if(cartList.get(i).getDiscountRate()>0){%>
@@ -335,25 +336,30 @@
                     <div>
                         <div class="quantity-box">
                             <div><img src="<%=request.getContextPath() %>/images/arrow_left_black.png"></div>
-                            <input type="text" name="quantity<%=i+1 %>" id="quantity<%=i+1 %>" value="<%=cartList.get(i).getProductCount()%>"/>
+                            <input type="text" name="quantity<%=i+1%>" id="quantity<%=i+1%>" value="<%=cartList.get(i).getProductCount()%>"/>
                             <div><img src="<%=request.getContextPath() %>/images/arrow_right_black.png"></div>
                         </div>
                     </div>
-                    <div></div>
-                    <div><img src="<%=request.getContextPath() %>/images/btn_close.png"></div>
+                    <input type="hidden" value="<%=i+1%>">
+                    <div id="totalPrice<%=i+1%>"><%=cartList.get(i).getDiscountOptionPrice()*cartList.get(i).getProductCount()%>원</div>
+                    <div><img src="<%=request.getContextPath() %>/images/btn_close.png" onclick="fn_cart_close()"></div>
+                    <input type="hidden" id="price<%=i+1%>" value="<%=cartList.get(i).getDisplayOptionPrice()%>">
+                    <input type="hidden" id="discount<%=i+1%>" value="<%=cartList.get(i).getDisplayOptionPrice()-cartList.get(i).getDiscountOptionPrice()%>">
+                    <input type="hidden" id="dpseq<%=i+1%>" value="<%=cartList.get(i).getDisplayListSeq()%>">
+                    <input type="hidden" id="pcode<%=i+1%>" value="<%=cartList.get(i).getProductCode()%>">
                 </div>
                 <%}}%>
             </div>
             <div class="checkbox-control">
-                <input type="button" value="선택 삭제"/>
+                <input type="button" value="선택 삭제" onclick="fn_selected_delete()"/>
                 <input type="button" value="품절 삭제"/>
             </div>
             <div class="total-info">
-                <div><p>상품금액</p><input type="text" name="preTotal" id="preTotal" value="10000"></div>
+                <div><p>상품금액</p><input type="text" name="preTotal" id="preTotal" value=""></div>
                 <p>-</p>
-                <div><p>할인금액</p><input type="text" name="discount" id="discount" value="2000"></div>
+                <div><p>할인금액</p><input type="text" name="discount" id="discount" value=""></div>
                 <p>+</p>
-                <div><p>배송료</p><input type="text" name="shipFee" id="shipFee" value="2500"></div>
+                <div><p>배송료</p><input type="text" name="shipFee" id="shipFee" value=""></div>
                 <p>=</p>
                 <div><p>결제예정금액</p><input type="text" name="totalPrice" id="totalPrice"></div>
             </div>
@@ -368,11 +374,38 @@
         const discount = $('#discount');
         const shipFee = $('#shipFee');
         const totalPrice = $('#totalPrice');
+        
+    	const cartSize = $(".cart-col").length;
 
-        $(() => {
+        function cart_total_calculate(){
+        	var preTotalPriceTotal = 0;
+        	var discountPriceTotal = 0;
+        	for(var i=0;i<cartSize;i++)
+        	{
+        		const preTotalPrice = parseInt($("#quantity"+(i+1)).val())*parseInt($("#price"+(i+1)).val());
+        		const discountPrice = parseInt($("#quantity"+(i+1)).val())*parseInt($("#discount"+(i+1)).val());
+        		if($.isNumeric(preTotalPrice) && $.isNumeric(discountPrice))
+        		{
+            		preTotalPriceTotal += preTotalPrice;
+            		discountPriceTotal += discountPrice;
+        		}
+
+        	}
+        	preTotal.val(preTotalPriceTotal);
+        	discount.val(discountPriceTotal);
+        	if(preTotalPriceTotal-discountPriceTotal>=30000)
+        	{
+        		shipFee.val(0);
+        	}
+        	else
+        	{
+        		shipFee.val(2500);
+        	}
             const execTotalPrice = parseInt(preTotal.val()) - parseInt(discount.val()) + parseInt(shipFee.val());
             totalPrice.val(execTotalPrice);
-        })
+        }
+        
+        $(cart_total_calculate());
 
         // 체크박스 전체선택
         const selectAll = $('#selectAll');
@@ -401,20 +434,81 @@
 
 		$(function(){
 			leftArrow.on ('click', (e) => {
+				var cartIndex = $(e.target).parent().parent().parent().next().val();
 				var decre = $(e.target).parent().next().val();
 				var denum = parseInt(decre);
 				denum--;
-				if(denum<=0)denum=1;
-				$(e.target).parent().next().val(denum);
-				
+				if(denum>0){
+					$(e.target).parent().next().val(denum);
+					$("#totalPrice"+cartIndex).html((parseInt($("#price"+cartIndex).val())-parseInt($("#discount"+cartIndex).val()))*denum+"원");
+					$.ajax({
+						url:"<%=request.getContextPath()%>/cartAdd.do",
+						type:"post",
+						data:{"dpseq":$("#dpseq"+cartIndex).val(),"pcode":$("#pcode"+cartIndex).val(),"change":-1},
+						success:function(data){}
+					});
+	    			cart_total_calculate();
+				}
 			});
 			rightArrow.on('click', (e) => {
+				var cartIndex = $(e.target).parent().parent().parent().next().val();
 				var incre = $(e.target).parent().prev().val();
 				var innum = parseInt(incre);
 				innum++;
 				$(e.target).parent().prev().val(innum);
+				$("#totalPrice"+cartIndex).html((parseInt($("#price"+cartIndex).val())-parseInt($("#discount"+cartIndex).val()))*innum+"원");
+				$.ajax({
+					url:"<%=request.getContextPath()%>/cartAdd.do",
+					type:"post",
+					data:{"dpseq":$("#dpseq"+cartIndex).val(),"pcode":$("#pcode"+cartIndex).val(),"change":1},
+					success:function(data){}
+				});
+				cart_total_calculate();
 			});
 		});
               
+		function fn_cart_close() {
+			var cartIndex = $(event.target).parent().prev().prev().val();
+			$.ajax({
+				url:"<%=request.getContextPath()%>/cartAdd.do",
+				type:"post",
+				data:{"dpseq":$("#dpseq"+cartIndex).val(),"pcode":$("#pcode"+cartIndex).val(),"change":-99999999},
+				success:function(data){}
+			});
+			$(event.target).parent().parent().remove();
+			cart_total_calculate();
+		}
+		
+		function fn_selected_delete() {
+			var c=0;
+			var dpseqs="";
+			var pcodes="";
+			var changes="";
+			
+        	for(var i=0;i<cartSize;i++)
+        	{
+        		if($("#product"+(i+1)).prop("checked"))
+        		{
+					dpseqs+=$("#dpseq"+(i+1)).val()+",";
+					pcodes+=$("#pcode"+(i+1)).val()+",";
+					changes+="-99999999,"
+        			$("#product"+(i+1)).parent().parent().remove();
+					c++;
+        		}
+        	}
+        	if(c>0)
+        	{
+    			$.ajax({
+    				url:"<%=request.getContextPath()%>/cartAdd.do",
+    				type:"post",
+    				data:{"multi":"yes","dpseqs":dpseqs,"pcodes":pcodes,"changes":changes},
+    				success:function(data){}
+    			});
+    			cart_total_calculate();
+        	}
+		}
+		
+		
+		
     </script>
 <%@ include file="/views/common/footer.jsp" %>
