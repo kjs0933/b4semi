@@ -195,6 +195,7 @@ public class DPListDao {
 				dplist.setOptionCount(rs.getInt("OPTIONCOUNT"));
 				dplist.setProductUnit(rs.getString("PRODUCTUNIT"));
 				dplist.setProductCode(rs.getString("PRODUCTCODE"));
+				dplist.setDiscountMinPrice();
 				result.add(dplist);
 			}
 		}
@@ -233,6 +234,7 @@ public class DPListDao {
 				dpoption.setDiscountRate(rs.getDouble("DISCOUNTRATE"));
 				dpoption.setDiscountName(rs.getString("DISCOUNTNAME"));
 				dpoption.setDiscountCode(rs.getString("DISCOUNTCODE"));
+				dpoption.setDiscountOptionPrice();
 				result.add(dpoption);
 			}
 		}

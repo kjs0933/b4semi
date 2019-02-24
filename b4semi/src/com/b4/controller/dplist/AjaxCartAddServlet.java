@@ -17,7 +17,7 @@ import com.google.gson.Gson;
 /**
  * Servlet implementation class AjaxCartAddServlet
  */
-@WebServlet("/js/cartAdd.do")
+@WebServlet("/cartAdd.do")
 public class AjaxCartAddServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -43,73 +43,6 @@ public class AjaxCartAddServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		
-		String cartUpdate = request.getParameter("cartUpdate");
-		//장바구니 업데이트 로직
-		if(cartUpdate != null && cartUpdate.length() >0)
-		{
-			if(m==null || session.getAttribute("cartUpdate") != null)
-			{
-				return;
-			}
-			session.setAttribute("cartUpdate", "ok");
-			int flag=0;
-				
-			String cookieString=null;
-			Cookie[] cookies=request.getCookies();
-			
-			if(cookies != null)
-			{
-				for(Cookie c : cookies)
-				{
-					if("cartSave".equals(c.getName()))
-					{
-						cookieString = c.getValue();
-					}
-				}
-			}
-			if(cookieString != null && cookieString.length() >0)
-			{
-				String[] cartData = cookieString.split("/");
-				String[][] data = new String[cartData.length][];
-				int amount;
-				CartService cart = new CartService();
-				System.out.println("쿠키 장바구니 DB에 저장중");
-				try {
-					for(int i=0; i<cartData.length; i++)
-					{
-						data[i] = cartData[i].split("\\&");
-						amount = cart.getAmount(m.getMemberSeq(), Integer.parseInt(data[i][0]), data[i][1]);
-						if(amount != Integer.parseInt(data[i][2]))
-						{
-							if(amount>0)
-							{
-								cart.updateCart(m.getMemberSeq(),Integer.parseInt(data[i][0]),data[i][1],Integer.parseInt(data[i][2]));
-							}
-							else
-							{
-								cart.insertCart(m.getMemberSeq(),Integer.parseInt(data[i][0]),data[i][1],Integer.parseInt(data[i][2]));
-							}
-						}
-					}
-					flag=1;
-				}
-				catch(Exception e)
-				{
-					e.printStackTrace();
-					System.out.println(m.getMemberId() + " 로그인 회원 쿠키 장바구니 변환중 오류");
-					flag=-1;
-				}
-				
-				Cookie cartSave = new Cookie("cartSave","");
-				cartSave.setMaxAge(0);
-				response.addCookie(cartSave);
-			}
-			response.setContentType("application/json;charset=UTF-8");
-			new Gson().toJson(flag, response.getWriter());
-			return;
-		}
-		
-		
 		int dpseq;
 		int[] result= {0,0};
 		try {
@@ -124,20 +57,30 @@ public class AjaxCartAddServlet extends HttpServlet {
 		{
 			return;
 		}
+		int change=1;
+		try {
+			change = Integer.parseInt(request.getParameter("change"));
+		}
+		catch(NumberFormatException e)
+		{}
 		
 		CartService cart= new CartService();
 		if(m!=null) {
 			
 			//현재 데이터가 있으면 update, 없으면 insert
 			int amount = cart.getAmount(m.getMemberSeq(),dpseq,pcode);
-			int resultQuery;
-			if(amount>0)
+			int resultQuery=0;
+			if(amount>0 && amount+change>0)
 			{
-				resultQuery = cart.updateCart(m.getMemberSeq(),dpseq,pcode,amount+1);
+				resultQuery = cart.updateCart(m.getMemberSeq(),dpseq,pcode,amount+change);
 			}
-			else
+			else if(change >0)
 			{
-				resultQuery = cart.insertCart(m.getMemberSeq(),dpseq,pcode,1);
+				resultQuery = cart.insertCart(m.getMemberSeq(),dpseq,pcode,change);
+			}
+			else if(amount >0)
+			{
+				resultQuery = cart.deleteOne(m.getMemberSeq(),dpseq,pcode);
 			}
 			if(resultQuery==0)
 			{
@@ -145,7 +88,7 @@ public class AjaxCartAddServlet extends HttpServlet {
 			}
 			
 			result[0] = cart.getKindCount(m.getMemberSeq());
-			result[1] = amount+1;
+			result[1] = amount+change;
 		}
 		else
 		{
@@ -165,12 +108,12 @@ public class AjaxCartAddServlet extends HttpServlet {
 			}
 			if(cookieString == null || cookieString.length() ==0)
 			{
-				Cookie cartSave = new Cookie("cartSave", dpseq+"&"+pcode+"&"+1);
+				Cookie cartSave = new Cookie("cartSave", dpseq+"&"+pcode+"&"+change);
 				cartSave.setMaxAge(14*24*60*60);
 				response.addCookie(cartSave);
 				
-				result[0] = 1;
-				result[1] = 1;
+				result[0] = change;
+				result[1] = change;
 			}
 			else
 			{
@@ -184,7 +127,7 @@ public class AjaxCartAddServlet extends HttpServlet {
 					if(String.valueOf(dpseq).equals(data[i][0]) && pcode.equals(data[i][1]))
 					{
 						result[0] = cartData.length;
-						result[1] = Integer.parseInt(data[i][2])+1;
+						result[1] = Integer.parseInt(data[i][2])+change;
 						data[i][2] = String.valueOf(result[1]); 
 						added = true;
 					}
@@ -206,9 +149,9 @@ public class AjaxCartAddServlet extends HttpServlet {
 				}
 				else
 				{
-					cookieString += "/"+dpseq+"&"+pcode+"&"+1;
-					result[0] = cartData.length+1;
-					result[1] = 1;
+					cookieString += "/"+dpseq+"&"+pcode+"&"+change;
+					result[0] = cartData.length+change;
+					result[1] = change;
 					
 					Cookie cartSave = new Cookie("cartSave", cookieString);
 					cartSave.setMaxAge(14*24*60*60);

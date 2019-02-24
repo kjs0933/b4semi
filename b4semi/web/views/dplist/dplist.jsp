@@ -370,22 +370,12 @@
                 <input type='hidden' name='plist-index' value="<%=dplist.get(i).getOptionCount()==1?dplist.get(i).getProductCode():""%>"/>
                 <input type='hidden' name='plist-index' value="<%=dplist.get(i).getDisplayListSeq()%>"/>
                 <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p><%=dplist.get(i).getDisplayListTitle()%></p>
-                <p><%=dplist.get(i).getMinPrice()%> 원</p>
-                
-                
-<%--            //할인률 분기 처리부분
-				<% if(dplist.get(i).getDiscountRate() == 1.0) 
-                {%>
-                	<p><%=dplist.get(i).getMinPrice()%> 원</p>
-                <% } 
-                else 
-                {%> 
-                	<s><%=dplist.get(i).getMinPrice()%>원</s><p><%=(Math.round((dplist.get(i).getMinPrice()*dplist.get(i).getDiscountRate())/10))*10 %> 원</p>
-            	<%} %> 
---%>
-            	
-            	
+                <p><%=dplist.get(i).getDisplayListTitle()%>&nbsp;★<%=dplist.get(i).getReviewScore()%></p>
+                 <%if(dplist.get(i).getDiscountRate()>0){%>
+                  <p><strike><%=dplist.get(i).getMinPrice()%>원</strike> → <b><%=dplist.get(i).getDiscountMinPrice()%>원</b>&nbsp;&nbsp;&nbsp;&nbsp;(단위:<%=dplist.get(i).getProductUnit()%>)</p>
+                  <%}else{ %>
+                  <p><%=dplist.get(i).getMinPrice()%>원&nbsp;&nbsp;&nbsp;&nbsp;(단위:<%=dplist.get(i).getProductUnit()%>)</p>
+                  <%}%>
             </div>
         <%} %>
         </div>
@@ -406,7 +396,7 @@
 			if(pcode != "")
 			{
 				$.ajax({
-					url:"<%=request.getContextPath()%>/js/cartAdd.do",
+					url:"<%=request.getContextPath()%>/cartAdd.do",
 					type:"post",
 					data:{"dpseq":dpseq,"pcode":pcode},
 					success:function(data){

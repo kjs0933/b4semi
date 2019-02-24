@@ -441,7 +441,13 @@ try {
             <p>베스트 상품</p>
             <div class="best-products-box">
             <%for(int i=0;i<best.size();i++) {%>
-                <div><div><a href="#"><img src="<%=request.getContextPath()%>/upload/product/<%=best.get(i).getImg()%>" onError="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';"></a></div><p><b><%=best.get(i).getDisplayListTitle()%></b><br><%=best.get(i).getMinPrice()%>원</p></div>
+                <div><div><a href="#"><img src="<%=request.getContextPath()%>/upload/product/<%=best.get(i).getImg()%>" onError="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';"></a></div><p><b><%=best.get(i).getDisplayListTitle()%></b>
+                  <%if(best.get(i).getDiscountRate()>0){%>
+                  <br><strike><%=best.get(i).getMinPrice()%>원</strike> → <b><%=best.get(i).getDiscountMinPrice()%>원</b>
+                  <%}else{ %>
+                  <br><%=best.get(i).getMinPrice()%>원
+                  <%}%>
+                </p></div>
              <%}%>
             </div>
         </section>
@@ -481,7 +487,13 @@ try {
             <div class="promotion-products-container">
                 <div class="promotion-products-image-track"
                 <%for(int i=0; i< promotion.size();i++){%>
-                	><div class="promotion-products-image-box"><div><a href="#"><img src="<%=request.getContextPath()%>/upload/product/<%=promotion.get(i).getImg()%>" onError="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';"></a></div><p><b><%=promotion.get(i).getDisplayListTitle()%></b><br><%=promotion.get(i).getMinPrice()%>원</p></div
+                	><div class="promotion-products-image-box"><div><a href="#"><img src="<%=request.getContextPath()%>/upload/product/<%=promotion.get(i).getImg()%>" onError="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';"></a></div><p><b><%=promotion.get(i).getDisplayListTitle()%>&nbsp;★<%=promotion.get(i).getReviewScore()%></b>
+                <%if(promotion.get(i).getDiscountRate()>0){%>
+                  <br><strike><%=promotion.get(i).getMinPrice()%>원</strike> → <b><%=promotion.get(i).getDiscountMinPrice()%>원</b>&nbsp;&nbsp;&nbsp;&nbsp;(단위:<%=promotion.get(i).getProductUnit()%>)
+                  <%}else{ %>
+                  <br><%=promotion.get(i).getMinPrice()%>원&nbsp;&nbsp;&nbsp;&nbsp;(단위:<%=promotion.get(i).getProductUnit()%>)
+                  <%}%>
+                	</p></div
                	<%}%>></div>
                 <img src="images/arrow-left-white-bold.png" class="promotion-products-slide-btn promotion-products-slide-btn--left">
                 <img src="images/arrow-right-white-bold.png" class="promotion-products-slide-btn promotion-products-slide-btn--right">
