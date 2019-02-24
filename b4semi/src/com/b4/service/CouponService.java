@@ -52,13 +52,22 @@ public class CouponService {
 	
 	
 	
+	
 	//회원 접근 쿠폰 메소드
 	//회원 기준 쿠폰 조회 - 페이징처리는 보류
-	public List<IssuedCoupon> selectCouponByMember(int memberSeq)
+	public List<IssuedCoupon> selectCouponListByMember(int cPage, int numPerPage, int memberSeq)
 	{
 		Connection conn = getConnection();
-		List<IssuedCoupon> list = dao.selectCouponByMember(conn, memberSeq);
+		List<IssuedCoupon> list = dao.selectCouponListByMember(conn, cPage, numPerPage, memberSeq);
 		close(conn);
 		return list;
+	}
+	
+	public int selectCouponCountByMember(int memberSeq)
+	{
+		Connection conn = getConnection();
+		int result = dao.selectCouponCountByMember(conn, memberSeq);
+		close(conn);
+		return result;
 	}
 }

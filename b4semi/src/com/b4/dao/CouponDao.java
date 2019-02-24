@@ -98,23 +98,30 @@ private Properties prop = new Properties();
 		return result;
 	}
 
-	public List<IssuedCoupon> selectCouponByMember(Connection conn, int memberSeq) {
+	public List<IssuedCoupon> selectCouponListByMember(Connection conn, int cPage, int numPerPage, int memberSeq) {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		List<IssuedCoupon> list = new ArrayList<>();
-		String sql = prop.getProperty("selectCouponByMember");
+		String sql = prop.getProperty("selectCouponListByMember");
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, memberSeq);
+			pstmt.setInt(2, (cPage-1)*numPerPage+1);
+			pstmt.setInt(3, cPage*numPerPage);
 			rs = pstmt.executeQuery();
 			while(rs.next())
 			{
 				IssuedCoupon ic = new IssuedCoupon();
-				//sql : couponName은 couponMaster에서 join해서 가져올 것
-				ic.setCouponName(rs.getString("couponName"));
-				ic.setUsed(rs.getBoolean("isUsed"));
-				ic.setIssueDate(rs.getTimestamp("issuedDate"));
+				ic.setCouponCode(rs.getString("couponCode"));
+				ic.setCouponSeq(rs.getInt("couponSeq"));
+				ic.setMemberSeq(rs.getInt("memberSeq"));
+				ic.setIsUsed(rs.getString("isUsed"));
+				ic.setIssueDate(rs.getTimestamp("issueDate"));
 				ic.setExpiryDate(rs.getTimestamp("expiryDate"));
+				ic.setCouponName(rs.getString("couponName"));
+				ic.setDiscountRate(rs.getDouble("discountRate"));
+				ic.setMinPrice(rs.getInt("minPrice"));
+				ic.setMaxDisPrice(rs.getInt("maxDisPrice"));
 				list.add(ic);
 			}
 		}		
@@ -130,6 +137,31 @@ private Properties prop = new Properties();
 		return list;
 	}
 	
+	public int selectCouponCountByMember(Connection conn, int memberSeq)
+	{
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int result = 0;
+		String sql = prop.getProperty("selectCouponCountByMember");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, memberSeq);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+			{
+				result = rs.getInt("CN");
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(rs);
+			close(pstmt);
+		}
+		return result;
+	}
 	
-
 }

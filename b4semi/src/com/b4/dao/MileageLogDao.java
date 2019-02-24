@@ -91,5 +91,37 @@ public class MileageLogDao {
 		return list;
 	}
 	
-	
+	public List<MileageLog> selectAllMileageLogList(Connection conn, int memberSeq)
+	{
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = prop.getProperty("selectAllMileageLogList");
+		List<MileageLog> result = new ArrayList<MileageLog>();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, memberSeq);
+			rs = pstmt.executeQuery();
+			while(rs.next())
+			{
+				MileageLog ml = new MileageLog();
+				ml.setMileageLogSeq(rs.getInt("mileageLogSeq"));
+				ml.setMemberSeq(rs.getInt("memberSeq"));
+				ml.setLogDate(rs.getTimestamp("logDate"));
+				ml.setPreMileage(rs.getInt("preMileage"));
+				ml.setNextMileage(rs.getInt("nextMileage"));
+				result.add(ml);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(pstmt);
+			close(rs);
+		}
+		return result;
+	}
+
 }

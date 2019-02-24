@@ -11,23 +11,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.b4.model.vo.IssuedCoupon;
 import com.b4.model.vo.Member;
-import com.b4.model.vo.MileageLog;
 import com.b4.model.vo.MypageHeader;
+import com.b4.service.CouponService;
 import com.b4.service.MemberService;
-import com.b4.service.MileageLogService;
 
 /**
- * Servlet implementation class MemberMileageServlet
+ * Servlet implementation class memberCouponServlet
  */
-@WebServlet("/memberMileage")
-public class MemberMileageServlet extends HttpServlet {
+@WebServlet("/memberCoupon")
+public class memberCouponServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MemberMileageServlet() {
+    public memberCouponServlet() {
         super();
 
     }
@@ -49,44 +49,35 @@ public class MemberMileageServlet extends HttpServlet {
 		MypageHeader mh = new MemberService().selectMypageHeader(loginMember);
 		request.setAttribute("mh", mh);
 		
-		//마일리지 누적 사용양
-		List<MileageLog> allList = new MileageLogService().selectAllMileageLogList(loginMember.getMemberSeq());
-		int mileageSpentSum = 0;
-		for(MileageLog ml : allList)
-		{
-			if(ml.getNextMileage()-ml.getPreMileage() < 0)
-			{
-				mileageSpentSum += (ml.getPreMileage()-ml.getNextMileage());
-			}
-		}
-		
 		//페이징 시작
-		int numPerPage;
-		try {
-			numPerPage = Integer.parseInt(request.getParameter("numPerPage"));
-		}catch(NumberFormatException e)
-		{
-			numPerPage = 10;
-		}
 		
 		int cPage;
 		try {
-			cPage = Integer.parseInt(request.getParameter("cPage"));			
-		}catch(NumberFormatException e)
+			cPage = Integer.parseInt(request.getParameter("cPage"));
+		}
+		catch(NumberFormatException e)
 		{
 			cPage = 1;
 		}
 		
-		int totalCount = new MileageLogService().selectMileageLogCount(loginMember.getMemberSeq());
-		List<MileageLog> list = new MileageLogService().selectMileageLogList(cPage, numPerPage, loginMember.getMemberSeq());
-		String pageBar = pageBar(request.getContextPath()+"/memberMileage", cPage, numPerPage, totalCount);
+		int numPerPage;
+		try {
+			numPerPage = Integer.parseInt(request.getParameter("numPerPage"));
+		}
+		catch(NumberFormatException e)
+		{
+			numPerPage = 15;
+		}
+		
+		int totalCount = new CouponService().selectCouponCountByMember(loginMember.getMemberSeq());
+		List<IssuedCoupon> list = new CouponService().selectCouponListByMember(cPage, numPerPage, loginMember.getMemberSeq());
+		String pageBar = pageBar(request.getContextPath()+"/memberCoupon", cPage, numPerPage, totalCount);
 		
 		request.setAttribute("list", list);
 		request.setAttribute("cPage", cPage);
 		request.setAttribute("pageBar", pageBar);
-		request.setAttribute("mileageSpentSum", mileageSpentSum);
 		
-		request.getRequestDispatcher("/views/member/mypage_mileage.jsp").forward(request, response);
+		request.getRequestDispatcher("/views/member/mypage_coupon.jsp").forward(request, response);
 	}
 
 	/**

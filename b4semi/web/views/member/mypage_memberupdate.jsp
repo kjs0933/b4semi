@@ -1,8 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/views/common/header.jsp"%>
-<%@ page import="com.b4.model.vo.Member"%>	
-<% 
+<%@ page import="com.b4.model.vo.Member"%>
+<%@ page import="com.b4.model.vo.MypageHeader" %>
+
+<%
+	MypageHeader mh = (MypageHeader)request.getAttribute("mh");
+	if(mh == null){mh = new MypageHeader();}
+	
 	Member lm = (Member)request.getAttribute("loginMember");
 	String memberPw = lm.getMemberPw();
 %>	
@@ -257,32 +262,32 @@
                 <div class="mypage-title">마이페이지</div>
                 <div class="my-account-info">
                     <div>
-                        <img src="images/member_grade_diamond.png">
-                        <p>다이아</p>
+                        <img src="images/<%=mh.getMemberGradeCode()%>.png">
+                        <p><%=mh.getMemberGradeName()%></p>
                     </div>
                     <span></span>
                     <div>
-                        <p><span>정우진</span> 님</p>
-                        <p>적립 9%</p>
+                        <p><span><%=mh.getMemberName()%></span> 님</p>
+                        <p><%=mh.getGradeRate()*100%>% 적립</p>
                         <p>무료배송</p>
                     </div>
                     <span></span>
                     <div>
                         <p>적립금</p>
-                        <a href="#">0 원</a>
+                        <a href="<%=request.getContextPath()%>/memberMileage"><%=mh.getMemberMileage()%> 원</a>
                     </div>
                     <span></span>
                     <div>
                         <p>쿠폰</p>
-                        <a href="#">0 개</a>
+                        <a href="<%=request.getContextPath() %>/memberCoupon"><%=mh.getCouponCount()%> 개</a>
                     </div>
                 </div>
             </div>
             <div class="mypage-tab">
                 <div><a href="<%=request.getContextPath() %>/views/member/mypage_orderlist.jsp">주문내역</a></div>
                 <div><a href="<%=request.getContextPath() %>/views/member/mypage_review_before.jsp">상품후기</a></div>
-                <div><a href="<%=request.getContextPath() %>/views/member/mypage_mileage.jsp">적립금</a></div>
-                <div><a href="<%=request.getContextPath() %>/views/member/mypage_coupon.jsp">쿠폰</a></div>
+                <div><a href="<%=request.getContextPath() %>/memberMileage">적립금</a></div>
+                <div><a href="<%=request.getContextPath() %>/memberCoupon">쿠폰</a></div>
                 <div class="mypage-tab-current"><a href="<%=request.getContextPath() %>/memberUpdate">개인정보수정</a></div>
             </div>
             <div class="mypage-body">

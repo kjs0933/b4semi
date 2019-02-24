@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.b4.model.vo.Member;
+import com.b4.model.vo.MypageHeader;
+import com.b4.service.MemberService;
 
 /**
  * Servlet implementation class MemberUpdateServlet
@@ -41,6 +43,9 @@ public class MemberUpdateServlet extends HttpServlet {
 		}
 		else
 		{
+			//각 mypage 위에 멤버 기본정보 가져오는 트랜잭션
+			MypageHeader mh = new MemberService().selectMypageHeader(loginMember);
+			request.setAttribute("mh", mh);
 			request.setAttribute("loginMember", loginMember);
 			request.getRequestDispatcher("/views/member/mypage_memberupdate.jsp").forward(request, response);
 		}

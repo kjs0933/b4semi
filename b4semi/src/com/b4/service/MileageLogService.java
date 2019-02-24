@@ -30,5 +30,14 @@ public class MileageLogService {
 		close(conn);
 		return result;
 	}
+	
+	//회원별 마일리지 로그 총 리스트 조회
+	public List<MileageLog> selectAllMileageLogList(int memberSeq)
+	{
+		Connection conn = getConnection();
+		List<MileageLog> result = dao.selectAllMileageLogList(conn, memberSeq);
+		close(conn);
+		return result;
+	}
 
 }

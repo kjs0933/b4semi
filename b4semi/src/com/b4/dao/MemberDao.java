@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 import java.util.Properties;
 
 import com.b4.model.vo.Member;
+import com.b4.model.vo.MypageHeader;
 
 public class MemberDao {
 	
@@ -167,6 +168,42 @@ public class MemberDao {
 			close(pstmt);
 		}
 		return result;
+	}
+	
+	public MypageHeader selectMypageHeader(Connection conn, Member m)
+	{
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		MypageHeader result = null;
+		String sql = prop.getProperty("selectMypageHeader");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, m.getMemberSeq());
+			pstmt.setInt(2, m.getMemberSeq());
+			rs = pstmt.executeQuery();
+			if(rs.next())
+			{
+				result = new MypageHeader();
+				result.setMemberSeq(rs.getInt("memberSeq"));
+				result.setMemberName(rs.getString("memberName"));
+				result.setMemberGradeCode(rs.getString("memberGradeCode"));
+				result.setMemberGradeName(rs.getString("memberGradeName"));
+				result.setMemberMileage(rs.getInt("memberMileage"));
+				result.setGradeRate(rs.getDouble("gradeRate"));
+				result.setCouponCount(rs.getInt("couponCount"));
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(pstmt);
+			close(rs);
+		}
+		return result;
+		
 	}
 
 

@@ -9,6 +9,7 @@ import java.sql.Connection;
 
 import com.b4.dao.MemberDao;
 import com.b4.model.vo.Member;
+import com.b4.model.vo.MypageHeader;
 
 public class MemberService {
 	
@@ -60,6 +61,15 @@ public class MemberService {
 		if(result>0) commit(conn);
 		else rollback(conn);
 		return result;
+	}
+	
+	//마이페이지 헤더 정보 가져오기
+	public MypageHeader selectMypageHeader(Member m)
+	{
+		Connection conn = getConnection();
+		MypageHeader mh = dao.selectMypageHeader(conn, m);
+		close(conn);
+		return mh;
 	}
 
 }

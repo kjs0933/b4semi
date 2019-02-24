@@ -2,9 +2,15 @@
     pageEncoding="UTF-8"%>
 <%@ include file="/views/common/header.jsp"%>
 <%@ page import="com.b4.model.vo.MileageLog"%>
+<%@ page import="com.b4.model.vo.MypageHeader"%>
+<%@ page import="static common.DateFormatTemplate.getTillMinKorLoc"%>
 <%@ page import="java.util.*" %>
 
 <%
+	MypageHeader mh = (MypageHeader)request.getAttribute("mh");
+	if(mh == null){mh = new MypageHeader();}
+	
+	int mileageSpentSum = (int)request.getAttribute("mileageSpentSum");
 	List<MileageLog> list = (List<MileageLog>)request.getAttribute("list");
 	String pageBar = (String)request.getAttribute("pageBar");
 	int cPage = (int)request.getAttribute("cPage");
@@ -215,7 +221,7 @@
             justify-content: center;
         }
 
-        .mypage-mileage-header > div:nth-of-type(1){flex: 3 1 0;}
+        .mypage-mileage-header > div:nth-of-type(1){flex: 2 1 0;}
         .mypage-mileage-header > div:nth-of-type(2){flex: 1 1 0;}
         .mypage-mileage-header > div:nth-of-type(3){flex: 1 1 0;}
         .mypage-mileage-header > div:nth-of-type(4){flex: 1 1 0;}
@@ -237,7 +243,7 @@
 
         .mypage-mileage-log{border-bottom: 1px solid #ccc;}
 
-        .mypage-mileage-cols > div:nth-of-type(1){flex: 3 1 0;}
+        .mypage-mileage-cols > div:nth-of-type(1){flex: 2 1 0;}
         .mypage-mileage-cols > div:nth-of-type(2){flex: 1 1 0;}
         .mypage-mileage-cols > div:nth-of-type(3){flex: 1 1 0;}
         .mypage-mileage-cols > div:nth-of-type(4){flex: 1 1 0;}
@@ -296,32 +302,32 @@
                 <div class="mypage-title">마이페이지</div>
                 <div class="my-account-info">
                     <div>
-                        <img src="images/member_grade_diamond.png">
-                        <p>다이아</p>
+                        <img src="images/<%=mh.getMemberGradeCode()%>.png">
+                        <p><%=mh.getMemberGradeName()%></p>
                     </div>
                     <span></span>
                     <div>
-                        <p><span>정우진</span> 님</p>
-                        <p>적립 9%</p>
+                        <p><span><%=mh.getMemberName()%></span> 님</p>
+                        <p><%=mh.getGradeRate()*100%>% 적립</p>
                         <p>무료배송</p>
                     </div>
                     <span></span>
                     <div>
                         <p>적립금</p>
-                        <a href="#">0 원</a>
+                        <a href="#"><%=mh.getMemberMileage()%> 원</a>
                     </div>
                     <span></span>
                     <div>
                         <p>쿠폰</p>
-                        <a href="#">0 개</a>
+                        <a href="#"><%=mh.getCouponCount()%> 개</a>
                     </div>
                 </div>
             </div>
             <div class="mypage-tab">
                 <div><a href="<%=request.getContextPath() %>/views/member/mypage_orderlist.jsp">주문내역</a></div>
                 <div><a href="<%=request.getContextPath() %>/views/member/mypage_review_before.jsp">상품후기</a></div>
-                <div class="mypage-tab-current"><a href="<%=request.getContextPath() %>/views/member/mypage_mileage.jsp">적립금</a></div>
-                <div><a href="<%=request.getContextPath() %>/views/member/mypage_coupon.jsp">쿠폰</a></div>
+                <div class="mypage-tab-current"><a href="<%=request.getContextPath() %>/memberMileage">적립금</a></div>
+                <div><a href="<%=request.getContextPath() %>/memberCoupon">쿠폰</a></div>
                 <div><a href="<%=request.getContextPath() %>/memberUpdate">개인정보수정</a></div>
             </div>
             <div class="mypage-body">
@@ -330,13 +336,13 @@
                         <p><span>적립금</span>보유하고 계신 적립금의 내역을 한 눈에 확인 하실수 있습니다.</p>
                     </div>
                     <div class="mypage-mileage-info">
-                    <div><p>현재적립금</p><span>원</span></div>
-                    <div><p>누적사용금액</p><span>원</span></div> 
+                    <div><p>현재적립금</p><span><%=mh.getMemberMileage()%> 원</span></div>
+                    <div><p>누적사용금액</p><span><%=mileageSpentSum%>원</span></div> 
                     </div>
                     
                     <div class="mypage-mileage-log">
                         <div class="mypage-mileage-header">
-                            <div>날짜</div>
+                            <div>시간</div>
                             <div>내용</div>
                             <div>금액</div>
                             <div>이전</div>
@@ -348,7 +354,7 @@
                     <%} else {
                		for (MileageLog ml : list) {%>
                         <div class="mypage-mileage-cols">
-                            <div><%=ml.getLogDate()%></div>
+                            <div><%=getTillMinKorLoc(ml.getLogDate())%></div>
                             <div><%=ml.getLogTypeName()%></div>
                             <div><%=ml.getNextMileage()-ml.getPreMileage()%> 원</div>
                             <div><%=ml.getPreMileage()%> 원</div>
