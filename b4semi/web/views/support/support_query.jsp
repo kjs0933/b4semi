@@ -7,6 +7,7 @@
             display: flex;
             font-family: 'Noto Sans KR';
             width: 1024px;
+            margin-top: 100px;
         }
 
         .support-wrapper > div:first-of-type
@@ -165,7 +166,7 @@
             font-size: 12px;
         }
 
-        .pagebar > div
+        .pagebar div
         {
             width: 33px;
             height: 33px;
@@ -177,10 +178,22 @@
             cursor: pointer;
         }
 
-        .pagebar > div:first-of-type
+        .pagebar div:first-of-type
         {
             border-left: 1px solid rgb(220, 220, 220);
-        }        
+        }
+        
+        .pagebar a
+        {
+        	display: flex;
+        	width: 100%;
+        	height: 100%;
+        	align-items: center;
+        	justify-content: center;
+        	text-decoration: none;
+        	color: black;
+        }   
+             
     </style>
     <section>
         <div class="support-wrapper">
@@ -189,11 +202,11 @@
                     <p>고객센터</p>
                 </div>
                 <div class="support-nav">
-                    <div><a href="">공지사항<img src="images/arrow_right_black.png"></a>
+                    <div><a href="">공지사항<img src="<%=request.getContextPath() %>/images/arrow_right_black.png"></a>
                     </div>
-                    <div class="current-tab"><a href="#">1:1문의<img src="images/arrow_right_black.png"></a>
+                    <div class="current-tab"><a href="#">1:1문의<img src="<%=request.getContextPath() %>/images/arrow_right_black.png"></a>
                     </div>
-                    <div><a href="">상품제안<img src="images/arrow_right_black.png"></a>
+                    <div><a href="">상품제안<img src="<%=request.getContextPath() %>/images/arrow_right_black.png"></a>
                     </div>
                 </div>
             </div>
@@ -215,15 +228,88 @@
                             <div>정우진</div>
                             <div>2019-02-18</div>
                         </div>
+                        <div class="query-board-content">
+                        	<div>끄악</div>
+                        	<div>
+                        		<button>수정</button>
+                        		<button>삭제</button>
+                        	</div>
+                        </div>
+                        <div class="query-board-cols">
+                            <div>1</div>
+                            <div>상품에서 쥐가 나왔어요</div>
+                            <div>정우진</div>
+                            <div>2019-02-18</div>
+                        </div>
+                        <div class="query-board-content">
+                        	<div>끄악</div>
+                        	<div>
+                        		<button>수정</button>
+                        		<button>삭제</button>
+                        	</div>
+                        </div>
+                        <div class="query-board-cols">
+                            <div>1</div>
+                            <div>상품에서 쥐가 나왔어요</div>
+                            <div>정우진</div>
+                            <div>2019-02-18</div>
+                        </div>
+                        <div class="query-board-content">
+                        	<div>끄악</div>
+                        	<div>
+                        		<button>수정</button>
+                        		<button>삭제</button>
+                        	</div>
+                        </div>
+                        <div class="query-board-cols">
+                            <div>1</div>
+                            <div>상품에서 쥐가 나왔어요</div>
+                            <div>정우진</div>
+                            <div>2019-02-18</div>
+                        </div>
+                        <div class="query-board-content">
+                        	<div>끄악</div>
+                        	<div>
+                        		<button>수정</button>
+                        		<button>삭제</button>
+                        	</div>
+                        </div>
+                        <div class="query-board-cols">
+                            <div>1</div>
+                            <div>상품에서 쥐가 나왔어요</div>
+                            <div>정우진</div>
+                            <div>2019-02-18</div>
+                        </div>
+                        <div class="query-board-content">
+                        	<div>끄악</div>
+                        	<div>
+                        		<button>수정</button>
+                        		<button>삭제</button>
+                        	</div>
+                        </div>
+                        <div class="query-board-cols">
+                            <div>1</div>
+                            <div>상품에서 쥐가 나왔어요</div>
+                            <div>정우진</div>
+                            <div>2019-02-18</div>
+                        </div>
+                        <div class="query-board-content">
+                        	<div>끄악</div>
+                        	<div>
+                        		<button>수정</button>
+                        		<button>삭제</button>
+                        	</div>
+                        </div>
+                        
                     </div>
                     <div class="pagebar">
-                        <div><img src="image/board-arrow-left.png"></div>
+                        <div><img src="<%=request.getContextPath() %>/images/board-arrow-left.png"></div>
                         <div>1</div>
                         <div>2</div>
                         <div>3</div>
                         <div>4</div>
                         <div>5</div>
-                        <div><img src="image/board-arrow-right.png"></div>
+                        <div><img src="<%=request.getContextPath() %>/images/board-arrow-right.png"></div>
                     </div>
                 </div>
             </div>

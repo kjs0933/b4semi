@@ -32,6 +32,7 @@ public class NoticeViewServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		request.setCharacterEncoding("UTF-8");
 		Member loginMember=(Member)request.getSession(false).getAttribute("loginMember");
 		if(loginMember==null||!"admin".equals(loginMember.getMemberId()))
 		{
@@ -45,7 +46,7 @@ public class NoticeViewServlet extends HttpServlet {
 		Notice n=new NoticeService().NoticeOne(no);
 		
 		request.setAttribute("notice", n);
-		request.getRequestDispatcher("/views/notice/noticeView.jsp").forward(request, response);
+		request.getRequestDispatcher("/views/support/support_notice_view.jsp").forward(request, response);
 	}
 
 	/**
