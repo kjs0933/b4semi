@@ -78,12 +78,16 @@ public class CartDao {
 		ResultSet rs = null;
 		PreparedStatement pstmt = null;
 		String sql = prop.getProperty("getDataByDPOption");
+		int pcount = Integer.parseInt(amount);
+		if(pcount <=0)
+		{
+			return null;
+		}
 
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, Integer.parseInt(dpseq));
 			pstmt.setString(2, pcode);
-			int pcount = Integer.parseInt(amount);
 			rs = pstmt.executeQuery();
 			if(rs.next())
 			{
@@ -168,8 +172,7 @@ public class CartDao {
 			pstmt.setInt(1, memberSeq);
 			pstmt.setString(2, pcode);
 			pstmt.setInt(3, dpseq);
-			pstmt.executeUpdate();	
-			result = pstmt.executeUpdate();			
+			result = pstmt.executeUpdate();	
 		}
 		catch(SQLException e)
 		{

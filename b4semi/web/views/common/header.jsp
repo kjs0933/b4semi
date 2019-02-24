@@ -188,7 +188,7 @@
         	position: relative;
         }
         
-		#my-account-btn > span
+		#my-account-btn
 		{
 			font-size: 15px;
 			font-weight: bold;
@@ -202,7 +202,7 @@
             height: auto;
             border: 1px solid #ccc;
             font-size: 13px;
-            left: -74px;
+            left: -81px;
             top : 30px;
             background-color: white;
         }
@@ -244,6 +244,10 @@
         {
             position: relative;
             cursor: pointer;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
         }
         
 /*         고객지원 토글 박스        */
@@ -252,7 +256,8 @@
 		.header-support-wrapper
         {
             position: relative;
-
+			width: 100%;
+			height: 100%;
         }
 
         .support-box
@@ -263,8 +268,8 @@
             border: 1px solid #ccc;
             font-size: 13px;
             position: absolute;
-            left: -17px;
-            top: 39px;
+            left: -10px;
+            top: 55px;
             
             background-color: white;
         }
@@ -304,6 +309,10 @@
         {
             position: relative;
             cursor: pointer;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
         }
 
 
@@ -650,6 +659,16 @@
             display: block;
             color: black;
         }
+        
+                
+        .signin-frm a
+        {
+        	text-decoration: none;
+        	color: gray;
+        }
+        
+        
+        
 
         .signin-frm #saveId
         {
@@ -695,6 +714,7 @@
         {
         	position: absolute !important;
         }
+
 
         .signin-frm > p
         {
@@ -796,14 +816,14 @@
                 <li id="login-btn">로그인</li>
                 <% } else { %>
         		<li></li>
-        		<li id="my-account-btn"><span><%=loginMember.getMemberName()%></span>님
+        		<li><span id="my-account-btn"><%=loginMember.getMemberName()%></span>님
 			        <div class="my-account-wrapper">
 			        	<div class="my-account-box">
 				           	<ul>
 				               	<li><a href="<%=request.getContextPath() %>/views/member/mypage_orderlist.jsp">주문내역</a></li>
 				               	<li><a href="<%=request.getContextPath() %>/views/member/mypage_review_before.jsp">상품리뷰</a></li>
-				               	<li><a href="<%=request.getContextPath() %>/views/member/mypage_mileage.jsp">적립금</a></li>
-				               	<li><a href="<%=request.getContextPath() %>/views/member/mypage_coupon.jsp">쿠폰</a></li>
+				               	<li><a href="<%=request.getContextPath() %>/memberMileage">마일리지</a></li>
+				               	<li><a href="<%=request.getContextPath() %>/memberCoupon">쿠폰</a></li>
 				               	<li><a href="<%=request.getContextPath() %>/memberUpdate">계정정보</a></li>
 				               	<li><a href="<%=request.getContextPath()%>/logout">로그아웃</a></li>
 				           	</ul>

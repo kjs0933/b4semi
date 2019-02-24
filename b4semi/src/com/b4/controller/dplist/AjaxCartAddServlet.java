@@ -20,20 +20,21 @@ import com.google.gson.Gson;
 @WebServlet("/cartAdd.do")
 public class AjaxCartAddServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public AjaxCartAddServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public AjaxCartAddServlet() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
+		CartService cart= new CartService();
 		Member m=null;
 		try {
 			m = (Member)session.getAttribute("loginMember");
@@ -42,60 +43,124 @@ public class AjaxCartAddServlet extends HttpServlet {
 		{
 			e.printStackTrace();
 		}
-		
-		int dpseq;
+
+		boolean multi = false;
+		int multiSize = 0;
+		int dpseq=0;
+		String pcode=null;
+		String[] dpseqs=null;
+		String[] pcodes=null;
+		String[] changes=null;
 		int[] result= {0,0};
-		try {
-			dpseq = Integer.parseInt(request.getParameter("dpseq"));
-		}
-		catch(NumberFormatException e)
+		if(request.getParameter("multi") == null || request.getParameter("multi").length() ==0)
 		{
-			return;
+			multi=false;
 		}
-		String pcode = request.getParameter("pcode");
-		if(pcode==null)
+		else
 		{
-			return;
+			multi=true;
 		}
+
 		int change=1;
 		try {
 			change = Integer.parseInt(request.getParameter("change"));
 		}
 		catch(NumberFormatException e)
 		{}
-		
-		CartService cart= new CartService();
+
+
+		if(multi)
+		{
+			try {
+				dpseqs = request.getParameter("dpseqs").split(",");
+				pcodes = request.getParameter("pcodes").split(",");
+				changes = request.getParameter("changes").split(",");
+				multiSize = Math.min(dpseqs.length, pcodes.length);
+			}
+			catch(Exception e)
+			{
+				return;
+			}
+			if(multiSize<=0)
+			{
+				return;
+			}
+
+		}
+		else
+		{
+			try {
+				dpseq = Integer.parseInt(request.getParameter("dpseq"));
+			}
+			catch(NumberFormatException e)
+			{
+				return;
+			}
+			pcode = request.getParameter("pcode");
+			if(pcode==null)
+			{
+				return;
+			}
+		}
+
 		if(m!=null) {
-			
-			//현재 데이터가 있으면 update, 없으면 insert
-			int amount = cart.getAmount(m.getMemberSeq(),dpseq,pcode);
-			int resultQuery=0;
-			if(amount>0 && amount+change>0)
+
+			for(int n=0; n< Math.max(multiSize,1); n++)
 			{
-				resultQuery = cart.updateCart(m.getMemberSeq(),dpseq,pcode,amount+change);
+
+				if(multi)
+				{	
+					try {
+						dpseq = Integer.parseInt(dpseqs[n]);
+					}
+					catch(NumberFormatException e)
+					{
+						continue;
+					}
+					pcode = pcodes[n];
+					if(pcode==null)
+					{
+						continue;
+					}
+					try {
+						change = Integer.parseInt(changes[n]);
+					}
+					catch(Exception e)
+					{}
+				}
+
+
+				//현재 데이터가 있으면 update, 없으면 insert
+				int amount = cart.getAmount(m.getMemberSeq(),dpseq,pcode);
+				int resultQuery=0;
+				if(amount>0 && amount+change>0)
+				{
+					resultQuery = cart.updateCart(m.getMemberSeq(),dpseq,pcode,amount+change);
+				}
+				else if(change >0)
+				{
+					resultQuery = cart.insertCart(m.getMemberSeq(),dpseq,pcode,change);
+				}
+				else if(amount >0)
+				{
+					resultQuery = cart.deleteOne(m.getMemberSeq(),dpseq,pcode);
+				}
+				
+				if(resultQuery==0)
+				{
+					System.out.println("헐 장바구니 등록 에러");
+				}
+
+				result[0] = cart.getKindCount(m.getMemberSeq());
+				result[1] = amount+change;
 			}
-			else if(change >0)
-			{
-				resultQuery = cart.insertCart(m.getMemberSeq(),dpseq,pcode,change);
-			}
-			else if(amount >0)
-			{
-				resultQuery = cart.deleteOne(m.getMemberSeq(),dpseq,pcode);
-			}
-			if(resultQuery==0)
-			{
-				System.out.println("헐 장바구니 등록 에러");
-			}
-			
-			result[0] = cart.getKindCount(m.getMemberSeq());
-			result[1] = amount+change;
 		}
 		else
 		{
 			//쿠키 가져오기
-			String cookieString=null;
+			String cookieString="";
 			Cookie[] cookies=request.getCookies();
-			
+
 			if(cookies != null)
 			{
 				for(Cookie c : cookies)
@@ -106,64 +171,111 @@ public class AjaxCartAddServlet extends HttpServlet {
 					}
 				}
 			}
-			if(cookieString == null || cookieString.length() ==0)
+			
+			//여기서부터 반복문
+			for(int n=0; n< Math.max(multiSize,1); n++)
 			{
-				Cookie cartSave = new Cookie("cartSave", dpseq+"&"+pcode+"&"+change);
-				cartSave.setMaxAge(14*24*60*60);
-				response.addCookie(cartSave);
-				
-				result[0] = change;
-				result[1] = change;
-			}
-			else
-			{
-				
-				String[] cartData = cookieString.split("/");
-				String[][] data = new String[cartData.length][];
-				boolean added = false;
-				for(int i=0; i<cartData.length; i++)
-				{
-					data[i] = cartData[i].split("\\&");
-					if(String.valueOf(dpseq).equals(data[i][0]) && pcode.equals(data[i][1]))
-					{
-						result[0] = cartData.length;
-						result[1] = Integer.parseInt(data[i][2])+change;
-						data[i][2] = String.valueOf(result[1]); 
-						added = true;
+
+				if(multi)
+				{	
+					try {
+						dpseq = Integer.parseInt(dpseqs[n]);
 					}
+					catch(NumberFormatException e)
+					{
+						continue;
+					}
+					pcode = pcodes[n];
+					if(pcode==null)
+					{
+						continue;
+					}
+					try {
+						change = Integer.parseInt(changes[n]);
+					}
+					catch(Exception e)
+					{}
 				}
-				
-				if(added)
+			
+				if(cookieString.length() == 0)
 				{
-					cookieString ="";
-					for(int i=0; i<data.length; i++)
+					if(change>0)
 					{
-						cartData[i] = String.join("&",data[i]);
+						cookieString = dpseq+"&"+pcode+"&"+change;
+						if(!multi)
+						{
+							result[0] = change;
+							result[1] = change;
+						}
 					}
-					cookieString = String.join("/", cartData);
-					
-					Cookie cartSave = new Cookie("cartSave", cookieString);
-					cartSave.setMaxAge(14*24*60*60);
-					response.addCookie(cartSave);
-					
 				}
 				else
 				{
-					cookieString += "/"+dpseq+"&"+pcode+"&"+change;
-					result[0] = cartData.length+change;
-					result[1] = change;
-					
-					Cookie cartSave = new Cookie("cartSave", cookieString);
-					cartSave.setMaxAge(14*24*60*60);
-					response.addCookie(cartSave);
+					String[] cartData = cookieString.split("/");
+					String[][] data = new String[cartData.length][];
+					boolean added = false;
+					int count=0;
+					for(int i=0; i<cartData.length; i++)
+					{
+						data[i] = cartData[i].split("\\&");
+						if(String.valueOf(dpseq).equals(data[i][0]) && pcode.equals(data[i][1]))
+						{
+							result[0] = cartData.length;
+							count = Integer.parseInt(data[i][2])+change;
+							if(count >= 0)
+							{
+								result[1] = count;
+								data[i][2] = String.valueOf(result[1]); 
+							}
+							else
+							{
+								result[1] = 0;
+								data[i][2] = String.valueOf(result[1]);
+							}
+							added = true;
+						}
+					}
+	
+					if(added)
+					{
+						cookieString ="";
+						for(int i=0; i<data.length; i++)
+						{
+							if(Integer.parseInt(data[i][2])>0)
+							{
+								cookieString += data[i][0] + "&" + data[i][1] + "&" + data[i][2];
+								if(i<data.length-1)
+								{
+									cookieString +="/";
+								}
+							}
+						}
+					}
+					else
+					{
+						if(change>0)
+						{
+							cookieString += "/"+dpseq+"&"+pcode+"&"+change;
+							result[0] = cartData.length+change;
+							result[1] = change;
+						}
+					}
 				}
 			}
+			
+			Cookie cartSave = new Cookie("cartSave", cookieString);
+			cartSave.setMaxAge(14*24*60*60);
+			response.addCookie(cartSave);
 		}
-		
-		//카트에 담긴 수량을 전송
-		response.setContentType("application/json;charset=UTF-8");
-		new Gson().toJson(result, response.getWriter());
-		
+
+
+		if(!multi)
+		{
+			//카트에 담긴 수량을 전송
+			response.setContentType("application/json;charset=UTF-8");
+			new Gson().toJson(result, response.getWriter());
+		}
+
 	}
 
 	/**
