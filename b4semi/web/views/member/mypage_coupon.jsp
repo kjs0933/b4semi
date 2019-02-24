@@ -1,6 +1,29 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/views/common/header.jsp"%>
+<%@ page import="java.util.*" %>
+<%@ page import="com.b4.model.vo.MypageHeader" %>
+<%@ page import="com.b4.model.vo.IssuedCoupon" %>
+<%@ page import="static common.DateFormatTemplate.getTillDate" %>
+
+<%
+	MypageHeader mh = (MypageHeader)request.getAttribute("mh");
+	if(mh == null){mh = new MypageHeader();}
+	
+	List<IssuedCoupon> list = (List<IssuedCoupon>)request.getAttribute("list");
+	String pageBar = (String)request.getAttribute("pageBar");
+	int cPage = (int)request.getAttribute("cPage");
+	
+	int countAvailable=0;
+	for(IssuedCoupon ic : list)
+	{
+		if(ic.getExpiryDate().getTime() > System.currentTimeMillis() && ic.getIsUsed().equals("N"))
+		{
+			countAvailable++;
+		}
+	}
+	
+%>
 
     <style>
         .mypage-wrapper
@@ -206,6 +229,7 @@
         .coupon-table-cols > div
         {
             display: flex;
+            flex-flow: column nowrap;
             align-items: center;
             justify-content: center;
         }
@@ -216,7 +240,9 @@
         .coupon-table-cols > div:nth-of-type(2){flex: 1 1 0;}
         .coupon-table-cols > div:nth-of-type(3){flex: 1 1 0;}
         .coupon-table-cols > div:nth-of-type(4){flex: 1 1 0;}
-    
+        
+        .coupon-table-cols > div > div:nth-of-type(2){font-size: 13px;}
+        
         .pagebar img
         {
             width: 40%;
@@ -255,32 +281,32 @@
                 <div class="mypage-title">마이페이지</div>
                 <div class="my-account-info">
                     <div>
-                        <img src="images/member_grade_diamond.png">
-                        <p>다이아</p>
+                        <img src="images/<%=mh.getMemberGradeCode()%>.png">
+                        <p><%=mh.getMemberGradeName()%></p>
                     </div>
                     <span></span>
                     <div>
-                        <p><span>정우진</span> 님</p>
-                        <p>적립 9%</p>
+                        <p><span><%=mh.getMemberName()%></span> 님</p>
+                        <p><%=mh.getGradeRate()*100%>% 적립</p>
                         <p>무료배송</p>
                     </div>
                     <span></span>
                     <div>
                         <p>적립금</p>
-                        <a href="#">0 원</a>
+                        <a href="<%=request.getContextPath()%>/memberMileage"><%=mh.getMemberMileage()%> 원</a>
                     </div>
                     <span></span>
                     <div>
                         <p>쿠폰</p>
-                        <a href="#">0 개</a>
+                        <a href="<%=request.getContextPath() %>/memberCoupon"><%=mh.getCouponCount()%> 개</a>
                     </div>
                 </div>
             </div>
             <div class="mypage-tab">
                 <div><a href="<%=request.getContextPath() %>/views/member/mypage_orderlist.jsp">주문내역</a></div>
                 <div><a href="<%=request.getContextPath() %>/views/member/mypage_review_before.jsp">상품후기</a></div>
-                <div><a href="<%=request.getContextPath() %>/views/member/mypage_mileage.jsp">적립금</a></div>
-                <div class="mypage-tab-current"><a href="<%=request.getContextPath() %>/views/member/mypage_coupon.jsp">쿠폰</a></div>
+                <div><a href="<%=request.getContextPath() %>/memberMileage">적립금</a></div>
+                <div class="mypage-tab-current"><a href="<%=request.getContextPath() %>/memberCoupon">쿠폰</a></div>
                 <div><a href="<%=request.getContextPath() %>/memberUpdate">개인정보수정</a></div>
             </div>
             <div class="mypage-body">
@@ -292,31 +318,31 @@
                         <ul>
                             <li>쿠폰은 적용 가능한 상품이 따로 적용되어 있는 경우 해당 상품 구매 시에만 사용이 가능합니다.</li>
                         </ul>
-                        <span>사용가능쿠폰: 0 장</span>
+                        <span>사용가능쿠폰: <%=String.valueOf(countAvailable)%> 장</span>
                     </div>
                     <div class="coupon-table">
                         <div class="coupon-table-header">
                             <div>쿠폰명</div>
                             <div>기능</div>
-                            <div>사용가능기간</div>
-                            <div>사용가능여부</div>
+                            <div>유효기간</div>
+                            <div>가용여부</div>
                         </div>
+                        <%if(list.size() != 0){
+                        	for(IssuedCoupon ic : list)
+                        	{ %>
                         <div class="coupon-table-cols">
-                            <div>생일쿠폰</div>
-                            <div>10%할인</div>
-                            <div>2019-02-01 ~ 2019-02-28</div>
-                            <div>가능</div>
-                        </div>
+                            <div>
+                                <div><%=ic.getCouponName()%></div>
+                                <div><%=ic.getMinPrice() != 0 ? ic.getMinPrice()+" 원 이상" : "" %></div>
+                            </div>
+                            <div><%=ic.getDiscountRate() != 0 ? (ic.getDiscountRate() != 1 ? (int)(ic.getDiscountRate()*100)+"% 할인" : ic.getMaxDisPrice()+"원 할인") : "배송료 무료" %></div>
+                            <div><%=getTillDate(ic.getIssueDate())%> ~ <%=getTillDate(ic.getExpiryDate())%></div>
+                            <div><%=ic.getExpiryDate().getTime() > System.currentTimeMillis() ? (ic.getIsUsed().equals("Y") ? "사용후" : "사용전" ) : "만료"%></div>
+                        </div>	
+                          <%}
+                        } %>
                     </div>
-                    <div class="pagebar">
-                        <div><img src="images/board-arrow-left.png"></div>
-                        <div>1</div>
-                        <div>2</div>
-                        <div>3</div>
-                        <div>4</div>
-                        <div>5</div>
-                        <div><img src="images/board-arrow-right.png"></div>
-                    </div>
+					<%=pageBar %>
                 </div>
             </div>
         </div>

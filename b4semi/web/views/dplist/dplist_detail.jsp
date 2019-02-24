@@ -172,12 +172,20 @@
         {
             display: flex;
             justify-content: space-between;
-            padding: 10px 10px 5px 10px;
+            padding: 10px;
         }
 
-        .selected-option > div:nth-of-type(1){flex: 4 1 0;}
-        .selected-option > div:nth-of-type(2){flex: 1 1 0;}
-        .selected-option > div:nth-of-type(3){flex: 1 1 0; text-align: right;}
+        .selected-option > div
+        {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .selected-option > div:nth-of-type(1){flex: 8 1 0;}
+        .selected-option > div:nth-of-type(2){flex: 2 1 0;}
+        .selected-option > div:nth-of-type(3){flex: 2 1 0;justify-content: flex-end;}
+        .selected-option > div:nth-of-type(4){width: 20px; margin-left: 10px;justify-content: center;}
 
 
 
@@ -313,6 +321,9 @@
             background-color: white !important;
             border-bottom: none !important;
         }
+
+        .delete-selection img {cursor: pointer;}
+
     </style>
 
 <section>
@@ -370,15 +381,6 @@
                         
                         <!-- 옵션태그 선택시 append되는 부분{ -->
 
-                        <div class="selected-option">
-                            <div>[간편 샐러드] 더미 샐러드(수량변경X)</div>
-                            <div class="option-quantity-controller">
-                                <div><img src="images/arrow_left_black.png"></div>
-                                <input type="text" name="op-quantity-5" id="op-quantity-5" value="1">
-                                <div><img src="images/arrow_right_black.png"></div>
-                            </div>
-                            <div>1,900 원</div>
-                        </div>
 
                          <!-- }옵션태그 선택시 append되는 부분 -->
 
@@ -448,25 +450,25 @@
     </div>
 </section>
 
-
 <script>
+
     //셀렉트 태그 옵션 선택시 화면에 추가
     const optionSelectEle = $('.purchase-option');
     const selectedOptionsDisplay = $('.selected-options-display');    
     
     $(() => {
         optionSelectEle.on('change', (e) => {
-            //옵션의 인덱스값으로 상품 정보 접근(ArrayList?)
-            const optionIndex = $(e.target).val();
-
             //해당 인덱스의 옵션이 이미 추가되어 있으면 메시지 출력 후 리턴
-            const selectedOption = $('.selected-option'); // 화면에 추가된 옵션들 선택
-
-            if(selectedOption.hasClass(optionIndex))
+            if($('.selected-option').hasClass($(e.target).val()))
             {
                 alert('이미 선택된 상품입니다.');
-                return false;
+                return;
             }
+
+            //옵션의 인덱스값으로 상품 정보 접근(ArrayList?)
+            const optionIndex = $(e.target).val();
+            const selectedOption = $('.selected-option'); // 화면에 추가된 옵션들 선택
+
             
             const newTag 
             = '<div class="selected-option '+optionIndex+'">'
@@ -477,6 +479,7 @@
             +       '<div><img src="images/arrow_right_black.png"></div>'
             +   '</div>'
             +   '<div>가격</div>'
+            +   '<div class="delete-selection"><img src="images/btn_close_black.png"></div>'
             + '</div>';
             
             selectedOptionsDisplay.append(newTag);
@@ -501,13 +504,18 @@
                 const target = $(e.target).parent().prev();
                 target.val(parseInt(target.val())+1);
             });
+
+            //버튼 클릭시 해당 옵션 화면에서 삭제
+            const deleteBtn = $('.delete-selection');
+            deleteBtn.off('click');
+            deleteBtn.on('click', (e) =>{
+                $(e.target).parents('.selected-option').remove();
+            });
         });
 
         //단일 상품 수량 조정 로직
         const leftBtn = $('.quantity-controller > input').prev().children();
         const rightBtn = $('.quantity-controller > input').next().children();
-
-
         $(() => {
             leftBtn.on('click', (e) => {
                 const target = leftBtn.parent().next()
@@ -520,6 +528,7 @@
                 target.val(parseInt(target.val())+1);
             });
         });
+
     });
 </script>
 

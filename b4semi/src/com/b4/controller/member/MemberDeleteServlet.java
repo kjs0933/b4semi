@@ -45,7 +45,7 @@ public class MemberDeleteServlet extends HttpServlet {
 		else {msg = "회원탈퇴에 실패하였습니다."; loc="/memberUpdate";}		
 		request.setAttribute("msg", msg);
 		request.setAttribute("loc", loc);
-		request.getRequestDispatcher("views/common/msg.jsp").forward(request, response);
+		request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
 	}
 
 	/**

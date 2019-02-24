@@ -4,34 +4,50 @@ import java.sql.Timestamp;
 
 public class IssuedCoupon {
 	
-	private int couponSeq;
+	private String CouponCode;
+	private int CouponSeq;
 	private int memberSeq;
-	private String couponName;
-	private boolean isUsed;
+	private String isUsed;
 	private Timestamp issueDate;
 	private Timestamp expiryDate;
-	
+	private String couponName;
+	private double discountRate;
+	private int minPrice;
+	private int maxDisPrice;
+
 	public IssuedCoupon() {
-		// TODO Auto-generated constructor stub
+
 	}
 
-	public IssuedCoupon(int couponSeq, int memberSeq, String couponName, boolean isUsed, Timestamp issueDate,
-			Timestamp expiryDate) {
+	public IssuedCoupon(String couponCode, int couponSeq, int memberSeq, String isUsed, Timestamp issueDate,
+			Timestamp expiryDate, String couponName, double discountRate, int minPrice, int maxDisPrice) {
 		super();
-		this.couponSeq = couponSeq;
+		CouponCode = couponCode;
+		CouponSeq = couponSeq;
 		this.memberSeq = memberSeq;
-		this.couponName = couponName;
 		this.isUsed = isUsed;
 		this.issueDate = issueDate;
 		this.expiryDate = expiryDate;
+		this.couponName = couponName;
+		this.discountRate = discountRate;
+		this.minPrice = minPrice;
+		this.maxDisPrice = maxDisPrice;
+	}
+
+	public String getCouponCode() {
+		return CouponCode;
+	}
+
+	public void setCouponCode(String couponCode) {
+		CouponCode = couponCode;
 	}
 
 	public int getCouponSeq() {
-		return couponSeq;
+		return CouponSeq;
 	}
 
 	public void setCouponSeq(int couponSeq) {
-		this.couponSeq = couponSeq;
+		CouponSeq = couponSeq;
 	}
 
 	public int getMemberSeq() {
@@ -42,19 +58,11 @@ public class IssuedCoupon {
 		this.memberSeq = memberSeq;
 	}
 
-	public String getCouponName() {
-		return couponName;
-	}
-
-	public void setCouponName(String couponName) {
-		this.couponName = couponName;
-	}
-
-	public boolean isUsed() {
+	public String getIsUsed() {
 		return isUsed;
 	}
 
-	public void setUsed(boolean isUsed) {
+	public void setIsUsed(String isUsed) {
 		this.isUsed = isUsed;
 	}
 
@@ -74,12 +82,36 @@ public class IssuedCoupon {
 		this.expiryDate = expiryDate;
 	}
 
-	@Override
-	public String toString() {
-		return "IssuedCoupon [couponSeq=" + couponSeq + ", memberSeq=" + memberSeq + ", couponName=" + couponName
-				+ ", isUsed=" + isUsed + ", issueDate=" + issueDate + ", expiryDate=" + expiryDate + "]";
+	public String getCouponName() {
+		return couponName;
 	}
-	
-	
+
+	public void setCouponName(String couponName) {
+		this.couponName = couponName;
+	}
+
+	public double getDiscountRate() {
+		return discountRate;
+	}
+
+	public void setDiscountRate(double discountRate) {
+		this.discountRate = discountRate;
+	}
+
+	public int getMinPrice() {
+		return minPrice;
+	}
+
+	public void setMinPrice(int minPrice) {
+		this.minPrice = minPrice;
+	}
+
+	public int getMaxDisPrice() {
+		return maxDisPrice;
+	}
+
+	public void setMaxDisPrice(int maxDisPrice) {
+		this.maxDisPrice = maxDisPrice;
+	}
 
 }
