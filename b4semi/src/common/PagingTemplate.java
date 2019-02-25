@@ -40,7 +40,7 @@ public class PagingTemplate {
 		}
 		else
 		{
-			pageBar+="<div><a href=\""+href+"?cPage="+pageNo+"&numPerPage="+numPerPage+"><img src=\"images/board-arrow-right.png\"></a></div></div>";
+			pageBar+="<div><a href=\""+href+"?cPage="+pageNo+"&numPerPage="+numPerPage+"\"><img src=\"images/board-arrow-right.png\"></a></div></div>";
 		}
 		return pageBar;
 	}
