@@ -230,4 +230,40 @@ public class QueryBoardDao {
 		}
 		return result;
 	}
+	
+	public List<QueryBoard> getByDp(Connection conn, int dpseq, int qpage)
+	{
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<QueryBoard> list = new ArrayList<QueryBoard>();
+		String sql = prop.getProperty("getByDp");
+		int numPerPage = 15;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, dpseq);
+			pstmt.setInt(2, (qpage-1)*numPerPage+1);
+			pstmt.setInt(3, qpage*numPerPage);
+			rs = pstmt.executeQuery();
+			while(rs.next())
+			{
+				QueryBoard qb = new QueryBoard();
+				qb.setMemberSeq(rs.getInt("memberSeq"));
+				qb.setQuerySeq(rs.getInt("querySeq"));
+				qb.setQueryTitle(rs.getString("queryTitle"));
+				qb.setQueryContents(rs.getString("queryContents"));
+				qb.setQueryDate(rs.getTimestamp("queryDate"));
+				qb.setMemberId(rs.getString("memberId"));
+				list.add(qb);
+			}
+		}catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(rs);
+			close(pstmt);
+		}
+		return list;
+	}
 }

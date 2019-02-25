@@ -14,6 +14,8 @@ public class QueryBoard {
    private Timestamp queryDeleteDate;
    private int orderSeq;
    private List<QueryComment> list;
+   private String memberId; //작성자 아이디를 보여주어야 하므로 추가!
+   
    
    public QueryBoard() {}
    
@@ -77,5 +79,11 @@ public class QueryBoard {
    public void setList(List<QueryComment> list) {
       this.list = list;
    }
+	public String getMemberId() {
+		return memberId;
+	}
+	public void setMemberId(String memberId) {
+		this.memberId = memberId;
+	}
    
 }

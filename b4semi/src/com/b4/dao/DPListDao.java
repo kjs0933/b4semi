@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 import com.b4.model.vo.Category;
+import com.b4.model.vo.DPDetail;
 import com.b4.model.vo.DPList;
 import com.b4.model.vo.DPOption;
 
@@ -216,13 +217,59 @@ public class DPListDao {
 		return result;
 	}
 	
-	public ArrayList<DPOption> searchDPOption(Connection cn, int dpSeq)
+	public DPDetail getDetail(Connection cn, int dpseq)
+	{
+		PreparedStatement ps = null;
+		ResultSet rs= null;
+		DPDetail result = null;
+		String sql=prop.getProperty("getDetail");
+		try {
+			ps=cn.prepareStatement(sql);
+			ps.setInt(1, dpseq);
+			rs=ps.executeQuery();
+			if(rs.next())
+			{
+				result = new DPDetail();
+				result.setDisplayListSeq(rs.getInt("DISPLAYLISTSEQ"));
+				result.setDisplayListTitle(rs.getString("DISPLAYLISTTITLE"));
+				result.setDpListAvailable(rs.getString("DPLISTAVAILABLE"));
+				result.setDisplayDate(rs.getTimestamp("DISPLAYDATE"));
+				result.setMinPrice(rs.getInt("MINPRICE"));
+				result.setDiscountRate(rs.getDouble("DISCOUNTRATE"));
+				result.setReviewScore(rs.getString("REVIEWSCORE"));
+				result.setImg(rs.getString("IMG"));
+				result.setProductUnit(rs.getString("PRODUCTUNIT"));
+				result.setProductCode(rs.getString("PRODUCTCODE"));
+				result.setDiscountMinPrice();
+				result.setDiscountName(rs.getString("DISCOUNTNAME"));
+				result.setMajorCategoryName(rs.getString("MAJORCATEGORYNAME"));
+				result.setOriginCountry(rs.getString("ORIGINCOUNTRY"));
+				result.setSubCategoryName(rs.getString("SUBCATEGORYNAME"));
+				result.setSupplierAddress(rs.getString("SUPPLIERADDRESS"));
+				result.setSupplierEmail(rs.getString("SUPPLIEREMAIL"));
+				result.setSupplierName(rs.getString("SUPPLIERNAME"));
+				result.setSupplierPhone(rs.getString("SUPPLIERPHONE"));
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(rs);
+			close(ps);
+		}
+		return result;
+	}
+	
+	public ArrayList<DPOption> getOption(Connection cn, int dpSeq)
 	{
 		PreparedStatement ps = null;
 		ResultSet rs=null;
 		ArrayList<DPOption> result = new ArrayList<DPOption>();
 		DPOption dpoption;
-		String sql=prop.getProperty("searchDPOption");
+		String sql=prop.getProperty("getOption");
 		try {
 			ps=cn.prepareStatement(sql);
 			ps.setInt(1, dpSeq);
@@ -253,6 +300,31 @@ public class DPListDao {
 		}
 		return result;
 	}
-
-
+	
+	public ArrayList<String> getRenames(Connection cn, int dpseq)
+	{
+		PreparedStatement ps = null;
+		ResultSet rs=null;
+		ArrayList<String> result = new ArrayList<String>();
+		String sql=prop.getProperty("getRenames");
+		try {
+			ps=cn.prepareStatement(sql);
+			ps.setInt(1, dpseq);
+			rs=ps.executeQuery();
+			while(rs.next())
+			{
+				result.add(rs.getString("RENAMEFILE"));
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(rs);
+			close(ps);
+		}
+		return result;
+	}
 }

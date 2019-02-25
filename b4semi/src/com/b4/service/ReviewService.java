@@ -29,6 +29,11 @@ public class ReviewService {
 	{
 		Connection conn = getConnection();
 		List<Review> list = dao.selectAllByDP(conn, displayListSeq, cPage);
+		//각각 리뷰 객체에 이미지 담기
+		for(int i=0; i<list.size();i++)
+		{
+			list.get(i).setRenameFiles(dao.getRenameFiles(conn, list.get(i).getReviewSeq()));
+		}
 		close(conn);
 		return list;
 	}

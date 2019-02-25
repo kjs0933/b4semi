@@ -63,7 +63,7 @@ public class ReviewDao {
 	{
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		List<Review> list = new ArrayList<>();
+		List<Review> list = new ArrayList<Review>();
 		String sql = prop.getProperty("selectAllByDP");
 		//numPerPage의 값 고정
 		int numPerPage = 15;
@@ -85,7 +85,35 @@ public class ReviewDao {
 				review.setReviewScore(rs.getInt("reviewScore"));
 				review.setProductCode(rs.getString("productCode"));
 				review.setDisplayListSeq(rs.getInt("displayListSeq"));
+				review.setMemberId(rs.getString("memberId"));
 				list.add(review);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(rs);
+			close(pstmt);
+		}
+		return list;
+	}
+	
+	public List<String> getRenameFiles(Connection conn, int reviewSeq)
+	{
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<String> list = new ArrayList<String>();
+		String sql = prop.getProperty("getRenameFiles");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, reviewSeq);
+			rs = pstmt.executeQuery();
+			while(rs.next())
+			{
+				list.add(rs.getString("renameFile"));
 			}
 		}
 		catch(SQLException e)
@@ -131,7 +159,7 @@ public class ReviewDao {
 	{
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		List<Review> list = new ArrayList<>();
+		List<Review> list = new ArrayList<Review>();
 		String sql = prop.getProperty("selectAllByMember");
 		//numPerPage의 값 고정
 		int numPerPage = 15;

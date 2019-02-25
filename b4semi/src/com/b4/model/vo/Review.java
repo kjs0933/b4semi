@@ -1,6 +1,7 @@
 package com.b4.model.vo;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public class Review {
 
@@ -13,24 +14,10 @@ public class Review {
 	private int reviewScore;
 	private String productCode;
 	private int displayListSeq;
+	private String memberId;
+	private List<String> renameFiles; // 업로드 된 renameFile
 	
-	public Review() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public Review(int reviewSeq, int memberSeq, String reviewTitle, String reviewContents, Timestamp reviewDate,
-			Timestamp reviewDeleteDate, int reviewScore, String productCode, int displayListSeq) {
-		super();
-		this.reviewSeq = reviewSeq;
-		this.memberSeq = memberSeq;
-		this.reviewTitle = reviewTitle;
-		this.reviewContents = reviewContents;
-		this.reviewDate = reviewDate;
-		this.reviewDeleteDate = reviewDeleteDate;
-		this.reviewScore = reviewScore;
-		this.productCode = productCode;
-		this.displayListSeq = displayListSeq;
-	}
+	public Review() {}
 
 	public int getReviewSeq() {
 		return reviewSeq;
@@ -104,14 +91,19 @@ public class Review {
 		this.displayListSeq = displayListSeq;
 	}
 
-	@Override
-	public String toString() {
-		return "Review [reviewSeq=" + reviewSeq + ", memberSeq=" + memberSeq + ", reviewTitle=" + reviewTitle
-				+ ", reviewContents=" + reviewContents + ", reviewDate=" + reviewDate + ", reviewDeleteDate="
-				+ reviewDeleteDate + ", reviewScore=" + reviewScore + ", productCode=" + productCode
-				+ ", displayListSeq=" + displayListSeq + "]";
+	public String getMemberId() {
+		return memberId;
 	}
 
-	
-	
+	public void setMemberId(String memberId) {
+		this.memberId = memberId;
+	}
+
+	public List<String> getRenameFiles() {
+		return renameFiles;
+	}
+
+	public void setRenameFiles(List<String> renameFiles) {
+		this.renameFiles = renameFiles;
+	}
 }

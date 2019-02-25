@@ -105,5 +105,19 @@ public class QueryBoardService {
 		close(conn);
 		return result;
 	}
+	
+	//상품상세페이지에서 보여줄 주문번호 관련 문의 모두 가져오기
+	public List<QueryBoard> getByDp(int dpseq, int qpage)
+	{
+		Connection conn = getConnection();
+		List<QueryBoard> list = dao.getByDp(conn, dpseq, qpage);
+		//각 객체에 댓글 객체를 넣어주는 과정
+/*		for(int i=0; i<list.size();i++)
+		{
+			list.get(i).setList(dao.get);
+		}*/
+		close(conn);
+		return list;
+	}
 
 }

@@ -54,5 +54,4 @@ public class ImagesService {
 		close(conn);
 		return result;
 	}
-
 }
