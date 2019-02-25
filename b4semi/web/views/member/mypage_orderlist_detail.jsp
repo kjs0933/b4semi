@@ -1,11 +1,27 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/views/common/header.jsp"%>
-<%@ page import="com.b4.model.vo.MypageHeader" %>
+<%@ page import="com.b4.model.vo.MypageHeader, java.util.*, com.b4.model.vo.OrderPDetail, com.b4.model.vo.OrderList, java.net.URLDecoder" %>
 
 <%
+	
 	MypageHeader mh = (MypageHeader)request.getAttribute("mh");
 	if(mh == null){mh = new MypageHeader();}
+	
+	List<OrderPDetail> opdList = (List<OrderPDetail>)request.getAttribute("opdList");
+
+	OrderList orderlist = (OrderList)request.getAttribute("orderList");
+	String orderStatus="";
+	switch(orderlist.getOrderStatusCode()){
+    case "OS01" : orderStatus="결제완료"; break;
+    case "OS02" : orderStatus="출고대기"; break;
+    case "OS03" : orderStatus="배송중"; break;
+    case "OS04" : orderStatus="배송완료"; break;
+    case "OS05" : orderStatus="구매확정"; break;
+    default : orderStatus="구매확정"; break;
+    }
+	
+	String phone = orderlist.getReceiverPhone().substring(0, 3)+"-"+orderlist.getReceiverPhone().substring(3, 7)+"-"+orderlist.getReceiverPhone().substring(7, 11);
 %>
     <style>
         .mypage-wrapper
@@ -370,9 +386,9 @@
                 </div>
             </div>
             <div class="mypage-tab">
-                <div><a href="<%=request.getContextPath() %>/views/member/mypage_orderlist.jsp">주문내역</a></div>
+                <div class="mypage-tab-current"><a href="<%=request.getContextPath() %>/views/member/mypage_orderlist.jsp">주문내역</a></div>
                 <div><a href="<%=request.getContextPath() %>/views/member/mypage_review_before.jsp">상품후기</a></div>
-                <div class="mypage-tab-current"><a href="<%=request.getContextPath() %>/memberMileage">적립금</a></div>
+                <div><a href="<%=request.getContextPath() %>/memberMileage">적립금</a></div>
                 <div><a href="<%=request.getContextPath() %>/memberCoupon">쿠폰</a></div>
                 <div><a href="<%=request.getContextPath() %>/memberUpdate">개인정보수정</a></div>
             </div>
@@ -386,19 +402,23 @@
                         <span>배송또는 상품에 문제가 있나요? <a href="#">1대1 문의</a></span>
                     </div>
                     <div class="order-table">
+                        <%if(opdList!=null){
+                        	for(int i=0;i<opdList.size();i++){
+                        %>
                         <div class="order-table-cols">
-                            <div><img src="images/order_sample_1.jpg"></div>
+                            <div><img src="<%=request.getContextPath() %>/upload/product/<%=opdList.get(i).getProductName() %>.jpg"></div>
                             <div>
-                                <div><b>[갈바니나] 자몽소다수 355ml</b></div>
-                                <div><span>3,800 원</span> 1개</div>
+                                <div><b><%=opdList.get(i).getProductName()%></b></div>
+                                <div><span><%=opdList.get(i).getDisplayOptionPrice() %> 원</span> <%=opdList.get(i).getOrderProductCount() %>개</div>
                             </div>
-                            <div>배송완료</div>
+                            <div><%=orderStatus %></div>
                             <div>
                                 <input type="text" value="후기 작성">
                                 <input type="text" value="장바구니 담기">
                             </div>
                         </div>
-                        <div class="order-table-cols">
+                        <%}} %>
+                        <!-- <div class="order-table-cols">
                             <div><img src="images/order_sample_2.jpg"></div>
                             <div>
                                 <div><b>멕시코 생 라임</b></div>
@@ -421,7 +441,7 @@
                                 <input type="text" value="후기 작성">
                                 <input type="text" value="장바구니 담기">
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     
                     <div class="payment-info">
@@ -443,11 +463,11 @@
                             </div>
                             <div class="payment-info-cols">
                                 <span>적립금 사용</span>
-                                <span>0 원</span>
+                                <span><%=orderlist.getSpentMileage() %> 원</span>
                             </div>
                             <div class="payment-info-cols">
                                 <span>배송비</span>
-                                <span>0 원</span>
+                                <span><%=orderlist.getShipmentFee() %> 원</span>
                             </div>
                             <div class="payment-info-cols">
                                 <span>결제금액</span>
@@ -471,15 +491,15 @@
                         <div class="order-info-table">
                             <div class="order-info-cols">
                                 <span>주문 번호</span>
-                                <span>1550328316414</span>
+                                <span><%=orderlist.getOrderSeq() %></span>
                             </div>
                             <div class="order-info-cols">
                                 <span>주문자 명</span>
-                                <span>정우진</span>
+                                <span><%=loginMember.getMemberName() %></span>
                             </div>
                             <div class="order-info-cols">
                                 <span>보내는 분</span>
-                                <span>정우진</span>
+                                <span><%=loginMember.getMemberName() %></span>
                             </div>
                             <div class="order-info-cols">
                                 <span>결제 시간</span>
@@ -487,7 +507,7 @@
                             </div>
                             <div class="order-info-cols">
                                 <span>주문 처리 상태</span>
-                                <span>배송완료</span>
+                                <span><%=orderStatus %></span>
                             </div>
                         </div>
                     </div>
@@ -499,11 +519,11 @@
                         <div class="shipment-info-table">
                             <div class="shipment-info-cols">
                                 <span>받는분</span>
-                                <span>정우진</span>
+                                <span><%=orderlist.getReceiverName() %></span>
                             </div>
                             <div class="shipment-info-cols">
                                 <span>받는 분 핸드폰</span>
-                                <span>010-5069-4404</span>
+                                <span><%=phone %></span>
                             </div>
                             <div class="shipment-info-cols">
                                 <span>우편번호</span>
@@ -515,11 +535,11 @@
                             </div>
                             <div class="shipment-info-cols">
                                 <span>주소</span>
-                                <span>경기 수원시 팔달구</span>
+                                <span><%=orderlist.getReceiverAddress() %></span>
                             </div>
                             <div class="shipment-info-cols">
                                 <span>배송 요청사항</span>
-                                <span>문앞에 놓고 가주세요.</span>
+                                <span><%=orderlist.getReceiverComment() %></span>
                             </div>
                         </div>
                     </div>

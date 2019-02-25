@@ -13,10 +13,10 @@ public class OrderListService {
 	
 	OrderListDao dao = new OrderListDao();
 	
-	public List<OrderList> selectByMemberThreeYears(int cPage, int memberSeq)
+	public List<OrderList> selectByMemberThreeYears(int cPage, int numPerPage, int memberSeq)
 	{
 		Connection conn = getConnection();
-		List<OrderList> list = dao.selectByMemberThreeYears(conn, cPage, memberSeq);
+		List<OrderList> list = dao.selectByMemberThreeYears(conn, cPage, numPerPage, memberSeq);
 		close(conn);
 		return list;
 	}
@@ -26,6 +26,13 @@ public class OrderListService {
 		int result = dao.selectCountByMemberThreeYears(conn, memberSeq);
 		close(conn);
 		return result;
+	}
+
+	public OrderList selectByOrderListSeq(int orderSeq) {
+		Connection conn = getConnection();
+		OrderList orderList = dao.selectByOrderListSeq(conn, orderSeq);
+		close(conn);
+		return orderList;
 	}
 
 }

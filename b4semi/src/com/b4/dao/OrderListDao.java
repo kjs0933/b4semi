@@ -28,7 +28,7 @@ public class OrderListDao {
 		}
 	}
 
-	public List<OrderList> selectByMemberThreeYears(Connection conn, int cPage, int memberSeq) {
+	public List<OrderList> selectByMemberThreeYears(Connection conn, int cPage, int numPerPage, int memberSeq) {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		List<OrderList> list = new ArrayList<>();
@@ -36,8 +36,8 @@ public class OrderListDao {
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, memberSeq);
-			pstmt.setInt(2, (cPage-1)*7+1);
-			pstmt.setInt(3, (cPage*7));
+			pstmt.setInt(2, (cPage-1)*numPerPage+1);
+			pstmt.setInt(3, cPage*numPerPage);
 			rs = pstmt.executeQuery();
 			while(rs.next())
 			{
@@ -93,6 +93,43 @@ public class OrderListDao {
 			close(pstmt);
 		}
 		return result;
+	}
+
+	public OrderList selectByOrderListSeq(Connection conn, int orderSeq) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		OrderList ol = new OrderList();
+		String sql = prop.getProperty("selectByOrderListSeq");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, orderSeq);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				ol.setOrderSeq(rs.getInt("orderSeq"));
+				ol.setCouponSeq(rs.getInt("couponSeq"));
+				ol.setMemberSeq(rs.getInt("memberSeq"));
+				ol.setOrderStatusCode(rs.getString("orderStatusCode"));
+				ol.setSpentMileage(rs.getInt("spentMileage"));
+				ol.setReceiverName(rs.getString("receiverName"));
+				ol.setReceiverAddress(rs.getString("receiverAddress"));
+				ol.setReceiverPhone(rs.getString("receiverPhone"));
+				ol.setReceiverComment(rs.getString("receiverComment"));
+				ol.setShipmentNo(rs.getString("shipmentNo"));
+				ol.setTotalPrice(rs.getInt("totalPrice"));
+				ol.setCancelprice(rs.getInt("cancelPrice"));
+				ol.setOrderTime(rs.getTimestamp("orderTime"));
+				ol.setShipmentFee(rs.getInt("shipmentFee"));				
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally {
+			close(rs);
+			close(pstmt);
+		}
+		return ol;
 	}
 
 

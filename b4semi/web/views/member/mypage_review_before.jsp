@@ -285,7 +285,7 @@
                 </div>
             </div>
             <div class="mypage-tab">
-                <div><a href="<%=request.getContextPath() %>/views/member/mypage_orderlist.jsp">주문내역</a></div>
+                <div><a href="<%=request.getContextPath() %>/memberOrderlist">주문내역</a></div>
                 <div class="mypage-tab-current"><a href="<%=request.getContextPath() %>/views/member/mypage_review_before.jsp">상품후기</a></div>
                 <div><a href="<%=request.getContextPath() %>/memberMileage">적립금</a></div>
                 <div><a href="<%=request.getContextPath() %>/memberCoupon">쿠폰</a></div>
