@@ -820,7 +820,7 @@
 			        <div class="my-account-wrapper">
 			        	<div class="my-account-box">
 				           	<ul>
-				               	<li><a href="<%=request.getContextPath() %>/views/member/mypage_orderlist.jsp">주문내역</a></li>
+				               	<li><a href="<%=request.getContextPath() %>/memberOrderlist">주문내역</a></li>
 				               	<li><a href="<%=request.getContextPath() %>/views/member/mypage_review_before.jsp">상품리뷰</a></li>
 				               	<li><a href="<%=request.getContextPath() %>/memberMileage">마일리지</a></li>
 				               	<li><a href="<%=request.getContextPath() %>/memberCoupon">쿠폰</a></li>

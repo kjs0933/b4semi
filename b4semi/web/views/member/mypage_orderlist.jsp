@@ -3,10 +3,20 @@
 <%@ include file="/views/common/header.jsp"%>
 <%@ page import="java.util.*" %>
 <%@ page import="com.b4.model.vo.MypageHeader" %>
+<%@ page import="com.b4.model.vo.OrderList" %>
+<%@ page import="com.b4.model.vo.OrderPDetail" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.sql.Timestamp" %>
 
 <%
 	MypageHeader mh = (MypageHeader)request.getAttribute("mh");
 	if(mh == null){mh = new MypageHeader();}
+	String orderStatus = "";
+	String pageBar = (String)request.getAttribute("pageBar");
+	int cPage = (int)request.getAttribute("cPage");
+	List<OrderList> orderlist = (List<OrderList>)request.getAttribute("orderlist");
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd [HH시 mm분]");
+	List<OrderPDetail> orderPList = (List<OrderPDetail>)request.getAttribute("orderProductList");
 %>
 
     <style>
@@ -413,6 +423,17 @@
         {
             border-left: 1px solid rgb(220, 220, 220);
         }
+        
+        .pagebar a
+        {
+        	display: flex;
+        	width: 100%;
+        	height: 100%;
+        	align-items: center;
+        	justify-content: center;
+        	text-decoration: none;
+        	color: black;
+        }
 
         .mypage-tab-current{border-bottom: 2px solid rgb(42, 71, 114) !important;}
 
@@ -445,7 +466,7 @@
                 </div>
             </div>
             <div class="mypage-tab">
-                <div class="mypage-tab-current"><a href="<%=request.getContextPath() %>/views/member/mypage_orderlist.jsp">주문내역</a></div>
+                <div class="mypage-tab-current"><a href="<%=request.getContextPath() %>/memberOrderlist">주문내역</a></div>
                 <div><a href="<%=request.getContextPath() %>/views/member/mypage_review_before.jsp">상품후기</a></div>
                 <div><a href="<%=request.getContextPath() %>/memberMileage">적립금</a></div>
                 <div><a href="<%=request.getContextPath() %>/memberCoupon">쿠폰</a></div>
@@ -459,25 +480,37 @@
 
                         </div>
                     </div>
+                    <%if(orderlist != null){
+                    	for(int i=0;i<orderlist.size();i++) {%>
                     <div class="order">
-                        <p class="order-date">2019.02.18 [23시 27분]</p>
+                        <p class="order-date"><%=sdf.format(new Date(orderlist.get(i).getOrderTime().getTime()))%></p>
                         <div>
                             <div>
-                                <div class="order-title"><a href="#">[몽상클레르] 커스터드 크림빵 2종 외 1건</a><img
+                                <div class="order-title"><a href="<%=request.getContextPath() %>/memberOrderlistDetail?no=<%=orderlist.get(i).getOrderSeq()%>"><%=orderPList.get(i).getProductName() %> 외 <%=(orderPList.get(i).getCountByOrderList())-1 %>건</a><img
                                         src="images/arrow_right_black.png" alt=""></div>
                             </div>
                             <span></span>
                             <div class="order-body">
-                                <div><img src="images/order_sample_3.jpg"></div>
+                                <div><img src="<%=request.getContextPath() %>/upload/product/<%=orderPList.get(i).getProductName() %>.jpg"></div>
                                 <div>
                                     <div>주문번호</div>
                                     <div>결제금액</div>
                                     <div>주문상태</div>
                                 </div>
                                 <div>
-                                    <div>1550500008708</div>
-                                    <div>11,868 원</div>
-                                    <div>배송완료</div>
+                                    <div><%=orderlist.get(i).getOrderSeq() %></div>
+                                    <div><%=(orderlist.get(i).getTotalPrice())+(orderlist.get(i).getShipmentFee())%> 원</div>
+                                    <%
+                                    switch(orderlist.get(i).getOrderStatusCode()){
+                                    case "OS01" : orderStatus="결제완료"; break;
+                                    case "OS02" : orderStatus="출고대기"; break;
+                                    case "OS03" : orderStatus="배송중"; break;
+                                    case "OS04" : orderStatus="배송완료"; break;
+                                    case "OS05" : orderStatus="구매확정"; break;
+                                    default : orderStatus="구매확정"; break;
+                                    }
+                                    %>
+                                    <div><%=orderStatus %></div>
                                 </div>
                                 <div>
                                     <input type="button" value="후기 작성">
@@ -485,44 +518,9 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="order">
-                        <p class="order-date">2019.02.17 [0시 17분]</p>
-                        <div>
-                            <div>
-                                <div class="order-title"><a href="#">[갈바니나] 유기농 과일 탄산수 6종 외 2건</a><img
-                                        src="images/arrow_right_black.png" alt=""></div>
-                            </div>
-                            <span></span>
-                            <div class="order-body">
-                                <div><img src="images/order_sample_1.jpg"></div>
-                                <div>
-                                    <div>주문번호</div>
-                                    <div>결제금액</div>
-                                    <div>주문상태</div>
-                                </div>
-                                <div>
-                                    <div>1550328316414</div>
-                                    <div>9,030원</div>
-                                    <div>배송준비중</div>
-                                </div>
-                                <div>
-                                    <input type="button" value="후기 작성">
-                                    <input type="button" value="1:1 문의">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="pagebar">
-                        <div><img src="images/board-arrow-left.png"></div>
-                        <div>1</div>
-                        <div>2</div>
-                        <div>3</div>
-                        <div>4</div>
-                        <div>5</div>
-                        <div><img src="images/board-arrow-right.png"></div>
-                    </div>
                 </div>
+                <%}} %>
+					<%=pageBar %>
             </div>
         </div>
     </section>

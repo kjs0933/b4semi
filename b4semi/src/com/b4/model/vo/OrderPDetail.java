@@ -7,6 +7,9 @@ public class OrderPDetail {
 	private String productName;
 	private int displayListSeq;
 	private int orderProductCount;
+	private String discountcode;
+	private int displayOptionPrice;
+	private String optionavailable;
 	private int countByOrderList;
 	
 	public OrderPDetail() {
@@ -21,6 +24,46 @@ public class OrderPDetail {
 		this.productName = productName;
 		this.displayListSeq = displayListSeq;
 		this.orderProductCount = orderProductCount;
+		this.countByOrderList = countByOrderList;
+	}
+
+	
+
+	public String getDiscountcode() {
+		return discountcode;
+	}
+
+	public void setDiscountcode(String discountcode) {
+		this.discountcode = discountcode;
+	}
+
+	public int getDisplayOptionPrice() {
+		return displayOptionPrice;
+	}
+
+	public void setDisplayOptionPrice(int displayOptionPrice) {
+		this.displayOptionPrice = displayOptionPrice;
+	}
+
+	public String getOptionavailable() {
+		return optionavailable;
+	}
+
+	public void setOptionavailable(String optionavailable) {
+		this.optionavailable = optionavailable;
+	}
+
+	public OrderPDetail(int orderSeq, String productCode, String productName, int displayListSeq, int orderProductCount,
+			String discountcode, int displayOptionPrice, String optionavailable, int countByOrderList) {
+		super();
+		this.orderSeq = orderSeq;
+		this.productCode = productCode;
+		this.productName = productName;
+		this.displayListSeq = displayListSeq;
+		this.orderProductCount = orderProductCount;
+		this.discountcode = discountcode;
+		this.displayOptionPrice = displayOptionPrice;
+		this.optionavailable = optionavailable;
 		this.countByOrderList = countByOrderList;
 	}
 
