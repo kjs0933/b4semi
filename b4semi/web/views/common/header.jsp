@@ -908,7 +908,7 @@
 	        			<div class="support-box">
 		            		<ul>
 		                		<li><a href="<%=request.getContextPath()%>/views/support/support_notice.jsp">공지사항</a></li>
-		                		<li><a href="<%=request.getContextPath()%>/views/support/support_query.jsp">1:1문의</a></li>
+		                		<li><a href="<%=request.getContextPath()%>/query">1:1문의</a></li>
 		                		<li><a href="#">상품제안</a></li>
 		            		</ul>
 	        			</div>

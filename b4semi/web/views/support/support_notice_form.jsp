@@ -34,6 +34,7 @@
 
         .notice-form
         {
+        	width: 100%;
             display: flex;
             flex-flow: column nowrap;
             border-top: 2px solid rgb(42, 71, 114);
