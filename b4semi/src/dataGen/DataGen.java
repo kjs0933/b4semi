@@ -1638,7 +1638,7 @@ public class DataGen {
 						if(orderList.get(z).isReview())
 						{
 							//5점 만점, 0.5점 단위로 설정 가능
-							double reviewPoint = (10-(int)(Math.random()*Math.random()*Math.random()*11))/2.0;
+							double reviewPoint = (10-(int)(Math.random()*Math.random()*11))/2.0;
 							long reviewTime = order.getOrderTime() + (long)(Math.random()*604800000L);
 							String title;
 							String text;

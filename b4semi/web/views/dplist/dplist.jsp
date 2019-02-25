@@ -433,6 +433,7 @@
 			else
 			{
 				//상품 종류가 많을 때 옵션창 로직
+				location.href="<%=request.getContextPath()%>/dpdetail?dpseq="+dpseq;
 			}
 				
 		});

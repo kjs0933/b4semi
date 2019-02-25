@@ -38,9 +38,14 @@ public class DisplayDetailServlet extends HttpServlet {
 			request.getRequestDispatcher("/views/common/msg.jsp");
 		}
 		
+		
+		
+		
+		
+		
 		request.setAttribute("msg", "상품 상세페이지 공사중입니다");
 		request.setAttribute("loc", "/");
-		request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
+		request.getRequestDispatcher("/views/dplist/dplist_detail.jsp").forward(request, response);
 		
 		
 		
