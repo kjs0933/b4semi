@@ -187,8 +187,6 @@
             color: rgb(38, 85, 139);
         }
         
-        
-
         .plist-board  > div > div > img
         {
             margin-top: 2px;
@@ -205,6 +203,7 @@
         .plist-board  > div > img
         {
             width: 100%;
+            cursor: pointer;
         }
 
         .plist-board  p
@@ -436,7 +435,7 @@
                 </div>
                   <%}%>
             	<div class="rating-holder">
-					<div class="c-rating" data-rating-value="<%=decimal < 0.25 ? (int)standardizedRate : standardizedRate%>">
+					<div class="c-rating" data-rating-value="<%=standardizedRate%>">
 					    <button>1</button>
 					    <button>2</button>
 					    <button>3</button>
