@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Properties;
 
 import com.b4.model.vo.QueryBoard;
+import com.b4.model.vo.QueryComment;
 import com.b4.model.vo.Reply;
 
 public class QueryBoardDao {
@@ -29,7 +30,6 @@ public class QueryBoardDao {
 			e.printStackTrace();
 		}
 	}
-	
 	
 	public int selectCountByMember(Connection conn, int memberSeq)
 	{
@@ -56,6 +56,74 @@ public class QueryBoardDao {
 		}
 		return result;
 	}
+	
+	public List<QueryBoard> selectListByMember(Connection conn, int cPage, int numPerPage, int memberSeq)
+	{
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<QueryBoard> list = new ArrayList<QueryBoard>();
+		String sql = prop.getProperty("selectListByMember");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, memberSeq);
+			pstmt.setInt(2, (cPage-1)*numPerPage+1);
+			pstmt.setInt(3, cPage*numPerPage);
+			rs = pstmt.executeQuery();
+			while(rs.next())
+			{
+				QueryBoard qb = new QueryBoard();
+				qb.setMemberSeq(rs.getInt("memberSeq"));
+				qb.setQuerySeq(rs.getInt("querySeq"));
+				qb.setQueryTitle(rs.getString("queryTitle"));
+				qb.setQueryContents(rs.getString("queryContents"));
+				qb.setQueryDate(rs.getTimestamp("queryDate"));
+				qb.setOrderSeq(rs.getInt("orderSeq"));
+				
+				sql = prop.getProperty("selectCommentByBoardSeq");
+				PreparedStatement cPstmt = null;
+				ResultSet cRs = null;
+				List<QueryComment> cList = new ArrayList<QueryComment>();
+				try {
+					cPstmt = conn.prepareStatement(sql);
+					cPstmt.setInt(1, qb.getQuerySeq());
+					cRs = pstmt.executeQuery();
+					while(cRs.next());
+					{
+						QueryComment qc = new QueryComment();
+						qc.setBoardeSeq(rs.getInt("boardSeq"));
+						qc.setCommentDate(rs.getTimestamp("commentDate"));
+						qc.setCommentSeq(rs.getInt("commentSeq"));
+						qc.setCommentText(rs.getString("commentText"));
+						qc.setMemberSeq(rs.getInt("memberSeq"));
+						qc.setMemberId(rs.getString("memberId"));
+						cList.add(qc);
+					}
+				} 
+				catch(SQLException e)
+				{
+					e.printStackTrace();
+				}
+				finally
+				{
+					close(cRs);
+					close(cPstmt);
+				}
+				qb.setList(cList);
+				list.add(qb);
+			}	
+		} 
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(pstmt);
+			close(rs);
+		}
+		return list;
+	}
+	
 	
 	public List<QueryBoard> selectAllByMember(Connection conn, int memberSeq, int cPage)
 	{

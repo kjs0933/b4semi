@@ -27,6 +27,15 @@ public class QueryBoardService {
 		return result;
 	}
 	
+	public List<QueryBoard> selectListByMember(int cPage, int numPerPage, int memberSeq)
+	{
+		Connection conn = getConnection();
+		List<QueryBoard> result = dao.selectListByMember(conn, cPage, numPerPage, memberSeq);
+		close(conn);
+		return result;
+	}
+	
+	
 	//1대1문의 게시판 회원별 리스트
 	public List<QueryBoard> selectAllByMember(int memberSeq, int cPage)
 	{

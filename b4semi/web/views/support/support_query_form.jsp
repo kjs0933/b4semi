@@ -9,101 +9,13 @@
 	List<OrderPDetail> orderPList = (List<OrderPDetail>)request.getAttribute("orderProductList");
 %>
 
-    <style>
-        .support-wrapper
-        {
-            display: flex;
-            font-family: 'Noto Sans KR';
-            width: 1024px;
-        }
-
-        .support-wrapper > div:first-of-type
-        {
-            flex: 2 1 0;
-        }
-
-        .support-wrapper > div:last-of-type
-        {
-            flex: 7 1 0;
-        }
-
-        .support-nav-title > p
-        {
-            margin: 20px 0;
-            font-size: 30px;
-        }
-        
-        .support-nav
-        {
-            display: flex;
-            flex-flow: column nowrap;
-            position: relative;
-        }
-
-        .support-nav > div
-        {
-            height: 50px;
-            border: 1px solid #ccc;
-            border-bottom: none;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-sizing: border-box;
-            padding: 0 30px;
-            font-size: 15px;
-
-            cursor: pointer;
-        }
-
-        .support-nav > div:hover
-        {
-            background-color: rgb(248, 248, 248);
-        }
-
-        .support-nav a
-        {
-            text-decoration: none;
-            color: black;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-        }
-
-        .support-nav img
-        {
-            width: 25px;
-            height: 25px;
-            position: absolute;
-            right: 0;
-        }
-
-        .support-nav > div:last-of-type
-        {
-            border-bottom: 1px solid #ccc;
-        }
-
-        .current-tab
-        {
-            background-color: rgb(248, 248, 248);
-        }
-
-        .support-content
-        {
-            display: flex;
-            flex-flow: column nowrap;
-            justify-content: center;
-            margin-left: 30px;
-        }
-
-
-    
-
+    <style> 
         .query-form-wrapper
         {
-            width: 100%;
+            width: 1024px;
             font-family: 'Noto Sans KR';
             font-size: 14px;
+            margin-top: 100px;
         }
 
         .query-form input
@@ -285,7 +197,7 @@
             width: 600px;
             height: 367px;
             border: 1px solid black;
-            left: 157px;
+            left: 146px;
             top: 60px;
             background-color: white;
             display: flex;
@@ -406,7 +318,7 @@
                 <div>주문번호</div>
                 <div>
                     <input type="text" name="orderSeq" id="order-seq" value="<%=orderSeq%>">
-                    <input type="button" value="주문 조회">
+                    <input id="show-orderlist" type="button" value="주문 조회">
                 </div>
                 <div class="order-seq-list" id="order-seq-list">
                     <span>문의하실 주문번호를 선택하세요.</span>
@@ -458,7 +370,7 @@
                 </div>
             </div>
             <div class="query-button-set">
-                <input type="button" value="저장">
+                <input id="cancel" type="button" value="취소">
                 <input type="submit" value="저장">
             </div>
         </form>
@@ -466,7 +378,7 @@
     </section>
 <script>
 	//주문 조회창 토글
-	const showOrderSeqBtn = $('input[type="button"');
+	const showOrderSeqBtn = $('#show-orderlist');
 	const orderSeqList = $('.order-seq-list');
 	
 	$(() => {
