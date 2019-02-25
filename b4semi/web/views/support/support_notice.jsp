@@ -1,5 +1,12 @@
+<%@page import="common.DateFormatTemplate"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="com.b4.model.vo.*,com.b4.controller.notice.*,java.util.*,java.sql.*" %>
+<%@ page import ="static common.DateFormatTemplate.getTillDate"%>
+<%
+	List<Notice> list=(List)request.getAttribute("list");
+%>    
+
 <%@ include file="/views/common/header.jsp"%>
     <style>
     
@@ -217,74 +224,28 @@
                         <div>제목</div>
                         <div>작성자</div>
                         <div>작성일</div>
-                        <div>조회</div>
+                        <div>조회수</div>
                     </div>
+                    <%for(Notice o:list) {%>
                     <div class="support-board-cols">
-                        <div>8</div>
-                        <div>공지 8</div>
+                        <div><%=o.getNoticeSeq() %></div>
+                        <div><a href="<%=request.getContextPath()%>/notice/noticeView?noticeseq=<%=o.getNoticeSeq()%>"><%=o.getNoticeTitle() %></a></div>
                         <div>TheFoodForum</div>
-                        <div>2019-02-13</div>
-                        <div>95</div>
+                        <%-- <div><a herf="<%=DateFormatTemplate.getetTillDate()%>"></a></div> --%>
+                        
+                        <div><%=o.getNoticeReadCount() %></div>
                     </div>
-                    <div class="support-board-cols">
-                        <div>7</div>
-                        <div>공지 7</div>
-                        <div>TheFoodForum</div>
-                        <div>2019-02-13</div>
-                        <div>95</div>
-                    </div>
-                    <div class="support-board-cols">
-                        <div>6</div>
-                        <div>공지 6</div>
-                        <div>TheFoodForum</div>
-                        <div>2019-02-13</div>
-                        <div>95</div>
-                    </div>
-                    <div class="support-board-cols">
-                        <div>5</div>
-                        <div>공지 5</div>
-                        <div>TheFoodForum</div>
-                        <div>2019-02-13</div>
-                        <div>95</div>
-                    </div>
-                    <div class="support-board-cols">
-                        <div>4</div>
-                        <div>공지 4</div>
-                        <div>TheFoodForum</div>
-                        <div>2019-02-13</div>
-                        <div>95</div>
-                    </div>
-                    <div class="support-board-cols">
-                        <div>3</div>
-                        <div>공지 3</div>
-                        <div>TheFoodForum</div>
-                        <div>2019-02-13</div>
-                        <div>95</div>
-                    </div>
-                    <div class="support-board-cols">
-                        <div>2</div>
-                        <div>공지 2</div>
-                        <div>TheFoodForum</div>
-                        <div>2019-02-13</div>
-                        <div>95</div>
-                    </div>
-                    <div class="support-board-cols">
-                        <div>1</div>
-                        <div>공지 1</div>
-                        <div>TheFoodForum</div>
-                        <div>2019-02-13</div>
-                        <div>95</div>
-                    </div>
+                    <%} %>
                 </div>
 
                 <div class="pagebar">
-                    <div><img src="image/board-arrow-left.png"></div>
+                    <div><img src="/images/board-arrow-left.png"></div>
                     <div>1</div>
                     <div>2</div>
                     <div>3</div>
                     <div>4</div>
                     <div>5</div>
-                    <div><img src="image/board-arrow-right.png"></div>
+                    <div><img src="/images/board-arrow-right.png"></div>
                 </div>
             </div>
         </div>
