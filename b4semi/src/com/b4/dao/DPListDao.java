@@ -230,6 +230,7 @@ public class DPListDao {
 			if(rs.next())
 			{
 				result = new DPDetail();
+				result.setDisplayListContents(rs.getString("DISPLAYLISTCONTENTS"));
 				result.setDisplayListSeq(rs.getInt("DISPLAYLISTSEQ"));
 				result.setDisplayListTitle(rs.getString("DISPLAYLISTTITLE"));
 				result.setDpListAvailable(rs.getString("DPLISTAVAILABLE"));
@@ -249,6 +250,7 @@ public class DPListDao {
 				result.setSupplierEmail(rs.getString("SUPPLIEREMAIL"));
 				result.setSupplierName(rs.getString("SUPPLIERNAME"));
 				result.setSupplierPhone(rs.getString("SUPPLIERPHONE"));
+				result.setReviewCount(rs.getInt("POPULARITY"));
 			}
 		}
 		catch(SQLException e)

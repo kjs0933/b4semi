@@ -87,5 +87,46 @@ public class PagingTemplate {
 		pageBar+="</div>";
 		return pageBar;
 	}
+	
+	//DisplayDetailServlet에서 사용중
+	public static String pageBar3(String href, int cPage, int totalContent, String pageName, String root)
+	{
+		int pageBarSize = 5;
+		int pageNo = ((cPage-1)/pageBarSize)*pageBarSize+1;
+		int pageEnd = pageNo+pageBarSize-1;
+		String pageBar = "<div class='pagebar'>";
+		int numPerPage = 15;
+		int totalPage = (int)Math.ceil((double)totalContent/numPerPage);
+		
+		if(pageNo==1)
+		{
+			pageBar += "<div><img src='"+root+"/images/board-arrow-left.png'></div>";
+		}
+		else
+		{
+			pageBar += "<div><a href='"+ href+pageName+"="+(pageNo-1)+"'><img src='"+root+"/images/board-arrow-left.png'></a></div>";
+		}
+		for(int i=pageNo; i<=Math.min(pageEnd,totalPage); i++)
+		{
+			if(cPage==i)
+			{
+				pageBar+="<div><b>"+cPage+"</b></div>";
+			}
+			else
+			{
+				pageBar +="<div><a href='"+href+pageName+"="+i+"'/>"+i+"</a></div>";
+			}
+		}
+		if(pageEnd>=totalPage)
+		{
+			pageBar+="<div><img src='"+root+"/images/board-arrow-right.png'></div>";
+		}
+		else
+		{
+			pageBar +="<div><a href='"+href+pageName+"="+(pageEnd+1)+"<img src='"+root+"/images/board-arrow-right.png'></a></div>";
+		}
+		pageBar+="</div>";
+		return pageBar;
+	}
 
 }

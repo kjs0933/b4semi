@@ -1,7 +1,92 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/views/common/header.jsp"%>
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="com.b4.model.vo.DPDetail"%>
+<%@ page import="com.b4.model.vo.DPOption"%>
+<%@ page import="com.b4.model.vo.Review"%>
+<%@ page import="com.b4.model.vo.QueryBoard"%>
+<%@ page import="com.b4.model.vo.QueryComment"%>
+<%
 
+DPDetail detail;
+try {
+	detail= (DPDetail)request.getAttribute("detail");
+	if(detail == null)
+	{
+		detail=new DPDetail();
+	}
+} catch (ClassCastException e) {
+	detail=new DPDetail();
+}
+
+ArrayList<DPOption> option;
+try {
+	option= (ArrayList<DPOption>)request.getAttribute("option");
+	if(option == null)
+	{
+		option=new ArrayList<DPOption>();
+	}
+} catch (ClassCastException e) {
+	option=new ArrayList<DPOption>();
+}
+
+ArrayList<String> renames;
+try {
+	renames= (ArrayList<String>)request.getAttribute("renames");
+	if(renames == null)
+	{
+		renames=new ArrayList<String>();
+	}
+} catch (ClassCastException e) {
+	renames=new ArrayList<String>();
+}
+
+ArrayList<Review> review;
+try {
+	review= (ArrayList<Review>)request.getAttribute("review");
+	if(review == null)
+	{
+		review=new ArrayList<Review>();
+	}
+} catch (ClassCastException e) {
+	review=new ArrayList<Review>();
+}
+
+ArrayList<QueryBoard> qna;
+try {
+	qna= (ArrayList<QueryBoard>)request.getAttribute("qna");
+	if(qna == null)
+	{
+		qna=new ArrayList<QueryBoard>();
+	}
+} catch (ClassCastException e) {
+	qna=new ArrayList<QueryBoard>();
+}
+
+String rpageStr;
+try {
+	rpageStr = (String)request.getAttribute("rpageStr");
+	if(rpageStr == null)
+	{
+		rpageStr="";
+	}
+} catch (ClassCastException e) {
+	rpageStr="";
+}
+
+String qpageStr;
+try {
+	qpageStr = (String)request.getAttribute("qpageStr");
+	if(qpageStr == null)
+	{
+		qpageStr="";
+	}
+} catch (ClassCastException e) {
+	qpageStr="";
+}
+
+%>
     <style>
         .dp-detail-wrapper
         {
@@ -330,25 +415,26 @@
     <div class="dp-detail-wrapper">
         <div class="dp-detail-top-wrapper">
             <div class="prod-image">
-                <img src="images/tit_md_goods_3.jpg">
+                <img src="<%=request.getContextPath()%>/upload/product/<%=detail.getImg()%>">
             </div>
             <div class="prod-description">
                 <div class="prod-name">
-                    [교토마블] 데니쉬 식빵 6종
+                    <%=detail.getDisplayListTitle()%>
                 </div>
                 <div class="prod-price">
                     <div>판매가</div>
-                    <div>7,200 원</div>
+                    <div><%=detail.getMinPrice() %> 원</div>
                 </div>
                 <div class="prod-unit">
                     <div>판매단위</div>
-                    <div>1박스</div>
+                    <div><%=detail.getProductUnit()%></div>
                 </div>
                 <div class="prod-origin">
                     <div>원산지</div>
-                    <div>국산</div>
+                    <div><%=detail.getOriginCountry()%></div>
                 </div>
 
+<%if(option.size()>1){ %>
                 <!-- 단일 상품일시 출력 X {-->
                 <div class="purchase-option">
                     <div>구매옵션선택</div>
@@ -361,7 +447,7 @@
                     </div>
                 </div>
                 <!--} 단일 상품일시 출력 X -->
-
+<%}else{ %>
 
                 <!-- 옵션 상품일시 출력 X {-->
                 <div class="quantity">
@@ -373,7 +459,7 @@
                     </div>
                 </div>
                 <!--} 옵션 상품일시 출력 X -->
-
+<%} %>
 
                 <div class="prod-descr-conclude">
                     
@@ -402,50 +488,68 @@
                 <div class="current-tab">상품설명</div>
                 <div>상품이미지</div>
                 <div>상세정보</div>
-                <div>고객후기(38160)</div>
-                <div>상품문의(315)</div>
+                <div>고객후기(<%=detail.getReviewCount()%>)</div>
+                <div>상품문의(<%=detail.getQnaCount()%>)</div>
                 <div></div>
             </div>
+            <div><%=detail.getDisplayListContents()%></div>
         </div>
         <div id="dp-detail-body-wrapper">
             <div class="dp-detail-tab">
                 <div>상품설명</div>
                 <div class="current-tab">상품이미지</div>
                 <div>상세정보</div>
-                <div>고객후기(38160)</div>
-                <div>상품문의(315)</div>
+                <div>고객후기(<%=detail.getReviewCount()%>)</div>
+                <div>상품문의(<%=detail.getQnaCount()%>)</div>
                 <div></div>
             </div>
+            <%for(int i=0; i<renames.size();i++){ %>
+            <div><img src="<%=request.getContextPath()%>/upload/product/<%=renames.get(i)%>"></div>
+            <%} %>
         </div>
         <div id="dp-detail-body-wrapper">
             <div class="dp-detail-tab">
                 <div>상품설명</div>
                 <div>상품이미지</div>
                 <div class="current-tab">상세정보</div>
-                <div>고객후기(38160)</div>
-                <div>상품문의(315)</div>
+                <div>고객후기(<%=detail.getReviewCount()%>)</div>
+                <div>상품문의(<%=detail.getQnaCount()%>)</div>
                 <div></div>
             </div>
+            <div><%=detail.getSupplierName()%></div>
         </div>
         <div id="dp-detail-body-wrapper">
             <div class="dp-detail-tab">
                 <div>상품설명</div>
                 <div>상품이미지</div>
                 <div>상세정보</div>
-                <div class="current-tab">고객후기(38160)</div>
-                <div>상품문의(315)</div>
+                <div class="current-tab">고객후기(<%=detail.getReviewCount()%>)</div>
+                <div>상품문의(<%=detail.getQnaCount()%>)</div>
                 <div></div>
             </div>
+            <%for(int i=0; i<review.size();i++){%>
+            <div><%=review.get(i).getMemberId()%></div><div><%=review.get(i).getReviewScore()%>점 <%=review.get(i).getReviewTitle()%></div><div><%=review.get(i).getReviewContents()%></div>
+            <%}%>
+            <div><%=rpageStr%></div>
         </div>
         <div id="dp-detail-body-wrapper">
             <div class="dp-detail-tab">
                 <div>상품설명</div>
                 <div>상품이미지</div>
                 <div>상세정보</div>
-                <div>고객후기(38160)</div>
-                <div class="current-tab">상품문의(315)</div>
+                <div>고객후기(<%=detail.getReviewCount()%>)</div>
+                <div class="current-tab">상품문의(<%=detail.getQnaCount()%>)</div>
                 <div></div>
             </div>
+            <%for(int i=0; i<qna.size();i++){%>
+            <div><%=qna.get(i).getMemberId()%></div><div><%=qna.get(i).getQueryTitle()%></div><div><%=qna.get(i).getQueryContents()%></div>
+            	<div>
+<%--             <%for(int j=0; j<qna.get(i).getList().size();j++){%>
+            		<div><%=qna.get(i).getList().get(j).getMemberId()%></div><div><%=qna.get(i).getList().get(j).getCommentText()%></div>
+            	<%}%> --%>
+            	</div>
+            <%}%>
+            <div><%=qpageStr%></div>
         </div>
     </div>
 </section>

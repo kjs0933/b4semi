@@ -6,8 +6,7 @@ import java.sql.Timestamp;
 public class DPList {
 	
 	private int displayListSeq;
-	private String displayListTitle;
-	private String displayListContents;
+	private String displayListTitle;	
 	private String dpListAvailable;
 	private Timestamp displayDate;
 	private String img; //판매상품 게시글의 메인 사진 파일명
@@ -33,12 +32,6 @@ public class DPList {
 	}
 	public void setDisplayListTitle(String displayListTitle) {
 		this.displayListTitle = displayListTitle;
-	}
-	public String getDisplayListContents() {
-		return displayListContents;
-	}
-	public void setDisplayListContents(String displayListContents) {
-		this.displayListContents = displayListContents;
 	}
 	public String getDpListAvailable() {
 		return dpListAvailable;

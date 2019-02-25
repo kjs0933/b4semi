@@ -11,7 +11,7 @@ public class Review {
 	private String reviewContents;
 	private Timestamp reviewDate;
 	private Timestamp reviewDeleteDate;
-	private int reviewScore;
+	private double reviewScore;
 	private String productCode;
 	private int displayListSeq;
 	private String memberId;
@@ -67,11 +67,11 @@ public class Review {
 		this.reviewDeleteDate = reviewDeleteDate;
 	}
 
-	public int getReviewScore() {
+	public double getReviewScore() {
 		return reviewScore;
 	}
 
-	public void setReviewScore(int reviewScore) {
+	public void setReviewScore(double reviewScore) {
 		this.reviewScore = reviewScore;
 	}
 

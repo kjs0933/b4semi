@@ -28,12 +28,12 @@ public class TimeSystem extends Thread {
 		try {
 			for(;;)
 			{
-				sleep(1000);
 				if(dayChangeCheck())
 				{
 					System.out.println("타임시스템 - 시스템 날짜 변경 및 데이터 갱신");
 					// 데이터 갱신 로직
 				}
+				sleep(60000);
 			}
 		}catch(InterruptedException e)
 		{

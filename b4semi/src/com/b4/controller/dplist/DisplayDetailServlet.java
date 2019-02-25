@@ -18,6 +18,8 @@ import com.b4.service.DPListService;
 import com.b4.service.QueryBoardService;
 import com.b4.service.ReviewService;
 
+import common.PagingTemplate;
+
 /**
  * Servlet implementation class DisplayDetailServlet
  */
@@ -37,7 +39,6 @@ public class DisplayDetailServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("두번 요청하는가?");
 		int rpage;
 		try {
 			rpage = Integer.parseInt(request.getParameter("rpage"));
@@ -74,22 +75,23 @@ public class DisplayDetailServlet extends HttpServlet {
 			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
 			return;
 		}
+		detail.setQnaCount(new QueryBoardService().countByDP(dpseq));
 		ArrayList<DPOption> option = service.getOption(dpseq);
 		ArrayList<String> renames = service.getRenames(dpseq);
 		
 		List<Review> review = new ReviewService().selectAllByDP(dpseq, rpage);
 		List<QueryBoard> qna = new QueryBoardService().getByDp(dpseq, qpage);
 		
-	
-		
-		//리뷰 저장 + 페이징 처리 필요
-		//QNA 저장 + 페이징 처리 필요
+		String rpageStr = PagingTemplate.pageBar3(request.getContextPath()+"/dpdetail?dpseq="+dpseq+"&qpage="+qpage+"&", rpage, detail.getReviewCount(), "rpage", request.getContextPath());
+		String qpageStr = PagingTemplate.pageBar3(request.getContextPath()+"/dpdetail?dpseq="+dpseq+"&rpage="+rpage+"&", qpage, detail.getQnaCount(), "qpage",request.getContextPath());
 		
 		request.setAttribute("detail", detail);
 		request.setAttribute("option", option);
 		request.setAttribute("renames", renames);
 		request.setAttribute("review", review);
 		request.setAttribute("qna", qna);
+		request.setAttribute("rpageStr", rpageStr);
+		request.setAttribute("qpageStr", qpageStr);
 		request.getRequestDispatcher("/views/dplist/dplist_detail.jsp").forward(request, response);
 		
 	}

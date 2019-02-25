@@ -334,4 +334,30 @@ public class QueryBoardDao {
 		}
 		return list;
 	}
+	
+	public int countByDP(Connection conn, int dpseq)
+	{
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int result = 0;
+		String sql = prop.getProperty("countByDP");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, dpseq);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+			{
+				result = rs.getInt(1);
+			}
+		}catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(rs);
+			close(pstmt);
+		}
+		return result;
+	}
 }

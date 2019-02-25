@@ -128,5 +128,13 @@ public class QueryBoardService {
 		close(conn);
 		return list;
 	}
+	
+	 public int countByDP(int dpseq)
+	 {
+		Connection conn = getConnection();
+		int result = dao.countByDP(conn, dpseq);
+		close(conn);
+		return result;
+	 }
 
 }

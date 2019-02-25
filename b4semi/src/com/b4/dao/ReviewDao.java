@@ -44,7 +44,7 @@ public class ReviewDao {
 			rs = pstmt.executeQuery();
 			if(rs.next())
 			{
-				result = rs.getInt("cnt");
+				result = rs.getInt(1);
 			}
 		}
 		catch(SQLException e)
@@ -82,7 +82,7 @@ public class ReviewDao {
 				review.setReviewContents(rs.getString("reviewContents"));
 				review.setReviewDate(rs.getTimestamp("reviewDate"));
 				review.setReviewDeleteDate(rs.getTimestamp("reviewDeleteDate"));
-				review.setReviewScore(rs.getInt("reviewScore"));
+				review.setReviewScore(rs.getDouble("reviewScore"));
 				review.setProductCode(rs.getString("productCode"));
 				review.setDisplayListSeq(rs.getInt("displayListSeq"));
 				review.setMemberId(rs.getString("memberId"));
@@ -208,7 +208,7 @@ public class ReviewDao {
 			pstmt.setString(2, r.getReviewTitle());
 			pstmt.setString(3, r.getReviewContents());
 			pstmt.setTimestamp(4, r.getReviewDate());
-			pstmt.setInt(5, r.getReviewScore());
+			pstmt.setDouble(5, r.getReviewScore());
 			pstmt.setString(6, r.getProductCode());
 			pstmt.setInt(7, r.getDisplayListSeq());
 			result = pstmt.executeUpdate();
@@ -235,7 +235,7 @@ public class ReviewDao {
 			pstmt.setString(1, r.getReviewTitle());
 			pstmt.setString(2, r.getReviewContents());
 			pstmt.setTimestamp(3, r.getReviewDate());
-			pstmt.setInt(4, r.getReviewScore());
+			pstmt.setDouble(4, r.getReviewScore());
 			pstmt.setInt(5, r.getReviewSeq());
 			result = pstmt.executeUpdate();
 		}

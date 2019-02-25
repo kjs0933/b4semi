@@ -10,6 +10,8 @@ public class DPDetail extends DPList {
 	private String supplierPhone;
 	private String supplierAddress;
 	private String supplierEmail;
+	private String displayListContents;
+	private int qnaCount;
 	
 	public DPDetail () {}
 	
@@ -61,4 +63,17 @@ public class DPDetail extends DPList {
 	public void setSupplierEmail(String supplierEmail) {
 		this.supplierEmail = supplierEmail;
 	}
+	public String getDisplayListContents() {
+		return displayListContents;
+	}
+	public void setDisplayListContents(String displayListContents) {
+		this.displayListContents = displayListContents;
+	}
+	public int getQnaCount() {
+		return qnaCount;
+	}
+	public void setQnaCount(int qnaCount) {
+		this.qnaCount = qnaCount;
+	}
+	
 }
