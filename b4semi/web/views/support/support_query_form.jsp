@@ -1,6 +1,14 @@
+<%@page import="com.sun.org.omg.CORBA.OpDescriptionSeqHelper"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="com.b4.model.vo.*, java.util.*, static common.DateFormatTemplate.getTillDate" %>
 <%@ include file="/views/common/header.jsp"%>
+<%
+	String orderSeq = (String)request.getAttribute("orderSeq");
+	List<OrderList> orderlist = (List<OrderList>)request.getAttribute("orderlist");
+	List<OrderPDetail> orderPList = (List<OrderPDetail>)request.getAttribute("orderProductList");
+%>
+
     <style>
         .support-wrapper
         {
@@ -397,7 +405,7 @@
             <div class="query-form-order-seq">
                 <div>주문번호</div>
                 <div>
-                    <input type="text" name="orderSeq" id="order-seq">
+                    <input type="text" name="orderSeq" id="order-seq" value="<%=orderSeq%>">
                     <input type="button" value="주문 조회">
                 </div>
                 <div class="order-seq-list" id="order-seq-list">
@@ -411,28 +419,26 @@
                         <div>주문금액</div>
                         <div>선택</div>
                     </div>
+                    <%if(orderlist!=null) {
+                    	for(int i=0; i<orderlist.size(); i++){ 
+                    		String date=getTillDate(orderlist.get(i).getOrderTime());
+                    		String productName=orderPList.get(i).getProductName();
+                    		if(productName.length()>5){productName=productName.substring(0,5)+"..";}%>                    
                     <div class="order-seq-list-cols">
-                        <div>1550500008708</div>
-                        <div>19-02-18</div>
-                        <div>[몽상클레르]커스터드..외 1건</div>
-                        <div>2개</div>
-                        <div>11,868 원</div>
+                        <div><%=orderlist.get(i).getOrderSeq() %></div>
+                        <div><%=date %></div>
+                        <div><%=productName %><%if(orderPList.get(i).getCountByOrderList()!=1){ %> 외  <%=(orderPList.get(i).getCountByOrderList())-1 %>건<%} %></div>
+                        <div><%=orderPList.get(i).getCountByOrderList() %>개</div>
+                        <div><%=orderlist.get(i).getTotalPrice() %> 원</div>
                         <div><input type="radio" name="orderSeq" class="order-seq-radio"></div>
                     </div>
-                    <div class="order-seq-list-cols">
-                        <div>1550328316414</div>
-                        <div>19-02-17</div>
-                        <div>[갈바니나] 유기농 과..외 2건</div>
-                        <div>3개</div>
-                        <div>9,030</div>
-                        <div><input type="radio" name="orderSeq" class="order-seq-radio"></div>
-                    </div>
+                    <%}}%>               
                 </div>
             </div>
             <div class="query-form-email">
                 <div>이메일</div>
                 <div>
-                    <input type="text" name="memberEmail" id="member-email" readonly="readonly" value="jwj3955@gmail.com">
+                    <input type="text" name="memberEmail" id="member-email" readonly="readonly" value="<%=loginMember.getMemberEmail()%>">
                     <input type="checkbox" name="receiveEmail" id="receive-email" class="receive-email"><label for="receive-email"><span></span></label>답변을 이메일로 받겠습니다.
                 </div>
             </div>
@@ -443,9 +449,9 @@
             <div class="query-form-image-upload">
                 <div>이미지</div>
                 <div>
-                    <div class="added-image-box">
+                    <!-- <div class="added-image-box">
                         <img src="images/order_sample_5.jpg">
-                    </div>
+                    </div> -->
                     <div class="image-upload-container">
                         <span>+</span><input type="file" name="originalFile" id="originalFile">
                     </div>

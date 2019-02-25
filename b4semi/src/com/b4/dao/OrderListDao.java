@@ -132,6 +132,46 @@ public class OrderListDao {
 		return ol;
 	}
 
+	public List<OrderList> selectByMemberRecent5(Connection conn, int memberSeq) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<OrderList> list = new ArrayList<>();
+		String sql = prop.getProperty("selectByMemberRecent5");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, memberSeq);
+			rs = pstmt.executeQuery();
+			while(rs.next())
+			{
+				OrderList ol = new OrderList();
+				ol.setOrderSeq(rs.getInt("orderSeq"));
+				ol.setCouponSeq(rs.getInt("couponSeq"));
+				ol.setMemberSeq(rs.getInt("memberSeq"));
+				ol.setOrderStatusCode(rs.getString("orderStatusCode"));
+				ol.setSpentMileage(rs.getInt("spentMileage"));
+				ol.setReceiverName(rs.getString("receiverName"));
+				ol.setReceiverAddress(rs.getString("receiverAddress"));
+				ol.setReceiverPhone(rs.getString("receiverPhone"));
+				ol.setReceiverComment(rs.getString("receiverComment"));
+				ol.setShipmentNo(rs.getString("shipmentNo"));
+				ol.setTotalPrice(rs.getInt("totalPrice"));
+				ol.setCancelprice(rs.getInt("cancelPrice"));
+				ol.setOrderTime(rs.getTimestamp("orderTime"));
+				ol.setShipmentFee(rs.getInt("shipmentFee"));
+				list.add(ol);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally {
+			close(rs);
+			close(pstmt);
+		}
+		return list;
+	}
+
 
 
 }
