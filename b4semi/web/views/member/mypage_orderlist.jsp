@@ -498,7 +498,7 @@
                                     <div>주문상태</div>
                                 </div>
                                 <div>
-                                    <div><%=orderlist.get(i).getOrderSeq() %></div>
+                                    <div class="order-seq"><%=orderlist.get(i).getOrderSeq() %></div>
                                     <div><%=(orderlist.get(i).getTotalPrice())+(orderlist.get(i).getShipmentFee())%> 원</div>
                                     <%
                                     switch(orderlist.get(i).getOrderStatusCode()){
@@ -513,8 +513,8 @@
                                     <div><%=orderStatus %></div>
                                 </div>
                                 <div>
-                                    <input type="button" value="후기 작성">
-                                    <input type="button" value="1:1 문의">
+                                    <input class="form-review" type="button" value="후기 작성">
+                                    <input class="form-query" type="button" value="1:1 문의">
                                 </div>
                             </div>
                         </div>
@@ -524,4 +524,17 @@
             </div>
         </div>
     </section>
+    <script>
+        const formReviewBtn = $('.form-review');
+        const formQueryBtn = $('.form-query');
+
+        console.log(formQueryBtn);
+        
+        $(() => {
+            formQueryBtn.on('click', (e) => {
+                const orderSeq = $(e.target).parent().parent().find('.order-seq').text();
+                location.href='<%=request.getContextPath()%>/queryForm?orderSeq='+orderSeq;
+            });
+        });
+    </script>
 <%@ include file="/views/common/footer.jsp" %>

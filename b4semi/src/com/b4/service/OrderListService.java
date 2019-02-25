@@ -35,4 +35,11 @@ public class OrderListService {
 		return orderList;
 	}
 
+	public List<OrderList> selectByMemberRecent5(int memberSeq) {
+		Connection conn = getConnection();
+		List<OrderList> list = dao.selectByMemberRecent5(conn, memberSeq);
+		close(conn);
+		return list;
+	}
+
 }
