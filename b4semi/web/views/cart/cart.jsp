@@ -336,7 +336,7 @@
                     <div>
                         <div class="quantity-box">
                             <div><img src="<%=request.getContextPath() %>/images/arrow_left_black.png"></div>
-                            <input type="text" name="quantity<%=i+1%>" id="quantity<%=i+1%>" value="<%=cartList.get(i).getProductCount()%>"/>
+                            <input type="text" name="quantity<%=i+1%>" id="quantity<%=i+1%>" value="<%=cartList.get(i).getProductCount()%>" readonly/>
                             <div><img src="<%=request.getContextPath() %>/images/arrow_right_black.png"></div>
                         </div>
                     </div>
@@ -356,13 +356,13 @@
                 <input type="button" value="품절 삭제" onclick="fn_soldout_delete()"/>
             </div>
             <div class="total-info">
-                <div><p>상품금액</p><input type="text" name="preTotal" id="preTotal" value=""></div>
+                <div><p>상품금액</p><input type="text" name="preTotal" id="preTotal" value="" readonly></div>
                 <p>-</p>
-                <div><p>할인금액</p><input type="text" name="discount" id="discount" value=""></div>
+                <div><p>할인금액</p><input type="text" name="discount" id="discount" value="" readonly></div>
                 <p>+</p>
-                <div><p>배송료</p><input type="text" name="shipFee" id="shipFee" value=""></div>
+                <div><p>배송료</p><input type="text" name="shipFee" id="shipFee" value="" readonly></div>
                 <p>=</p>
-                <div><p>결제예정금액</p><input type="text" name="totalPrice" id="totalPrice"></div>
+                <div><p>결제예정금액</p><input type="text" name="totalPrice" id="totalPrice" readonly></div>
             </div>
             <input id="checkout" type="submit" value="주문하기">
         </form>
