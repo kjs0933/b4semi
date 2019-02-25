@@ -23,9 +23,8 @@
             flex-flow: column nowrap;
             background-color: white;
             padding: 40px 100px;
-            margin: 30px 0;
-            
-            border: 1px solid gray;
+            margin: 20px 0;
+			border-top: 1px solid #ccc;
         }
 
         .signup-frm input
@@ -49,7 +48,7 @@
         {
             width: 300px;
             height: 45px;
-            margin: 40px 0;
+            margin: 50px 0;
             border: none;
             background-color: rgb(38, 85, 139);
             color: white;

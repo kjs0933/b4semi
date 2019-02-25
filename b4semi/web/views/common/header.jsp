@@ -41,7 +41,7 @@
     <title>Document</title>
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR|Marcellus+SC" rel="stylesheet">
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-       
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/star_rate.css">
 	<style>
 	
 		/* 헤더 */
