@@ -1,13 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/views/common/header.jsp"%>
-<%@ page import="com.b4.model.vo.MypageHeader, java.util.*, com.b4.model.vo.OrderPDetail, com.b4.model.vo.OrderList" %>
+<%@ page import="com.b4.model.vo.MypageHeader, java.util.*, com.b4.model.vo.OrderPDetail, com.b4.model.vo.OrderList, java.net.URLDecoder" %>
 
 <%
+	
 	MypageHeader mh = (MypageHeader)request.getAttribute("mh");
 	if(mh == null){mh = new MypageHeader();}
 	
 	List<OrderPDetail> opdList = (List<OrderPDetail>)request.getAttribute("opdList");
+
 	OrderList orderlist = (OrderList)request.getAttribute("orderList");
 	String orderStatus="";
 	switch(orderlist.getOrderStatusCode()){
@@ -19,7 +21,7 @@
     default : orderStatus="구매확정"; break;
     }
 	
-	String phone = orderlist.getReceiverPhone().substring(1, 3)+"-"+orderlist.getReceiverPhone().substring(4, 7)+"-"+orderlist.getReceiverPhone().substring(8, 11);
+	String phone = orderlist.getReceiverPhone().substring(0, 3)+"-"+orderlist.getReceiverPhone().substring(3, 7)+"-"+orderlist.getReceiverPhone().substring(7, 11);
 %>
     <style>
         .mypage-wrapper
@@ -404,10 +406,10 @@
                         	for(int i=0;i<opdList.size();i++){
                         %>
                         <div class="order-table-cols">
-                            <div><img src="images/order_sample_1.jpg"></div>
+                            <div><img src="<%=request.getContextPath() %>/upload/product/<%=opdList.get(i).getProductName() %>.jpg"></div>
                             <div>
-                                <div><b><!-- [갈바니나] 자몽소다수 355ml --><%=opdList.get(i).getProductName()%></b></div>
-                                <div><span><!-- 3,800 --><%=opdList.get(i).getDisplayOptionPrice() %> 원</span> <%=opdList.get(i).getOrderProductCount() %>개</div>
+                                <div><b><%=opdList.get(i).getProductName()%></b></div>
+                                <div><span><%=opdList.get(i).getDisplayOptionPrice() %> 원</span> <%=opdList.get(i).getOrderProductCount() %>개</div>
                             </div>
                             <div><%=orderStatus %></div>
                             <div>
@@ -461,11 +463,11 @@
                             </div>
                             <div class="payment-info-cols">
                                 <span>적립금 사용</span>
-                                <span>0 원</span>
+                                <span><%=orderlist.getSpentMileage() %> 원</span>
                             </div>
                             <div class="payment-info-cols">
                                 <span>배송비</span>
-                                <span>0 원</span>
+                                <span><%=orderlist.getShipmentFee() %> 원</span>
                             </div>
                             <div class="payment-info-cols">
                                 <span>결제금액</span>

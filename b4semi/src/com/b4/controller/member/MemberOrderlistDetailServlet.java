@@ -1,6 +1,7 @@
 package com.b4.controller.member;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -42,6 +43,7 @@ public class MemberOrderlistDetailServlet extends HttpServlet {
 			request.setAttribute("msg", "세션이 만료되었습니다.");
 			request.setAttribute("loc", "/");
 			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
+			
 		}
 		
 		//각 mypage 위에 멤버 기본정보 가져오는 트랜잭션

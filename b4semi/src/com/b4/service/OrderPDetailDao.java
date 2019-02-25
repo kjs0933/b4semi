@@ -74,6 +74,7 @@ public class OrderPDetailDao {
 				opd.setOptionavailable(rs.getString("optionavailable"));
 				opd.setOrderProductCount(rs.getInt("orderProductCount"));
 				opd.setOrderSeq(rs.getInt("orderSeq"));
+				list.add(opd);
 			}
 		}
 		catch(SQLException e)
