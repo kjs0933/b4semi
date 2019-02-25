@@ -44,7 +44,6 @@ public class CartDao {
 				cart = new Cart();
 				cart.setOptionAvailable(rs.getString("optionAvailable"));
 				cart.setProductUnit(rs.getString("productUnit"));
-				cart.setDiscountCode(rs.getString("discountCode"));
 				cart.setProductCode(rs.getString("productCode"));
 				cart.setProductName(rs.getString("productName"));
 				cart.setDisplayListSeq(rs.getInt("displayListSeq"));
@@ -94,7 +93,6 @@ public class CartDao {
 				cart = new Cart();
 				cart.setOptionAvailable(rs.getString("optionAvailable"));
 				cart.setProductUnit(rs.getString("productUnit"));
-				cart.setDiscountCode(rs.getString("discountCode"));
 				cart.setProductCode(rs.getString("productCode"));
 				cart.setProductName(rs.getString("productName"));
 				cart.setDisplayListSeq(rs.getInt("displayListSeq"));

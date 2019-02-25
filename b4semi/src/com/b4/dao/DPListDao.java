@@ -41,8 +41,10 @@ public class DPListDao {
 		try {
 			ps=cn.prepareStatement(sql);
 			ps.setString(1, "%"+keyword+"%");
-			ps.setString(2, "%"+sub+"%");
-			ps.setString(3, "%"+major+"%");
+			ps.setString(2, "%"+keyword+"%");
+			ps.setString(3, "%"+keyword+"%");
+			ps.setString(4, "%"+sub+"%");
+			ps.setString(5, "%"+major+"%");
 			rs=ps.executeQuery();
 			if(rs.next())
 			{
@@ -176,10 +178,12 @@ public class DPListDao {
 		try {
 			ps=cn.prepareStatement(sql);
 			ps.setString(1, "%"+keyword+"%");
-			ps.setString(2, "%"+sub+"%");
-			ps.setString(3, "%"+major+"%");
-			ps.setInt(4, (cPage)*numPerPage); //최대값이 먼저 와야 한다
-			ps.setInt(5, (cPage-1)*numPerPage+1);
+			ps.setString(2, "%"+keyword+"%");
+			ps.setString(3, "%"+keyword+"%");
+			ps.setString(4, "%"+sub+"%");
+			ps.setString(5, "%"+major+"%");
+			ps.setInt(6, (cPage)*numPerPage); //최대값이 먼저 와야 한다
+			ps.setInt(7, (cPage-1)*numPerPage+1);
 			rs=ps.executeQuery();
 			while(rs.next())
 			{
@@ -196,6 +200,7 @@ public class DPListDao {
 				dplist.setProductUnit(rs.getString("PRODUCTUNIT"));
 				dplist.setProductCode(rs.getString("PRODUCTCODE"));
 				dplist.setDiscountMinPrice();
+				dplist.setReviewCount(rs.getInt("POPULARITY"));
 				result.add(dplist);
 			}
 		}
@@ -230,11 +235,10 @@ public class DPListDao {
 				dpoption.setDisplayListSeq(rs.getInt("DISPLAYLISTSEQ"));
 				dpoption.setDisplayOptionPrice(rs.getInt("DISPLAYOPTIONPRICE"));
 				dpoption.setOptionAvailable(rs.getString("OPTIONAVAILABLE"));
-				dpoption.setProductUnit(rs.getString("PRODUCTUNIT"));
 				dpoption.setDiscountRate(rs.getDouble("DISCOUNTRATE"));
-				dpoption.setDiscountName(rs.getString("DISCOUNTNAME"));
 				dpoption.setDiscountCode(rs.getString("DISCOUNTCODE"));
 				dpoption.setDiscountOptionPrice();
+				dpoption.setOriginCountry(rs.getString("ORIGINCOUNTRY"));
 				result.add(dpoption);
 			}
 		}

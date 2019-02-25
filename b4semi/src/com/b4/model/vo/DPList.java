@@ -1,7 +1,6 @@
 package com.b4.model.vo;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 
 //DB에서 보여줄 데이터를 가져오기 위한 클래스
 public class DPList {
@@ -17,9 +16,9 @@ public class DPList {
 	private String reviewScore; //평균리뷰점수, DB에서 가져온 소수점 두자리를 그대로 표현해주기 위해 String으로 저장
 	private String productUnit; //상품 단위
 	private int optionCount; //세부옵션 수
-	private ArrayList<DPOption> options; //세부옵션 내용들 - 세부옵션 수가 2 이상일때 저장한다
 	private String productCode; // 주의 - 세부옵션이 하나일때 이용해야 합니다
 	private int discountMinPrice; //할인 가격
+	private int reviewCount; // 작성된 리뷰수
 	
 	public DPList () {}
 	
@@ -83,12 +82,6 @@ public class DPList {
 	public void setOptionCount(int optionCount) {
 		this.optionCount = optionCount;
 	}
-	public ArrayList<DPOption> getOptions() {
-		return options;
-	}
-	public void setOptions(ArrayList<DPOption> options) {
-		this.options = options;
-	}
 	public String getProductUnit() {
 		return productUnit;
 	}
@@ -110,4 +103,11 @@ public class DPList {
 	public void setDiscountMinPrice() {
 		this.discountMinPrice = (int)Math.round(minPrice*(1-discountRate)/10)*10;
 	}
+	public int getReviewCount() {
+		return reviewCount;
+	}
+	public void setReviewCount(int reviewCount) {
+		this.reviewCount = reviewCount;
+	}
+	
 }

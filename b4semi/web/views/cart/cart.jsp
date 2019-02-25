@@ -327,6 +327,7 @@
                     <div><img src="<%=request.getContextPath() %>/upload/product/<%=cartList.get(i).getImg()%>" onError="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';"></div>
                     <div><div>
                     <p><a href="<%=request.getContextPath()%>/dpdetail?dpseq=<%=cartList.get(i).getDisplayListSeq()%>" style="text-decoration: none;"><%=cartList.get(i).getDisplayListTitle()%></a> (옵션 - <%=cartList.get(i).getProductName()%>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;단위:<%=cartList.get(i).getProductUnit()%></p><br>
+                    <%=cartList.get(i).getDiscountName()==null?"":cartList.get(i).getDiscountName()%>
                     <% if(cartList.get(i).getDiscountRate()>0){%>
                     <p><strike><%=cartList.get(i).getDisplayOptionPrice()%>원</strike> → <b><%=cartList.get(i).getDiscountOptionPrice()%>원<%="Y".equals(cartList.get(i).getOptionAvailable())?"":" <품절>"%></b></p>
                     <%}else{ %>

@@ -1,6 +1,6 @@
 package com.b4.model.vo;
 
-//장바구니, DPList 모달창에 표시하기 위한 객체
+//상세페이지에서 옵션별로 표시하기 위한 객체
 public class DPOption {
 	
 	private String productCode;
@@ -8,64 +8,38 @@ public class DPOption {
 	private String discountCode;
 	private int displayOptionPrice;
 	private String OptionAvailable;
-	private String discountName;
 	private double discountRate;
 	private String productName;
-	private String productUnit;
 	private int discountOptionPrice; //할인 가격
+	private String originCountry; //개별 원산지
 	
 	public DPOption() {
 		// TODO Auto-generated constructor stub
 	}
-
 	public String getProductCode() {
 		return productCode;
 	}
-
 	public void setProductCode(String productCode) {
 		this.productCode = productCode;
 	}
-
 	public int getDisplayListSeq() {
 		return displayListSeq;
 	}
-
 	public void setDisplayListSeq(int displayListSeq) {
 		this.displayListSeq = displayListSeq;
 	}
-
-	public String getDiscountCode() {
-		return discountCode;
-	}
-
-	public void setDiscountCode(String discountCode) {
-		this.discountCode = discountCode;
-	}
-
 	public int getDisplayOptionPrice() {
 		return displayOptionPrice;
 	}
-
 	public void setDisplayOptionPrice(int displayOptionPrice) {
 		this.displayOptionPrice = displayOptionPrice;
 	}
-
 	public String getOptionAvailable() {
 		return OptionAvailable;
 	}
-
 	public void setOptionAvailable(String optionAvailable) {
 		OptionAvailable = optionAvailable;
 	}
-
-	public String getDiscountName() {
-		return discountName;
-	}
-
-	public void setDiscountName(String discountName) {
-		this.discountName = discountName;
-	}
-
 	public double getDiscountRate() {
 		return discountRate;
 	}
@@ -82,14 +56,6 @@ public class DPOption {
 		this.productName = productName;
 	}
 
-	public String getProductUnit() {
-		return productUnit;
-	}
-
-	public void setProductUnit(String productUnit) {
-		this.productUnit = productUnit;
-	}
-
 	public int getDiscountOptionPrice() {
 		return discountOptionPrice;
 	}
@@ -100,6 +66,19 @@ public class DPOption {
 	public void setDiscountOptionPrice() {
 		this.discountOptionPrice = (int)Math.round(displayOptionPrice*(1-discountRate)/10)*10;
 	}
+	public String getOriginCountry() {
+		return originCountry;
+	}
+	public void setOriginCountry(String originCountry) {
+		this.originCountry = originCountry;
+	}
+	public String getDiscountCode() {
+		return discountCode;
+	}
+	public void setDiscountCode(String discountCode) {
+		this.discountCode = discountCode;
+	}
+	
 	
 
 }

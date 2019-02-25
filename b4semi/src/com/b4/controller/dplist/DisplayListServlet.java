@@ -88,7 +88,7 @@ public class DisplayListServlet extends HttpServlet {
 		
 		DPListService service = new DPListService();
 
-		ArrayList<DPList> dplist = service.searchDPList(cPage,numPerPage,keyword,sub,major,sortText,true);
+		ArrayList<DPList> dplist = service.searchDPList(cPage,numPerPage,keyword,sub,major,sortText);
 		
 		
 		String subText; 

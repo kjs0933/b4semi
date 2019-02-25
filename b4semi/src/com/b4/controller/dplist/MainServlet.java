@@ -50,9 +50,9 @@ public class MainServlet extends HttpServlet {
 		String[] newURL = prop.getProperty("newURL").split("/");
 		
 		//평점이 높은 순서대로 4개 베스트
-		ArrayList<DPList> best = service.searchDPList(1,4,"","","","REVIEWSCORE DESC",false);
+		ArrayList<DPList> best = service.searchDPList(1,4,"","","","REVIEWSCORE DESC");
 		//가장 할인율이 높은 순서대로 6개 프로모션 상품
-		ArrayList<DPList> promotion = service.searchDPList(1,6,"","","","DISCOUNTRATE DESC NULLS LAST",false);
+		ArrayList<DPList> promotion = service.searchDPList(1,6,"","","","DISCOUNTRATE DESC NULLS LAST");
 		
 		request.setAttribute("best", best);
 		request.setAttribute("promotion", promotion);
