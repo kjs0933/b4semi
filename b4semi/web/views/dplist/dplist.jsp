@@ -124,11 +124,11 @@
             margin-bottom: 70px;
         }
 
-        .plist-board  > div > div 
+        .add-to-cart
         {
             position: absolute;
             right: 5%;
-            top: 73%;
+            top: 74%;
             width: 50px;
             height: 50px;
             border-radius: 50%;
@@ -138,6 +138,56 @@
             justify-content: center;
             cursor: pointer;
         }
+        
+        .plist-title
+        {
+        	font-size: 18px;
+            color: #222;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .rating-holder {
+            display: inline-block;
+            box-sizing: border-box;
+            display: flex;
+            align-items: flex-end;
+        	position: absolute;
+        	top: 0;
+        	right: 0;
+        	margin-right: 2px;
+        }
+        
+        .c-rating
+        {
+        	display: flex;
+        }
+
+        .c-rating button {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            border: 0;
+            text-indent: -9999px;
+            outline: none;
+            background: url("data:image/svg+xml;utf8,%3Csvg%20version%3D%221.1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20width%3D%22512%22%20height%3D%22512%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cpath%20fill%3D%22%23ddd%22%20d%3D%22M457.888 210.672l-139.504-20.272-62.384-126.4-62.384 126.4-139.504 20.272 100.944 98.384-23.84 138.928 124.768-65.6 124.768 65.6-23.84-138.928c0 0 100.944-98.384 100.944-98.384z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E") center/cover no-repeat;
+        }
+        
+        .plist-price-box
+        {
+        	display: flex;
+        	justify-content: space-between;
+        }
+                
+        .plist-price
+        {
+            font-size: 15px;
+            color: rgb(38, 85, 139);
+        }
+        
+        
 
         .plist-board  > div > div > img
         {
@@ -162,20 +212,8 @@
             margin: 0;
         }
 
-        .plist-board  > div p:first-of-type
-        {
-            font-size: 20px;
-            color: #222;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-        }
 
-        .plist-board  > div p:last-of-type
-        {
-            font-size: 16px;
-            color: rgb(38, 85, 139);
-        }
+        
 
         .major-category
         {
@@ -318,9 +356,8 @@
             margin-top: 50px;
 
         }
+    </style>
         
-        .plist-price
-        .plist-rate
 
 </style>
 <section>
@@ -364,19 +401,49 @@
             </div>
         </div>
         
+       
+        
+        
         <div class="plist-board">
+        
         <%for(int i=0; i< dplist.size();i++) {%>
+            
+            <%
+            	double standardizedRate = 0;
+            	int integer = (int)(Double.parseDouble(dplist.get(i).getReviewScore()));
+            	double decimal = Double.parseDouble(dplist.get(i).getReviewScore()) - integer;
+            	if(decimal >= 0.75) {standardizedRate = (double)integer + 0.75;}
+            	else if(decimal >= 0.5) {standardizedRate = (double)integer + 0.5;}
+            	else if(decimal >= 0.25) {standardizedRate = (double)integer + 0.25;}
+            	else if(decimal < 0.25) {standardizedRate = (double)integer;}
+            %>
+
             <div>
                 <img src="<%=request.getContextPath()%>/upload/product/<%=dplist.get(i).getImg()%>" onError="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';">
                 <input type='hidden' name='plist-index' value="<%=dplist.get(i).getOptionCount()==1?dplist.get(i).getProductCode():""%>"/>
                 <input type='hidden' name='plist-index' value="<%=dplist.get(i).getDisplayListSeq()%>"/>
-                <div><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
-                <p><%=dplist.get(i).getDisplayListTitle()%></p>
+                <div class="add-to-cart"><img src="<%=request.getContextPath()%>/images/add_to_cart.png"></div>
+                <div class="plist-title">
+                	<%=dplist.get(i).getDisplayListTitle()%>
+                </div>
                  <%if(dplist.get(i).getDiscountRate()>0){%>
-                  <p class="plist-price"><del><%=dplist.get(i).getMinPrice()%>원</del> → <b><%=dplist.get(i).getDiscountMinPrice()%>원</b>&nbsp;&nbsp;&nbsp;&nbsp;(단위:<%=dplist.get(i).getProductUnit()%>)<span class="plist-rate">★<%=dplist.get(i).getReviewScore()%></span></p>
+                <div class="plist-price-box">
+                  	<div class="plist-price"><del><%=dplist.get(i).getMinPrice()%>원</del> → <b><%=dplist.get(i).getDiscountMinPrice()%>원</b>&nbsp;&nbsp;(단위:<%=dplist.get(i).getProductUnit()%>)</div>
+                </div>
                   <%}else{ %>
-                  <p class="plist-price"><%=dplist.get(i).getMinPrice()%>원&nbsp;&nbsp;&nbsp;&nbsp;(단위:<%=dplist.get(i).getProductUnit()%>)<span class="plist-rate">★<%=dplist.get(i).getReviewScore()%></span></p>
+                <div class="plist-price-box">
+                  	<div class="plist-price"><%=dplist.get(i).getMinPrice()%>원&nbsp;&nbsp;(단위:<%=dplist.get(i).getProductUnit()%>)</div>
+                </div>
                   <%}%>
+            	<div class="rating-holder">
+					<div class="c-rating" data-rating-value="<%=decimal < 0.25 ? (int)standardizedRate : standardizedRate%>">
+					    <button>1</button>
+					    <button>2</button>
+					    <button>3</button>
+					    <button>4</button>
+					    <button>5</button>
+					</div>
+    			</div>
             </div>
         <%} %>
         </div>
