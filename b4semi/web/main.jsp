@@ -441,7 +441,7 @@ try {
             <p>베스트 상품</p>
             <div class="best-products-box">
             <%for(int i=0;i<best.size();i++) {%>
-                <div><div><a href="#"><img src="<%=request.getContextPath()%>/upload/product/<%=best.get(i).getImg()%>" onError="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';"></a></div><p><b><%=best.get(i).getDisplayListTitle()%></b>
+                <div><div><a href="<%=request.getContextPath()%>/dpdetail?dpseq=<%=best.get(i).getDisplayListSeq()%>"><img src="<%=request.getContextPath()%>/upload/product/<%=best.get(i).getImg()%>" onError="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';"></a></div><p><b><%=best.get(i).getDisplayListTitle()%></b>
                   <%if(best.get(i).getDiscountRate()>0){%>
                   <br><del><%=best.get(i).getMinPrice()%>원</del> → <b><%=best.get(i).getDiscountMinPrice()%>원</b>
                   <%}else{ %>
@@ -487,7 +487,7 @@ try {
             <div class="promotion-products-container">
                 <div class="promotion-products-image-track"
                 <%for(int i=0; i< promotion.size();i++){%>
-                	><div class="promotion-products-image-box"><div><a href="#"><img src="<%=request.getContextPath()%>/upload/product/<%=promotion.get(i).getImg()%>" onError="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';"></a></div><p><b>★<%=promotion.get(i).getReviewScore()%> <%=promotion.get(i).getDisplayListTitle()%></b>
+                	><div class="promotion-products-image-box"><div><a href="<%=request.getContextPath()%>/dpdetail?dpseq=<%=promotion.get(i).getDisplayListSeq()%>"><img src="<%=request.getContextPath()%>/upload/product/<%=promotion.get(i).getImg()%>" onError="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';"></a></div><p><b>★<%=promotion.get(i).getReviewScore()%> <%=promotion.get(i).getDisplayListTitle()%></b>
                 <%if(promotion.get(i).getDiscountRate()>0){%>
                   <br><del><%=promotion.get(i).getMinPrice()%>원</del> → <b><%=promotion.get(i).getDiscountMinPrice()%>원</b>&nbsp;&nbsp;&nbsp;&nbsp;(단위:<%=promotion.get(i).getProductUnit()%>)
                   <%}else{ %>

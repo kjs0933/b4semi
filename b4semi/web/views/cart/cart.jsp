@@ -326,11 +326,11 @@
                     <div><input type="checkbox" name="products" id="product<%=i+1 %>" class="products"><label for="product<%=i+1 %>"><span></span></label></div>
                     <div><img src="<%=request.getContextPath() %>/upload/product/<%=cartList.get(i).getImg()%>" onError="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';"></div>
                     <div><div>
-                    <p><a href="#"><%=cartList.get(i).getDisplayListTitle()%></a> (옵션 - <%=cartList.get(i).getProductName()%>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;단위:<%=cartList.get(i).getProductUnit()%></p><br>
+                    <p><a href="<%=request.getContextPath()%>/dpdetail?dpseq=<%=cartList.get(i).getDisplayListSeq()%>" style="text-decoration: none;"><%=cartList.get(i).getDisplayListTitle()%></a> (옵션 - <%=cartList.get(i).getProductName()%>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;단위:<%=cartList.get(i).getProductUnit()%></p><br>
                     <% if(cartList.get(i).getDiscountRate()>0){%>
-                    <p><strike><%=cartList.get(i).getDisplayOptionPrice()%>원</strike> → <b><%=cartList.get(i).getDiscountOptionPrice()%>원</b></p>
+                    <p><strike><%=cartList.get(i).getDisplayOptionPrice()%>원</strike> → <b><%=cartList.get(i).getDiscountOptionPrice()%>원<%="Y".equals(cartList.get(i).getOptionAvailable())?"":" <품절>"%></b></p>
                     <%}else{ %>
-                    <p><%=cartList.get(i).getDisplayOptionPrice()%>원</p>
+                    <p><%=cartList.get(i).getDisplayOptionPrice()%>원<%="Y".equals(cartList.get(i).getOptionAvailable())?"":" <품절>"%></p>
                     <%}%>
                     </div></div>
                     <div>
@@ -347,12 +347,13 @@
                     <input type="hidden" id="discount<%=i+1%>" value="<%=cartList.get(i).getDisplayOptionPrice()-cartList.get(i).getDiscountOptionPrice()%>">
                     <input type="hidden" id="dpseq<%=i+1%>" value="<%=cartList.get(i).getDisplayListSeq()%>">
                     <input type="hidden" id="pcode<%=i+1%>" value="<%=cartList.get(i).getProductCode()%>">
+                    <input type="hidden" id="available<%=i+1%>" value="<%=cartList.get(i).getOptionAvailable()%>">
                 </div>
                 <%}}%>
             </div>
             <div class="checkbox-control">
                 <input type="button" value="선택 삭제" onclick="fn_selected_delete()"/>
-                <input type="button" value="품절 삭제"/>
+                <input type="button" value="품절 삭제" onclick="fn_soldout_delete()"/>
             </div>
             <div class="total-info">
                 <div><p>상품금액</p><input type="text" name="preTotal" id="preTotal" value=""></div>
@@ -506,8 +507,45 @@
     			});
     			cart_total_calculate();
         	}
+        	else
+        	{
+        		alert("먼저 체크박스에 체크해주세요");
+        	}
+        	
 		}
-		
+		function fn_soldout_delete() {
+			var c=0;
+			var dpseqs="";
+			var pcodes="";
+			var changes="";
+			
+        	for(var i=0;i<cartSize;i++)
+        	{
+        		if($("#available"+(i+1)).val() != "Y")
+        		{
+					dpseqs+=$("#dpseq"+(i+1)).val()+",";
+					pcodes+=$("#pcode"+(i+1)).val()+",";
+					changes+="-99999999,"
+        			$("#product"+(i+1)).parent().parent().remove();
+					c++;
+        		}
+        	}
+        	if(c>0)
+        	{
+    			$.ajax({
+    				url:"<%=request.getContextPath()%>/cartAdd.do",
+    				type:"post",
+    				data:{"multi":"yes","dpseqs":dpseqs,"pcodes":pcodes,"changes":changes},
+    				success:function(data){}
+    			});
+    			cart_total_calculate();
+        	}
+        	else
+        	{
+        		alert("품절 상품이 없습니다");
+        	}
+        	
+		}
 		
 		
     </script>

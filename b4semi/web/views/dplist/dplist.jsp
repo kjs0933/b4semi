@@ -395,9 +395,15 @@
 	const addedProdName = $('.added-prod-name');
 	const addedProdAmount = $('.added-prod-amount');
 	const cartCount = $('#cart-count');
-	
 	const addCart = $('.plist-board > div > div').children();
+	
+	
 	$(function(){
+		//이미지 클릭시 링크 이벤트
+		$(".plist-board>div>img").click(function(){
+			location.href="<%=request.getContextPath()%>/dpdetail?dpseq="+$(event.target).next().next().val();
+			});
+		
 		addCart.on('click',(e) => {
 			if(cartMsgWrapper.is(':animated')||cartMsgWrapper.is(':visible')) return;
 			
