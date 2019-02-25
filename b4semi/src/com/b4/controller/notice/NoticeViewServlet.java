@@ -8,14 +8,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.b4.model.vo.Member;
 import com.b4.model.vo.Notice;
 import com.b4.service.NoticeService;
 
 /**
  * Servlet implementation class NoticeViewServlet
  */
-@WebServlet("/NoticeViewServlet")
+@WebServlet("/support/support_notice_View")
 public class NoticeViewServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -33,15 +32,8 @@ public class NoticeViewServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		request.setCharacterEncoding("UTF-8");
-		Member loginMember=(Member)request.getSession(false).getAttribute("loginMember");
-		if(loginMember==null||!"admin".equals(loginMember.getMemberId()))
-		{
-			request.setAttribute("msg", "잘못된 경로로 이동하셨습니다.");
-			request.setAttribute("loc", "/");
-			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
-		}
 		
-		int no=Integer.parseInt(request.getParameter("noticeno"));
+		int no=Integer.parseInt(request.getParameter("noticeone"));
 		
 		Notice n=new NoticeService().NoticeOne(no);
 		

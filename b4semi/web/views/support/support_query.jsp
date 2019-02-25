@@ -204,7 +204,7 @@
                 <div class="support-nav">
                     <div><a href="">공지사항<img src="<%=request.getContextPath() %>/images/arrow_right_black.png"></a>
                     </div>
-                    <div class="current-tab"><a href="#">1:1문의<img src="<%=request.getContextPath() %>/images/arrow_right_black.png"></a>
+                    <div class="current-tab"><a href="<%=request.getContextPath()%>/views/support_notice">1:1문의<img src="<%=request.getContextPath() %>/images/arrow_right_black.png"></a>
                     </div>
                     <div><a href="">상품제안<img src="<%=request.getContextPath() %>/images/arrow_right_black.png"></a>
                     </div>

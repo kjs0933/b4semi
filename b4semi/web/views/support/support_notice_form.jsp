@@ -268,7 +268,7 @@
                 <div><input type="text" name="" id=""></div>
             </div>
             <div class="notice-form-content">
-                <div>공지내용</div>
+                <div>내용</div>
                 <div><textarea></textarea></div>
             </div>
             <div class="notice-form-image-upload">
