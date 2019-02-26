@@ -524,10 +524,10 @@ try {
 
                     </div>
                     <div class="option-total">
-                        총 상품금액: <span class="option-total-price">0원</span>
+                        총 상품금액: <span class="option-total-price"><%=option.size()>1?"0원":option.get(0).getDiscountOptionPrice()+"원"%></span>
                     </div>
                     <div class="add-to-cart">
-                        <input type="button" value="장바구니 담기">
+                        <input type="button" value="장바구니 담기" onclick="fn_cart_all()">
                         <input type="button" value="재입고 알림">
                         <img id="cart-icon" src="images/add_to_cart.png">
                         <img id="bell-icon" src="images/bell.png">
@@ -568,7 +568,12 @@ try {
                 <div>상품문의(<%=detail.getQnaCount()%>)</div>
                 <div></div>
             </div>
-            <div><%=detail.getSupplierName()%></div>
+            <div>
+            	제조사<div><%=detail.getSupplierName()%></div>
+            	연락처<div><%=detail.getSupplierPhone()%></div>
+            	주소<div><%=detail.getSupplierAddress()%></div>
+            	이메일<div><%=detail.getSupplierEmail()%></div>
+            </div>
         </div>
         <div id="dp-detail-body-wrapper">
             <div class="dp-detail-tab">
@@ -579,6 +584,7 @@ try {
                 <div>상품문의(<%=detail.getQnaCount()%>)</div>
                 <div></div>
             </div>
+            <div>평점:<%=detail.getReviewScore()%>/5.00</div>
             <%for(int i=0; i<review.size();i++){%>
             <div><%=review.get(i).getMemberId()%></div><div><%=review.get(i).getReviewScore()%>점 <%=review.get(i).getReviewTitle()%></div><div><%=review.get(i).getReviewContents()%></div>
             <%}%>
@@ -639,13 +645,12 @@ try {
             +       '<div><img src="images/arrow_right_black.png"></div>'
             +   '</div>'
             +   '<div id="op-price"'+optionIndex+'>'+selectedData.data("price")+'원</div>'
-            +   '<div class="delete-selection"><img src="images/btn_close_black.png"></div>'
+            +   '<div class="delete-selection" data-delindex='+optionIndex+'><img src="images/btn_close_black.png"></div>'
             + '</div>';
             
             selectedOptionsDisplay.append(newTag);
             
             $("#op-data-"+optionIndex).data("count",1);
-            alert($("#op-data-"+optionIndex).data("count"));
 
             
             //수량 조정 로직
@@ -661,6 +666,7 @@ try {
                 if(target.val() == 1){alert('최수 수량은 1개입니다.'); return;}
                 target.val(parseInt(target.val())-1);
                 target.parent().next().text($("#op-data-"+target.data("index")).data("price")*parseInt(target.val())+"원");
+                $("#op-data-"+target.data("index")).data("count",target.val());
                 detail_cal_Total();
             });
 
@@ -669,6 +675,7 @@ try {
                 const target = $(e.target).parent().prev();
                 target.val(parseInt(target.val())+1);
                 target.parent().next().text($("#op-data-"+target.data("index")).data("price")*parseInt(target.val())+"원");
+                $("#op-data-"+target.data("index")).data("count",target.val());
                 detail_cal_Total();
             });
 
@@ -676,6 +683,7 @@ try {
             const deleteBtn = $('.delete-selection');
             deleteBtn.off('click');
             deleteBtn.on('click', (e) =>{
+            	$("#op-data-"+$(e.target).parent().data("delindex")).data("count",0);
                 $(e.target).parents('.selected-option').remove();
                 detail_cal_Total();
             });
@@ -690,28 +698,68 @@ try {
         $(() => {
             leftBtn.on('click', (e) => {
                 const target = leftBtn.parent().next()
-                if(target.val() == 1){ alert('최수 수량은 1개입니다.'); return; }
+                if(target.val() <= 1){ alert('최수 수량은 1개입니다.'); return; }
                 target.val(parseInt(target.val())-1);
+                $("#op-data-1").data("count",target.val());
+                detail_cal_Total();
             });
 
             rightBtn.on('click', (e) => {
                 const target = rightBtn.parent().prev();
                 target.val(parseInt(target.val())+1);
+                $("#op-data-1").data("count",target.val());
+                detail_cal_Total();
             });
         });
 
     });
     
     function detail_cal_Total() {
-    	const size = $(".selected-option").length;
     	var totalPrice = 0;
-    	for(var i=0; i<size;i++)
+    	for(var i=0; i<<%=option.size()%>;i++)
     	{
     		totalPrice += $("#op-data-"+(i+1)).data("price")*$("#op-data-"+(i+1)).data("count");
     	}
     	$(".option-total-price").text(totalPrice+"원");
-    	
     }
+    
+    function fn_cart_all() {
+		var c=0;
+		var dpseqs="";
+		var pcodes="";
+		var changes="";
+		
+    	for(var i=0;i<<%=option.size()%>;i++)
+    	{
+    		if($("#op-data-"+(i+1)).data("count")>0)
+    		{
+				dpseqs+=$("#op-data-"+(i+1)).data("dpseq")+",";
+				pcodes+=$("#op-data-"+(i+1)).data("pcode")+",";
+				changes+=$("#op-data-"+(i+1)).data("count")+",";
+    			$("#op-data-"+(i+1)).data("count",0);
+				c++;
+    		}
+    	}
+    	if(c>0)
+    	{
+    		$('.selected-option').remove();
+    		$('#quantity').val(0);
+			$.ajax({
+				url:"<%=request.getContextPath()%>/cartAdd.do",
+				type:"post",
+				data:{"multi":"yes","dpseqs":dpseqs,"pcodes":pcodes,"changes":changes},
+				success:function(data){
+					alert("성공적으로 장바구니에 담았습니다.");
+				}
+			});
+			detail_cal_Total();
+    	}
+    	else
+    	{
+    		alert("먼저 상품을 선택해주세요");
+    	}
+    }
+    
     
 </script>
 
