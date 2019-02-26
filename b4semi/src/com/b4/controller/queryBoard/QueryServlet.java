@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.b4.model.vo.Member;
 import com.b4.model.vo.QueryBoard;
+import com.b4.model.vo.QueryComment;
 import com.b4.service.QueryBoardService;
 import static common.PagingTemplate.pageBar;
 
@@ -63,9 +64,11 @@ public class QueryServlet extends HttpServlet {
 		List<QueryBoard> list = new QueryBoardService().selectListByMember(cPage, numPerPage, loginMember.getMemberSeq());
 		String pageBar = pageBar(request.getContextPath(), cPage, numPerPage, totalCount);
 		
-		request.setAttribute("totalCount", totalCount);
+		
 		request.setAttribute("list", list);
+		request.setAttribute("cPage", cPage);
 		request.setAttribute("pageBar", pageBar);
+		
 		request.getRequestDispatcher("/views/support/support_query.jsp").forward(request, response);
 	}
 

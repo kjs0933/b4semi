@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -63,6 +64,7 @@ public class QueryBoardDao {
 		ResultSet rs = null;
 		List<QueryBoard> list = new ArrayList<QueryBoard>();
 		String sql = prop.getProperty("selectListByMember");
+		
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, memberSeq);
@@ -73,42 +75,12 @@ public class QueryBoardDao {
 			{
 				QueryBoard qb = new QueryBoard();
 				qb.setMemberSeq(rs.getInt("memberSeq"));
+				qb.setMemberId(rs.getString("memberId"));
 				qb.setQuerySeq(rs.getInt("querySeq"));
 				qb.setQueryTitle(rs.getString("queryTitle"));
 				qb.setQueryContents(rs.getString("queryContents"));
 				qb.setQueryDate(rs.getTimestamp("queryDate"));
 				qb.setOrderSeq(rs.getInt("orderSeq"));
-				
-				sql = prop.getProperty("selectCommentByBoardSeq");
-				PreparedStatement cPstmt = null;
-				ResultSet cRs = null;
-				List<QueryComment> cList = new ArrayList<QueryComment>();
-				try {
-					cPstmt = conn.prepareStatement(sql);
-					cPstmt.setInt(1, qb.getQuerySeq());
-					cRs = pstmt.executeQuery();
-					while(cRs.next());
-					{
-						QueryComment qc = new QueryComment();
-						qc.setBoardeSeq(rs.getInt("boardSeq"));
-						qc.setCommentDate(rs.getTimestamp("commentDate"));
-						qc.setCommentSeq(rs.getInt("commentSeq"));
-						qc.setCommentText(rs.getString("commentText"));
-						qc.setMemberSeq(rs.getInt("memberSeq"));
-						qc.setMemberId(rs.getString("memberId"));
-						cList.add(qc);
-					}
-				} 
-				catch(SQLException e)
-				{
-					e.printStackTrace();
-				}
-				finally
-				{
-					close(cRs);
-					close(cPstmt);
-				}
-				qb.setList(cList);
 				list.add(qb);
 			}	
 		} 
@@ -124,6 +96,40 @@ public class QueryBoardDao {
 		return list;
 	}
 	
+	public List<QueryComment> selectCommentListByBoardSeq(Connection conn, int boardSeq)
+	{
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = prop.getProperty("selectCommentByBoardSeq");
+		List<QueryComment> cList = new ArrayList<QueryComment>();
+
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, boardSeq);
+			rs = pstmt.executeQuery();
+			while(rs.next())
+			{
+				QueryComment qc = new QueryComment();
+				qc.setBoardeSeq(rs.getInt("boardSeq"));
+				qc.setCommentDate(rs.getTimestamp("commentDate"));
+				qc.setCommentSeq(rs.getInt("commentSeq"));
+				qc.setCommentText(rs.getString("commentText"));
+				qc.setMemberSeq(rs.getInt("memberSeq"));
+				qc.setMemberId(rs.getString("memberId"));
+				cList.add(qc);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(pstmt);
+			close(rs);
+		}
+		return cList;
+	}
 	
 	public List<QueryBoard> selectAllByMember(Connection conn, int memberSeq, int cPage)
 	{
@@ -160,7 +166,6 @@ public class QueryBoardDao {
 		}
 		return list;
 	}
-
 
 	public int insertQuery(Connection conn, QueryBoard qb) {
 		PreparedStatement pstmt = null;
@@ -210,14 +215,14 @@ public class QueryBoardDao {
 		return result;
 	}
 	
-	public int deleteQuery(Connection conn, QueryBoard qb) {
+	public int deleteQuery(Connection conn, int querySeq) {
 		PreparedStatement pstmt = null;
 		String sql = prop.getProperty("deleteQuery");
 		int result = 0;
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setTimestamp(1, qb.getQueryDeleteDate());
-			pstmt.setInt(2, qb.getQuerySeq());
+			pstmt.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
+			pstmt.setInt(2, querySeq);
 			result = pstmt.executeUpdate();
 		}
 		catch(SQLException e)

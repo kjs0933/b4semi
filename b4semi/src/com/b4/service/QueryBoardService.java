@@ -31,6 +31,10 @@ public class QueryBoardService {
 	{
 		Connection conn = getConnection();
 		List<QueryBoard> result = dao.selectListByMember(conn, cPage, numPerPage, memberSeq);
+		for(QueryBoard qb : result)
+		{
+			qb.setList(dao.selectCommentListByBoardSeq(conn, qb.getQuerySeq()));
+		}
 		close(conn);
 		return result;
 	}
@@ -69,10 +73,10 @@ public class QueryBoardService {
 	
 
 	//1대1문의 삭제(deleteDate수정)
-	public int deleteQuery(QueryBoard qb)
+	public int deleteQuery(int querySeq)
 	{
 		Connection conn = getConnection();
-		int result = dao.deleteQuery(conn, qb);
+		int result = dao.deleteQuery(conn, querySeq);
 		if(result>0) commit(conn);
 		else rollback(conn);
 		close(conn);

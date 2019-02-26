@@ -8,22 +8,23 @@ public class QueryBoard {
    
    private int querySeq;
    private int memberSeq;
+   private String memberId; //작성자 아이디를 보여주어야 하므로 추가!
    private String queryTitle;
    private String queryContents;
    private Timestamp queryDate;
    private Timestamp queryDeleteDate;
    private int orderSeq;
    private List<QueryComment> list;
-   private String memberId; //작성자 아이디를 보여주어야 하므로 추가!
    
    
    public QueryBoard() {}
    
-   public QueryBoard(int querySeq, int memberSeq, String queryTitle, String queryContents, Timestamp queryDate,
+   public QueryBoard(int querySeq, int memberSeq, String memberId, String queryTitle, String queryContents, Timestamp queryDate,
          Timestamp queryDeleteDate, int orderSeq, List<QueryComment> list) {
       super();
       this.querySeq = querySeq;
       this.memberSeq = memberSeq;
+      this.memberId = memberId;
       this.queryTitle = queryTitle;
       this.queryContents = queryContents;
       this.queryDate = queryDate;
