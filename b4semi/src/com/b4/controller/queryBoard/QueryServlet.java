@@ -64,7 +64,7 @@ public class QueryServlet extends HttpServlet {
 		List<QueryBoard> list = new QueryBoardService().selectListByMember(cPage, numPerPage, loginMember.getMemberSeq());
 		String pageBar = pageBar(request.getContextPath(), cPage, numPerPage, totalCount);
 		
-		
+		request.setAttribute("loginMember", loginMember);
 		request.setAttribute("list", list);
 		request.setAttribute("cPage", cPage);
 		request.setAttribute("pageBar", pageBar);
