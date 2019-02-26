@@ -365,4 +365,33 @@ public class QueryBoardDao {
 		}
 		return result;
 	}
+
+	public QueryBoard selectRecentQuery(Connection conn) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		QueryBoard qb = new QueryBoard();
+		String sql = prop.getProperty("selectRecentQuery");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next())
+			{
+				qb.setMemberSeq(rs.getInt("memberSeq"));
+				qb.setQuerySeq(rs.getInt("querySeq"));
+				qb.setQueryTitle(rs.getString("queryTitle"));
+				qb.setQueryContents(rs.getString("queryContents"));
+				qb.setQueryDate(rs.getTimestamp("queryDate"));
+				qb.setQueryDeleteDate(rs.getTimestamp("queryDeleteDate"));
+			}
+		}catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(rs);
+			close(pstmt);
+		}
+		return qb;
+	}
 }

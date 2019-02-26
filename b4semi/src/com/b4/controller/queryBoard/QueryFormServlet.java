@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.b4.model.vo.Member;
 import com.b4.model.vo.OrderList;
 import com.b4.model.vo.OrderPDetail;
-import com.b4.service.MemberService;
 import com.b4.service.OrderListService;
 import com.b4.service.OrderPDetailService;
 
