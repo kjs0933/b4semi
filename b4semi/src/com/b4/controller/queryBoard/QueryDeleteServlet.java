@@ -36,8 +36,11 @@ public class QueryDeleteServlet extends HttpServlet {
 		String msg = "";
 		String loc = "/";
 		if(result > 0){msg = "1:1 문의가 삭제되었습니다."; loc="/query";}
-		else {msg = "1:1 문의 삭제에 실패하였습니다.";}
+		else {msg = "1:1 문의 삭제에 실패하였습니다."; loc="/view/support/support_query";}
 		
+		request.setAttribute("msg", msg);
+		request.setAttribute("loc", loc);
+		request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
 	}
 
 	/**

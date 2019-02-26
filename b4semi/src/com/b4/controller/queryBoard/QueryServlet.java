@@ -37,7 +37,7 @@ public class QueryServlet extends HttpServlet {
 		Member loginMember = (Member)request.getSession().getAttribute("loginMember");
 		if(loginMember == null)
 		{
-			request.setAttribute("msg", "세션이 만료되었습니다.");
+			request.setAttribute("msg", "로그인 회원만 이용 가능합니다.");
 			request.setAttribute("loc", "/");
 			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
 		}

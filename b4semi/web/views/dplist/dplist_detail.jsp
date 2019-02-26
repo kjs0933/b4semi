@@ -96,6 +96,7 @@ try {
             flex-flow: column nowrap;
             font-family: 'Noto Sans KR';
             font-size: 14px;
+            margin-top: 100px;
         }
 
         .dp-detail-wrapper select
@@ -409,6 +410,7 @@ try {
 
         .delete-selection img {cursor: pointer;}
 
+
     </style>
 
 <section>
@@ -432,6 +434,15 @@ try {
                     <%}%>
                     </div>
                 </div>
+                
+<!--            추가할 거 있으면 이런 식으로 추가하시면 되요. -->
+<!--            css 약간 달라지는데 그건 제가 수정할게요. -->
+<!--                 <div class="discount"> -->
+<!--                 	<div>할인률</div> -->
+<!--                 	<div>0%</div> -->
+<!--                 </div> -->
+<!--                 ------->
+
                 <div class="prod-unit">
                     <div>판매단위</div>
                     <div><%=detail.getProductUnit()%></div>

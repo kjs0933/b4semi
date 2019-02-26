@@ -459,6 +459,7 @@
 
         const queryViews = $('.query-board-view-unit');
 
+        //게시판 토글 이벤트
         $(() => {
             queryCols.on('click', (e) => {
                 if($(e.currentTarget).next(queryViews).is(':visible')) { queryViews.hide(); return; }
@@ -473,7 +474,7 @@
         const queryCmtDel = $('.query-comment-delete');
         const queryCmtWrite = $('.query-comment-write');
         
-        
+        //게시판 버튼 클릭 이벤트
         $(() => {
         	queryModify.on('click', (e) => {
         		location.href = '<%=request.getContextPath()%>/queryModify?querySeq='+$(e.target).data('query-seq');
