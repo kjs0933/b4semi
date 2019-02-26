@@ -74,7 +74,7 @@ public class DisplayListServlet extends HttpServlet {
 		case "priceAsc" : sortText="MINPRICE ASC"; break;
 		case "priceDesc" : sortText="MINPRICE DESC"; break;
 		case "event" : sortText="DISCOUNTRATE DESC NULLS LAST"; break;
-		default : sortText="DISPLAYLISTSEQ DESC";
+		default : sortText="POPULARITY DESC"; sort="popularity";
 		}
 		
 		if(major.length()==0 && sub.length()>0)

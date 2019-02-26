@@ -423,7 +423,14 @@ try {
                 </div>
                 <div class="prod-price">
                     <div>판매가</div>
-                    <div><%=detail.getMinPrice() %> 원</div>
+                    <div>
+                    <%if(detail.getDiscountRate()>0){%>
+                    <del><%=detail.getMinPrice() %> 원</del>
+                    <br>할인가 : <%=detail.getDiscountMinPrice()%> 원 
+                    <%}else{%>
+                    <%=detail.getMinPrice() %> 원
+                    <%}%>
+                    </div>
                 </div>
                 <div class="prod-unit">
                     <div>판매단위</div>
@@ -440,10 +447,13 @@ try {
                     <div>구매옵션선택</div>
                     <div>
                         <select>
-                            <option value="1">[간편 샐러드] 어린잎채소 믹스 40g</option>
-                            <option value="2">[간편 샐러드] 손질 양배추 + 적채 80g</option>
-                            <option value="3">[간편 샐러드] 손질 로메인 40g</option>
+                        <%for(int i=0; i<option.size(); i++){%>
+                            <option value="<%=i+1%>"><%=option.get(i).getProductName()%> (+<%=option.get(i).getDiscountOptionPrice() - detail.getDiscountMinPrice()%> 원 추가)</option>
+                        <%}%>
                         </select>
+                        <%for(int i=0; i<option.size(); i++){%>
+                        <input type="hidden" id="op-data-<%=i+1%>" data-dpseq="<%=detail.getDisplayListSeq()%>" data-pcode="<%=option.get(i).getProductCode()%>" data-price="<%=option.get(i)%>">
+                        <%}%>
                     </div>
                 </div>
                 <!--} 단일 상품일시 출력 X -->
@@ -544,7 +554,7 @@ try {
             <%for(int i=0; i<qna.size();i++){%>
             <div><%=qna.get(i).getMemberId()%></div><div><%=qna.get(i).getQueryTitle()%></div><div><%=qna.get(i).getQueryContents()%></div>
             	<div>
-<%--             <%for(int j=0; j<qna.get(i).getList().size();j++){%>
+<%--            <%for(int j=0; j<qna.get(i).getList().size();j++){%>
             		<div><%=qna.get(i).getList().get(j).getMemberId()%></div><div><%=qna.get(i).getList().get(j).getCommentText()%></div>
             	<%}%> --%>
             	</div>
@@ -576,7 +586,7 @@ try {
             
             const newTag 
             = '<div class="selected-option '+optionIndex+'">'
-            +   '<div>[ArrayList[optionIndex].상품명</div>'
+            +   '<div>[ArrayList['+optionIndex+'].상품명</div>'
             +   '<div class="option-quantity-controller">'
             +       '<div><img src="images/arrow_left_black.png"></div>'
             +       '<input type="text" name="op-quantity-'+optionIndex+'" id="op-quantity-'+optionIndex+'" value="1">'
