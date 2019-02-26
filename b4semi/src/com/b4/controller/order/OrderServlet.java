@@ -44,12 +44,12 @@ public class OrderServlet extends HttpServlet {
 		}
 		List<Cart> clist = new CartService().selectByMember(m.getMemberSeq());
 		List<AddressList> alist = new AddressListService().selectByMember(m);
-		List<IssuedCoupon> iclist = new CouponService().selectCouponListByMember(1, 999, m.getMemberSeq());
+		List<IssuedCoupon> ilist = new CouponService().selectCouponListByMember(1, 999, m.getMemberSeq());
 		
 		request.setAttribute("clist", clist);
 		request.setAttribute("alist", alist);
-		request.setAttribute("iclist", iclist);
-		request.getRequestDispatcher("/views/payment/payment.jsp").forward(request, response);
+		request.setAttribute("ilist", ilist);
+		request.getRequestDispatcher("/views/payment/order.jsp").forward(request, response);
 	}
 
 	/**

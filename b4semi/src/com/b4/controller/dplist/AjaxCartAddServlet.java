@@ -204,7 +204,7 @@ public class AjaxCartAddServlet extends HttpServlet {
 						cookieString = dpseq+"&"+pcode+"&"+change;
 						if(!multi)
 						{
-							result[0] = change;
+							result[0] = 1;
 							result[1] = change;
 						}
 					}
@@ -256,7 +256,7 @@ public class AjaxCartAddServlet extends HttpServlet {
 						if(change>0)
 						{
 							cookieString += "/"+dpseq+"&"+pcode+"&"+change;
-							result[0] = cartData.length+change;
+							result[0] = cartData.length+1;
 							result[1] = change;
 						}
 					}
@@ -269,12 +269,9 @@ public class AjaxCartAddServlet extends HttpServlet {
 		}
 
 
-		if(!multi)
-		{
-			//카트에 담긴 수량을 전송
-			response.setContentType("application/json;charset=UTF-8");
-			new Gson().toJson(result, response.getWriter());
-		}
+		//카트에 담긴 수량을 전송
+		response.setContentType("application/json;charset=UTF-8");
+		new Gson().toJson(result, response.getWriter());
 
 	}
 

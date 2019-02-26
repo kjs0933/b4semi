@@ -1,6 +1,55 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/views/common/header.jsp"%>
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="com.b4.model.vo.Cart"%>
+<%@ page import="com.b4.model.vo.Member"%>
+<%@ page import="com.b4.model.vo.AddressList"%>
+<%@ page import="com.b4.model.vo.IssuedCoupon"%>
+
+<%
+	ArrayList<Cart> clist;
+	try {
+		clist = (ArrayList<Cart>)request.getAttribute("clist");
+		if(clist == null)
+		{
+			clist=new ArrayList<Cart>();
+		}
+	} catch (ClassCastException e) {
+		clist=new ArrayList<Cart>();
+	}
+	ArrayList<AddressList> alist;
+	try {
+		alist = (ArrayList<AddressList>)request.getAttribute("alist");
+		if(alist == null)
+		{
+			alist=new ArrayList<AddressList>();
+		}
+	} catch (ClassCastException e) {
+		alist=new ArrayList<AddressList>();
+	}
+	ArrayList<IssuedCoupon> ilist;
+	try {
+		ilist = (ArrayList<IssuedCoupon>)request.getAttribute("ilist");
+		if(ilist == null)
+		{
+			ilist=new ArrayList<IssuedCoupon>();
+		}
+	} catch (ClassCastException e) {
+		ilist=new ArrayList<IssuedCoupon>();
+	}
+	Member m; 
+	try {
+		m = (Member)session.getAttribute("loginMember");
+		if(m == null)
+		{
+			m=new Member();
+		}
+	} catch (ClassCastException e) {
+		m=new Member();
+	}
+
+%>
 <style>
     .orderlist-pre-wrapper input {
         padding: 0 5px;
@@ -636,30 +685,16 @@
                     <div>상품 정보</div>
                     <div>상품 금액</div>
                 </div>
+                <%for(int i=0; i<clist.size(); i++){%>
                 <div class="products-info-cols">
-                    <div><img src="images/order_sample_2.jpg"></div>
+                    <div><img src="<%=request.getContextPath()%>/upload/product/<%=clist.get(i).getImg()%>"></div>
                     <div>
-                        <div><b>[우드앤브릭] 빵콩플레</b></div>
-                        <span>1개/개 당 4,500 원</span>
+                        <div><b><%=clist.get(i).getDisplayListTitle()%></b> (옵션 - <%=clist.get(i).getProductName()%>)</div>
+                        <span><%=clist.get(i).getProductCount()%>개 / <%=clist.get(i).getProductUnit()%>당  <%=clist.get(i).getDiscountOptionPrice()%>원</span>
                     </div>
-                    <div>4,500 원</div>
+                    <div><%=clist.get(i).getProductCount()*clist.get(i).getDiscountOptionPrice()%> 원</div>
                 </div>
-                <div class="products-info-cols">
-                    <div><img src="images/order_sample_1.jpg"></div>
-                    <div>
-                        <div><b>새송이버섯 2입</b></div>
-                        <span>1개/개 당 1,350 원</span>
-                    </div>
-                    <div>1,350 원</div>
-                </div>
-                <div class="products-info-cols">
-                    <div><img src="images/order_sample_3.jpg"></div>
-                    <div>
-                        <div><b>[테라오카] 계란에 뿌려먹는 간장</b></div>
-                        <span>1개/개 당 3,920 원</span>
-                    </div>
-                    <div>3,920 원</div>
-                </div>
+                <%}%>
             </div>
 
             <div class="buyer-info-title">
@@ -668,15 +703,15 @@
             <div class="buyer-info-table">
                 <div class="buyer-info-cols">
                     <div>보내는 분</div>
-                    <div>정우진</div>
+                    <div><%=m.getMemberName()%></div>
                 </div>
                 <div class="buyer-info-cols">
                     <div>휴대폰</div>
-                    <div>010 - 5069 - 4404</div>
+                    <div><%=m.getMemberPhone()%></div>
                 </div>
                 <div class="buyer-info-cols">
                     <div>이메일</div>
-                    <div>jwj3955@gmail.com</div>
+                    <div><%=m.getMemberEmail()%></div>
                 </div>
             </div>
 
@@ -731,8 +766,10 @@
                             <div>쿠폰 사용</div>
                             <div>
                                 <select name="coupon" id="coupon">
-                                    <option>쿠폰</option>
-                                    <option>생일쿠폰</option>
+                                <option value="0">=== 사용 쿠폰을 선택해주세요 ===</option>
+                                <%for(int i=0;i<ilist.size();i++){ %>
+                                    <option value="<%=i+1%>"><%=ilist.get(i).getCouponName()%></option>
+                                <%}%>
                                 </select>
                                 <span>보유 쿠폰: 1개</span>
                                 <div>장바구니 10% 할인.. 등등</div>
@@ -742,7 +779,7 @@
                             <div>적립금 사용</div>
                             <div>
                                 <input type="text" name="spentMileage" id="spent-mileage" value="0">
-                                <span>가용 적립금: 0</span>
+                                <span>가용 적립금: <%=m.getMemberMileage()%></span>
                             </div>
                         </div>
                     </div>
