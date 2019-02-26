@@ -30,7 +30,7 @@ public class ImagesService {
 		if(result>0)
 		{
 			commit(conn);
-			result=dao.ImagesSeq(conn);
+			//result=dao.ImagesSeq(conn);
 		}
 		else{rollback(conn);}
 		close(conn);

@@ -22,7 +22,7 @@ public class ImagesDao {
 	public ImagesDao() {	
 		
 		try {
-			String fileName = MemberDao.class.getResource("/sql/Images/Images-query.properties").getPath();
+			String fileName = ImagesDao.class.getResource("/sql/images/Images-query.properties").getPath();
 			prop.load(new FileReader(fileName));
 		}
 		catch(IOException e)

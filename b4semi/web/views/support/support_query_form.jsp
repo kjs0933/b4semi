@@ -9,103 +9,14 @@
 	List<OrderPDetail> orderPList = (List<OrderPDetail>)request.getAttribute("orderProductList");
 %>
 
-    <style>
-        .support-wrapper
-        {
-            display: flex;
-            font-family: 'Noto Sans KR';
-            width: 1024px;
-        }
-
-        .support-wrapper > div:first-of-type
-        {
-            flex: 2 1 0;
-        }
-
-        .support-wrapper > div:last-of-type
-        {
-            flex: 7 1 0;
-        }
-
-        .support-nav-title > p
-        {
-            margin: 20px 0;
-            font-size: 30px;
-        }
-        
-        .support-nav
-        {
-            display: flex;
-            flex-flow: column nowrap;
-            position: relative;
-        }
-
-        .support-nav > div
-        {
-            height: 50px;
-            border: 1px solid #ccc;
-            border-bottom: none;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-sizing: border-box;
-            padding: 0 30px;
-            font-size: 15px;
-
-            cursor: pointer;
-        }
-
-        .support-nav > div:hover
-        {
-            background-color: rgb(248, 248, 248);
-        }
-
-        .support-nav a
-        {
-            text-decoration: none;
-            color: black;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-        }
-
-        .support-nav img
-        {
-            width: 25px;
-            height: 25px;
-            position: absolute;
-            right: 0;
-        }
-
-        .support-nav > div:last-of-type
-        {
-            border-bottom: 1px solid #ccc;
-        }
-
-        .current-tab
-        {
-            background-color: rgb(248, 248, 248);
-        }
-
-        .support-content
-        {
-            display: flex;
-            flex-flow: column nowrap;
-            justify-content: center;
-            margin-left: 30px;
-        }
-
-
-    
-
+    <style> 
         .query-form-wrapper
         {
-            width: 100%;
+            width: 1024px;
             font-family: 'Noto Sans KR';
             font-size: 14px;
+            margin-top: 100px;
         }
-
         .query-form input
         {
             font-family: 'Noto Sans KR';
@@ -114,38 +25,31 @@
             box-sizing: border-box;
             border: 1px solid #ccc;
         }
-
         .query-form input:focus
         {
             outline: none;
         }
-
         .query-form-header
         {
             font-size: 21px;
             margin: 25px 0;
         }
-
         .query-form
         {
             display: flex;
             flex-flow: column nowrap;
             border-top: 2px solid rgb(42, 71, 114);
         }
-
         .query-form > div
         {
             display: flex;
         }
-
         .query-form > div > div:first-of-type
         {
             background-color: rgb(245, 245, 245);
         }
-
         .query-form > div > div:first-of-type{flex: 1 1 0; justify-content: center;}
         .query-form > div > div:nth-of-type(2){flex: 7 1 0; display: flex;}
-
         .query-form > div > div 
         {
             display: flex;
@@ -153,7 +57,6 @@
             align-items: center;
             border-bottom: 1px solid #ccc;
         }
-
         .query-form-order-seq input[type="button"]
         {
             width: 100px;
@@ -166,18 +69,13 @@
             background-color: rgb(42, 71, 114);
             cursor: pointer;
         }
-
         .query-form-order-seq input[type="button"]:hover
         {
             background-color: rgb(62, 91, 134);
         }
-
         .query-form-title input{width: 100%;}
-
         .query-form-email input{background-color: #eee;}
-
         .query-form-email label{margin: 0 10px;}
-
         .query-form-content textarea
         {
             height: 300px;
@@ -186,26 +84,21 @@
             border: 1px solid #ccc;
             padding: 5px;
         }
-
         .query-form-content textarea:focus
         {
             outline: none;
         }
-
-
         .added-image-box
         {
             width: 82px;
             height: 82px;
             margin-right: 10px;
         }
-
         .added-image-box > img
         {
             width: 100%;
             height: 100%;
         }
-
         .image-upload-container
         {
             width: 80px;
@@ -213,12 +106,10 @@
             border: 1px dotted gray;
             position: relative;
         }
-
         .image-upload-container:hover
         {
             background-color: #eee;
         }
-
         .image-upload-container > input
         {
             width: 100%;
@@ -226,7 +117,6 @@
             opacity: 0;
             cursor: pointer;
         }
-
         .image-upload-container > span
         {
             font-size: 20px;
@@ -235,13 +125,10 @@
             top: 50%;
             transform: translate(-50%, -50%);
         }
-
-
         .query-button-set
         {
             align-self: flex-end;
         }
-
         .query-button-set input[type="submit"]
         {
             color: white;
@@ -251,13 +138,10 @@
             align-self: flex-end;
             margin: 20px 0;
             border: none;
-
             border-radius: 2px;
             cursor: pointer;
-
             margin-left: 10px;
         }
-
         .query-button-set input[type="button"]
         {
             color: white;
@@ -267,25 +151,21 @@
             align-self: flex-end;
             margin: 20px 0;
             border: none;
-
             border-radius: 2px;
             cursor: pointer;
         }
-
         .query-button-set input[type="submit"]:hover
         {
             background-color: rgb(62, 91, 134);
         }
-
         .query-form-order-seq{position: relative;}
-
         .order-seq-list
         {
             position: absolute;
             width: 600px;
             height: 367px;
             border: 1px solid black;
-            left: 157px;
+            left: 146px;
             top: 60px;
             background-color: white;
             display: flex;
@@ -295,21 +175,17 @@
             font-size: 12px;
             z-index: 2;
         }
-
         #order-seq-list{display: none;}
-
         .order-seq-list > span
         {
             align-self: flex-start;
         }
-
         .order-seq-list-header
         {
             width: 100%;
             display: flex;
             margin-top: 20px;
         }
-
         .order-seq-list-header > div
         {
             display: flex;
@@ -318,21 +194,17 @@
             padding: 5px;
             background-color: #eee;
         }
-
-
         .order-seq-list-header > div:nth-of-type(1){flex: 2 1 0;}
         .order-seq-list-header > div:nth-of-type(2){flex: 2 1 0;}
         .order-seq-list-header > div:nth-of-type(3){flex: 4 1 0;}
         .order-seq-list-header > div:nth-of-type(4){flex: 1 1 0;}
         .order-seq-list-header > div:nth-of-type(5){flex: 2 1 0;}
         .order-seq-list-header > div:nth-of-type(6){flex: 1 1 0;}
-
         .order-seq-list-cols
         {
             width: 100%;
             display: flex;
         }
-
         .order-seq-list-cols > div
         {
             display: flex;
@@ -341,22 +213,18 @@
             padding: 5px;
             border-bottom: 1px solid #ccc;
         }
-
         .order-seq-list-cols > div:nth-of-type(1){flex: 2 1 0;}        
         .order-seq-list-cols > div:nth-of-type(2){flex: 2 1 0;}        
         .order-seq-list-cols > div:nth-of-type(3){flex: 4 1 0;}        
         .order-seq-list-cols > div:nth-of-type(4){flex: 1 1 0;}        
         .order-seq-list-cols > div:nth-of-type(5){flex: 2 1 0;}        
         .order-seq-list-cols > div:nth-of-type(6){flex: 1 1 0;}        
-
-
 		
         /* 체크박스 CSS */
         input[type="checkbox"]
         {
             display: none;
         }
-
         input[type="checkbox"] + label
         {
             position: relative;
@@ -366,7 +234,6 @@
             cursor: pointer;
             border-radius: 1px;
         }
-
         input[type="checkbox"] + label span
         {
             position: absolute;
@@ -379,17 +246,14 @@
             border-bottom: 2px solid white;
             transform: rotateZ(40deg);
         }
-
         input[type="checkbox"] + label:hover
         {
             background-color: rgb(47, 105, 172);
         }
-
         input[type="checkbox"]:checked + label span
         {
             display: inline-block;
         }
-
     </style>
     
 <section>
@@ -397,16 +261,16 @@
         <div class="query-form-header">
             1:1 문의
         </div>
-        <form action="#" method="post" class="query-form">
+        <form action="<%=request.getContextPath() %>/queryFormEnd" method="post" class="query-form" name="queryFrm" enctype="multipart/form-data">
             <div class="query-form-title">
                 <div>제목</div>
-                <div><input type="text" name="" id=""></div>
+                <div><input type="text" name="queryTitle" id=""></div>
             </div>
             <div class="query-form-order-seq">
                 <div>주문번호</div>
                 <div>
                     <input type="text" name="orderSeq" id="order-seq" value="<%=orderSeq%>">
-                    <input type="button" value="주문 조회">
+                    <input id="show-orderlist" type="button" value="주문 조회">
                 </div>
                 <div class="order-seq-list" id="order-seq-list">
                     <span>문의하실 주문번호를 선택하세요.</span>
@@ -444,21 +308,21 @@
             </div>
             <div class="query-form-content">
                 <div>문의내용</div>
-                <div><textarea></textarea></div>
+                <div><textarea name="queryContents"></textarea></div>
             </div>
             <div class="query-form-image-upload">
                 <div>이미지</div>
-                <div>
+                <div class="added-image-container">
                     <!-- <div class="added-image-box">
                         <img src="images/order_sample_5.jpg">
                     </div> -->
                     <div class="image-upload-container">
-                        <span>+</span><input type="file" name="originalFile" id="originalFile">
+                        <span>+</span><input type="file" name="originalFile" id="originalFile" multiple>
                     </div>
                 </div>
             </div>
             <div class="query-button-set">
-                <input type="button" value="저장">
+                <input id="cancel" type="button" value="취소">
                 <input type="submit" value="저장">
             </div>
         </form>
@@ -466,7 +330,7 @@
     </section>
 <script>
 	//주문 조회창 토글
-	const showOrderSeqBtn = $('input[type="button"');
+	const showOrderSeqBtn = $('#show-orderlist');
 	const orderSeqList = $('.order-seq-list');
 	
 	$(() => {
@@ -494,6 +358,49 @@
 	        $('body').off('click');
 	    });
 	});
+	
+	
+	const addedImageContainer = $('.added-image-container');
+	const queryForm = $('.query-form');
+	$(function(){
+		$("[name=originalFile]").change(function(){
+			
+			$.each(queryFrm.originalFile.files,function(index,item){
+			
+			console.log(item);
+				
+			var reader=new FileReader();
+			reader.onload=function(e){
+				var imageBoxToAdd = '<div class="added-image-box"><img src="'+e.target.result+'"></div>';
+			    addedImageContainer.prepend(imageBoxToAdd);
+			}
+			reader.readAsDataURL(queryFrm.originalFile.files[index]);//웹에서는 하드의 파일을 접근못하게 되어있어서 처리해주기위함 0은단일 index 넣어줘서 여러개처리
+		});
+		});
+			/* queryForm.on('submit',function(e){
+			e.preventDefault();
+			var fd=new FormData();//파일을 전송하게 해주는 객체;
+			$.each(queryFrm.originalFile.files,function(i,item){
+				fd.append("test"+i,item); //파라미터 키값이 test0 test1 이런식이됨
+				alert(fd);
+			}); */
+
+			<%-- $.ajax({
+				url:"<%=request.getContextPath()%>/queryFormEnd",
+				data : fd,
+				type:"post",
+				processData:false,
+				contentType:false,
+				success : function(data){
+				alert("업로드완료");
+				/* $('#image').html('');//업로드후 비워주기
+				$("[name=ajaxFileTest]").val('');*/
+					queryForm.submit();
+				} 
+			});
+		}); --%>
+	});
+
 </script>
 
 <%@ include file="/views/common/footer.jsp" %>

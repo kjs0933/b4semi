@@ -398,8 +398,8 @@
                         주문 내역 상세
                     </div>
                     <div class="order-seq">
-                        <p>주문번호 1550328316414</p>
-                        <span>배송또는 상품에 문제가 있나요? <a href="#">1대1 문의</a></span>
+                        <p>주문번호 <%=orderlist.getOrderSeq() %></p>
+                        <span>배송또는 상품에 문제가 있나요? <a href="<%=request.getContextPath() %>/queryForm?orderSeq=<%=orderlist.getOrderSeq()%>">1대1 문의</a></span>
                     </div>
                     <div class="order-table">
                         <%if(opdList!=null){

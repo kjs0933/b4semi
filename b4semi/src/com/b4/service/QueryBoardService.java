@@ -106,4 +106,11 @@ public class QueryBoardService {
 		return result;
 	}
 
+	public QueryBoard selectRecentQuery() {
+		Connection conn = getConnection();
+		QueryBoard qb = dao.selectRecentQuery(conn);
+		close(conn);
+		return qb;
+	}
+
 }
