@@ -365,7 +365,7 @@
                 <p>=</p>
                 <div><p>결제예정금액</p><input type="text" name="totalPrice" id="totalPrice" readonly></div>
             </div>
-            <input id="checkout" type="submit" value="주문하기">
+            <input id="checkout" type="button" value="주문하기" onclick="fn_order()">
         </form>
     </div>
     </section>
@@ -395,7 +395,7 @@
         	}
         	preTotal.val(preTotalPriceTotal);
         	discount.val(discountPriceTotal);
-        	if(preTotalPriceTotal-discountPriceTotal>=30000)
+        	if(preTotalPriceTotal-discountPriceTotal>=30000 || preTotalPriceTotal == 0)
         	{
         		shipFee.val(0);
         	}
@@ -549,5 +549,23 @@
 		}
 		
 		
+		function fn_order(){
+		var session = '<%=session.getAttribute("loginMember") == null?"logoff":"logon"%>';
+			if(session=="logon")
+			{
+				if($("#preTotal").val()>0)
+				{
+					location.href='<%=request.getContextPath()%>/order';
+				}
+				else
+				{
+					alert("먼저 장바구니에 상품을 담아주세요");
+				}
+			}
+			else
+			{
+				alert("로그인 후 이용해주세요");
+			}
+		}
     </script>
 <%@ include file="/views/common/footer.jsp" %>

@@ -493,7 +493,7 @@ try {
                         <select>
                         	<option value="0">=== 상품 옵션을 선택해주세요 ===</option>
                         <%for(int i=0; i<option.size(); i++){%>
-                            <option value="<%=i+1%>"><%=option.get(i).getProductName()%> (+<%=option.get(i).getDiscountOptionPrice() - detail.getDiscountMinPrice()%> 원 추가)</option>
+                            <option value="<%=i+1%>"><%=option.get(i).getProductName()%> <%=option.get(i).getDiscountOptionPrice()%>원 (+<%=option.get(i).getDiscountOptionPrice() - detail.getDiscountMinPrice()%> 원 추가)</option>
                         <%}%>
                         </select>
                     </div>
@@ -528,7 +528,7 @@ try {
                     </div>
                     <div class="add-to-cart">
                         <input type="button" value="장바구니 담기" onclick="fn_cart_all()">
-                        <input type="button" value="재입고 알림">
+                        <input type="button" value="재입고 알림" onclick="fn_stock_inform()">
                         <img id="cart-icon" src="images/add_to_cart.png">
                         <img id="bell-icon" src="images/bell.png">
                     </div>
@@ -619,6 +619,8 @@ try {
     const selectedOptionsDisplay = $('.selected-options-display');    
     
     $(() => {
+    	if(<%=option.size()%>==1){$("#op-data-1").data("count",1)}
+    	
         optionSelectEle.on('change', (e) => {
             const optionIndex = $(e.target).val();
             if(optionIndex == 0)
@@ -758,6 +760,10 @@ try {
     	{
     		alert("먼저 상품을 선택해주세요");
     	}
+    }
+    
+    function fn_stock_inform() {
+    	alert("딸랑딸랑~ 현재 재고가 충분히 있습니당");
     }
     
     

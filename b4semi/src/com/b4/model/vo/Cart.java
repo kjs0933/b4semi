@@ -99,6 +99,14 @@ public class Cart{
 	public void setDiscountOptionPrice() {
 		this.discountOptionPrice = (int)Math.round(displayOptionPrice*(1-discountRate)/10)*10;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Cart [productCount=" + productCount + ", displayListTitle=" + displayListTitle + ", dpListAvailable="
+				+ dpListAvailable + ", img=" + img + ", productCode=" + productCode + ", displayListSeq="
+				+ displayListSeq + ", displayOptionPrice=" + displayOptionPrice + ", OptionAvailable=" + OptionAvailable
+				+ ", discountName=" + discountName + ", discountRate=" + discountRate + ", productName=" + productName
+				+ ", productUnit=" + productUnit + ", discountOptionPrice=" + discountOptionPrice + "]";
+	}
 	
 }

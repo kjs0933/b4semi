@@ -114,4 +114,13 @@ public class IssuedCoupon {
 		this.maxDisPrice = maxDisPrice;
 	}
 
+	@Override
+	public String toString() {
+		return "IssuedCoupon [CouponCode=" + CouponCode + ", CouponSeq=" + CouponSeq + ", memberSeq=" + memberSeq
+				+ ", isUsed=" + isUsed + ", issueDate=" + issueDate + ", expiryDate=" + expiryDate + ", couponName="
+				+ couponName + ", discountRate=" + discountRate + ", minPrice=" + minPrice + ", maxDisPrice="
+				+ maxDisPrice + "]";
+	}
+
+	
 }

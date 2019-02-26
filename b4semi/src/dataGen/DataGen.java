@@ -981,6 +981,11 @@ public class DataGen {
 					ps2.setInt(3, dpListSeqStart+p.getDpNo());
 					ps2.executeUpdate();
 				}
+				else
+				{
+					html +="<p>"+ prefix + p.getProductName() +
+					"</p>"+text[(int)(text.length*Math.random())];
+				}
 
 				
 				if(i+1 == listSize || p.getDpNo() != plist.get(i+1).getDpNo())
