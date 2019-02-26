@@ -2,9 +2,11 @@
     pageEncoding="UTF-8"%>
 <%@ include file="/views/common/header.jsp"%>
 <%@ page import="com.b4.model.vo.QueryBoard, com.b4.model.vo.QueryComment" %>
+<%@ page import="com.b4.model.vo.Member" %>
 <%@ page import="java.util.*" %>
 <%@ page import="static common.DateFormatTemplate.getTillMin" %>
 <%
+	Member lm = (Member)request.getAttribute("loginMember");
 	List<QueryBoard> list = (List<QueryBoard>)request.getAttribute("list");
 	int cPage = (int)request.getAttribute("cPage");
 	String pageBar = (String)request.getAttribute("pageBar");
@@ -232,7 +234,9 @@
             margin-top: 10px;
             margin-bottom: 10px;
             padding: 15px 0 0 20px;
-
+			
+			
+			
             background-color: rgb(247, 247, 247);
             border-radius: 10px;
         }
@@ -429,15 +433,14 @@
                                     <div class="query-comment-date"><%=getTillMin(qc.getCommentDate())%></div>
                                 </div>
                                 <div class="query-comment-content">
-                                    <%=qc.getCommentText() %>
+                                    <textarea name="commentText"readonly="readonly"><%=qc.getCommentText() %></textarea>
                                 </div>
-                                <%if("admin".equals(qb.getMemberId())){ %>
+                                <%if(qc.getMemberId().equals(qb.getMemberId())){ %>
                                 <div class="query-comment-btn-set">
                                     <button class="query-comment-modify">수정</button>
                                     <button class="query-comment-delete">삭제</button>
                                 </div>
-                            	<%} %>    
-                            
+                            	<%}%>    
                             </div>
                               <%}%> 
                             <div class="query-comment-form">
