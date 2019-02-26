@@ -396,7 +396,7 @@ public class DataGen {
 						//공지사항 제목
 						ps.setString(2, date + " 서버 점검 안내");
 						//공지사항 내용
-						ps.setString(3, "안녕하세요. The Food Forum 입니다.<br><br><br>보다 나은 서비스 제공을 위한 시스템 작업으로 서비스가 중단될 예정입니다.<br><br><br>최대한 빠른 시간 내에 작업을 마칠 수 있도록 최선을 다하겠습니다.<br><br><br>감사합니다.");
+						ps.setString(3, "안녕하세요. The Food Forum 입니다.\n\n\n보다 나은 서비스 제공을 위한 시스템 작업으로 서비스가 중단될 예정입니다.\n\n\n최대한 빠른 시간 내에 작업을 마칠 수 있도록 최선을 다하겠습니다.\n\n\n감사합니다.");
 					}
 					else
 					{
@@ -405,7 +405,7 @@ public class DataGen {
 							//공지사항 제목
 							ps.setString(2, plist.get((int)(plist.size()*Math.random())).getProductName() + " 상품 일시 품절 안내");
 							//공지사항 내용
-							ps.setString(3, "안녕하세요. The Food Forum 입니다.<br><br>최대한 빠른 시일 내에 상품 판매를 재개할 수 있도록 하겠습니다.<br><br><br>감사합니다.");
+							ps.setString(3, "안녕하세요. The Food Forum 입니다.\n\n최대한 빠른 시일 내에 상품 판매를 재개할 수 있도록 하겠습니다.\n\n\n감사합니다.");
 						}
 						else
 						{
@@ -414,7 +414,7 @@ public class DataGen {
 							//공지사항 제목
 							ps.setString(2, date + " " +p.getProductName() + " 할인 이벤트!");
 							//공지사항 내용
-							ps.setString(3, "<br>안녕하세요. The Food Forum 입니다.<br><br>오늘 단 하루! "+p.getProductName()+"를 "+(p.getOutPrice()-10)+"원에 구매하실 수 있습니다.<br><br><br>감사합니다.");
+							ps.setString(3, "\n안녕하세요. The Food Forum 입니다.\n\n오늘 단 하루! "+p.getProductName()+"를 "+(p.getOutPrice()-10)+"원에 구매하실 수 있습니다.\n\n\n감사합니다.");
 						}
 					}
 
@@ -519,6 +519,7 @@ public class DataGen {
 			if(Math.random()<0.05)
 			{
 				// 관리자 답변 없는 게시글
+				qnaSeqStart++;
 				continue;
 			}
 			
@@ -533,7 +534,7 @@ public class DataGen {
 				for(;;)
 				{
 					time = time+(long)(Math.random()*Math.random()*(howOld/qnaCount));
-
+					
 					//게시글 번호
 					ps2.setInt(1, qnaSeqStart);
 					
@@ -546,9 +547,9 @@ public class DataGen {
 					//댓글 내용
 					if(replyWriter==memberSeqStart)
 					{
-						String[] replyText = {"안녕하세요. The Food Forum 입니다.<br>좋은 하루 되세요.","안녕하세요. The Food Forum 입니다.<br>이용에 불편을 드려 죄송합니다.",
-								"안녕하세요. The Food Forum 입니다.<br>문의하신 내용 잘 확인하였습니다.","안녕하세요. The Food Forum 입니다.<br>문의해주신 대로 처리할 수 있도록 노력하겠습니다.",
-								"안녕하세요. The Food Forum 입니다.<br>해당 상품에 많은 관심 갖아주셔서 감사합니다."};
+						String[] replyText = {"안녕하세요. The Food Forum 입니다.\n좋은 하루 되세요.","안녕하세요. The Food Forum 입니다.\n이용에 불편을 드려 죄송합니다.",
+								"안녕하세요. The Food Forum 입니다.\n문의하신 내용 잘 확인하였습니다.","안녕하세요. The Food Forum 입니다.\n문의해주신 대로 처리할 수 있도록 노력하겠습니다.",
+								"안녕하세요. The Food Forum 입니다.\n해당 상품에 많은 관심 갖아주셔서 감사합니다."};
 						ps2.setString(4, replyText[(int)(Math.random()*replyText.length)]);
 					}
 					else
@@ -557,7 +558,6 @@ public class DataGen {
 						ps2.setString(4, replyText[(int)(Math.random()*replyText.length)]);
 					}
 
-		
 					ps2.executeUpdate();
 
 
@@ -595,7 +595,6 @@ public class DataGen {
 			
 			qnaSeqStart++;
 		}
-
 	}
 
 	public void createSupplier(Connection cn) {
@@ -1561,6 +1560,7 @@ public class DataGen {
 							if(Math.random()<0.05)
 							{
 								// 관리자 답변 없는 게시글
+								qnaSeqStart++;
 								continue;
 							}
 
@@ -1584,9 +1584,9 @@ public class DataGen {
 									//댓글 내용
 									if(replyWriter==memberSeqStart)
 									{
-										String[] replyText = {"안녕하세요. The Food Forum 입니다.<br>좋은 하루 되세요.","안녕하세요. The Food Forum 입니다.<br>이용에 불편을 드려 죄송합니다.",
-												"안녕하세요. The Food Forum 입니다.<br>문의하신 내용 잘 확인하였습니다.","안녕하세요. The Food Forum 입니다.<br>문의해주신 대로 처리할 수 있도록 노력하겠습니다.",
-										"안녕하세요. The Food Forum 입니다.<br>해당 상품에 많은 관심 갖아주셔서 감사합니다."};
+										String[] replyText = {"안녕하세요. The Food Forum 입니다.\n좋은 하루 되세요.","안녕하세요. The Food Forum 입니다.\n이용에 불편을 드려 죄송합니다.",
+												"안녕하세요. The Food Forum 입니다.\n문의하신 내용 잘 확인하였습니다.","안녕하세요. The Food Forum 입니다.\n문의해주신 대로 처리할 수 있도록 노력하겠습니다.",
+										"안녕하세요. The Food Forum 입니다.\n해당 상품에 많은 관심 갖아주셔서 감사합니다."};
 										ps4.setString(4, replyText[(int)(Math.random()*replyText.length)]);
 									}
 									else

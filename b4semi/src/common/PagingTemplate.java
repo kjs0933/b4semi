@@ -82,7 +82,7 @@ public class PagingTemplate {
 		}
 		else
 		{
-			pageBar +="<div><a href='"+href+"?cPage="+(pageEnd+1)+"<img src='/b4semi/images/board-arrow-right.png'></a></div>";
+			pageBar +="<div><a href='"+href+"?cPage="+(pageEnd+1)+"'><img src='/b4semi/images/board-arrow-right.png'></a></div>";
 		}
 		pageBar+="</div>";
 		return pageBar;
@@ -123,7 +123,7 @@ public class PagingTemplate {
 		}
 		else
 		{
-			pageBar +="<div><a href='"+href+pageName+"="+(pageEnd+1)+"<img src='"+root+"/images/board-arrow-right.png'></a></div>";
+			pageBar +="<div><a href='"+href+pageName+"="+(pageEnd+1)+"'><img src='"+root+"/images/board-arrow-right.png'></a></div>";
 		}
 		pageBar+="</div>";
 		return pageBar;

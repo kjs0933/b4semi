@@ -409,6 +409,40 @@ try {
         }
 
         .delete-selection img {cursor: pointer;}
+        
+        
+        
+        
+        .pagebar img
+        {
+            width: 40%;
+            height: 40%;
+        }
+
+        .pagebar
+        {
+            display: flex;
+            align-self: center;
+            margin: 40px;
+            font-size: 12px;
+        }
+
+        .pagebar > div
+        {
+            width: 33px;
+            height: 33px;
+            border: 1px solid rgb(220, 220, 220);
+            border-left: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .pagebar > div:first-of-type
+        {
+            border-left: 1px solid rgb(220, 220, 220);
+        }
 
 
     </style>
@@ -417,32 +451,31 @@ try {
     <div class="dp-detail-wrapper">
         <div class="dp-detail-top-wrapper">
             <div class="prod-image">
-                <img src="<%=request.getContextPath()%>/upload/product/<%=detail.getImg()%>">
+                <img src="<%=request.getContextPath()%>/upload/product/<%=detail.getImg()%>" onError="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';">
             </div>
             <div class="prod-description">
+            	<div><%=detail.getMajorCategoryName()%>&nbsp;&nbsp;>&nbsp;&nbsp;<%=detail.getSubCategoryName()%></div>
                 <div class="prod-name">
                     <%=detail.getDisplayListTitle()%>
                 </div>
+<%--            <div class="discount">
+                	<div>할인</div>
+                	<div><%=detail.getDiscountName()%></div>
+                </div> --%>
                 <div class="prod-price">
                     <div>판매가</div>
                     <div>
                     <%if(detail.getDiscountRate()>0){%>
                     <del><%=detail.getMinPrice() %> 원</del>
-                    <br>할인가 : <%=detail.getDiscountMinPrice()%> 원 
+                    <br>할인가 : <%=detail.getDiscountMinPrice()%> 원 (<%=detail.getDiscountName()%>)
                     <%}else{%>
                     <%=detail.getMinPrice() %> 원
                     <%}%>
                     </div>
+                    <%for(int i=0; i<option.size(); i++){%>
+                        <input type="hidden" id="op-data-<%=i+1%>" data-dpseq="<%=detail.getDisplayListSeq()%>" data-pcode="<%=option.get(i).getProductCode()%>" data-pname="<%=option.get(i).getProductName()%>" data-price="<%=option.get(i).getDiscountOptionPrice()%>" data-count="0">
+                    <%}%>
                 </div>
-                
-<!--            추가할 거 있으면 이런 식으로 추가하시면 되요. -->
-<!--            css 약간 달라지는데 그건 제가 수정할게요. -->
-<!--                 <div class="discount"> -->
-<!--                 	<div>할인률</div> -->
-<!--                 	<div>0%</div> -->
-<!--                 </div> -->
-<!--                 ------->
-
                 <div class="prod-unit">
                     <div>판매단위</div>
                     <div><%=detail.getProductUnit()%></div>
@@ -458,13 +491,11 @@ try {
                     <div>구매옵션선택</div>
                     <div>
                         <select>
+                        	<option value="0">=== 상품 옵션을 선택해주세요 ===</option>
                         <%for(int i=0; i<option.size(); i++){%>
                             <option value="<%=i+1%>"><%=option.get(i).getProductName()%> (+<%=option.get(i).getDiscountOptionPrice() - detail.getDiscountMinPrice()%> 원 추가)</option>
                         <%}%>
                         </select>
-                        <%for(int i=0; i<option.size(); i++){%>
-                        <input type="hidden" id="op-data-<%=i+1%>" data-dpseq="<%=detail.getDisplayListSeq()%>" data-pcode="<%=option.get(i).getProductCode()%>" data-price="<%=option.get(i)%>">
-                        <%}%>
                     </div>
                 </div>
                 <!--} 단일 상품일시 출력 X -->
@@ -475,7 +506,7 @@ try {
                     <div>구매수량</div>
                     <div class="quantity-controller">
                         <div><img src="images/arrow_left_black.png"></div>
-                        <input type="text" name="quantity" id="quantity" value="1">
+                        <input type="text" name="quantity" id="quantity" value="1" readonly>
                         <div><img src="images/arrow_right_black.png"></div>
                     </div>
                 </div>
@@ -493,7 +524,7 @@ try {
 
                     </div>
                     <div class="option-total">
-                        총 상품금액: <span class="option-total-price">2,950원</span>
+                        총 상품금액: <span class="option-total-price">0원</span>
                     </div>
                     <div class="add-to-cart">
                         <input type="button" value="장바구니 담기">
@@ -583,31 +614,38 @@ try {
     
     $(() => {
         optionSelectEle.on('change', (e) => {
+            const optionIndex = $(e.target).val();
+            if(optionIndex == 0)
+            {
+            	return;
+            }
+
             //해당 인덱스의 옵션이 이미 추가되어 있으면 메시지 출력 후 리턴
             if($('.selected-option').hasClass($(e.target).val()))
             {
                 alert('이미 선택된 상품입니다.');
+                $(e.target).val("0").prop("selected", true);
                 return;
             }
-
-            //옵션의 인덱스값으로 상품 정보 접근(ArrayList?)
-            const optionIndex = $(e.target).val();
             const selectedOption = $('.selected-option'); // 화면에 추가된 옵션들 선택
-
+            const selectedData = $("#op-data-"+optionIndex); // 선택한 옵션의 데이터들을 저장했던 input태그
             
             const newTag 
             = '<div class="selected-option '+optionIndex+'">'
-            +   '<div>[ArrayList['+optionIndex+'].상품명</div>'
+            +   '<div>'+selectedData.data("pname")+'</div>'
             +   '<div class="option-quantity-controller">'
             +       '<div><img src="images/arrow_left_black.png"></div>'
-            +       '<input type="text" name="op-quantity-'+optionIndex+'" id="op-quantity-'+optionIndex+'" value="1">'
+            +       '<input type="text" name="op-quantity-'+optionIndex+'" id="op-quantity-'+optionIndex+'" value="1" data-index='+optionIndex+' readonly>'
             +       '<div><img src="images/arrow_right_black.png"></div>'
             +   '</div>'
-            +   '<div>가격</div>'
+            +   '<div id="op-price"'+optionIndex+'>'+selectedData.data("price")+'원</div>'
             +   '<div class="delete-selection"><img src="images/btn_close_black.png"></div>'
             + '</div>';
             
             selectedOptionsDisplay.append(newTag);
+            
+            $("#op-data-"+optionIndex).data("count",1);
+            alert($("#op-data-"+optionIndex).data("count"));
 
             
             //수량 조정 로직
@@ -622,12 +660,16 @@ try {
                 const target = $(e.target).parent().next()
                 if(target.val() == 1){alert('최수 수량은 1개입니다.'); return;}
                 target.val(parseInt(target.val())-1);
+                target.parent().next().text($("#op-data-"+target.data("index")).data("price")*parseInt(target.val())+"원");
+                detail_cal_Total();
             });
 
             opRightBtn.off('click');
             opRightBtn.on('click', (e) => {
                 const target = $(e.target).parent().prev();
                 target.val(parseInt(target.val())+1);
+                target.parent().next().text($("#op-data-"+target.data("index")).data("price")*parseInt(target.val())+"원");
+                detail_cal_Total();
             });
 
             //버튼 클릭시 해당 옵션 화면에서 삭제
@@ -635,7 +677,11 @@ try {
             deleteBtn.off('click');
             deleteBtn.on('click', (e) =>{
                 $(e.target).parents('.selected-option').remove();
+                detail_cal_Total();
             });
+            
+            detail_cal_Total();
+            $(e.target).val("0").prop("selected", true);
         });
 
         //단일 상품 수량 조정 로직
@@ -655,6 +701,18 @@ try {
         });
 
     });
+    
+    function detail_cal_Total() {
+    	const size = $(".selected-option").length;
+    	var totalPrice = 0;
+    	for(var i=0; i<size;i++)
+    	{
+    		totalPrice += $("#op-data-"+(i+1)).data("price")*$("#op-data-"+(i+1)).data("count");
+    	}
+    	$(".option-total-price").text(totalPrice+"원");
+    	
+    }
+    
 </script>
 
 <%@ include file="/views/common/footer.jsp" %>
