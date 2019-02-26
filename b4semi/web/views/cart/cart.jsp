@@ -325,15 +325,17 @@
                 <div class="cart-col">
                     <div><input type="checkbox" name="products" id="product<%=i+1 %>" class="products"><label for="product<%=i+1 %>"><span></span></label></div>
                     <div><img src="<%=request.getContextPath() %>/upload/product/<%=cartList.get(i).getImg()%>" onError="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';"></div>
-                    <div><div>
+                    <div>
+                    <div>
                     <p><a href="<%=request.getContextPath()%>/dpdetail?dpseq=<%=cartList.get(i).getDisplayListSeq()%>" style="text-decoration: none;"><%=cartList.get(i).getDisplayListTitle()%></a> (옵션 - <%=cartList.get(i).getProductName()%>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;단위:<%=cartList.get(i).getProductUnit()%></p><br>
                     <%=cartList.get(i).getDiscountName()==null?"":cartList.get(i).getDiscountName()%>
                     <% if(cartList.get(i).getDiscountRate()>0){%>
-                    <p><strike><%=cartList.get(i).getDisplayOptionPrice()%>원</strike> → <b><%=cartList.get(i).getDiscountOptionPrice()%>원<%="Y".equals(cartList.get(i).getOptionAvailable())?"":" <품절>"%></b></p>
+                    <p><del><%=cartList.get(i).getDisplayOptionPrice()%>원</del> → <b><%=cartList.get(i).getDiscountOptionPrice()%>원<%="Y".equals(cartList.get(i).getOptionAvailable())?"":" <품절>"%></b></p>
                     <%}else{ %>
                     <p><%=cartList.get(i).getDisplayOptionPrice()%>원<%="Y".equals(cartList.get(i).getOptionAvailable())?"":" <품절>"%></p>
                     <%}%>
-                    </div></div>
+                    </div>
+                    </div>
                     <div>
                         <div class="quantity-box">
                             <div><img src="<%=request.getContextPath() %>/images/arrow_left_black.png"></div>
