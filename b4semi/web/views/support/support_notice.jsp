@@ -6,10 +6,10 @@
 <%@ page import="java.util.*" %>
 <%@ page import="java.sql.*" %>
 <%@ page import ="static common.DateFormatTemplate.getTillDate"%>
-<%@ page import ="static common.PagingTemplate.pageBar"%>
+<%@ page import ="static common.PagingTemplate.pageBar2"%>
 <%
 	List<Notice> list=(List)request.getAttribute("list");
-	int cPage = (int)request.getAttribute("cPage");
+	String cPage = (String)request.getAttribute("cPage");
 	String pageBar = (String)request.getAttribute("pageBar");
 %>    
 
@@ -237,7 +237,7 @@
                         <div><%=o.getNoticeSeq() %></div>
                         <div><a href="<%=request.getContextPath()%>/notice/noticeview?noticeseq=<%=o.getNoticeSeq()%>"><%=o.getNoticeTitle() %></a></div>
                         <div>TheFoodForum</div>
-                        <div><%=getTillDate(o.getNoticeDate()) %></div>
+                        <div><%=getTillDate(o.getNoticeDate())%></div>
                         <div><%=o.getNoticeReadCount() %></div>
                     </div>
                     <%} %>

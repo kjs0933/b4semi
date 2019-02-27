@@ -55,6 +55,7 @@ public class NoticeListServlet extends HttpServlet {
 		//DB에서 데이터를 불러옴!
 		//servlet -> service(Connection) -> Dao
 		int totalCount = new NoticeService().NoticeCount();
+		System.out.println(totalCount);
 		List<Notice> list = new NoticeService().selectList(cPage, numPerPage);
 		System.out.println("서블릿리스트"+list);
 		String pageBar = pageBar(request.getContextPath(),cPage,numPerPage,totalCount);
