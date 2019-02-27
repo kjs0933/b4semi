@@ -57,6 +57,15 @@ public class CouponGen {
 		ps.executeUpdate();
 		list.add(code);
 		
+		code="GCP-500K-0.15-100000";
+		ps.setString(1,code);
+		ps.setString(2,"금수저 전용 쿠폰");
+		ps.setDouble(3,0.15);
+		ps.setInt(4,500000);
+		ps.setInt(5,100000);
+		ps.executeUpdate();
+		list.add(code);
+		
 		}
 		catch(SQLException e)
 		{

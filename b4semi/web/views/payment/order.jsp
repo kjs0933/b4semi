@@ -713,9 +713,10 @@
         			<input type="hidden" id="initialPrice" value="<%=totalPrice-totalDiscount%>" >
         			<input type="hidden" id="totalPrice" name="totalPrice" value="<%=totalPrice-totalDiscount%>" >
         			<input type="hidden" id="shipmentFee" name="shipmentFee" value="<%=ship%>" >
-        			<input type="hidden" id="couponSeq" name="couponSeq" value="" >
+        			<input type="hidden" id="couponSeq" name="couponSeq" value="0" >
+        			<input type="hidden" id="ilist0" data-cseq="0" data-discount="0">
         		<%for(int i=0;i<ilist.size();i++){ %>
-                    <input type="hidden" id="ilist<%=i+1%>" value="<%=i+1%>" data-cseq="<%=ilist.get(i).getCouponSeq()%>" data-cmin="<%=ilist.get(i).getMinPrice()%>" data-cmax="<%=ilist.get(i).getMaxDisPrice()%>" data-crate="<%=ilist.get(i).getDiscountRate()%>"
+                    <input type="hidden" id="ilist<%=i+1%>" data-cseq="<%=ilist.get(i).getCouponSeq()%>" data-cmin="<%=ilist.get(i).getMinPrice()%>" data-cmax="<%=ilist.get(i).getMaxDisPrice()%>" data-crate="<%=ilist.get(i).getDiscountRate()%>"
                      data-discount="<%=(totalPrice- totalDiscount >= ilist.get(i).getMinPrice())?(int)(Math.min(ilist.get(i).getMaxDisPrice(),(totalPrice-totalDiscount)*ilist.get(i).getDiscountRate())/10)*10 : 0%>">
                 <%}%>
         	</div>
@@ -830,8 +831,8 @@
                         <div class="coupon-mileage-cols">
                             <div>적립금 사용</div>
                             <div>
-                                <input type="text" onkeyup="fn_use_mileage()" name="spentMileage" id="spentMileage" value="0" data-memberMileage="<%=m.getMemberMileage()%>">
-                                <span>가용 적립금: <%=m.getMemberMileage()%></span>
+                                <input type="text" onkeyup="fn_use_mileage()" name="spentMileage" id="spentMileage" value="0" data-maxmile="<%=(int)(m.getMemberMileage()/10)*10%>">
+                                <span>가용 적립금: <%=(int)(m.getMemberMileage()/10)*10%></span>
                             </div>
                         </div>
                     </div>
@@ -999,41 +1000,66 @@
     	if(coup.data("cmin")>$("#initialPrice").val())
     	{
     		alert(coup.data("cmin")+"원 이상 구매시 사용 가능한 쿠폰입니다.");
-    		$(event.target).val("0").prop("selected", true)
+    		$(event.target).val("0").prop("selected", true);
 
     		
     		$("#coupon-rate").html("");
     		$("#coupon-max").html("");
     		$("#result-coupon").html("0 원");
-    		$("#result-final").html((parseInt($("#initialPrice").val())+parseInt($("#shipmentFee").val()))+" 원");
+    		$("#couponSeq").val("0");
+    		fn_order_calculate();
     		return;
     	}
     	
-    	$("#coupon-rate").html("최대 "+(coup.data("crate")*1000)/10+"% 할인가능");
+    	$("#coupon-rate").html("최대 "+Math.floor(coup.data("crate")*1000)/10+"% 할인가능");
     	$("#coupon-max").html("할인 적용 상한 : "+coup.data("cmax")+"원");
-    	$("#result-coupon").html(coup.data("discount")+" 원");
-    	$("#result-final").html((parseInt($("#initialPrice").val())+parseInt($("#shipmentFee").val())-coup.data("discount"))+" 원");
+    	$("#result-coupon").html(coup.data("discount")*(-1)+" 원");
+    	$("#couponSeq").val(coup.data("cseq"));
+    	fn_order_calculate();
     	
-   /*  	인풋 데이터 넣는 로직 */
-    	
-<%-- 		<input type="hidden" id="initialPrice" value="<%=totalPrice-totalDiscount%>" >
-		<input type="hidden" name="totalPrice" value="<%=totalPrice-totalDiscount%>" >
-		<input type="hidden" name="shipmentFee" value="<%=ship%>" >
-		<input type="hidden" name="CouponSeq" value="" > --%>
     }
     
     function fn_use_mileage() {
     	if(!($(event.target).val()>=0))
     	{
     		alert("숫자를 입력하세요");
-    		$(event.target).val("");
+    		$(event.target).val("0");
     		$("#result-mileage").html("0 원");
-/*     		$("#result-final").html((parseInt($("#initialPrice").val())+parseInt($("#shipmentFee").val())-coup.data("discount"))+" 원"); */
-    		
+    		fn_order_calculate();
+    	}
+    	if(parseInt($(event.target).val()) > $(event.target).data("maxmile"))
+    	{
+    		$(event.target).val($(event.target).data("maxmile"));
+    		$("#result-mileage").html($(event.target).data("maxmile")*(-1)+" 원");
+    		fn_order_calculate();
     	}
     	
+    	if($(event.target).val()>=10)
+    	{
+        	$(event.target).val(Math.floor(parseInt($(event.target).val())/10)*10);
+    		$("#result-mileage").html(parseInt($(event.target).val())*(-1)+" 원");
+    		fn_order_calculate();
+    	}
+    	else if($(event.target).val() == 0)
+    	{
+    		$(event.target).val("0");
+    		$("#result-mileage").html("0 원");
+    		fn_order_calculate();
+    	}
     	
+    	if($("#totalPrice").val()<0)
+    	{
+    		$(event.target).val(parseInt($(event.target).val())+parseInt($("#totalPrice").val()));
+    		$("#result-mileage").html(parseInt($(event.target).val())*(-1)+" 원");
+    		fn_order_calculate();
+    	}
     }
+    
+    function fn_order_calculate(){
+    	$("#totalPrice").val(parseInt($("#initialPrice").val())+parseInt($("#shipmentFee").val())-$("#ilist"+$("#coupon").val()).data("discount") - parseInt($("#spentMileage").val()));
+    	$("#result-final").html($("#totalPrice").val()+" 원");
+    }
+    
     
 
 </script>
