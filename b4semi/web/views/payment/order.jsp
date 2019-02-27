@@ -91,7 +91,7 @@
         padding: 0 5px;
         font-size: 13px;
         font-family: 'Noto Sans KR';
-
+	
 
     }
 
@@ -105,6 +105,7 @@
         flex-flow: column;
         align-items: center;
         font-family: 'Noto Sans KR';
+        margin-top: 100px;
     }
 
 
@@ -709,11 +710,12 @@
     <form action="#" method="post" id="payment-frm" autocomplete="off">
         <div class="orderlist-pre-wrapper">
         	<div>
-        			<input type="hidden" name="totalPrice" value="<%=totalPrice-totalDiscount%>" >
-        			<input type="hidden" name="shipmentFee" value="<%=ship%>" >
-        			<input type="hidden" name="CouponSeq" value="" >
+        			<input type="hidden" id="initialPrice" value="<%=totalPrice-totalDiscount%>" >
+        			<input type="hidden" id="totalPrice" name="totalPrice" value="<%=totalPrice-totalDiscount%>" >
+        			<input type="hidden" id="shipmentFee" name="shipmentFee" value="<%=ship%>" >
+        			<input type="hidden" id="couponSeq" name="couponSeq" value="" >
         		<%for(int i=0;i<ilist.size();i++){ %>
-                    <input type="hidden" id="ilist<%=i+1%>" value="<%=i+1%>" data-cseq="<%=ilist.get(i).getCouponSeq()%>" data-cmin"<%=ilist.get(i).getMinPrice()%>" data-cmax"<%=ilist.get(i).getMaxDisPrice()%>" data-crate="<%=ilist.get(i).getDiscountRate()%>"
+                    <input type="hidden" id="ilist<%=i+1%>" value="<%=i+1%>" data-cseq="<%=ilist.get(i).getCouponSeq()%>" data-cmin="<%=ilist.get(i).getMinPrice()%>" data-cmax="<%=ilist.get(i).getMaxDisPrice()%>" data-crate="<%=ilist.get(i).getDiscountRate()%>"
                      data-discount="<%=(totalPrice- totalDiscount >= ilist.get(i).getMinPrice())?(int)(Math.min(ilist.get(i).getMaxDisPrice(),(totalPrice-totalDiscount)*ilist.get(i).getDiscountRate())/10)*10 : 0%>">
                 <%}%>
         	</div>
@@ -814,21 +816,21 @@
                         <div class="coupon-mileage-cols">
                             <div>쿠폰 사용</div>
                             <div>
-                                <select id="coupon">
-                                <option value="0">=== 사용 쿠폰을 선택해주세요 ===</option>
+                                <select id="coupon" onchange="fn_select_coupon()">
+                                	<option value="0">=== 사용 쿠폰을 선택해주세요 ===</option>
                                 <%for(int i=0;i<ilist.size();i++){ %>
                                     <option value="<%=i+1%>"><%=ilist.get(i).getCouponName()%><%=(totalPrice- totalDiscount >= ilist.get(i).getMinPrice())? " ("+(int)(Math.min(ilist.get(i).getMaxDisPrice(),(totalPrice-totalDiscount)*ilist.get(i).getDiscountRate())/10)*10+"원 할인가능)" : " (최소금액 미달)"%></option>
                                 <%}%>
                                 </select>
-                                <span id="coupon-min">사용 가능 쿠폰 : <%=couponCount%>개</span>
-                                <div id="coupon-rate">최대 10% 할인</div>
-                                <div id="coupon-max">할인 적용 상한 : 3000원</div>
+                                <span>사용 가능 쿠폰 : <%=couponCount%>개</span>
+                                <div id="coupon-rate"></div>
+                                <div id="coupon-max"></div>
                             </div>
                         </div>
                         <div class="coupon-mileage-cols">
                             <div>적립금 사용</div>
                             <div>
-                                <input type="text" name="spentMileage" id="spentMileage" value="0" data-memberMileage="<%=m.getMemberMileage()%>">
+                                <input type="text" onkeyup="fn_use_mileage()" name="spentMileage" id="spentMileage" value="0" data-memberMileage="<%=m.getMemberMileage()%>">
                                 <span>가용 적립금: <%=m.getMemberMileage()%></span>
                             </div>
                         </div>
@@ -985,6 +987,54 @@
             searchAddressClose.trigger('click');
         });
     });
+    
+    function fn_select_coupon() {
+    	var index = $(event.target).val();
+    	if(index <1)
+    	{
+    		return;
+    	}
+    	var coup = $("#ilist"+index);
+    	
+    	if(coup.data("cmin")>$("#initialPrice").val())
+    	{
+    		alert(coup.data("cmin")+"원 이상 구매시 사용 가능한 쿠폰입니다.");
+    		$(event.target).val("0").prop("selected", true)
+
+    		
+    		$("#coupon-rate").html("");
+    		$("#coupon-max").html("");
+    		$("#result-coupon").html("0 원");
+    		$("#result-final").html((parseInt($("#initialPrice").val())+parseInt($("#shipmentFee").val()))+" 원");
+    		return;
+    	}
+    	
+    	$("#coupon-rate").html("최대 "+(coup.data("crate")*1000)/10+"% 할인가능");
+    	$("#coupon-max").html("할인 적용 상한 : "+coup.data("cmax")+"원");
+    	$("#result-coupon").html(coup.data("discount")+" 원");
+    	$("#result-final").html((parseInt($("#initialPrice").val())+parseInt($("#shipmentFee").val())-coup.data("discount"))+" 원");
+    	
+   /*  	인풋 데이터 넣는 로직 */
+    	
+<%-- 		<input type="hidden" id="initialPrice" value="<%=totalPrice-totalDiscount%>" >
+		<input type="hidden" name="totalPrice" value="<%=totalPrice-totalDiscount%>" >
+		<input type="hidden" name="shipmentFee" value="<%=ship%>" >
+		<input type="hidden" name="CouponSeq" value="" > --%>
+    }
+    
+    function fn_use_mileage() {
+    	if(!($(event.target).val()>=0))
+    	{
+    		alert("숫자를 입력하세요");
+    		$(event.target).val("");
+    		$("#result-mileage").html("0 원");
+/*     		$("#result-final").html((parseInt($("#initialPrice").val())+parseInt($("#shipmentFee").val())-coup.data("discount"))+" 원"); */
+    		
+    	}
+    	
+    	
+    }
+    
 
 </script>
 

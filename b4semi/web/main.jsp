@@ -76,7 +76,7 @@ try {
         {
             position: relative;
             width: 100%;
-            height: 650px;
+            height: 350px;
             overflow: hidden;
         }
 
