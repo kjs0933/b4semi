@@ -4,6 +4,7 @@
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="com.b4.model.vo.Cart"%>
 <%@ page import="com.b4.model.vo.Member"%>
+<%@ page import="com.b4.model.vo.MemberGrade"%>
 <%@ page import="com.b4.model.vo.AddressList"%>
 <%@ page import="com.b4.model.vo.IssuedCoupon"%>
 
@@ -48,6 +49,16 @@
 	} catch (ClassCastException e) {
 		m=new Member();
 	}
+	MemberGrade grade; 
+	try {
+		grade = (MemberGrade)request.getAttribute("grade");
+		if(grade == null)
+		{
+			grade=new MemberGrade();
+		}
+	} catch (ClassCastException e) {
+		grade=new MemberGrade();
+	}
 	int totalPrice=0;
 	int totalDiscount=0;
 	int ship;
@@ -65,6 +76,15 @@
 	{
 		ship = 0;
 	}
+	int couponCount=0;
+	for(int i=0;i<ilist.size();i++)
+	{
+		if(totalPrice - totalDiscount >= ilist.get(i).getMinPrice())
+		{
+			couponCount++;
+		}
+	}
+			
 %>
 <style>
     .orderlist-pre-wrapper input {
@@ -689,9 +709,12 @@
     <form action="#" method="post" id="payment-frm" autocomplete="off">
         <div class="orderlist-pre-wrapper">
         	<div>
-        			<input type="hidden" id="orderResult">
+        			<input type="hidden" name="totalPrice" value="<%=totalPrice-totalDiscount%>" >
+        			<input type="hidden" name="shipmentFee" value="<%=ship%>" >
+        			<input type="hidden" name="CouponSeq" value="" >
         		<%for(int i=0;i<ilist.size();i++){ %>
-                    <input type="hidden" id="ilist<%=i+1%>" value="<%=i+1%>" data-cseq="<%=ilist.get(i).getCouponSeq()%>" data-ccode="<%=ilist.get(i).getCouponCode()%>" data-cmin"<%=ilist.get(i).getMinPrice()%>" data-cmax"<%=ilist.get(i).getMaxDisPrice()%>" data-crate="<%=ilist.get(i).getDiscountRate()%>">
+                    <input type="hidden" id="ilist<%=i+1%>" value="<%=i+1%>" data-cseq="<%=ilist.get(i).getCouponSeq()%>" data-cmin"<%=ilist.get(i).getMinPrice()%>" data-cmax"<%=ilist.get(i).getMaxDisPrice()%>" data-crate="<%=ilist.get(i).getDiscountRate()%>"
+                     data-discount="<%=(totalPrice- totalDiscount >= ilist.get(i).getMinPrice())?(int)(Math.min(ilist.get(i).getMaxDisPrice(),(totalPrice-totalDiscount)*ilist.get(i).getDiscountRate())/10)*10 : 0%>">
                 <%}%>
         	</div>
             <div class="orderlist-pre-header">
@@ -756,12 +779,12 @@
             <div class="shipment-info-table">
                 <div class="shipment-info-cols">
                     <div>배송지</div>
-                    <div><input type="text" name="addressTag" id="address-tag"></div>
+                    <div><input type="text" id="address-tag"></div>
                 </div>
                 <div class="shipment-info-cols">
                     <div>주소</div>
                     <div>
-                        <input type="text" name="address" id="address">
+                        <input type="text" name="receiverAddress" id="address">
                     </div>
                 </div>
                 <div class="shipment-info-cols">
@@ -771,13 +794,13 @@
                 <div class="shipment-info-cols">
                     <div>휴대전화</div>
                     <div class="phone-info-container">
-                        <input type="text" name="addressPhone" id="address-phone">
+                        <input type="text" name="receiverPhone" id="address-phone">
                     </div>
                 </div>
                 <div class="shipment-info-cols">
                     <div>배송 요청사항</div>
                     <div>
-                        <textarea rows="4"></textarea>
+                        <textarea name="receiverComment" rows="4"></textarea>
                     </div>
                 </div>
             </div>
@@ -791,20 +814,21 @@
                         <div class="coupon-mileage-cols">
                             <div>쿠폰 사용</div>
                             <div>
-                                <select name="coupon" id="coupon">
+                                <select id="coupon">
                                 <option value="0">=== 사용 쿠폰을 선택해주세요 ===</option>
                                 <%for(int i=0;i<ilist.size();i++){ %>
-                                    <option value="<%=i+1%>"><%=ilist.get(i).getCouponName()%></option>
+                                    <option value="<%=i+1%>"><%=ilist.get(i).getCouponName()%><%=(totalPrice- totalDiscount >= ilist.get(i).getMinPrice())? " ("+(int)(Math.min(ilist.get(i).getMaxDisPrice(),(totalPrice-totalDiscount)*ilist.get(i).getDiscountRate())/10)*10+"원 할인가능)" : " (최소금액 미달)"%></option>
                                 <%}%>
                                 </select>
-                                <span>보유 쿠폰: 1개</span>
-                                <div>장바구니 10% 할인.. 등등</div>
+                                <span id="coupon-min">사용 가능 쿠폰 : <%=couponCount%>개</span>
+                                <div id="coupon-rate">최대 10% 할인</div>
+                                <div id="coupon-max">할인 적용 상한 : 3000원</div>
                             </div>
                         </div>
                         <div class="coupon-mileage-cols">
                             <div>적립금 사용</div>
                             <div>
-                                <input type="text" name="spentMileage" id="spent-mileage" value="0">
+                                <input type="text" name="spentMileage" id="spentMileage" value="0" data-memberMileage="<%=m.getMemberMileage()%>">
                                 <span>가용 적립금: <%=m.getMemberMileage()%></span>
                             </div>
                         </div>
@@ -821,7 +845,7 @@
                         </div>
                         <div class="final-price-cols">
                             <div>상품 할인 금액</div>
-                            <div>-<%=totalDiscount%> 원</div>
+                            <div><%=totalDiscount*(-1)%> 원</div>
                         </div>
                         <div class="final-price-cols">
                             <div>배송비</div>
@@ -829,19 +853,17 @@
                         </div>
                         <div class="final-price-cols">
                             <div>쿠폰 사용</div>
-                            <div>0 원</div>
+                            <div id="result-coupon">0 원</div>
                         </div>
                         <div class="final-price-cols">
                             <div>적립금 사용</div>
-                            <div>0 원</div>
+                            <div id="result-mileage">0 원</div>
                         </div>
                         <div class="final-price-cols">
                             <div>최종결제금액</div>
-                            <div id="final-price"><%=totalPrice-totalDiscount+ship%> 원</div>
+                            <div id="result-final"><%=totalPrice-totalDiscount+ship%> 원</div>
                         </div>
-                        <div class="final-price-cols">
-                            구매 시 <%=(totalPrice-totalDiscount+ship)*0.05%> 원(0.5%) 적립 예정
-                        </div>
+                        <div class="final-price-cols">구매 시 <%=(int)((totalPrice-totalDiscount)*grade.getGradeRate())%> 원(<%=grade.getGradeRate()*100%>%) 적립 예정</div>
                     </div>
                 </div>
             </div>
@@ -872,7 +894,7 @@
                     </div>
                 </div>
             </div>
-            <input type="submit" value="결제하기">
+            <input type="button" value="결제하기">
         </div>
     </form>
 

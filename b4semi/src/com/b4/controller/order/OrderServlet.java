@@ -13,9 +13,11 @@ import com.b4.model.vo.AddressList;
 import com.b4.model.vo.Cart;
 import com.b4.model.vo.IssuedCoupon;
 import com.b4.model.vo.Member;
+import com.b4.model.vo.MemberGrade;
 import com.b4.service.AddressListService;
 import com.b4.service.CartService;
 import com.b4.service.CouponService;
+import com.b4.service.MemberGradeService;
 
 /**
  * Servlet implementation class OrderServlet
@@ -46,11 +48,14 @@ public class OrderServlet extends HttpServlet {
 		List<Cart> clist = new CartService().selectByMember(m.getMemberSeq());
 		List<AddressList> alist = new AddressListService().selectByMember(m);
 		List<IssuedCoupon> ilist = new CouponService().selectCouponUseAble(m.getMemberSeq());
+		MemberGrade grade = new MemberGradeService().selectOne(m.getMemberSeq());
 		
 		request.setAttribute("clist", clist);
 		request.setAttribute("alist", alist);
 		request.setAttribute("ilist", ilist);
+		request.setAttribute("grade", grade);
 		request.getRequestDispatcher("/views/payment/order.jsp").forward(request, response);
+		
 	}
 
 	/**

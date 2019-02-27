@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.b4.dao.QueryBoardDao;
 import com.b4.model.vo.QueryBoard;
+import com.b4.model.vo.QueryComment;
 import com.b4.model.vo.Reply;
 
 public class QueryBoardService {
@@ -125,10 +126,11 @@ public class QueryBoardService {
 		Connection conn = getConnection();
 		List<QueryBoard> list = dao.getByDp(conn, dpseq, qpage);
 		//각 객체에 댓글 객체를 넣어주는 과정
-/*		for(int i=0; i<list.size();i++)
+		for(int i=0; i<list.size();i++)
 		{
-			list.get(i).setList(dao.get);
-		}*/
+			list.get(i).setList(dao.selectCommentListByBoardSeq(conn, list.get(i).getQuerySeq()));
+			//list.get(i).setImg(dao.);
+		}
 		close(conn);
 		return list;
 	}
