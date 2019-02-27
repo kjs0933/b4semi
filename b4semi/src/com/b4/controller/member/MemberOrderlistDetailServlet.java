@@ -1,7 +1,6 @@
 package com.b4.controller.member;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -10,10 +9,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.b4.model.vo.Cart;
 import com.b4.model.vo.Member;
 import com.b4.model.vo.MypageHeader;
 import com.b4.model.vo.OrderList;
 import com.b4.model.vo.OrderPDetail;
+import com.b4.service.CartService;
 import com.b4.service.MemberService;
 import com.b4.service.OrderListService;
 import com.b4.service.OrderPDetailService;
@@ -43,7 +44,6 @@ public class MemberOrderlistDetailServlet extends HttpServlet {
 			request.setAttribute("msg", "세션이 만료되었습니다.");
 			request.setAttribute("loc", "/");
 			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
-			
 		}
 		
 		//각 mypage 위에 멤버 기본정보 가져오는 트랜잭션
@@ -55,6 +55,9 @@ public class MemberOrderlistDetailServlet extends HttpServlet {
 		
 		List<OrderPDetail> opdList = new OrderPDetailService().selectByOrderListSeq(orderSeq);
 		request.setAttribute("opdList", opdList);
+		
+		List<Cart> cartList = new CartService().selectByOrderSeq(orderSeq);
+		request.setAttribute("cartList", cartList);
 		
 		OrderList orderList = new OrderListService().selectByOrderListSeq(orderSeq); 
 		request.setAttribute("orderList", orderList);

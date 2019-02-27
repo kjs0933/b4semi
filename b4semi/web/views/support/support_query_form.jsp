@@ -264,12 +264,12 @@
         <form action="<%=request.getContextPath() %>/queryFormEnd" method="post" class="query-form" name="queryFrm" enctype="multipart/form-data">
             <div class="query-form-title">
                 <div>제목</div>
-                <div><input type="text" name="queryTitle" id=""></div>
+                <div><input type="text" name="queryTitle" id="" required></div>
             </div>
             <div class="query-form-order-seq">
                 <div>주문번호</div>
                 <div>
-                    <input type="text" name="orderSeq" id="order-seq" value="<%=orderSeq%>">
+                    <input type="text" name="orderSeq" id="order-seq" value="<%=orderSeq==null?" ":orderSeq%>">
                     <input id="show-orderlist" type="button" value="주문 조회">
                 </div>
                 <div class="order-seq-list" id="order-seq-list">
@@ -308,7 +308,7 @@
             </div>
             <div class="query-form-content">
                 <div>문의내용</div>
-                <div><textarea name="queryContents"></textarea></div>
+                <div><textarea name="queryContents" required></textarea></div>
             </div>
             <div class="query-form-image-upload">
                 <div>이미지</div>
@@ -319,8 +319,8 @@
                     <div class="image-upload-container">
                         <span>+</span><input type="file" name="originalFile" id="originalFile" multiple>
                     </div>
-                </div>
                 <p>이미지는 한 장만 등록할 수 있습니다.</p>
+                </div>
             </div>
             <div class="query-button-set">
                 <input id="cancel" type="button" value="취소">
@@ -360,7 +360,22 @@
 	    });
 	});
 	
+	//일치하지 않는 주문번호 입력시 alert.
+	/* const arrOrderSeqBox = $('.order-seq-list-cols>div:nth-of-type(1)');
+	var arrOrderSeq = arrOrderSeqBox[0].innerText;
+	for(var i=1; i<arrOrderSeqBox.length; i++){
+		arrOrderSeq += ","+arrOrderSeqBox[i].innerText;
+	}
 	
+	$(() => {
+		orderSeqInput.on('blur', (e) => {
+			const writeOrderSeq = $(e.target).val();
+			console.log(arrOrderSeq);
+			});
+		}); */
+
+	
+
 	const addedImageContainer = $('.added-image-container');
 	const queryForm = $('.query-form');
 	$(function(){
@@ -374,9 +389,10 @@
 			reader.onload=function(e){
 				var imageBoxToAdd = '<div class="added-image-box"><img src="'+e.target.result+'"></div>';
 			    addedImageContainer.prepend(imageBoxToAdd);
-			}
-			reader.readAsDataURL(queryFrm.originalFile.files[index]);//웹에서는 하드의 파일을 접근못하게 되어있어서 처리해주기위함 0은단일 index 넣어줘서 여러개처리
-		});
+			    /* $('.image-upload-container').css("display",'none'); */
+				}
+			    reader.readAsDataURL(queryFrm.originalFile.files[index]);//웹에서는 하드의 파일을 접근못하게 되어있어서 처리해주기위함 0은단일 index 넣어줘서 여러개처리
+			});
 		});
 			/* queryForm.on('submit',function(e){
 			e.preventDefault();
@@ -386,20 +402,7 @@
 				alert(fd);
 			}); */
 
-			<%-- $.ajax({
-				url:"<%=request.getContextPath()%>/queryFormEnd",
-				data : fd,
-				type:"post",
-				processData:false,
-				contentType:false,
-				success : function(data){
-				alert("업로드완료");
-				/* $('#image').html('');//업로드후 비워주기
-				$("[name=ajaxFileTest]").val('');*/
-					queryForm.submit();
-				} 
-			});
-		}); --%>
+
 	});
 
 </script>
