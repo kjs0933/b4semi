@@ -7,6 +7,8 @@
 <%@ page import="com.b4.model.vo.Review"%>
 <%@ page import="com.b4.model.vo.QueryBoard"%>
 <%@ page import="com.b4.model.vo.QueryComment"%>
+<%@ page import="static common.DateFormatTemplate.getTillDate" %>
+<%@ page import="static common.DateFormatTemplate.getTillMin" %>
 <%
 
 DPDetail detail;
@@ -84,6 +86,12 @@ try {
 	}
 } catch (ClassCastException e) {
 	qpageStr="";
+}
+
+String scrollAnchor = (String)request.getAttribute("scrollAnchor");
+if(scrollAnchor == null)
+{
+	scrollAnchor = "page-top";
 }
 
 %>
@@ -164,31 +172,31 @@ try {
 
         .prod-price
         {
-            padding: 40px 0;
+            padding: 35px 0;
         }
 
         .prod-unit
         {
             border-top: 1px solid #eee;
-            padding: 40px 0;
+            padding: 35px 0;
         }
 
         .quantity
         {
             border-top: 1px solid #eee;
-            padding: 40px 0;
+            padding: 30px 0;
         }
 
         .prod-origin
         {
             border-top: 1px solid #eee;
-            padding: 40px 0;
+            padding: 30px 0;
         }
 
         .purchase-option
         {
             border-top: 1px solid #eee;
-            padding: 40px 0;
+            padding: 30px 0;
         }
         .option-total
         {
@@ -279,13 +287,27 @@ try {
         {
             width: 100%;
             display: flex;
+            height: auto;
             flex-flow: column nowrap;
+            align-items: center;
         }
 
         .dp-detail-tab
         {
             display: flex;
-            margin-top: 50px;
+            padding: 50px 0;
+        }
+        
+        .dp-detail-tab a
+        {
+        	width: 100%;
+        	height: 100%;
+        	display: block;
+        	text-decoration: none;
+        	color: black;
+        	display: flex;
+        	align-items: center;
+        	justify-content: center;
         }
 
         .dp-detail-tab > div
@@ -411,8 +433,93 @@ try {
         .delete-selection img {cursor: pointer;}
         
         
+        .rating-holder {
+            display: inline-block;
+            box-sizing: border-box;
+        }
         
+        .c-rating
+        {
+        	display: flex;
+        }
+
+        .c-rating button {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            border: 0;
+            text-indent: -9999px;
+            outline: none;
+            background: url("data:image/svg+xml;utf8,%3Csvg%20version%3D%221.1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20width%3D%22512%22%20height%3D%22512%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cpath%20fill%3D%22%23ddd%22%20d%3D%22M457.888 210.672l-139.504-20.272-62.384-126.4-62.384 126.4-139.504 20.272 100.944 98.384-23.84 138.928 124.768-65.6 124.768 65.6-23.84-138.928c0 0 100.944-98.384 100.944-98.384z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E") center/cover no-repeat;
+        }
+
+
+        .review-board-wrapper
+        {
+            display: flex;
+            flex-flow: column nowrap;
+            width: 1024px;
+            font-family: 'Noto Sans KR';
+            font-size: 13px;
+
+            border-bottom: 1px solid black;
+        }
+
+        .review-board-header
+        {
+            display: flex;
+            border-top: 2px solid black;
+        }
+
+
+        .review-board-header > div
+        {
+            display: flex;
+            flex-flow: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .review-board-header > div:nth-of-type(1){flex: 1 1 0;}
+        .review-board-header > div:nth-of-type(2){flex: 14 1 0;}
+        .review-board-header > div:nth-of-type(3){flex: 2 1 0;}
+        .review-board-header > div:nth-of-type(4){flex: 3 1 0;}
+        .review-board-header > div:nth-of-type(5){flex: 2 1 0;}
+
+        .review-board-cols
+        {
+            display: flex;
+            border-top: 1px solid #eee;
+        }
         
+        .review-board-cols > div
+        {
+            display: flex;
+            flex-flow: column;
+            justify-content: center;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .review-board-cols > div:nth-of-type(1){flex: 1 1 0;}
+        .review-board-cols > div:nth-of-type(2){flex: 14 1 0;}
+        .review-board-cols > div:nth-of-type(3){flex: 2 1 0;}
+        .review-board-cols > div:nth-of-type(4){flex: 3 1 0;}
+        .review-board-cols > div:nth-of-type(5){flex: 2 1 0; color: gray; font-size: 11px;}
+
+        .review-board-content
+        {
+            padding: 15px 30px 20px 30px;
+            display: none;
+        }
+
+        .review-board-content img
+        {
+            max-width: 100%;
+        }
+        
+
         .pagebar img
         {
             width: 40%;
@@ -421,13 +528,14 @@ try {
 
         .pagebar
         {
+        	width: 100%;
             display: flex;
-            align-self: center;
+			justify-content: center;
             margin: 40px;
             font-size: 12px;
         }
 
-        .pagebar > div
+        .pagebar div
         {
             width: 33px;
             height: 33px;
@@ -439,29 +547,35 @@ try {
             cursor: pointer;
         }
 
-        .pagebar > div:first-of-type
+        .pagebar div:first-of-type
         {
             border-left: 1px solid rgb(220, 220, 220);
         }
-
-
+        
+        .pagebar a
+        {
+        	display: flex;
+        	width: 100%;
+        	height: 100%;
+        	align-items: center;
+        	justify-content: center;
+        	text-decoration: none;
+        	color: black;
+        }
     </style>
 
 <section>
+<div id="page-top"></div>
     <div class="dp-detail-wrapper">
         <div class="dp-detail-top-wrapper">
             <div class="prod-image">
                 <img src="<%=request.getContextPath()%>/upload/product/<%=detail.getImg()%>" onError="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';">
             </div>
             <div class="prod-description">
-            	<div><%=detail.getMajorCategoryName()%>&nbsp;&nbsp;>&nbsp;&nbsp;<%=detail.getSubCategoryName()%></div>
+            	<div><%=detail.getMajorCategoryName()%>&nbsp;&nbsp;&#62;&nbsp;&nbsp;<%=detail.getSubCategoryName()%></div>
                 <div class="prod-name">
                     <%=detail.getDisplayListTitle()%>
                 </div>
-<%--            <div class="discount">
-                	<div>할인</div>
-                	<div><%=detail.getDiscountName()%></div>
-                </div> --%>
                 <div class="prod-price">
                     <div>판매가</div>
                     <div>
@@ -536,23 +650,23 @@ try {
             </div>
         </div>
         <div id="dp-detail-body-wrapper">
-            <div class="dp-detail-tab">
-                <div class="current-tab">상품설명</div>
-                <div>상품이미지</div>
-                <div>상세정보</div>
-                <div>고객후기(<%=detail.getReviewCount()%>)</div>
-                <div>상품문의(<%=detail.getQnaCount()%>)</div>
+            <div id="dp-desc-tab" class="dp-detail-tab">
+                <div class="current-tab"><a href="#dp-desc-tab">상품설명</a></div>
+                <div><a href="#dp-image-tab">상품이미지</a></div>
+                <div><a href="#detail-view-tab">상세정보</a></div>
+                <div><a href="#review-tab">고객후기(<%=detail.getReviewCount()%>)</a></div>
+                <div><a href="#qna-tab">상품문의(<%=detail.getQnaCount()%>)</a></div>
                 <div></div>
             </div>
             <div><%=detail.getDisplayListContents()%></div>
         </div>
         <div id="dp-detail-body-wrapper">
-            <div class="dp-detail-tab">
-                <div>상품설명</div>
-                <div class="current-tab">상품이미지</div>
-                <div>상세정보</div>
-                <div>고객후기(<%=detail.getReviewCount()%>)</div>
-                <div>상품문의(<%=detail.getQnaCount()%>)</div>
+            <div id="dp-image-tab" class="dp-detail-tab">
+                <div><a href="#dp-desc-tab">상품설명</a></div>
+                <div class="current-tab"><a href="#dp-image-tab">상품이미지</a></div>
+                <div><a href="#detail-view-tab">상세정보</a></div>
+                <div><a href="#review-tab">고객후기(<%=detail.getReviewCount()%>)</a></div>
+                <div><a href="#qna-tab">상품문의(<%=detail.getQnaCount()%>)</a></div>
                 <div></div>
             </div>
             <%for(int i=0; i<renames.size();i++){ %>
@@ -560,12 +674,12 @@ try {
             <%} %>
         </div>
         <div id="dp-detail-body-wrapper">
-            <div class="dp-detail-tab">
-                <div>상품설명</div>
-                <div>상품이미지</div>
-                <div class="current-tab">상세정보</div>
-                <div>고객후기(<%=detail.getReviewCount()%>)</div>
-                <div>상품문의(<%=detail.getQnaCount()%>)</div>
+            <div id="detail-view-tab" class="dp-detail-tab">
+                <div><a href="#dp-desc-tab">상품설명</a></div>
+                <div><a href="#dp-image-tab">상품이미지</a></div>
+                <div class="current-tab"><a href="#detail-view-tab">상세정보</a></div>
+                <div><a href="#review-tab">고객후기(<%=detail.getReviewCount()%>)</a></div>
+                <div><a href="#qna-tab">상품문의(<%=detail.getQnaCount()%>)</a></div>
                 <div></div>
             </div>
             <div>
@@ -576,38 +690,77 @@ try {
             </div>
         </div>
         <div id="dp-detail-body-wrapper">
-            <div class="dp-detail-tab">
-                <div>상품설명</div>
-                <div>상품이미지</div>
-                <div>상세정보</div>
-                <div class="current-tab">고객후기(<%=detail.getReviewCount()%>)</div>
-                <div>상품문의(<%=detail.getQnaCount()%>)</div>
+            <div id="review-tab" class="dp-detail-tab">
+                <div><a href="#dp-desc-tab">상품설명</a></div>
+                <div><a href="#dp-image-tab">상품이미지</a></div>
+                <div><a href="#detail-view-tab">상세정보</a></div>
+                <div class="current-tab"><a href="#review-tab">고객후기(<%=detail.getReviewCount()%>)</a></div>
+                <div><a href="#qna-tab">상품문의(<%=detail.getQnaCount()%>)</a></div>
                 <div></div>
             </div>
-            <div>평점:<%=detail.getReviewScore()%>/5.00</div>
-            <%for(int i=0; i<review.size();i++){%>
-            <div><%=review.get(i).getMemberId()%></div><div><%=review.get(i).getReviewScore()%>점 <%=review.get(i).getReviewTitle()%></div><div><%=review.get(i).getReviewContents()%></div>
-            <%}%>
-            <div><%=rpageStr%></div>
+			<div class="review-board-wrapper">
+		        <div class="review-board-header">
+		            <div></div>
+		            <div>제목</div>
+		            <div>아이디</div>
+		            <div>평점</div>
+		            <div>시간</div>
+		        </div>
+		        
+		        <%
+		        if(review.size() != 0) {
+		        	for(Review r : review)
+		        	{	
+		            	double standardizedRate = 0;
+		            	int integer = (int)r.getReviewScore();
+		            	double decimal = r.getReviewScore() - integer;
+		            	if(decimal >= 0.75) {standardizedRate = (double)integer + 0.75;}
+		            	else if(decimal >= 0.5) {standardizedRate = (double)integer + 0.5;}
+		            	else if(decimal >= 0.25) {standardizedRate = (double)integer + 0.25;}
+		            	else if(decimal < 0.25) {standardizedRate = (double)integer;}
+		        %>
+		        <div class="review-board-cols">
+		            <div><%=r.getReviewSeq() %></div>
+		            <div><%=r.getReviewTitle() %></div>
+		            <div><%=r.getMemberId() %></div>
+		            <div>
+		                <div class="rating-holder">
+							<div class="c-rating" data-rating-value="<%= standardizedRate%>">
+							    <button>1</button>
+							    <button>2</button>
+							    <button>3</button>
+							    <button>4</button>
+							    <button>5</button>
+							</div>
+		    			</div>
+		            </div>
+		            <div><%=getTillDate(r.getReviewDate()) %></div>
+		        </div>
+		        <div class="review-board-content">
+		            <%if(r.getRenameFiles().size() != 0)
+		            { for (String rfn : r.getRenameFiles())
+		            	{%>
+		            <img src="<%=rfn%>">
+		              <%}
+		            }%>
+		            <%=r.getReviewContents() %>
+		        </div>
+		        <%} 
+		      } else {%>
+		      	리뷰가 존재하지 않습니다.
+		      <%}%>
+    		</div>
+			<%=rpageStr%>
         </div>
         <div id="dp-detail-body-wrapper">
-            <div class="dp-detail-tab">
-                <div>상품설명</div>
-                <div>상품이미지</div>
-                <div>상세정보</div>
-                <div>고객후기(<%=detail.getReviewCount()%>)</div>
-                <div class="current-tab">상품문의(<%=detail.getQnaCount()%>)</div>
+            <div id="qna-tab" class="dp-detail-tab">
+                <div><a href="#dp-desc-tab">상품설명</a></div>
+                <div><a href="#dp-image-tab">상품이미지</a></div>
+                <div><a href="#detail-view-tab">상세정보</a></div>
+                <div><a href="#review-tab">고객후기(<%=detail.getReviewCount()%>)</a></div>
+                <div class="current-tab"><a href="#qna-tab">상품문의(<%=detail.getQnaCount()%>)</a></div>
                 <div></div>
             </div>
-            <%for(int i=0; i<qna.size();i++){%>
-            <div><%=qna.get(i).getMemberId()%></div><div><%=qna.get(i).getQueryTitle()%></div><div><%=qna.get(i).getQueryContents()%></div>
-            	<div>
-<%--            <%for(int j=0; j<qna.get(i).getList().size();j++){%>
-            		<div><%=qna.get(i).getList().get(j).getMemberId()%></div><div><%=qna.get(i).getList().get(j).getCommentText()%></div>
-            	<%}%> --%>
-            	</div>
-            <%}%>
-            <div><%=qpageStr%></div>
         </div>
     </div>
 </section>
@@ -700,7 +853,7 @@ try {
         $(() => {
             leftBtn.on('click', (e) => {
                 const target = leftBtn.parent().next()
-                if(target.val() <= 1){ alert('최수 수량은 1개입니다.'); return; }
+                if(target.val() <= 1){ return; }
                 target.val(parseInt(target.val())-1);
                 $("#op-data-1").data("count",target.val());
                 detail_cal_Total();
@@ -765,6 +918,23 @@ try {
     function fn_stock_inform() {
     	alert("딸랑딸랑~ 현재 재고가 충분히 있습니당");
     }
+    
+    //스크롤 앵커
+    $(() => {
+    	location.href='#<%=scrollAnchor%>';
+    });
+    
+    //리뷰 게시판 토글
+    const reviewRows = $('.review-board-cols');
+    const reviewContents = $('.review-board-content');
+
+    $(() => {
+        reviewRows.on('click', e => {
+            if(reviewContents.is(':visible') && !$(e.currentTarget).next().is(':visible'))
+            { reviewContents.hide(); }
+            $(e.currentTarget).next().toggle();
+        });
+    });
     
     
 </script>

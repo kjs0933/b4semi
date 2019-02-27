@@ -113,6 +113,8 @@
             display: flex;
             flex-flow: row wrap;
             justify-content: flex-start;
+            
+             border-radius: 10px;
         }
 
         .plist-board > div
@@ -204,6 +206,8 @@
         {
             width: 100%;
             cursor: pointer;
+            
+             border-radius: 10px;
         }
 
         .plist-board  p
@@ -355,6 +359,13 @@
             margin-top: 50px;
 
         }
+        
+        .prod-unit
+        {
+        	font-size: 12px;
+        	color: gray;
+        	margin-left: 5px;
+        }
     </style>
         
 
@@ -427,7 +438,7 @@
                 </div>
                  <%if(dplist.get(i).getDiscountRate()>0){%>
                 <div class="plist-price-box">
-                  	<div class="plist-price"><del><%=dplist.get(i).getMinPrice()%>원</del> → <b><%=dplist.get(i).getDiscountMinPrice()%>원</b>&nbsp;&nbsp;(단위:<%=dplist.get(i).getProductUnit()%>)</div>
+                  	<div class="plist-price"><del><%=dplist.get(i).getMinPrice()%>원</del> → <b><%=dplist.get(i).getDiscountMinPrice()%>원</b><span class="prod-unit">(단위: <%=dplist.get(i).getProductUnit()%>)</span></div>
                 </div>
                   <%}else{ %>
                 <div class="plist-price-box">

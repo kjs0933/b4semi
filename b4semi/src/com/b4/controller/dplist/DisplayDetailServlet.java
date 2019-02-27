@@ -66,6 +66,11 @@ public class DisplayDetailServlet extends HttpServlet {
 			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
 			return;
 		}
+		
+		//스크롤 앵커//
+		String scrollAnchor = request.getParameter("scrollAnchor");
+		if(scrollAnchor == null) {scrollAnchor = "page-top";}
+		
 		DPListService service = new DPListService();
 		DPDetail detail = service.getDetail(dpseq);
 		if(detail ==null)
@@ -82,8 +87,8 @@ public class DisplayDetailServlet extends HttpServlet {
 		List<Review> review = new ReviewService().selectAllByDP(dpseq, rpage);
 		List<QueryBoard> qna = new QueryBoardService().getByDp(dpseq, qpage);
 		
-		String rpageStr = PagingTemplate.pageBar3(request.getContextPath()+"/dpdetail?dpseq="+dpseq+"&qpage="+qpage+"&", rpage, detail.getReviewCount(), "rpage", request.getContextPath());
-		String qpageStr = PagingTemplate.pageBar3(request.getContextPath()+"/dpdetail?dpseq="+dpseq+"&rpage="+rpage+"&", qpage, detail.getQnaCount(), "qpage",request.getContextPath());
+		String rpageStr = PagingTemplate.pageBar3(request.getContextPath()+"/dpdetail?dpseq="+dpseq+"&qpage="+qpage+"&scrollAnchor=review-tab&", rpage, detail.getReviewCount(), "rpage", request.getContextPath());
+		String qpageStr = PagingTemplate.pageBar4(request.getContextPath()+"/dpdetail?dpseq="+dpseq+"&rpage="+rpage+"&scrollAnchor=qna-tab&", qpage, detail.getQnaCount(), "qpage",request.getContextPath());
 		
 		request.setAttribute("detail", detail);
 		request.setAttribute("option", option);
@@ -92,6 +97,8 @@ public class DisplayDetailServlet extends HttpServlet {
 		request.setAttribute("qna", qna);
 		request.setAttribute("rpageStr", rpageStr);
 		request.setAttribute("qpageStr", qpageStr);
+		//스크롤 앵커//
+		request.setAttribute("scrollAnchor", scrollAnchor);
 		request.getRequestDispatcher("/views/dplist/dplist_detail.jsp").forward(request, response);
 		
 	}

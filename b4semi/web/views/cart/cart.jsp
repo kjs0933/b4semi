@@ -16,20 +16,10 @@
 	}
 	
 %>    
-	<style>
-	
-		.cart-wrapper
-		{
-			width: 1024px;
-			margin-top: 60px;
-			display: flex;
-			flex-flow: column nowrap;
-			align-items: center;
-		}
-	
+<style>
         #cart-frm
         {
-            width: 100%;
+            width: 1024px;
             display: flex;
             flex-flow: column nowrap;
             align-items: center;
@@ -38,7 +28,7 @@
         #cart-frm > p
         {
             font-size: 40px;
-            color: rgb(38, 85, 139);
+            color: rgb(42, 71, 114);
             font-weight: bold;
             margin: 70px;
 
@@ -59,7 +49,7 @@
             display: flex;
             flex-flow: row nowrap;
             border-bottom: 1px solid #ccc;
-            border-top: 2px solid rgb(38, 85, 139);
+            border-top: 2px solid rgb(42, 71, 114);
             font-family: 'Noto Sans KR';
             box-sizing: border-box;
             font-weight: bold;
@@ -82,21 +72,15 @@
         .cart-header > div:nth-of-type(5){flex:3 1 0;}
         .cart-header > div:nth-of-type(6){flex:2 1 0;}
 
-        .cart-col, #emptycart
+        .cart-col
         {
             width: 1024px;
             display: flex;
             flex-flow: row nowrap;
             border-bottom: 1px solid #ccc;
         }
-        
-        #emptycart
-        {
-        	height:120px;
-        	align-items: center;        	
-        }
 
-        .cart-col > div:nth-of-type(2) > img{width: 80px;height: auto;}
+        .cart-col > div:nth-of-type(2) > a > img{width: 80px;height: auto;}
         .cart-col > div:nth-of-type(6) > img{cursor: pointer;}
 
         .cart-col > div
@@ -114,15 +98,20 @@
         .cart-col > div:nth-of-type(5){flex:3 1 0;}
         .cart-col > div:nth-of-type(6){flex:2 1 0;}
         
-        .cart-col > div p
+        .product-info
         {
-            margin: 0;
-            font-size: 15px;
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: space-between !important;
+            align-items: flex-start !important;
         }
 
-        .cart-col > div p:first-of-type{font-weight: bold;}
-        .cart-col > div p:last-of-type{font-size: 13px;}
+        .pd-title{color: gray; font-size: 12px; border-bottom: 1px solid #ccc;}
+        .pd-option{font-size: 18px; font-weight: bold;}
+        .pd-price {font-size: 16px; color: rgb(42, 71, 114);}
 
+        .pd-option a {text-decoration: none; color: black;}
+        .pd-unit {margin-left: 10px; color: gray; font-size: 12px; font-weight: normal;}
 
         .quantity-box
         {
@@ -142,8 +131,10 @@
             box-sizing: border-box;
             text-align: center;
             font-weight: bold;
-            background-color: rgb(38, 85, 139);
-            color: white;
+            background-color: rgb(247,247,247);
+            color: black;
+            border-top: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
         }
 
         .quantity-box > input:focus
@@ -251,17 +242,23 @@
         {
             width: 200px;
             height: 50px;
-            background-color: rgb(38, 85, 139);
+            background-color: rgb(42, 71, 114);
             border: none;
             color: white;
             cursor: pointer;
 
+            border-radius: 3px;
             margin: 20px 0;
         }
 
         #checkout:focus
         {
             outline: none;
+        }
+
+        #checkout:hover
+        {
+            background-color: rgb(62, 91, 134);
         }
 
         input[type="checkbox"]
@@ -274,7 +271,7 @@
             position: relative;
             width: 17px;
             height: 17px;
-            background-color: rgb(38, 85, 139);
+            background-color: rgb(42, 71, 114);
             cursor: pointer;
             border-radius: 1px;
         }
@@ -294,15 +291,15 @@
 
         input[type="checkbox"] + label:hover
         {
-            background-color: rgb(47, 105, 172);
+            background-color: rgb(62, 91, 134);
         }
 
         input[type="checkbox"]:checked + label span
         {
             display: inline-block;
         }
-	</style>
-	
+
+    </style>
     <section>
     <div class="cart-wrapper">
         <form action="#" method="post" id="cart-frm">
@@ -324,17 +321,22 @@
              	%>
                 <div class="cart-col">
                     <div><input type="checkbox" name="products" id="product<%=i+1 %>" class="products"><label for="product<%=i+1 %>"><span></span></label></div>
-                    <div><img src="<%=request.getContextPath() %>/upload/product/<%=cartList.get(i).getImg()%>" onError="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';"></div>
-                    <div>
-                    <div>
-                    <p><a href="<%=request.getContextPath()%>/dpdetail?dpseq=<%=cartList.get(i).getDisplayListSeq()%>" style="text-decoration: none;"><%=cartList.get(i).getDisplayListTitle()%></a> (옵션 - <%=cartList.get(i).getProductName()%>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;단위:<%=cartList.get(i).getProductUnit()%></p><br>
-                    <%=cartList.get(i).getDiscountName()==null?"":cartList.get(i).getDiscountName()%>
-                    <% if(cartList.get(i).getDiscountRate()>0){%>
-                    <p><del><%=cartList.get(i).getDisplayOptionPrice()%>원</del> → <b><%=cartList.get(i).getDiscountOptionPrice()%>원<%="Y".equals(cartList.get(i).getOptionAvailable())?"":" <품절>"%></b></p>
-                    <%}else{ %>
-                    <p><%=cartList.get(i).getDisplayOptionPrice()%>원<%="Y".equals(cartList.get(i).getOptionAvailable())?"":" <품절>"%></p>
-                    <%}%>
-                    </div>
+                    <div><a href="<%=request.getContextPath()%>/dpdetail?dpseq=<%=cartList.get(i).getDisplayListSeq()%>"><img src="<%=request.getContextPath() %>/upload/product/<%=cartList.get(i).getImg()%>" alt="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';"></a></div>
+                    <div class="product-info">     
+                    	<div class="pd-title">
+                    		<%=cartList.get(i).getDisplayListTitle()%>
+                    	</div>
+                    	<div class="pd-option">
+                    		<a href="<%=request.getContextPath()%>/dpdetail?dpseq=<%=cartList.get(i).getDisplayListSeq()%>"><%=cartList.get(i).getProductName()%></a><span class="pd-unit">단위:<%=cartList.get(i).getProductUnit()%></span>
+                    	</div>
+                    	<div class="pd-price">
+			            	<%=cartList.get(i).getDiscountName()==null?"":cartList.get(i).getDiscountName()%>
+			            	<% if(cartList.get(i).getDiscountRate()>0){%>     
+                    		<del><%=cartList.get(i).getDisplayOptionPrice()%>원</del> → <b><%=cartList.get(i).getDiscountOptionPrice()%>원<%="Y".equals(cartList.get(i).getOptionAvailable())?"":" <품절>"%></b>
+                    		<%}else{ %>
+			                <%=cartList.get(i).getDisplayOptionPrice()%>원<%="Y".equals(cartList.get(i).getOptionAvailable())?"":" <품절>"%>
+			                <%}%>
+                    	</div>                   
                     </div>
                     <div>
                         <div class="quantity-box">
