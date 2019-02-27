@@ -31,9 +31,11 @@ public class QueryBoardService {
 	{
 		Connection conn = getConnection();
 		List<QueryBoard> result = dao.selectListByMember(conn, cPage, numPerPage, memberSeq);
+		
 		for(QueryBoard qb : result)
 		{
 			qb.setList(dao.selectCommentListByBoardSeq(conn, qb.getQuerySeq()));
+			qb.setRenamedFile(dao.selectRenamedFileByBoardNo(conn, qb.getQuerySeq()));
 		}
 		close(conn);
 		return result;
@@ -87,10 +89,10 @@ public class QueryBoardService {
 	//Reply 메소드
 	
 	//댓글 입력
-	public int insertReply(Reply re)
+	public int insertReply(int boardSeq, int memberSeq, String commentText)
 	{
 		Connection conn = getConnection();
-		int result = dao.insertReply(conn, re);
+		int result = dao.insertReply(conn, boardSeq, memberSeq, commentText);
 		if(result>0) commit(conn);
 		else rollback(conn);
 		close(conn);
@@ -98,10 +100,10 @@ public class QueryBoardService {
 	}
 	
 	//댓글 수정
-	public int updateReply(Reply re)
+	public int updateReply(String commentText, int commentSeq)
 	{
 		Connection conn = getConnection();
-		int result = dao.updateReply(conn, re);
+		int result = dao.updateReply(conn, commentText, commentSeq);
 		if(result>0) commit(conn);
 		else rollback(conn);
 		close(conn);
@@ -109,10 +111,10 @@ public class QueryBoardService {
 	}
 	
 	//댓글삭제 - 프런트에서 deleteDate있을 경우 삭제된 것으로 처리
-	public int deleteReply(Reply re)
+	public int deleteReply(int commentSeq)
 	{
 		Connection conn = getConnection();
-		int result = dao.deleteReply(conn, re);
+		int result = dao.deleteReply(conn, commentSeq);
 		if(result>0) commit(conn);
 		else rollback(conn);
 		close(conn);

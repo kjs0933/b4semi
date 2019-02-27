@@ -22,7 +22,7 @@ public class QueryDeleteServlet extends HttpServlet {
      */
     public QueryDeleteServlet() {
         super();
-        // TODO Auto-generated constructor stub
+
     }
 
 	/**
@@ -31,16 +31,18 @@ public class QueryDeleteServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int querySeq = Integer.parseInt(request.getParameter("querySeq"));
 		
-		int result = new QueryBoardService().deleteQuery(querySeq);
+		System.out.println(querySeq);
 		
-		String msg = "";
-		String loc = "/";
-		if(result > 0){msg = "1:1 문의가 삭제되었습니다."; loc="/query";}
-		else {msg = "1:1 문의 삭제에 실패하였습니다."; loc="/view/support/support_query";}
-		
-		request.setAttribute("msg", msg);
-		request.setAttribute("loc", loc);
-		request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
+//		int result = new QueryBoardService().deleteQuery(querySeq);
+//		
+//		String msg = "";
+//		String loc = "/";
+//		if(result > 0){msg = "1:1 문의가 삭제되었습니다."; loc="/query";}
+//		else {msg = "1:1 문의 삭제에 실패하였습니다."; loc="/view/support/support_query";}
+//		
+//		request.setAttribute("msg", msg);
+//		request.setAttribute("loc", loc);
+//		request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
 	}
 
 	/**

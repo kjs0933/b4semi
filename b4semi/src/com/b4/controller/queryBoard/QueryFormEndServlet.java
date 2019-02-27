@@ -50,8 +50,6 @@ public class QueryFormEndServlet extends HttpServlet {
 			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
 		}
 		
-		
-		
 		if(!ServletFileUpload.isMultipartContent(request))
 		{
 			//response.sendRedirect("/index.jsp");

@@ -15,12 +15,12 @@ public class QueryBoard {
    private Timestamp queryDeleteDate;
    private int orderSeq;
    private List<QueryComment> list;
-   
+   private String renamedFile;
    
    public QueryBoard() {}
    
    public QueryBoard(int querySeq, int memberSeq, String memberId, String queryTitle, String queryContents, Timestamp queryDate,
-         Timestamp queryDeleteDate, int orderSeq, List<QueryComment> list) {
+         Timestamp queryDeleteDate, int orderSeq, List<QueryComment> list, String renamedFile) {
       super();
       this.querySeq = querySeq;
       this.memberSeq = memberSeq;
@@ -31,6 +31,7 @@ public class QueryBoard {
       this.queryDeleteDate = queryDeleteDate;
       this.orderSeq = orderSeq;
       this.list = list;
+      this.renamedFile = renamedFile;
    }
    public int getQuerySeq() {
       return querySeq;
@@ -86,5 +87,12 @@ public class QueryBoard {
 	public void setMemberId(String memberId) {
 		this.memberId = memberId;
 	}
-   
+
+	public String getRenamedFile() {
+		return renamedFile;
+	}
+
+	public void setRenamedFile(String renamedFile) {
+		this.renamedFile = renamedFile;
+	}
 }

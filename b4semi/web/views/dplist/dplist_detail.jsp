@@ -569,7 +569,7 @@ if(scrollAnchor == null)
     <div class="dp-detail-wrapper">
         <div class="dp-detail-top-wrapper">
             <div class="prod-image">
-                <img src="<%=request.getContextPath()%>/upload/product/<%=detail.getImg()%>" onError="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';">
+                <img src="<%=request.getContextPath()%>/upload/product/<%=detail.getImg()%>" alt="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg'">
             </div>
             <div class="prod-description">
             	<div><%=detail.getMajorCategoryName()%>&nbsp;&nbsp;&#62;&nbsp;&nbsp;<%=detail.getSubCategoryName()%></div>
@@ -878,6 +878,14 @@ if(scrollAnchor == null)
     	$(".option-total-price").text(totalPrice+"원");
     }
     
+    
+    
+	const cartMsgWrapper = $('.cart-msg-wrapper');
+	const addedProdImage = $('.added-prod-image').children();
+	const addedProdName = $('.added-prod-name');
+	const addedProdAmount = $('.added-prod-amount');
+	const cartCount = $('#cart-count');
+
     function fn_cart_all() {
 		var c=0;
 		var dpseqs="";
@@ -904,7 +912,14 @@ if(scrollAnchor == null)
 				type:"post",
 				data:{"multi":"yes","dpseqs":dpseqs,"pcodes":pcodes,"changes":changes},
 				success:function(data){
-					alert("성공적으로 장바구니에 담았습니다.");
+					
+					console.log(cartCount.text());
+					addedProdImage.prop('src', $('.prod-image').children().prop('src'));
+					addedProdName.text($('.prod-name').text());
+					addedProdAmount.text(data[0]+'개 품목');
+					cartCount.text(parseInt(cartCount.text())+1);
+					cartMsgWrapper.fadeIn(600);
+					setTimeout(()=>{cartMsgWrapper.fadeOut(600)}, 2000);
 				}
 			});
 			detail_cal_Total();
