@@ -51,8 +51,5 @@ private Properties prop = new Properties();
 		finally {close(rs);close(pstmt);}
 		return m;
 	}
-		
-		
-		
 
 }
