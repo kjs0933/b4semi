@@ -7,6 +7,7 @@ import static common.JDBCTemplate.rollback;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.b4.dao.CartDao;
 import com.b4.model.vo.Cart;
@@ -85,6 +86,13 @@ public class CartService {
 		int result = dao.getKindCount(conn, memberSeq);
 		close(conn);
 		return result;
+	}
+
+	public List<Cart> selectByOrderSeq(int orderSeq) {
+		Connection conn = getConnection();
+		ArrayList<Cart> list = dao.selectByOrderSeq(conn, orderSeq);
+		close(conn);
+		return list;
 	}
 
 }

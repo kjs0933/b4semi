@@ -592,7 +592,7 @@
             let flag = confirm('정말로 삭제하시겠습니까?');
             if(flag)
             {
-                location.href='<%=request.getContextPath()%>/deleteQuery'+$(e.target).parent().data('querySeq');
+                location.href='<%=request.getContextPath()%>/queryDelete?querySeq='+$(e.target).parent().data('querySeq');
             }
         });
     });
@@ -613,11 +613,11 @@
         });
     });
 
-    //1:1 문의 삭제버튼 이벤트 바인드
+    //1:1 문의 수정버튼 이벤트 바인드
     $(() => {
         queryModify.on('click', e => {
             console.log($(e.target).parent().data('querySeq'))
-            location.href='<%=request.getContextPath()%>/queryModify?'+$(e.target).parent().data('querySeq');
+            location.href='<%=request.getContextPath()%>/queryModify?querySeq='+$(e.target).parent().data('querySeq');
         });
     });
     </script>

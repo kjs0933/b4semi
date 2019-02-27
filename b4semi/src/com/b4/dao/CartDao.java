@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Properties;
 
 import com.b4.model.vo.Cart;
@@ -242,5 +243,47 @@ public class CartDao {
 		}
 		
 		return result;
+	}
+
+	public ArrayList<Cart> selectByOrderSeq(Connection conn, int orderSeq) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		ArrayList<Cart> list = new ArrayList<Cart>();
+		Cart cart = null;
+		String sql = prop.getProperty("selectByOrderSeq");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, orderSeq);
+			rs = pstmt.executeQuery();
+			while(rs.next())
+			{
+				cart = new Cart();
+				cart.setOptionAvailable(rs.getString("optionAvailable"));
+				cart.setProductUnit(rs.getString("productUnit"));
+				cart.setProductCode(rs.getString("productCode"));
+				cart.setProductName(rs.getString("productName"));
+				cart.setDisplayListSeq(rs.getInt("displayListSeq"));
+				cart.setProductCount(rs.getInt("orderproductCount"));
+				cart.setDisplayOptionPrice(rs.getInt("displayOptionPrice"));
+				cart.setDiscountName(rs.getString("discountName"));
+				cart.setDiscountRate(rs.getDouble("discountRate"));
+				cart.setDisplayListTitle(rs.getString("displayListTitle"));
+				cart.setDpListAvailable(rs.getString("dpListAvailable"));
+				cart.setDiscountOptionPrice();
+				cart.setImg(rs.getString("renameFile"));
+				list.add(cart);
+				Collections.reverse(list);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(rs);
+			close(pstmt);
+		}
+		return list;
 	}
 }

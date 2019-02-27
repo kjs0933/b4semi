@@ -78,10 +78,11 @@ public class QueryFormEndServlet extends HttpServlet {
 		QueryBoard qb = new QueryBoard();
 		qb.setQuerySeq(querySeq);
 		qb.setMemberSeq(loginMember.getMemberSeq());
+		try {
 		if(!orderSeq.isEmpty() || !orderSeq.equals("")) {
 			//orderSeq=""인 경우에는 null, 아닌경우 int로 파싱해서 db로 저장
 			qb.setOrderSeq(Integer.parseInt(orderSeq));
-		}
+		}}catch(NumberFormatException e) {orderSeq="";}
 		qb.setQueryTitle(queryTitle);
 		qb.setQueryContents(queryContents);
 		qb.setQueryDate(new Timestamp(System.currentTimeMillis()));

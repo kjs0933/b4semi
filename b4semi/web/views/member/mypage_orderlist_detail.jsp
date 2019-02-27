@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/views/common/header.jsp"%>
-<%@ page import="com.b4.model.vo.MypageHeader, java.util.*, com.b4.model.vo.OrderPDetail, com.b4.model.vo.OrderList, java.net.URLDecoder" %>
+<%@ page import="com.b4.model.vo.MypageHeader, java.util.*, com.b4.model.vo.OrderPDetail, com.b4.model.vo.Cart, com.b4.model.vo.OrderList, static common.DateFormatTemplate.getTillSec" %>
 
 <%
 	
@@ -9,6 +9,7 @@
 	if(mh == null){mh = new MypageHeader();}
 	
 	List<OrderPDetail> opdList = (List<OrderPDetail>)request.getAttribute("opdList");
+	List<Cart> cartList = (List<Cart>)request.getAttribute("cartList");
 
 	OrderList orderlist = (OrderList)request.getAttribute("orderList");
 	String orderStatus="";
@@ -21,6 +22,12 @@
     default : orderStatus="구매확정"; break;
     }
 	
+	int discountPriceTotal = 0;
+	for(int i=0; i<cartList.size(); i++){
+		if(cartList.get(i).getDiscountName()!=null){
+			discountPriceTotal = (cartList.get(i).getDisplayOptionPrice()-cartList.get(i).getDiscountOptionPrice())*(cartList.get(i).getProductCount());
+		}
+	}	
 	String phone = orderlist.getReceiverPhone().substring(0, 3)+"-"+orderlist.getReceiverPhone().substring(3, 7)+"-"+orderlist.getReceiverPhone().substring(7, 11);
 %>
     <style>
@@ -229,11 +236,12 @@
         .order-table-cols > div:nth-of-type(1){width: 78px;}
         .order-table-cols > div:nth-of-type(2){flex: 4 1 0;}
         .order-table-cols > div:nth-of-type(3){flex: 1 1 0;}
-        .order-table-cols > div:nth-of-type(4){flex: 1 1 0;align-items: center; justify-content: space-between;}
+        .order-table-cols > div:nth-of-type(4){flex: 1 1 0;}
+        .order-table-cols > div:nth-of-type(5){flex: 1 1 0;align-items: center; justify-content: space-between;}
 
 
-        .order-table-cols > div:nth-of-type(2) > div:last-of-type{font-size: 13px;}
-        .order-table-cols > div:nth-of-type(2) > div span{font-size: 16px; font-weight: bold;}
+/*         .order-table-cols > div:nth-of-type(2) > div:last-of-type{font-size: 13px;}
+       	.order-table-cols > div:nth-of-type(2) > div span{font-size: 16px; font-weight: bold;} */ 
 
         .order-table-cols input
         {
@@ -356,6 +364,20 @@
             padding: 15px 10px;
         }
 
+ 		.product-info
+        {
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: space-between !important;
+            align-items: flex-start !important;
+        }
+
+        .pd-title{color: gray; font-size: 12px; border-bottom: 1px solid #ccc;}
+		.pd-option{font-size: 18px; font-weight: bold;}
+        .pd-price {font-size: 16px; color: rgb(42, 71, 114);}
+
+        .pd-option a {text-decoration: none; color: black;}
+        .pd-unit {margin-left: 10px; color: gray; font-size: 15px; font-weight: normal;}
     </style>
 
     <section>
@@ -402,23 +424,36 @@
                         <span>배송또는 상품에 문제가 있나요? <a href="<%=request.getContextPath() %>/queryForm?orderSeq=<%=orderlist.getOrderSeq()%>">1대1 문의</a></span>
                     </div>
                     <div class="order-table">
-                        <%if(opdList!=null){
-                        	for(int i=0;i<opdList.size();i++){
+                        <%if(cartList!=null){
+                        	for(int i=0;i<cartList.size();i++){
                         %>
-                        <div class="order-table-cols">
-                            <div><img src="<%=request.getContextPath() %>/upload/product/<%=opdList.get(i).getProductName() %>.jpg"></div>
+                    <div class="order-table-cols">
+                    <div><a href="<%=request.getContextPath()%>/dpdetail?dpseq=<%=cartList.get(i).getDisplayListSeq()%>"><img src="<%=request.getContextPath() %>/upload/product/<%=cartList.get(i).getImg()%>"alt="this.src='<%=request.getContextPath()%>/images/dp_sample.jpg';"></a></div>
+                    <div class="product-info">     
+                    	<div class="pd-title">
+                    		<%=cartList.get(i).getDisplayListTitle()%>
+                    	</div>
+                    	<div class="pd-option">
+                    		<a href="<%=request.getContextPath()%>/dpdetail?dpseq=<%=cartList.get(i).getDisplayListSeq()%>"><%=cartList.get(i).getProductName()%></a><span class="pd-unit">수량 : <%=cartList.get(i).getProductCount()%><%=cartList.get(i).getProductUnit()%></span>
+                    	</div>
+                    	<div class="pd-price">
+			            	<%-- <%=cartList.get(i).getDiscountName()==null?"":cartList.get(i).getDiscountName()%> --%>
+			            	<% if(cartList.get(i).getDiscountRate()>0){%>     
+                    		<del><%=cartList.get(i).getDisplayOptionPrice()%>원</del> → <b><%=cartList.get(i).getDiscountOptionPrice()%>원<%="Y".equals(cartList.get(i).getOptionAvailable())?"":" <품절>"%></b>
+                    		<%}else{ %>
+			                <%=cartList.get(i).getDisplayOptionPrice()%>원<%="Y".equals(cartList.get(i).getOptionAvailable())?"":" <품절>"%>
+			                <%}%>
+                    	</div>                    	                   
+                    </div>
+                    <div><%=(cartList.get(i).getDiscountOptionPrice())*(cartList.get(i).getProductCount()) %>원</div>
+                    <div><%=orderStatus%></div>
                             <div>
-                                <div><b><%=opdList.get(i).getProductName()%></b></div>
-                                <div><span><%=opdList.get(i).getDisplayOptionPrice() %> 원</span> <%=opdList.get(i).getOrderProductCount() %>개</div>
-                            </div>
-                            <div><%=orderStatus %></div>
-                            <div>
-                                <input type="text" value="후기 작성">
-                                <input type="text" value="장바구니 담기">
+                                <input type="button" value="후기 작성">
+                                <input type="button" value="장바구니 담기">
                             </div>
                         </div>
                         <%}} %>
-                        <!-- <div class="order-table-cols">
+	                        <!-- <div class="order-table-cols">
                             <div><img src="images/order_sample_2.jpg"></div>
                             <div>
                                 <div><b>멕시코 생 라임</b></div>
@@ -451,11 +486,11 @@
                         <div class="payment-info-table">
                             <div class="payment-info-cols">
                                 <span>총 주문 금액</span>
-                                <span>9,600 원</span>
+                                <span><%=orderlist.getTotalPrice() %> 원</span>
                             </div>
                             <div class="payment-info-cols">
                                 <span>상품할인</span>
-                                <span>-570 원</span>
+                                <span>-<%=discountPriceTotal %> 원</span>
                             </div>
                             <div class="payment-info-cols">
                                 <span>쿠폰할인</span>
@@ -471,11 +506,11 @@
                             </div>
                             <div class="payment-info-cols">
                                 <span>결제금액</span>
-                                <span>9,030 원</span>
+                                <span><%=orderlist.getTotalPrice()-discountPriceTotal+orderlist.getShipmentFee() %> 원</span>
                             </div>
                             <div class="payment-info-cols">
                                 <span>적립금액</span>
-                                <span>452 원</span>
+                                <span><%=(int)((orderlist.getTotalPrice()-discountPriceTotal)*mh.getGradeRate()) %> 원</span>
                             </div>
                             <div class="payment-info-cols">
                                 <span>결제수단</span>
@@ -503,7 +538,7 @@
                             </div>
                             <div class="order-info-cols">
                                 <span>결제 시간</span>
-                                <span>2019-02-17 00:17:15</span>
+                                <span><%=getTillSec(orderlist.getOrderTime()) %></span>
                             </div>
                             <div class="order-info-cols">
                                 <span>주문 처리 상태</span>

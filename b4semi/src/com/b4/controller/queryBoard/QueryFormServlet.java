@@ -44,10 +44,12 @@ public class QueryFormServlet extends HttpServlet {
 			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
 		}
 			
-		String orderSeq = request.getParameter("orderSeq");
+		/*String orderSeq = request.getParameter("orderSeq");
 		if(orderSeq.isEmpty() || orderSeq.equals("")){
 			orderSeq = "";
-		}
+		}*/
+		String orderSeq="";
+		orderSeq = request.getParameter("orderSeq");
 		request.setAttribute("orderSeq", orderSeq);
 		
 		List<OrderList> orderlist = new OrderListService().selectByMemberRecent5(m.getMemberSeq());

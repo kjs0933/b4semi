@@ -486,7 +486,7 @@
                         <p class="order-date"><%=sdf.format(new Date(orderlist.get(i).getOrderTime().getTime()))%></p>
                         <div>
                             <div>
-                                <div class="order-title"><a href="<%=request.getContextPath() %>/memberOrderlistDetail?no=<%=orderlist.get(i).getOrderSeq()%>"><%=orderPList.get(i).getProductName() %> 외 <%=(orderPList.get(i).getCountByOrderList())-1 %>건</a><img
+                                <div class="order-title"><a href="<%=request.getContextPath() %>/memberOrderlistDetail?no=<%=orderlist.get(i).getOrderSeq()%>"><%=orderPList.get(i).getProductName() %><%if(orderPList.get(i).getCountByOrderList()!=1){%> 외 <%=(orderPList.get(i).getCountByOrderList())-1 %>건<%} %></a><img
                                         src="images/arrow_right_black.png" alt=""></div>
                             </div>
                             <span></span>
