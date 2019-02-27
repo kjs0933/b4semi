@@ -46,34 +46,28 @@ public class NoticeFormEndServlet extends HttpServlet {
 			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
 			return;
 		}
-		
-		String dir=getServletContext().getRealPath("/");
+		//클라이언트가 보낸 자료를 받자
+		//1.전송된 파일을 처리하기 위해 전송된 파일을 저장할 공간확보~
+		//디렉토리경로를 확인! 파일이 저장 low 최상위 드라이브시작! 절대경로로 확보
+		String dir=getServletContext().getRealPath("/");//루트 web~폴더가 저장공간으로 잡힘
 		dir+="upload/notice";
+		System.out.println(dir);
 		
+		//2.저장크기설정
+		int maxSize=1024*1024*10;
 		
-		int maxSize=1024*1024*100;
-		
-
-		MultipartRequest mr=new MultipartRequest(request,dir,maxSize,"UTF-8",new DefaultFileRenamePolicy());
-		
-		String title=mr.getParameter("noticeTitle");
-		String contents=mr.getParameter("noticeContents");
-		Timestamp date=new Timestamp(System.currentTimeMillis());
-		int readCount=Integer.parseInt(mr.getFilesystemName("noticeReadCount"));
-		
-		//ajax파일 다중 업로드
-		Enumeration e=mr.getFileNames();
-		List<String> fileNames=new ArrayList();
-		while(e.hasMoreElements())
-		{
-			fileNames.add(mr.getFilesystemName((String)e.nextElement()));
-		}
+		//3.파일 업로드 처리할 MultipartRequest객체생성
+		MultipartRequest mr=new MultipartRequest(request,dir,maxSize,"UTF-8",new DefaultFileRenamePolicy());  //DefaultFileRenamePolicy=>중복값처리
+		String title=mr.getParameter("title");
+		int memberseq=Integer.parseInt(mr.getParameter("noticeSeq"));
+		String content=mr.getParameter("noticecontents");
+		String file=mr.getFilesystemName("up_file");
 		
 		Notice n=new Notice();
 		n.setNoticeTitle(title);
-		n.setNoticeContents(contents);
-		n.setNoticeDate(date);
-		n.setNoticeReadCount(readCount);
+		n.setNoticeSeq(memberseq);
+		n.setNoticeContents(content);
+		//n.setFilePath(file);
 		
 		int result = new NoticeService().insertNotice(n);
 		String msg="";

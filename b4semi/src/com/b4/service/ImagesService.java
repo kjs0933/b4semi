@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.b4.dao.ImagesDao;
 import com.b4.model.vo.Images;
+import com.b4.model.vo.Notice;
 
 public class ImagesService {
 	
@@ -21,6 +22,14 @@ public class ImagesService {
 		List<Images> list = dao.selectList(conn,cPage,numPerPage);
 		close(conn);
 		return list;
+	}
+	
+	public Images selectOne(int no)
+	{
+		Connection conn=getConnection();
+		Images i=dao.selectOne(conn,no);
+		close(conn);
+		return i;
 	}
 	
 	public int insertImages(Images d)

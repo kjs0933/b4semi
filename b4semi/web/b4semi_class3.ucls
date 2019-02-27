@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.2.3" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
+  <class id="1" language="java" name="com.b4.model.vo.DPList" project="b4semi" 
+    file="/b4semi/src/com/b4/model/vo/DPList.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1522" y="148"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="com.b4.model.vo.Member" project="b4semi" 
+    file="/b4semi/src/com/b4/model/vo/Member.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="405" y="130"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="com.b4.model.vo.MypageHeader" project="b4semi" 
+    file="/b4semi/src/com/b4/model/vo/MypageHeader.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="885" y="-5"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="com.b4.model.vo.AddressList" project="b4semi" 
+    file="/b4semi/src/com/b4/model/vo/AddressList.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1232" y="-32"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="com.b4.model.vo.Cart" project="b4semi" 
+    file="/b4semi/src/com/b4/model/vo/Cart.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1773" y="148"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="com.b4.model.vo.Reply" project="b4semi" 
+    file="/b4semi/src/com/b4/model/vo/Reply.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="2082" y="22"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="com.b4.model.vo.Images" project="b4semi" 
+    file="/b4semi/src/com/b4/model/vo/Images.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="2388" y="-86"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="com.b4.model.vo.Product" project="b4semi" 
+    file="/b4semi/src/com/b4/model/vo/Product.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="326" y="849"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="com.b4.model.vo.DPOption" project="b4semi" 
+    file="/b4semi/src/com/b4/model/vo/DPOption.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="820" y="555"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="com.b4.model.vo.InStock" project="b4semi" 
+    file="/b4semi/src/com/b4/model/vo/InStock.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="2079" y="606"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="11" language="java" name="com.b4.model.vo.Review" project="b4semi" 
+    file="/b4semi/src/com/b4/model/vo/Review.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="3739" y="85"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="12" language="java" name="com.b4.model.vo.DPDetail" project="b4semi" 
+    file="/b4semi/src/com/b4/model/vo/DPDetail.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1531" y="978"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="13" language="java" name="com.b4.model.vo.IssuedCoupon" project="b4semi" 
+    file="/b4semi/src/com/b4/model/vo/IssuedCoupon.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="2750" y="63"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="14" language="java" name="com.b4.model.vo.MileageLog" project="b4semi" 
+    file="/b4semi/src/com/b4/model/vo/MileageLog.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="4048" y="-1"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="15" language="java" name="com.b4.model.vo.Category" project="b4semi" 
+    file="/b4semi/src/com/b4/model/vo/Category.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1779" y="713"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="16" language="java" name="com.b4.model.vo.Notice" project="b4semi" 
+    file="/b4semi/src/com/b4/model/vo/Notice.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1200" y="1161"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="17" language="java" name="com.b4.model.vo.OrderList" project="b4semi" 
+    file="/b4semi/src/com/b4/model/vo/OrderList.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="2536" y="838"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="18" language="java" name="com.b4.model.vo.QueryComment" project="b4semi" 
+    file="/b4semi/src/com/b4/model/vo/QueryComment.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="3070" y="697"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="19" language="java" name="com.b4.model.vo.CouponMaster" project="b4semi" 
+    file="/b4semi/src/com/b4/model/vo/CouponMaster.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="718" y="1058"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="20" language="java" name="com.b4.model.vo.QueryBoard" project="b4semi" 
+    file="/b4semi/src/com/b4/model/vo/QueryBoard.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="3287" y="41"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="21" language="java" name="com.b4.model.vo.OrderPDetail" project="b4semi" 
+    file="/b4semi/src/com/b4/model/vo/OrderPDetail.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1232" y="522"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="22" language="java" name="com.b4.model.vo.Supplier" project="b4semi" 
+    file="/b4semi/src/com/b4/model/vo/Supplier.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="3440" y="557"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="23">    
+    <end type="SOURCE" refId="20" navigable="false">      
+      <attribute id="24" name="list"/>      
+      <multiplicity id="25" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="26">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

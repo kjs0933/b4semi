@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.b4.model.vo.Images;
 import com.b4.model.vo.Notice;
+import com.b4.service.ImagesService;
 import com.b4.service.NoticeService;
 
 /**
@@ -32,10 +34,16 @@ public class NoticeViewServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		request.setCharacterEncoding("UTF-8");
+		try {int no=Integer.parseInt(request.getParameter("noticeone"));			}
+		catch(NumberFormatException e) {e.printStackTrace();}
+		Notice n=new NoticeService().NoticeOne(0);
 		
-		int no=Integer.parseInt(request.getParameter("noticeone"));
+		try {String IM=request.getParameter("selectOne");}
+		catch(Exception e) {e.printStackTrace();}
 		
-		Notice n=new NoticeService().NoticeOne(no);
+		//Images m=new ImagesService().selectOne(IM);
+		
+		
 		
 		request.setAttribute("notice", n);
 		request.getRequestDispatcher("/views/support/support_notice_view.jsp").forward(request, response);

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.2.3" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
+  <package id="1" language="java" name="sql.orderPDetail" project="b4semi" file="/b4semi/src/sql/orderPDetail" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="94" y="71"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="2" language="java" name="sql.addressList" project="b4semi" file="/b4semi/src/sql/addressList" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="270" y="71"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="3" language="java" name="sql.DPList" project="b4semi" file="/b4semi/src/sql/DPList" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="437" y="71"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="4" language="java" name="sql.notice" project="b4semi" file="/b4semi/src/sql/notice" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="599" y="71"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="5" language="java" name="sql.supplier" project="b4semi" file="/b4semi/src/sql/supplier" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="761" y="71"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="6" language="java" name="sql.cart" project="b4semi" file="/b4semi/src/sql/cart" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="923" y="71"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="7" language="java" name="sql.member" project="b4semi" file="/b4semi/src/sql/member" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1085" y="71"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="8" language="java" name="sql.coupon" project="b4semi" file="/b4semi/src/sql/coupon" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1247" y="71"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="9" language="java" name="sql.images" project="b4semi" file="/b4semi/src/sql/images" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="97" y="159"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="10" language="java" name="sql.mileageLog" project="b4semi" file="/b4semi/src/sql/mileageLog" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="263" y="159"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="11" language="java" name="sql.orderList" project="b4semi" file="/b4semi/src/sql/orderList" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="430" y="159"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="12" language="java" name="sql.review" project="b4semi" file="/b4semi/src/sql/review" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="592" y="159"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="13" language="java" name="sql.product" project="b4semi" file="/b4semi/src/sql/product" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="754" y="159"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="14" language="java" name="sql.queryBoard" project="b4semi" file="/b4semi/src/sql/queryBoard" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="921" y="159"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="15" language="java" name="sql.DPOption" project="b4semi" file="/b4semi/src/sql/DPOption" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1088" y="159"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="16" language="java" name="sql.instock" project="b4semi" file="/b4semi/src/sql/instock" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1250" y="159"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="17" language="java" name="sql.mileage" project="b4semi" file="/b4semi/src/sql/mileage" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1412" y="159"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
