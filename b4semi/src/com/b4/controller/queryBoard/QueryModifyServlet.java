@@ -35,6 +35,7 @@ public class QueryModifyServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		Member m = (Member)request.getSession().getAttribute("loginMember");
 		if(m == null)
 		{
@@ -50,7 +51,7 @@ public class QueryModifyServlet extends HttpServlet {
 		
 		request.setAttribute("imgList", imgList);
 		request.setAttribute("queryBoard", qb);		
-		request.getRequestDispatcher("/views/support/support_query_modify.jsp").forward(request, response);		
+		request.getRequestDispatcher("/views/support/support_query_modify.jsp").forward(request, response);	
 	}
 
 	/**

@@ -14,6 +14,94 @@
 	String pageBar = (String)request.getAttribute("pageBar");
 %>
 	<style>
+		        .support-wrapper
+        {
+            display: flex;
+            font-family: 'Noto Sans KR';
+            width: 1024px;
+            margin-top: 100px;
+            font-size: 14px;
+        }
+
+        .support-wrapper > div:first-of-type
+        {
+            flex: 2 1 0;
+        }
+
+        .support-wrapper > div:last-of-type
+        {
+            flex: 7 1 0;
+        }
+
+        .support-nav-title > p
+        {
+            margin: 20px 0;
+            font-size: 30px;
+        }
+        
+        .support-nav
+        {
+            display: flex;
+            flex-flow: column nowrap;
+            position: relative;
+        }
+
+        .support-nav > div
+        {
+            height: 50px;
+            border: 1px solid #ccc;
+            border-bottom: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-sizing: border-box;
+            padding: 0 30px;
+            font-size: 15px;
+
+            cursor: pointer;
+        }
+
+        .support-nav > div:hover
+        {
+            background-color: rgb(248, 248, 248);
+        }
+
+        .support-nav a
+        {
+            text-decoration: none;
+            color: black;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .support-nav img
+        {
+            width: 25px;
+            height: 25px;
+            position: absolute;
+            right: 0;
+        }
+
+        .support-nav > div:last-of-type
+        {
+            border-bottom: 1px solid #ccc;
+        }
+
+        .current-tab
+        {
+            background-color: rgb(248, 248, 248);
+        }
+
+        .support-content
+        {
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: center;
+            margin-left: 30px;
+        }
+	
         .query-wrapper
         {
             font-family: 'Noto Sans KR';
@@ -346,6 +434,10 @@
                         </div>
                         <div class="query-board-view-unit">
                             <div class="query-board-content">
+                            	<%if(qb.getRenamedFile() != null) 
+                            	{%>
+                            	<img src="<%=request.getContextPath() %>/upload/queryBoard/<%=qb.getRenamedFile()%>">
+                            	<% }%>
                             	<%=qb.getQueryContents() %>
                                 <div data-query-seq="<%=qb.getQuerySeq() %>" class="query-board-btn-set">
                                     <button class="query-modify">수정</button>
@@ -476,11 +568,20 @@
             if(flag)
             {
                 $.ajax({
-                    url: '<%=request.getContextPath()%>/queryCommentDelete?'+$(e.target).parent().data('commentSeq'),
+                    url: '<%=request.getContextPath()%>/queryCommentDelete?commentSeq='+$(e.target).parent().data('commentSeq'),
                     type: 'get',
                     dataType: 'text',
                     success: data => {
-                        $(e.target).parent().parent().remove();
+                    	if(data = 1)
+                        {
+                    		$(e.target).parent().parent().fadeOut(500);
+                    		setTimeout(() => {$(e.target).parent().parent().remove();}, 2000);
+                    		
+                        }
+                    	else
+                    	{
+                    		alert('커멘트 삭제에 실패하였습니다.');
+                    	}
                     }
                 });
             }
@@ -503,7 +604,7 @@
             $.ajax({
                 url: '<%=request.getContextPath()%>/queryCommentForm',
                 type: 'post',
-                data: {'commentText': textToSend},
+                data: {'commentText': textToSend, 'memberSeq': <%=lm.getMemberSeq()%>},
                 dataType: 'text',
                 success: data => {
                     $(e.target).parent().before(data);

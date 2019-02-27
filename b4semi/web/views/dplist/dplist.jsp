@@ -500,8 +500,8 @@
 
 						addedProdImage.prop('src', $(e.target).parent().siblings().first().prop('src'));
 						addedProdName.text($(e.target).parent().next().text());
-						addedProdAmount.text(data[1]+'개');
-						if(data[1] == 1) {cartCount.text(parseInt(cartCount.text())+1);}
+						addedProdAmount.text(data[0]+'개 품목');
+						cartCount.text(parseInt(cartCount.text())+1);
 						cartMsgWrapper.fadeIn(600);
 						setTimeout(()=>{cartMsgWrapper.fadeOut(600)}, 2000);
 					}

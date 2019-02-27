@@ -238,17 +238,16 @@ public class QueryBoardDao {
 	}
 
 
-	public int insertReply(Connection conn, Reply re) {
+	public int insertReply(Connection conn, int boardSeq, int memberSeq, String commentText) {
 		PreparedStatement pstmt = null;
 		int result = 0;
 		String sql = prop.getProperty("insertReply");
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, re.getBoardSeq());
-			pstmt.setInt(2, re.getMemberSeq());
-			pstmt.setInt(3, re.getCommentRef());
-			pstmt.setTimestamp(4, re.getCommentDate());
-			pstmt.setString(5, re.getCommentText());
+			pstmt.setInt(1, boardSeq);
+			pstmt.setInt(2, memberSeq);
+			pstmt.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
+			pstmt.setString(4, commentText);
 			result = pstmt.executeUpdate();
 		}
 		catch(SQLException e)
@@ -262,15 +261,15 @@ public class QueryBoardDao {
 		return result;
 	}
 	
-	public int updateReply(Connection conn, Reply re) {
+	public int updateReply(Connection conn, String commentText ,int commentSeq) {
 		PreparedStatement pstmt = null;
 		int result = 0;
 		String sql = prop.getProperty("updateReply");
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setTimestamp(1, re.getCommentDate());
-			pstmt.setString(2, re.getCommentText());
-			pstmt.setInt(3, re.getCommentSeq());
+			pstmt.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
+			pstmt.setString(2, commentText);
+			pstmt.setInt(3, commentSeq);
 			result = pstmt.executeUpdate();
 		}
 		catch(SQLException e)
@@ -284,14 +283,14 @@ public class QueryBoardDao {
 		return result;
 	}
 	
-	public int deleteReply(Connection conn, Reply re) {
+	public int deleteReply(Connection conn, int boardNo) {
 		PreparedStatement pstmt = null;
 		int result = 0;
 		String sql = prop.getProperty("deleteReply");
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setTimestamp(1, re.getCommentDeleteDate());
-			pstmt.setInt(2, re.getCommentSeq());
+			pstmt.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
+			pstmt.setInt(2, boardNo);
 			result = pstmt.executeUpdate();
 		}
 		catch(SQLException e)
@@ -365,6 +364,33 @@ public class QueryBoardDao {
 			close(pstmt);
 		}
 		return result;
+	}
+	
+	public String selectRenamedFileByBoardNo(Connection conn, int boardNo) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = prop.getProperty("selectImageFilenameByBoardNo");
+		String renamedFile = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, boardNo);
+			rs = pstmt.executeQuery();
+			while(rs.next())
+			{	
+				renamedFile = rs.getString("renamedFile");
+			}
+		} 
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally 
+		{
+			close(rs);
+			close(pstmt);
+		}
+		return renamedFile;
+		
 	}
 
 	public QueryBoard selectRecentQuery(Connection conn) {
