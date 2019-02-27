@@ -1,16 +1,8 @@
 package com.b4.controller.queryBoard;
 
-import static common.JDBCTemplate.close;
-import static common.JDBCTemplate.commit;
-import static common.JDBCTemplate.getConnection;
-import static common.JDBCTemplate.rollback;
-
-import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,22 +17,24 @@ import com.b4.model.vo.Images;
 import com.b4.model.vo.Member;
 import com.b4.model.vo.QueryBoard;
 import com.b4.service.ImagesService;
-import com.b4.service.QueryBoardService;
 import com.oreilly.servlet.MultipartRequest;
-
+import static common.JDBCTemplate.getConnection;
+import static common.JDBCTemplate.commit;
+import static common.JDBCTemplate.rollback;
+import static common.JDBCTemplate.close;
 import common.rename.QueryFileRenamePolicy;
 
 /**
- * Servlet implementation class QueryFormEndServlet
+ * Servlet implementation class QueryModifyEndServlet
  */
-@WebServlet("/queryFormEnd")
-public class QueryFormEndServlet extends HttpServlet {
+@WebServlet("/queryModifyEnd")
+public class QueryModifyEndServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public QueryFormEndServlet() {
+    public QueryModifyEndServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -62,21 +56,17 @@ public class QueryFormEndServlet extends HttpServlet {
 		if(!ServletFileUpload.isMultipartContent(request))
 		{
 			//response.sendRedirect("/index.jsp");
-			System.out.println("???????야");
 		}
-		
+		System.out.println(request.getParameter("querySeq"));
+		int querySeq = Integer.parseInt(request.getParameter("querySeq"));
 		String dir=getServletContext().getRealPath("/upload/queryBoard");
 		int maxSize=1024*1024*1024;
 		MultipartRequest mr= new MultipartRequest(request,dir,maxSize,"UTF-8",new QueryFileRenamePolicy());
-		//DB 로직 구성
 		
 		String orderSeq = mr.getParameter("orderSeq");
 		String queryTitle = mr.getParameter("queryTitle");
 		String queryContents = mr.getParameter("queryContents");
 		
-		//queryBoard 객체 생성
-		
-		int querySeq = new QueryBoardService().selectNextVal();
 		QueryBoard qb = new QueryBoard();
 		qb.setQuerySeq(querySeq);
 		qb.setMemberSeq(loginMember.getMemberSeq());
@@ -88,43 +78,43 @@ public class QueryFormEndServlet extends HttpServlet {
 		qb.setQueryContents(queryContents);
 		qb.setQueryDate(new Timestamp(System.currentTimeMillis()));
 		
-		//images객체생성
 		
-		String originalFile = mr.getOriginalFileName("originalFile");
-		String renameFile = mr.getFilesystemName("originalFile");
-		
+		String oldFile = mr.getParameter("oldFile");		
+		String upFile = mr.getOriginalFileName("upFile");
+		String renameUpFile = mr.getFilesystemName("upFile");
+
 		Images img = new Images();
 		img.setBoardCode("BQ");
 		img.setBoardNo(qb.getQuerySeq());
-		img.setOriginalFile(originalFile);
-		img.setRenameFile(renameFile);
-
+		img.setOriginalFile(upFile);
+		img.setRenameFile(renameUpFile);
+		
 		Connection conn = getConnection();
-		int resultQuery = new QueryBoardDao().insertQuery(conn, qb);
+		int resultQuery = new QueryBoardDao().updateQuery(conn, qb);
 		if(resultQuery>0) 
 		{
-			if(!img.getOriginalFile().isEmpty()) 
+			if(!img.getOriginalFile().isEmpty())
 			{
-				int resultFile = new ImagesService().insertImages(img);
+				int resultFile = new ImagesService().updateImages(oldFile,img);
 				if(resultFile>0) {
 					commit(conn);
 					close(conn);
-					request.setAttribute("msg", "1대1 문의가 등록되었습니다");
+					request.setAttribute("msg", "1대1 문의가 수정되었습니다");
 					request.setAttribute("loc", "/query");
 					request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
 				}
 				else 
 				{
 					rollback(conn);close(conn);
-					request.setAttribute("msg", "1대1 문의 등록이 실패하였습니다.");
+					request.setAttribute("msg", "1대1 문의 수정이 실패하였습니다.");
 					request.setAttribute("loc", "/queryForm");
 					request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
-				}	
+				}
 			}
 			else 
 			{
 				commit(conn);close(conn);
-				request.setAttribute("msg", "1대1 문의가 등록되었습니다");
+				request.setAttribute("msg", "1대1 문의가 수정되었습니다");
 				request.setAttribute("loc", "/query");
 				request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
 			}
@@ -132,12 +122,11 @@ public class QueryFormEndServlet extends HttpServlet {
 		else
 		{
 			rollback(conn);close(conn);
-			request.setAttribute("msg", "1대1 문의 등록이 실패하였습니다.");
+			request.setAttribute("msg", "1대1 문의 수정이 실패하였습니다.");
 			request.setAttribute("loc", "/queryForm");
 			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
 		}
-		
-		
+
 	}
 
 	/**

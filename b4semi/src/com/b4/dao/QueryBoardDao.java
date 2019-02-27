@@ -173,11 +173,12 @@ public class QueryBoardDao {
 		int result = 0;
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, qb.getMemberSeq());
-			pstmt.setString(2, qb.getQueryTitle());
-			pstmt.setString(3, qb.getQueryContents());
-			pstmt.setTimestamp(4, qb.getQueryDate());
-			pstmt.setInt(5, qb.getOrderSeq());
+			pstmt.setInt(1, qb.getQuerySeq());
+			pstmt.setInt(2, qb.getMemberSeq());
+			pstmt.setString(3, qb.getQueryTitle());
+			pstmt.setString(4, qb.getQueryContents());
+			pstmt.setTimestamp(5, qb.getQueryDate());
+			pstmt.setInt(6, qb.getOrderSeq());
 			result = pstmt.executeUpdate();
 		}
 		catch(SQLException e)
@@ -393,5 +394,60 @@ public class QueryBoardDao {
 			close(pstmt);
 		}
 		return qb;
+	}
+
+	public QueryBoard selectByQuerySeq(Connection conn, int querySeq) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		QueryBoard qb = new QueryBoard();
+		String sql = prop.getProperty("selectByQuerySeq");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, querySeq);
+			rs = pstmt.executeQuery();
+			while(rs.next())
+			{
+				qb.setMemberSeq(rs.getInt("memberSeq"));
+				qb.setQuerySeq(rs.getInt("querySeq"));
+				qb.setQueryTitle(rs.getString("queryTitle"));
+				qb.setQueryContents(rs.getString("queryContents"));
+				qb.setQueryDate(rs.getTimestamp("queryDate"));
+				qb.setQueryDeleteDate(rs.getTimestamp("queryDeleteDate"));
+				qb.setOrderSeq(rs.getInt("orderSeq"));
+			}
+		}catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(rs);
+			close(pstmt);
+		}
+		return qb;
+	}
+
+	public int selectNextVal(Connection conn) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int result = 0;
+		String sql = prop.getProperty("selectNextVal");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+			{
+				result = rs.getInt(1);
+			}
+		}catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(rs);
+			close(pstmt);
+		}
+		return result;
 	}
 }

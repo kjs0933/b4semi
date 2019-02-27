@@ -1,6 +1,9 @@
 package com.b4.controller.queryBoard;
 
+import static common.PagingTemplate.pageBar;
+
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -9,11 +12,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.b4.model.vo.Images;
 import com.b4.model.vo.Member;
 import com.b4.model.vo.QueryBoard;
-import com.b4.model.vo.QueryComment;
+import com.b4.service.ImagesService;
 import com.b4.service.QueryBoardService;
-import static common.PagingTemplate.pageBar;
 
 /**
  * Servlet implementation class QueryListServlet
@@ -64,6 +67,15 @@ public class QueryServlet extends HttpServlet {
 		List<QueryBoard> list = new QueryBoardService().selectListByMember(cPage, numPerPage, loginMember.getMemberSeq());
 		String pageBar = pageBar(request.getContextPath(), cPage, numPerPage, totalCount);
 		
+/*		List<Images> imgList = new ArrayList<>();
+		if(list!=null) {
+			for(int i=0; i<list.size(); i++) {
+				//boardcode='BQ', boardno=queryseq
+				imgList = new ImagesService().selectListByBoard("BQ",list.get(i).getQuerySeq());
+				System.out.println(imgList.toString());
+			}
+		}
+		request.setAttribute("imgList", imgList);*/
 		request.setAttribute("loginMember", loginMember);
 		request.setAttribute("list", list);
 		request.setAttribute("cPage", cPage);

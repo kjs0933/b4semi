@@ -4,9 +4,8 @@
 <%@ page import="com.b4.model.vo.*, java.util.*, static common.DateFormatTemplate.getTillDate" %>
 <%@ include file="/views/common/header.jsp"%>
 <%
-	String orderSeq = (String)request.getAttribute("orderSeq");
-	List<OrderList> orderlist = (List<OrderList>)request.getAttribute("orderlist");
-	List<OrderPDetail> orderPList = (List<OrderPDetail>)request.getAttribute("orderProductList");
+	QueryBoard qb = (QueryBoard)request.getAttribute("queryBoard");
+	List<Images> imgList = (List<Images>)request.getAttribute("imgList");
 %>
 
     <style> 
@@ -259,44 +258,17 @@
 <section>
     <div class="query-form-wrapper">
         <div class="query-form-header">
-            1:1 문의
+            1:1 문의 수정
         </div>
-        <form action="<%=request.getContextPath() %>/queryFormEnd" method="post" class="query-form" name="queryFrm" enctype="multipart/form-data">
+        <form action="<%=request.getContextPath() %>/queryModifyEnd?querySeq=<%=qb.getQuerySeq() %>" method="post" class="query-form" name="queryFrm" enctype="multipart/form-data">
             <div class="query-form-title">
                 <div>제목</div>
-                <div><input type="text" name="queryTitle" id=""></div>
+                <div><input type="text" name="queryTitle" id="" value="<%=qb.getQueryTitle()%>"></div>
             </div>
             <div class="query-form-order-seq">
                 <div>주문번호</div>
                 <div>
-                    <input type="text" name="orderSeq" id="order-seq" value="<%=orderSeq%>">
-                    <input id="show-orderlist" type="button" value="주문 조회">
-                </div>
-                <div class="order-seq-list" id="order-seq-list">
-                    <span>문의하실 주문번호를 선택하세요.</span>
-                    <span>최근 주문 5개까지 선택됩니다.</span>
-                    <div class="order-seq-list-header">
-                        <div>주문번호</div>
-                        <div>주문일자</div>
-                        <div>상품명</div>
-                        <div>수량</div>
-                        <div>주문금액</div>
-                        <div>선택</div>
-                    </div>
-                    <%if(orderlist!=null) {
-                    	for(int i=0; i<orderlist.size(); i++){ 
-                    		String date=getTillDate(orderlist.get(i).getOrderTime());
-                    		String productName=orderPList.get(i).getProductName();
-                    		if(productName.length()>5){productName=productName.substring(0,5)+"..";}%>                    
-                    <div class="order-seq-list-cols">
-                        <div><%=orderlist.get(i).getOrderSeq() %></div>
-                        <div><%=date %></div>
-                        <div><%=productName %><%if(orderPList.get(i).getCountByOrderList()!=1){ %> 외  <%=(orderPList.get(i).getCountByOrderList())-1 %>건<%} %></div>
-                        <div><%=orderPList.get(i).getCountByOrderList() %>개</div>
-                        <div><%=orderlist.get(i).getTotalPrice() %> 원</div>
-                        <div><input type="radio" name="orderSeq" class="order-seq-radio"></div>
-                    </div>
-                    <%}}%>               
+                    <input type="text" name="orderSeq" id="order-seq" value="<%=qb.getOrderSeq()%>" readonly>
                 </div>
             </div>
             <div class="query-form-email">
@@ -308,23 +280,27 @@
             </div>
             <div class="query-form-content">
                 <div>문의내용</div>
-                <div><textarea name="queryContents"></textarea></div>
+                <div><textarea name="queryContents"><%=qb.getQueryContents()%></textarea></div>
             </div>
             <div class="query-form-image-upload">
                 <div>이미지</div>
                 <div class="added-image-container">
-                    <!-- <div class="added-image-box">
-                        <img src="images/order_sample_5.jpg">
-                    </div> -->
-                    <div class="image-upload-container">
-                        <span>+</span><input type="file" name="originalFile" id="originalFile" multiple>
+                    <%if(imgList!=null){ 
+                    	for(int i=0; i<imgList.size(); i++){%>
+                    <div class="added-image-box">
+                        <img src="<%=request.getContextPath() %>/upload/queryBoard/<%=imgList.get(i).getRenameFile() %>">
+                    	<input type="hidden" name="oldFile" value="<%=imgList.get(i).getRenameFile()%>"/>
                     </div>
+                    <%}} %>
+                    <div class="image-upload-container">
+                        <span>+</span><input type="file" name="upFile" id="originalFile" multiple>
+                    </div>
+                    <p>이미지는 한 장만 등록할 수 있습니다.</p>
                 </div>
-                <p>이미지는 한 장만 등록할 수 있습니다.</p>
             </div>
             <div class="query-button-set">
                 <input id="cancel" type="button" value="취소">
-                <input type="submit" value="저장">
+                <input type="submit" value="수정">
             </div>
         </form>
     </div>
@@ -363,43 +339,21 @@
 	
 	const addedImageContainer = $('.added-image-container');
 	const queryForm = $('.query-form');
+	const fileImage = $('.added-image-box > img');
 	$(function(){
-		$("[name=originalFile]").change(function(){
+		$("[name=upFile]").change(function(){
 			
-			$.each(queryFrm.originalFile.files,function(index,item){
+			$.each(queryFrm.upFile.files,function(index,item){
 			
 			console.log(item);
 				
 			var reader=new FileReader();
-			reader.onload=function(e){
-				var imageBoxToAdd = '<div class="added-image-box"><img src="'+e.target.result+'"></div>';
-			    addedImageContainer.prepend(imageBoxToAdd);
+			reader.onload= function(e){
+			    fileImage.attr('src', e.target.result);
 			}
-			reader.readAsDataURL(queryFrm.originalFile.files[index]);//웹에서는 하드의 파일을 접근못하게 되어있어서 처리해주기위함 0은단일 index 넣어줘서 여러개처리
+			reader.readAsDataURL(queryFrm.upFile.files[index]);//웹에서는 하드의 파일을 접근못하게 되어있어서 처리해주기위함 0은단일 index 넣어줘서 여러개처리
 		});
 		});
-			/* queryForm.on('submit',function(e){
-			e.preventDefault();
-			var fd=new FormData();//파일을 전송하게 해주는 객체;
-			$.each(queryFrm.originalFile.files,function(i,item){
-				fd.append("test"+i,item); //파라미터 키값이 test0 test1 이런식이됨
-				alert(fd);
-			}); */
-
-			<%-- $.ajax({
-				url:"<%=request.getContextPath()%>/queryFormEnd",
-				data : fd,
-				type:"post",
-				processData:false,
-				contentType:false,
-				success : function(data){
-				alert("업로드완료");
-				/* $('#image').html('');//업로드후 비워주기
-				$("[name=ajaxFileTest]").val('');*/
-					queryForm.submit();
-				} 
-			});
-		}); --%>
 	});
 
 </script>
