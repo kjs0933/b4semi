@@ -1,16 +1,19 @@
 package com.b4.dao;
 
 import static common.JDBCTemplate.close;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import com.b4.model.vo.Cart;
 import com.b4.model.vo.OrderList;
 
 public class OrderListDao {
@@ -172,6 +175,93 @@ public class OrderListDao {
 		return list;
 	}
 
+	public int getOrderSeq(Connection conn)
+	{
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int result=0;
+		String sql = prop.getProperty("getOrderSeq");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+			{
+				result = rs.getInt(1);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally {
+			close(rs);
+			close(pstmt);
+		}
+		return result;
+		
+	}
 
-
+	public int newOrder(Connection conn, OrderList order)
+	{
+		PreparedStatement pstmt = null;
+		int result=0;
+		String sql = prop.getProperty("newOrder");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1,order.getOrderSeq());
+			if(order.getCouponSeq()==0)
+			{
+				pstmt.setNull(2,Types.INTEGER);
+			}
+			else
+			{
+				pstmt.setInt(2,order.getCouponSeq());
+			}
+			pstmt.setInt(3,order.getMemberSeq());
+			pstmt.setInt(4,order.getSpentMileage());
+			pstmt.setString(5, order.getReceiverName());
+			pstmt.setString(6, order.getReceiverAddress());
+			pstmt.setString(7, order.getReceiverPhone());
+			pstmt.setString(8, order.getReceiverComment());
+			pstmt.setInt(9, order.getTotalPrice());
+			pstmt.setTimestamp(10, order.getOrderTime());
+			pstmt.setInt(11, order.getShipmentFee());
+			
+			result = pstmt.executeUpdate();
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally {
+			close(pstmt);
+		}
+		return result;
+	}
+	
+	public int newOrderP(Connection conn, ArrayList<Cart> cartlist, int orderSeq)
+	{
+		PreparedStatement pstmt = null;
+		int result=0;
+		String sql = prop.getProperty("newOrderP");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			for(int i=0; i<cartlist.size();i++)
+			{
+				pstmt.setInt(1, orderSeq);
+				pstmt.setString(2, cartlist.get(i).getProductCode());
+				pstmt.setInt(3, cartlist.get(i).getDisplayListSeq());
+				pstmt.setInt(4, cartlist.get(i).getProductCount());
+				result += pstmt.executeUpdate();
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally {
+			close(pstmt);
+		}
+		return result;
+	}
 }

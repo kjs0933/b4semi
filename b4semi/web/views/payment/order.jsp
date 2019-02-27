@@ -707,7 +707,7 @@
 </style>
 
 <section>
-    <form action="#" method="post" id="payment-frm" autocomplete="off">
+    <form action="<%=request.getContextPath()%>/orderEnd" method="post" id="payment-frm" autocomplete="off">
         <div class="orderlist-pre-wrapper">
         	<div>
         			<input type="hidden" id="initialPrice" value="<%=totalPrice-totalDiscount%>" >
@@ -897,7 +897,7 @@
                     </div>
                 </div>
             </div>
-            <input type="button" value="결제하기">
+            <input type="button" value="결제하기" onclick="fn_order_end()">
         </div>
     </form>
 
@@ -1060,7 +1060,23 @@
     	$("#result-final").html($("#totalPrice").val()+" 원");
     }
     
-    
+    function fn_order_end(){
+    	if($("#address-tag").val().length<1)
+    	{
+    		alert("배송 정보를 입력해주세요");
+    		return;
+    	}
+    		
+    	alert("결제페이지로 이동합니다.");
+    	if(confirm($("#totalPrice").val()+"원 결제 하시겠습니까?"))
+    	{
+    		$("#payment-frm").submit();
+    	}
+    	else
+    	{
+    		alert("결제가 취소되었습니다.")	
+    	}
+    }
 
 </script>
 
