@@ -5,103 +5,15 @@
 <%@ page import="com.b4.model.vo.Member" %>
 <%@ page import="java.util.*" %>
 <%@ page import="static common.DateFormatTemplate.getTillMin" %>
+<%@ page import="static common.DateFormatTemplate.getTillDate" %>
+
 <%
 	Member lm = (Member)request.getAttribute("loginMember");
 	List<QueryBoard> list = (List<QueryBoard>)request.getAttribute("list");
 	int cPage = (int)request.getAttribute("cPage");
 	String pageBar = (String)request.getAttribute("pageBar");
 %>
-
-    <style>
-        .support-wrapper
-        {
-            display: flex;
-            font-family: 'Noto Sans KR';
-            width: 1024px;
-            margin-top: 100px;
-            font-size: 12px;
-        }
-
-        .support-wrapper > div:first-of-type
-        {
-            flex: 2 1 0;
-        }
-
-        .support-wrapper > div:last-of-type
-        {
-            flex: 7 1 0;
-        }
-
-        .support-nav-title > p
-        {
-            margin: 20px 0;
-            font-size: 30px;
-        }
-        
-        .support-nav
-        {
-            display: flex;
-            flex-flow: column nowrap;
-            position: relative;
-        }
-
-        .support-nav > div
-        {
-            height: 50px;
-            border: 1px solid #ccc;
-            border-bottom: none;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-sizing: border-box;
-            padding: 0 30px;
-            font-size: 15px;
-
-            cursor: pointer;
-        }
-
-        .support-nav > div:hover
-        {
-            background-color: rgb(248, 248, 248);
-        }
-
-        .support-nav a
-        {
-            text-decoration: none;
-            color: black;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-        }
-
-        .support-nav img
-        {
-            width: 25px;
-            height: 25px;
-            position: absolute;
-            right: 0;
-        }
-
-        .support-nav > div:last-of-type
-        {
-            border-bottom: 1px solid #ccc;
-        }
-
-        .current-tab
-        {
-            background-color: rgb(248, 248, 248);
-        }
-
-        .support-content
-        {
-            display: flex;
-            flex-flow: column nowrap;
-            justify-content: center;
-            margin-left: 30px;
-        }
-
-
+	<style>
         .query-wrapper
         {
             font-family: 'Noto Sans KR';
@@ -114,13 +26,12 @@
         .query-wrapper button
         {
             font-family: 'Noto Sans KR';
-/*             text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1); */
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
             background-color: transparent;
             border: none;
             font-weight: bolder;
             opacity: 0.5;
             font-size: 15px;
-
             cursor: pointer;
         }
 
@@ -130,11 +41,9 @@
             width: 100%;
             resize: none;
             font-family: 'Noto Sans KR';
-            min-height: 70px;
-            max-height: 70px;
+            height: inherit;
             border: none;
             background-color: transparent;
-            font-size: 15px;
         }
 
         .query-wrapper textarea:focus
@@ -154,6 +63,7 @@
             border-bottom: 1px solid #ccc;
             display: flex;
             flex-flow: column nowrap;
+            font-size: 14px;
         }
 
         .query-board-header
@@ -172,7 +82,7 @@
         .query-board-header > div:nth-of-type(1){flex: 2 1 0;}
         .query-board-header > div:nth-of-type(2){flex: 15 1 0;}
         .query-board-header > div:nth-of-type(3){flex: 2 1 0;}
-        .query-board-header > div:nth-of-type(4){flex: 4 1 0;}
+        .query-board-header > div:nth-of-type(4){flex: 3 1 0;}
 
         .query-board-cols
         {
@@ -187,10 +97,11 @@
             align-items: center;
             justify-content: center;
         }
+
         .query-board-cols > div:nth-of-type(1){flex: 2 1 0;}
         .query-board-cols > div:nth-of-type(2){flex: 15 1 0;}
         .query-board-cols > div:nth-of-type(3){flex: 2 1 0;}
-        .query-board-cols > div:nth-of-type(4){flex: 4 1 0; font-size: 11px; color: gray;}
+        .query-board-cols > div:nth-of-type(4){flex: 3 1 0; color: gray; font-size: 11px;padding-top: 2px;}
         .query-board-cols:last-of-type{border-bottom: 1px solid black;}
 
         .query-board-btn-set
@@ -205,11 +116,6 @@
             position: absolute;
             top: 15px;
             right: 9px;
-        }
-        
-        .comment-count
-        {
-        	color: rgb(62, 91, 134);
         }
 
         .query-board-view-unit
@@ -227,31 +133,28 @@
             padding: 20px 15px 20px 50px;
         }
 
-        .query-comment-unit[comment-writer="customer"]
+        .query-comment-unit
         {
             position: relative;
-            margin-left: 150px;
+            height: 150px;
             margin-top: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
             padding: 15px 0 0 20px;
-			
-			
-			
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .query-comment-unit[comment-writer="customer"]
+        {
             background-color: rgb(247, 247, 247);
-            border-radius: 10px;
+
         }
 
         .query-comment-unit[comment-writer="admin"]
         {
-            position: relative;
-            margin-right: 150px;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            padding: 15px 0 0 20px;
-
-            background-color: rgb(255, 249, 231);
-            border-radius: 10px;
+            background-color: rgba(79, 142, 158, 0.438);
         }
+
 
         .query-comment-header
         {
@@ -273,18 +176,34 @@
 
         .query-comment-content
         {
-            padding: 20px 20px 20px 0;
-            padding-bottom: 20px;
-            margin-left: -2px;
+            position: absolute;
+            height: inherit;
+            top: 0;
+            left: 0;
+            width: 100%;
         }
 
+        .written-comment-textarea
+        {
+            box-sizing: border-box;
+            padding-top: 50px;
+            padding-left: 18px;
+            transform-style: preserve-3d;
+
+        }
+
+        .written-comment-textarea:read-write
+        {
+            box-shadow: 0 1px 15px 1px rgba(0, 0, 0, 0.6);
+            border-radius: 5px;
+        }
+        
         .query-comment-form
         {
             position: relative;
             margin-top: 10px;
-            margin-right: 20px;
             margin-bottom: 10px;
-            margin-left: 150px;
+            margin-right: 20px;
         }
 
         .query-comment-write
@@ -303,49 +222,21 @@
         {
             padding: 10px 0 0 20px;
             background-color: rgb(247, 247, 247);
-            border-radius: 10px;
-            min-height: 30px;
-            max-height: 30px;
+            border-radius: 5px;
+            height: 30px;
+            transition: 200ms ease-in;
         }
 
         #comment-form-area:focus
         {
             background-color: rgb(221, 221, 221);
             box-shadow: 0 1px 10px 1px rgba(0, 0, 0, 0.3);
-            min-height: 100px;
-            max-height: 100px;
+            height: 100px;
         }
 
-        #comment-form-area:focus + button
-        {
-        }
+        .query-comment-confirm{display: none;}
+        .query-comment-cancel{display: none;}
 
-        #comment-form-area:focus + button:hover
-        {
-
-        }
-        
-        .form-query
-        {
-        	width: 100px;
-        	height: 40px;
-        	background-color: rgb(62, 91, 134);
-        	color: white;
-        	border: none;
-        	align-self: flex-end;
-        	border-radius: 2px;
-        	margin-top: 20px;
-        	transition: 200ms linear;
-        	cursor: pointer;
-        }
-        
-        .form-query:hover
-        {
-        	background-color: rgb(82, 111, 154);
-        }
-        
-
-        .form-query:focus{outline: none;}
 
         .pagebar img
         {
@@ -377,7 +268,44 @@
         {
             border-left: 1px solid rgb(220, 220, 220);
         }
-        
+
+
+        .query-write
+        {
+            padding: 0 10px;
+            height: 35px;
+            align-self: flex-end;
+            
+        }
+
+
+        .cmt-confirm-anim
+        {
+            animation: modSuccess 1s ease;
+        }
+
+        .cmt-mod-anim
+        {
+            animation: modClicked 150ms ease;
+        }
+
+
+        @keyframes modSuccess
+        {
+            100%{
+                transform: rotateY(-180deg);
+            }
+        }
+
+        @keyframes modClicked
+        {
+            50%{
+                transform: rotateZ(3deg);
+            }
+            100%{
+                transform: rotateZ(0deg);
+            }
+        }
     </style>
     <section>
         <div class="support-wrapper">
@@ -406,85 +334,190 @@
                             <div>작성자</div>
                             <div>작성일</div>
                         </div>
-                        <%for(QueryBoard qb : list)
-                        { %>
+                        <%if(list.size() != 0)
+                        {
+                        	for(QueryBoard qb : list)
+                        	{%>
                         <div class="query-board-cols">
                             <div><%=qb.getQuerySeq() %></div>
-                            <div><%=qb.getQueryTitle() %><span class="comment-count">&nbsp;[<%=qb.getList().size()%>]</span></div>
+                            <div><%=qb.getQueryTitle() %> [<%=qb.getList().size() %>]</div>
                             <div><%=qb.getMemberId() %></div>
                             <div><%=getTillMin(qb.getQueryDate()) %></div>
-                        </div> 
+                        </div>
                         <div class="query-board-view-unit">
                             <div class="query-board-content">
                             	<%=qb.getQueryContents() %>
-                                <div class="query-board-btn-set">
-                                    <button data-query-seq="<%=qb.getQuerySeq() %>" class="query-modify">수정</button>
-                                    <button data-query-seq="<%=qb.getQuerySeq() %>" class="query-delete">삭제</button>
+                                <div data-query-seq="<%=qb.getQuerySeq() %>" class="query-board-btn-set">
+                                    <button class="query-modify">수정</button>
+                                    <button class="query-delete">삭제</button>
                                 </div>
                             </div>
-                            <%if(qb.getList().size() != 0) 
-                              {	
-                            	 for(QueryComment qc : qb.getList())
-                            	 {
-                            %>
-                            <div comment-writer="<%="admin".equals(qc.getMemberId())?"admin":"customer"%>" class="query-comment-unit">
+                            <%if(qb.getList().size() != 0)
+                            {
+                            	for(QueryComment qc : qb.getList())
+                            	{%>
+                            <div comment-writer="<%="admin".equals(lm.getMemberId())?"admin":"customer" %>" class="query-comment-unit">
                                 <div class="query-comment-header">
                                     <div class="query-comment-id"><b><%=qc.getMemberId() %></b></div>
-                                    <div class="query-comment-date"><%=getTillMin(qc.getCommentDate())%></div>
+                                    <div class="query-comment-date"><%=getTillMin(qc.getCommentDate()) %></div>
                                 </div>
                                 <div class="query-comment-content">
-                                    <textarea name="commentText"readonly="readonly"><%=qc.getCommentText() %></textarea>
+                                    <textarea name="commentText" class="written-comment-textarea" readonly="readonly"><%=qc.getCommentText() %></textarea>
                                 </div>
-                                <%if(qc.getMemberId().equals(qb.getMemberId())){ %>
-                                <div class="query-comment-btn-set">
+                                <div data-comment-seq="<%=qc.getCommentSeq() %>" class="query-comment-btn-set">
+                                    <button class="query-comment-cancel">취소</button>
+                                    <button class="query-comment-confirm">수정완료</button>
                                     <button class="query-comment-modify">수정</button>
                                     <button class="query-comment-delete">삭제</button>
                                 </div>
-                            	<%}%>    
                             </div>
-                              <%}%> 
+                            <% }
+                            }%>
                             <div class="query-comment-form">
-                                <textarea name="commentText" id="comment-form-area"></textarea>
-                                <button class="query-comment-write">작성</button>
+                                <textarea name="commentText" id="comment-form-area" placeholder="댓글을 입력하세요."></textarea>
+                                <button class="query-comment-write">전송</button>
                             </div>
-                           <%}  %>
                         </div>
-                    	<%} %>
+                    <%	}
+                    }%>
                     </div>
-                    <input class="form-query" type="button" value="1:1문의">
-				<%=pageBar %>
+                    <button class="query-write" onclick="location.href='<%=request.getContextPath()%>/queryForm';">글쓰기</button>
+					<%=pageBar %>
+                </div>
             </div>
         </div>
-   	</div>
     </section>
     <script>
-        const queryCols = $('.query-board-cols');
+    
+    //1:1 문의 게시판 토글
+    const queryCols = $('.query-board-cols');
+    const queryViews = $('.query-board-view-unit');
+    $(() => {
+        queryCols.on('click', (e) => {
+            if($(e.currentTarget).next(queryViews).is(':visible')) { queryViews.hide(); return; }
+            else {queryViews.hide();}
+            $(e.currentTarget).next(queryViews).toggle();
+        });
+    });
 
-        const queryViews = $('.query-board-view-unit');
+    const queryModify = $('.query-modify');
+    const queryDelete = $('.query-delete');
+    const queryWrite = $('.query-write');
+    const queryCmtMod = $('.query-comment-modify');
+    const queryCmtDel = $('.query-comment-delete');
+    const queryCmtWrite = $('.query-comment-write');
+    const queryConfirm = $('.query-confirm');
+    const queryCmtCancel = $('.query-comment-cancel');
 
-        //게시판 토글 이벤트
-        $(() => {
-            queryCols.on('click', (e) => {
-                if($(e.currentTarget).next(queryViews).is(':visible')) { queryViews.hide(); return; }
-                else {queryViews.hide();}
-                
-                $(e.currentTarget).next(queryViews).toggle();
+    //커멘트 수정버튼 이벤트 바인드
+    $(() => {
+        queryCmtMod.on('click', e => {
+
+            const targetTextarea = $(e.target).parent().prev().children();
+            const targetModBtn = $(e.target);
+            const confirmBtn = $(e.target).prev();
+            const cancelBtn = $(e.target).prev().prev();
+            const deleteBtn = $(e.target).next();
+        
+            const targetCommentUnit = $(e.target).parent().parent();
+            targetCommentUnit.addClass('.cmt-mod-anim');
+            setTimeout(() => {targetCommentUnit.removeClass('.cmt-mod-anim')}, 1000);
+
+            targetModBtn.hide();
+            deleteBtn.hide();
+            confirmBtn.fadeToggle(500);
+            cancelBtn.fadeToggle(500);
+            targetTextarea.removeAttr('readonly');
+            targetTextarea.focus();
+            
+            let targetTextSave = targetTextarea.text();
+
+            //커멘트 텍스트창 토글 백 함수 정의
+            const toggleBack = () => {
+                targetTextarea.attr('readonly', 'readonly');
+                confirmBtn.hide();
+                cancelBtn.hide();
+                deleteBtn.fadeToggle(500);
+                targetModBtn.fadeToggle(500);
+                cancelBtn.off('click');
+            }
+
+            //커멘트 수정 취소버튼 이벤트 바인드
+            cancelBtn.on('click', e => {
+                targetTextarea.val(targetTextSave);
+                toggleBack();
+            });
+
+            //수정확인버튼 이벤트 바인드
+            confirmBtn.on('click', e => {
+
+                let flag = confirm('정말로 수정하시겠습니까?');
+                if(flag)
+                {
+                    $.ajax({
+                        url: '<%=request.getContextPath()%>/queryCommentModify',
+                        type: 'post',
+                        data: {'commentSeq': $(e.target).parent().data('commentSeq'), 'commentText': targetTextarea.val()},
+                        dataType: 'text',
+                        success: data => {
+                            alert('수정이 완료되었습니다.');
+                            toggleBack();
+                        }
+                    });
+                }
             });
         });
-        const queryModify = $('.query-modify');
-        const queryDelete = $('.query-delete');
-        const queryCmtMod = $('.query-comment-modify');
-        const queryCmtDel = $('.query-comment-delete');
-        const queryCmtWrite = $('.query-comment-write');
-        
-        //게시판 버튼 클릭 이벤트
-        $(() => {
-        	queryModify.on('click', (e) => {
-        		location.href = '<%=request.getContextPath()%>/queryModify?querySeq='+$(e.target).data('query-seq');
-        	});
-        	queryDelete.on('click', (e) => {
-        		location.href = '<%=request.getContextPath()%>/queryDelete?querySeq='+$(e.target).data('query-seq');
-        	});
+    });
+    
+    //커멘트 삭제버튼 이벤트 바인드
+    $(() => {
+        queryCmtDel.on('click', e =>{
+            let flag = confirm('정말로 삭제하시겠습니까?');
+            if(flag)
+            {
+                $.ajax({
+                    url: '<%=request.getContextPath()%>/queryCommentDelete?'+$(e.target).parent().data('commentSeq'),
+                    type: 'get',
+                    dataType: 'text',
+                    success: data => {
+                        $(e.target).parent().parent().remove();
+                    }
+                });
+            }
         });
+
+        //1:1문의 삭제버튼 이벤트 바인드
+        queryDelete.on('click', e => {
+            let flag = confirm('정말로 삭제하시겠습니까?');
+            if(flag)
+            {
+                location.href='<%=request.getContextPath()%>/deleteQuery'+$(e.target).parent().data('querySeq');
+            }
+        });
+    });
+
+    //커멘트 작성버튼 이벤트 바인드
+    $(() => {
+        queryCmtWrite.on('click', e => {
+            textToSend = $(e.target).prev().val();
+            $.ajax({
+                url: '<%=request.getContextPath()%>/queryCommentForm',
+                type: 'post',
+                data: {'commentText': textToSend},
+                dataType: 'text',
+                success: data => {
+                    $(e.target).parent().before(data);
+                }
+            });
+        });
+    });
+
+    //1:1 문의 삭제버튼 이벤트 바인드
+    $(() => {
+        queryModify.on('click', e => {
+            console.log($(e.target).parent().data('querySeq'))
+            location.href='<%=request.getContextPath()%>/queryModify?'+$(e.target).parent().data('querySeq');
+        });
+    });
     </script>
 <%@ include file="/views/common/footer.jsp" %>

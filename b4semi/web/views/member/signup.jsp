@@ -182,7 +182,7 @@
             <div>
                 <div>
                     <span>전화번호</span>
-                    <input type="text" name="memberPhone" id="member-phone">
+                    <input type="text" name="memberPhone" id="member-phone" placeholder="-없이 입력해주세요">
                     <span class="validation-msg"></span>
                 </div>
                 <div><span class="valid-mark"></span></div>
@@ -391,7 +391,11 @@ const idAvail = $('#idAvail');
         if(signupPhone.val().length == 0) return;
         
         const regex = /^01([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$/;
-        const result = regex.test(signupPhone.val());
+        let result = regex.test(signupPhone.val());
+        
+        if(signupPhone.val().search('-') != -1)
+        {result = false;}
+        
         if(!result) 
         {
         	$(e.target).next().css('color', 'crimson').text('전화번호가 올바른 형식이 아닙니다.');
