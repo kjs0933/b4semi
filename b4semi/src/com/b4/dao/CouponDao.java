@@ -229,5 +229,26 @@ private Properties prop = new Properties();
 		}
 		return result;
 	}
+	public int couponStatusChange(Connection conn, int couponSeq, String isUsed)
+	{
+		PreparedStatement pstmt = null;
+		int result = 0;
+		String sql = prop.getProperty("couponStatusChange");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, isUsed);
+			pstmt.setInt(2, couponSeq);
+			result = pstmt.executeUpdate();
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(pstmt);
+		}
+		return result;
+	}
 	
 }

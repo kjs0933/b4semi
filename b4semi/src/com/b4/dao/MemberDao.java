@@ -206,5 +206,27 @@ public class MemberDao {
 		
 	}
 
+	public int mileageUpdate(Connection conn, int memberSeq, int mileage)
+	{
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("mileageUpdate");
+		int result = 0;
+		try
+		{
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, mileage);
+			pstmt.setInt(2, memberSeq);
+			result = pstmt.executeUpdate();
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(pstmt);
+		}
+		return result;
+	}
 
 }

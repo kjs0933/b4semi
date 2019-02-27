@@ -243,4 +243,22 @@ public class CartDao {
 		
 		return result;
 	}
+	
+	public int deleteAll(Connection conn, int memberSeq) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		String sql = prop.getProperty("deleteAll");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, memberSeq);
+			result = pstmt.executeUpdate();	
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}return result;
+	}
+	
 }

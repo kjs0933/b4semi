@@ -710,7 +710,7 @@
     <form action="<%=request.getContextPath()%>/orderEnd" method="post" id="payment-frm" autocomplete="off">
         <div class="orderlist-pre-wrapper">
         	<div>
-        			<input type="hidden" id="initialPrice" value="<%=totalPrice-totalDiscount%>" >
+        			<input type="hidden" id="initialPrice" name="initialPrice" value="<%=totalPrice-totalDiscount%>" >
         			<input type="hidden" id="totalPrice" name="totalPrice" value="<%=totalPrice-totalDiscount%>" >
         			<input type="hidden" id="shipmentFee" name="shipmentFee" value="<%=ship%>" >
         			<input type="hidden" id="couponSeq" name="couponSeq" value="0" >
@@ -1047,9 +1047,10 @@
     		fn_order_calculate();
     	}
     	
-    	if($("#totalPrice").val()<0)
+    	if(parseInt($("#totalPrice").val())<parseInt($("#shipmentFee").val()))
     	{
-    		$(event.target).val(parseInt($(event.target).val())+parseInt($("#totalPrice").val()));
+    		alert("상품 금액보다 더 많은 적립금을 사용하실 수 없습니다.");
+    		$(event.target).val(parseInt($(event.target).val())-parseInt($("#shipmentFee").val())+parseInt($("#totalPrice").val()));
     		$("#result-mileage").html(parseInt($(event.target).val())*(-1)+" 원");
     		fn_order_calculate();
     	}

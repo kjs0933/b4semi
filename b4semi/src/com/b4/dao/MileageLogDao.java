@@ -124,6 +124,31 @@ public class MileageLogDao {
 		}
 		return result;
 	}
+	
+	public int createLog(Connection conn, MileageLog mlog)
+	{
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("createLog");
+		int result = 0;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, mlog.getMileageLogType());
+			pstmt.setInt(2, mlog.getMemberSeq());
+			pstmt.setTimestamp(3, mlog.getLogDate());
+			pstmt.setInt(4, mlog.getPreMileage());
+			pstmt.setInt(5, mlog.getNextMileage());
+			result = pstmt.executeUpdate();
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(pstmt);
+		}
+		return result;
+	}
 
 	
 /*import static common.JDBCTemplate.close;
