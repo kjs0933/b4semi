@@ -2,6 +2,8 @@ package com.b4.dao;
 
 import static common.JDBCTemplate.close;
 
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,12 +18,24 @@ public class NoticeDao {
 	
 	Properties prop = new Properties();
 	
-	public List<Notice> NoticeList(Connection conn, int cPage, int numPerPage)//시작페이지
+	public NoticeDao() {
+		try {
+			String fileName = NoticeDao.class.getResource("/sql/notice/notice-query.properties").getPath();
+			System.out.println(fileName);
+			prop.load(new FileReader(fileName));
+		}catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public List<Notice> selectList(Connection conn, int cPage, int numPerPage)//시작페이지
 	{
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
-		List<Notice> list = new ArrayList<>();
+		List<Notice> list = new ArrayList<Notice>();
 		String sql = prop.getProperty("selectList");
+		System.out.println(sql);
 		
 		try {
 			pstmt=conn.prepareStatement(sql);
@@ -34,11 +48,11 @@ public class NoticeDao {
 				n.setNoticeSeq(rs.getInt("noticeseq"));
 				n.setMemberSeq(rs.getInt("memberseq"));
 				n.setNoticeTitle(rs.getString("noticetitle"));
-				n.setNoticeContents(rs.getString("noticecontents"));
+				n.setNoticeContents(rs.getString("noticeContents"));
 				n.setNoticeDate(rs.getTimestamp("noticedate"));
-				n.setNoticeReadCount(rs.getInt("noticereadcount"));
-				n.setNoticeOriginalFilename(rs.getString("noticeoriginalfilename"));
-				n.setNoticeRenameFilename(rs.getString("noticerenamefilename"));
+				n.setNoticeReadCount(rs.getInt("noticeReadCount"));
+				list.add(n);
+				System.out.println("listDao"+list);
 			}
 		}
 		catch(SQLException e)
