@@ -32,10 +32,10 @@ public class CouponGen {
 		
 		code="FREE-5K";
 		ps.setString(1,code);
-		ps.setString(2,"배송비 무료 쿠폰");
-		ps.setDouble(3,0);
-		ps.setInt(4,5000);
-		ps.setInt(5,0);
+		ps.setString(2,"더 푸드 포럼 1주년 기념 쿠폰");
+		ps.setDouble(3,0.05);
+		ps.setInt(4,10000);
+		ps.setInt(5,10000);
 		ps.executeUpdate();
 		list.add(code);
 		

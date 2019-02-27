@@ -48,7 +48,23 @@
 	} catch (ClassCastException e) {
 		m=new Member();
 	}
-
+	int totalPrice=0;
+	int totalDiscount=0;
+	int ship;
+	for(int i=0; i< clist.size();i++)
+	{
+		Cart cart = clist.get(i);
+		totalPrice+=cart.getProductCount()*cart.getDisplayOptionPrice();
+		totalDiscount+=cart.getProductCount()*(cart.getDisplayOptionPrice()-cart.getDiscountOptionPrice());
+	}
+	if(totalPrice-totalDiscount < 30000)
+	{
+		ship = 2500;
+	}
+	else
+	{
+		ship = 0;
+	}
 %>
 <style>
     .orderlist-pre-wrapper input {
@@ -672,6 +688,12 @@
 <section>
     <form action="#" method="post" id="payment-frm" autocomplete="off">
         <div class="orderlist-pre-wrapper">
+        	<div>
+        			<input type="hidden" id="orderResult">
+        		<%for(int i=0;i<ilist.size();i++){ %>
+                    <input type="hidden" id="ilist<%=i+1%>" value="<%=i+1%>" data-cseq="<%=ilist.get(i).getCouponSeq()%>" data-ccode="<%=ilist.get(i).getCouponCode()%>" data-cmin"<%=ilist.get(i).getMinPrice()%>" data-cmax"<%=ilist.get(i).getMaxDisPrice()%>" data-crate="<%=ilist.get(i).getDiscountRate()%>">
+                <%}%>
+        	</div>
             <div class="orderlist-pre-header">
                 <h1>주문서</h1>
                 <span>주문하실 상품명 및 수량을 정확하게 확인해 주세요</span>
@@ -689,10 +711,14 @@
                 <div class="products-info-cols">
                     <div><img src="<%=request.getContextPath()%>/upload/product/<%=clist.get(i).getImg()%>"></div>
                     <div>
-                        <div><b><%=clist.get(i).getDisplayListTitle()%></b> (옵션 - <%=clist.get(i).getProductName()%>)</div>
+                        <div><b><%=clist.get(i).getDisplayListTitle()%></b> (옵션 - <%=clist.get(i).getProductName()%>)<%=clist.get(i).getDiscountName()==null?"":" : "+clist.get(i).getDiscountName()+" 적용"%></div>
                         <span><%=clist.get(i).getProductCount()%>개 / <%=clist.get(i).getProductUnit()%>당  <%=clist.get(i).getDiscountOptionPrice()%>원</span>
                     </div>
+                    <%if(clist.get(i).getDiscountRate()>0){%>
+                    <div><del><%=clist.get(i).getProductCount()*clist.get(i).getDisplayOptionPrice()%> 원</del> → <%=clist.get(i).getProductCount()*clist.get(i).getDiscountOptionPrice()%> 원</div>
+                    <% }else{%>
                     <div><%=clist.get(i).getProductCount()*clist.get(i).getDiscountOptionPrice()%> 원</div>
+                    <%} %>
                 </div>
                 <%}%>
             </div>
@@ -791,15 +817,15 @@
                     <div class="final-price-table">
                         <div class="final-price-cols">
                             <div>상품 금액</div>
-                            <div>14, 000원</div>
+                            <div><%=totalPrice%> 원</div>
                         </div>
                         <div class="final-price-cols">
                             <div>상품 할인 금액</div>
-                            <div>-1,1130 원</div>
+                            <div>-<%=totalDiscount%> 원</div>
                         </div>
                         <div class="final-price-cols">
                             <div>배송비</div>
-                            <div>+3,000 원</div>
+                            <div>+<%=ship%> 원</div>
                         </div>
                         <div class="final-price-cols">
                             <div>쿠폰 사용</div>
@@ -811,10 +837,10 @@
                         </div>
                         <div class="final-price-cols">
                             <div>최종결제금액</div>
-                            <div id="final-price">15, 870원</div>
+                            <div id="final-price"><%=totalPrice-totalDiscount+ship%> 원</div>
                         </div>
                         <div class="final-price-cols">
-                            구매 시 644 원(5%) 적립 예정
+                            구매 시 <%=(totalPrice-totalDiscount+ship)*0.05%> 원(0.5%) 적립 예정
                         </div>
                     </div>
                 </div>
@@ -869,46 +895,29 @@
                 <div>연락처</div>
                 <div>선택</div>
             </div>
+            <%for(int i=0; i<alist.size(); i++){%>
             <div class="address-cols">
                 <div class="address-tag">
-                    집
+             <%=alist.get(i).getAddressTag()%>
                 </div>
                 <div class="address">
-                    경기도 수원시 팔달구 경수대로 680번길 50 삼익세라믹아파트 2동 306호
+             <%=alist.get(i).getAddress()%>
                 </div>
                 <div class="receiver-name">
-                    정우진
+             <%=alist.get(i).getReceiverName()%>
                 </div>
                 <div class="address-phone">
-                    01050694404
+             <%=alist.get(i).getAddressPhone()%>
                 </div>
                 <div class="address-radio">
                     <input
-                        data-address='{"addressTag":"집", "address":"경기도 수원시 팔달구 경수대로 680번길 50 삼익세라믹 아파트 2동 306호", "receiver": "정우진", "addressPhone": "01050694404"}'
+                        data-address='{"addressTag":"<%=alist.get(i).getAddressTag()%>", "address":"<%=alist.get(i).getAddress()%>", "receiver": "<%=alist.get(i).getReceiverName()%>", "addressPhone": "<%=alist.get(i).getAddressPhone()%>"}'
                         type="radio" name="address" class="address-pick">
                 </div>
             </div>
-            <div class="address-cols">
-                <div class="address-tag">
-                    집
-                </div>
-                <div class="address">
-                    경기도 수원시 팔달구 경수대로 680번길 50 삼익세라믹아파트 2동 306호
-                </div>
-                <div class="receiver">
-                    정우진
-                </div>
-                <div class="address-phone">
-                    01050694404
-                </div>
-                <div class="address-radio">
-                    <input
-                        data-address='{"addressTag":"집", "address":"경기도 수원시 팔달구 경수대로 680번길 50 삼익세라믹 아파트 2동 306호", "receiver": "정우진", "addressPhone": "01050694404"}'
-                        type="radio" name="address" class="address-pick">
-                </div>
-            </div>
+            <%} %>
 
-            <div class="pagebar">
+ <!--            <div class="pagebar">
                 <div><a href="#"><img src="images/board-arrow-left.png"></a></div>
                 <div><a href="#">1</a></div>
                 <div><a href="#">2</a></div>
@@ -916,7 +925,7 @@
                 <div><a href="#">4</a></div>
                 <div><a href="#">5</a></div>
                 <div><a href="#"><img src="images/board-arrow-right.png"></a></div>
-            </div>
+            </div> -->
         </div>
         <div>
         </div>

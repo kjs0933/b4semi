@@ -137,6 +137,43 @@ private Properties prop = new Properties();
 		return list;
 	}
 
+	public List<IssuedCoupon> selectCouponUseAble(Connection conn, int memberSeq) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<IssuedCoupon> list = new ArrayList<>();
+		String sql = prop.getProperty("selectCouponUseAble");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, memberSeq);
+			rs = pstmt.executeQuery();
+			while(rs.next())
+			{
+				IssuedCoupon ic = new IssuedCoupon();
+				ic.setCouponCode(rs.getString("couponCode"));
+				ic.setCouponSeq(rs.getInt("couponSeq"));
+				ic.setMemberSeq(rs.getInt("memberSeq"));
+				ic.setIsUsed(rs.getString("isUsed"));
+				ic.setIssueDate(rs.getTimestamp("issueDate"));
+				ic.setExpiryDate(rs.getTimestamp("expiryDate"));
+				ic.setCouponName(rs.getString("couponName"));
+				ic.setDiscountRate(rs.getDouble("discountRate"));
+				ic.setMinPrice(rs.getInt("minPrice"));
+				ic.setMaxDisPrice(rs.getInt("maxDisPrice"));
+				list.add(ic);
+			}
+		}		
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(rs);
+			close(pstmt);
+		}
+		return list;
+	}
+	
 	public int couponCountByMember(Connection conn, String id) {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;

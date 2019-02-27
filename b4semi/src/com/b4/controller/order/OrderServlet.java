@@ -41,10 +41,11 @@ public class OrderServlet extends HttpServlet {
 			request.setAttribute("msg", "세션이 만료되었습니다.");
 			request.setAttribute("loc", "/cart");
 			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
+			return;
 		}
 		List<Cart> clist = new CartService().selectByMember(m.getMemberSeq());
 		List<AddressList> alist = new AddressListService().selectByMember(m);
-		List<IssuedCoupon> ilist = new CouponService().selectCouponListByMember(1, 999, m.getMemberSeq());
+		List<IssuedCoupon> ilist = new CouponService().selectCouponUseAble(m.getMemberSeq());
 		
 		request.setAttribute("clist", clist);
 		request.setAttribute("alist", alist);

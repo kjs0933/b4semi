@@ -63,6 +63,14 @@ public class CouponService {
 		return list;
 	}
 	
+	public List<IssuedCoupon> selectCouponUseAble(int memberSeq)
+	{
+		Connection conn = getConnection();
+		List<IssuedCoupon> list = dao.selectCouponUseAble(conn, memberSeq);
+		close(conn);
+		return list;
+	}
+	
 	public int selectCouponCountByMember(int memberSeq)
 	{
 		Connection conn = getConnection();

@@ -1150,13 +1150,14 @@ public class DataGen {
 		}
 	}
 	
-	public void setMemberMileage(Connection cn, int memberSeq, int mileage)
+	public void setMemberMileage(Connection cn, int memberSeq, int mileage, String grade)
 	{
 		PreparedStatement ps =null;
 		try {
-			ps = cn.prepareStatement("UPDATE MEMBER SET MEMBERMILEAGE = ? WHERE MEMBERSEQ = ?");
+			ps = cn.prepareStatement("UPDATE MEMBER SET MEMBERMILEAGE = ?, MEMBERGRADECODE = ? WHERE MEMBERSEQ = ?");
 			ps.setInt(1, mileage);
-			ps.setInt(2, memberSeq);
+			ps.setString(2, grade);
+			ps.setInt(3, memberSeq);
 			ps.executeUpdate();
 		}
 		catch(SQLException e)
@@ -1753,7 +1754,30 @@ public class DataGen {
 			}
 			
 			//DB에 회원정보 마일리지값 설정
-			setMemberMileage(cn, member.getMemberSeq(), member.getMemberMileage());
+			if(member.getMemberMileage()<750)
+			{
+				setMemberMileage(cn, member.getMemberSeq(), member.getMemberMileage(),"NEW");
+			}
+			else if(member.getMemberMileage()<1500)
+			{
+				setMemberMileage(cn, member.getMemberSeq(), member.getMemberMileage(),"BRZ");
+			}
+			else if(member.getMemberMileage()<2500)
+			{
+				setMemberMileage(cn, member.getMemberSeq(), member.getMemberMileage(),"SLV");
+			}
+			else if(member.getMemberMileage()<5000)
+			{
+				setMemberMileage(cn, member.getMemberSeq(), member.getMemberMileage(),"GLD");
+			}
+			else if(member.getMemberMileage()<7500)
+			{
+				setMemberMileage(cn, member.getMemberSeq(), member.getMemberMileage(),"PLT");
+			}
+			else
+			{
+				setMemberMileage(cn, member.getMemberSeq(), member.getMemberMileage(),"DIA");
+			}
 		}
 	}
 	
