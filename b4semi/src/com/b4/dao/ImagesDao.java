@@ -114,4 +114,47 @@ public class ImagesDao {
 		finally {close(pstmt);}
 		return result;
 	}
+
+	public List<Images> selectListByBoard(Connection conn, String boardCode, int querySeq) {
+		PreparedStatement pstmt = null;
+		ResultSet rs=null;
+		List<Images> list = new ArrayList<>();
+		String sql=prop.getProperty("selectListByBoard");
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, "BQ");
+			pstmt.setInt(2, querySeq);
+			rs=pstmt.executeQuery();
+			while(rs.next())
+			{
+				Images d = new Images();
+				d.setRenameFile(rs.getString("renameFile"));
+				d.setOriginalFile(rs.getString("originalFile"));
+				d.setBoardCode(rs.getString("boardCode"));
+				d.setBoardNo(rs.getInt("boardNo"));
+				list.add(d);
+			}
+		}
+		catch(SQLException e)
+		{e.printStackTrace();}
+		finally {close(rs);close(pstmt);}
+		return list;
+	}
+
+	public int updateImages(Connection conn, String oldFile, Images img) {
+		PreparedStatement pstmt=null;
+		int result=0;
+		String sql=prop.getProperty("updateImages");
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, img.getRenameFile());
+			pstmt.setString(2, img.getOriginalFile());
+			pstmt.setString(3, oldFile);
+			result=pstmt.executeUpdate();
+		}
+		catch(SQLException e)
+		{e.printStackTrace();}
+		finally {close(pstmt);}
+		return result;
+	}
 }

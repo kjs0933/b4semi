@@ -54,4 +54,27 @@ public class ImagesService {
 		close(conn);
 		return result;
 	}
+
+	public List<Images> selectListByBoard(String boardCode, int querySeq) {
+		Connection conn=getConnection();
+		List<Images> list = dao.selectListByBoard(conn, boardCode, querySeq);
+		close(conn);
+		return list;
+	}
+
+	public int updateImages(String oldFile, Images img) {
+		Connection conn=getConnection();
+		int result=dao.updateImages(conn, oldFile, img);
+		
+		if(result>0)
+		{
+			commit(conn);
+		}
+		else
+		{
+			rollback(conn);
+		}
+		close(conn);
+		return result;
+	}
 }

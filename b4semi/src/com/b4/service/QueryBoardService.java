@@ -148,4 +148,20 @@ public class QueryBoardService {
 		return qb;
 	}
 
+	public QueryBoard selectByQuerySeq(int querySeq) {
+		Connection conn = getConnection();
+		QueryBoard qb = dao.selectByQuerySeq(conn, querySeq);
+		close(conn);
+		return qb;
+	}
+
+	public int selectNextVal() {
+		Connection conn = getConnection();
+		int querySeq = dao.selectNextVal(conn);
+		close(conn);
+		return querySeq;
+	}
+
+
+
 }
