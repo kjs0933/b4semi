@@ -803,7 +803,7 @@
                 <div class="shipment-info-cols">
                     <div>배송 요청사항</div>
                     <div>
-                        <textarea name="receiverComment" rows="4"></textarea>
+                        <textarea name="receiverComment" id="receiverComment" rows="4"></textarea>
                     </div>
                 </div>
             </div>
@@ -880,7 +880,7 @@
                     </div>
                     <div>
                         <label><input type="radio" name="paymentMethod" id="payment-method-credit"
-                                value="creidt">신용카드</label>
+                                value="creidt" checked>신용카드</label>
                         <label><input type="radio" name="paymentMethod" id="payment-method-phone"
                                 value="phone">휴대전화</label>
                     </div>
@@ -890,7 +890,7 @@
                         미출고 시 조치 방법
                     </div>
                     <div>
-                        <label><input type="radio" name="refundMethod" id="refund-method-same" value="same">결제수단으로
+                        <label><input type="radio" name="refundMethod" id="refund-method-same" value="same" checked>결제수단으로
                             환불</label>
                         <label><input type="radio" name="refundMethod" id="refund-method-wait-instock"
                                 value="waitInstock">상품 입고시 배송</label>
@@ -1010,8 +1010,15 @@
     		fn_order_calculate();
     		return;
     	}
+    	if(coup.data("crate")>0.9999)
+    	{
+    		$("#coupon-rate").html("");
+    	}
+    	else
+    	{
+    		$("#coupon-rate").html("최대 "+Math.floor(coup.data("crate")*1000)/10+"% 할인가능");
+    	}
     	
-    	$("#coupon-rate").html("최대 "+Math.floor(coup.data("crate")*1000)/10+"% 할인가능");
     	$("#coupon-max").html("할인 적용 상한 : "+coup.data("cmax")+"원");
     	$("#result-coupon").html(coup.data("discount")*(-1)+" 원");
     	$("#couponSeq").val(coup.data("cseq"));
@@ -1062,9 +1069,28 @@
     }
     
     function fn_order_end(){
-    	if($("#address-tag").val().length<1)
+    	if($("#address").val().length<1)
     	{
-    		alert("배송 정보를 입력해주세요");
+    		alert("주소를 입력해주세요");
+    		$("#address").focus();
+    		return;
+    	}
+       	if($("#receiver-name").val().length<1)
+    	{
+    		alert("수령인을 입력해주세요");
+    		$("#receiver-name").focus();
+    		return;
+    	}
+       	if($("#address-phone").val().length<11 && $("#address-phone").val().length>14)
+    	{
+    		alert("휴대전화를 입력해주세요");
+    		$("#address-phone").focus();
+    		return;
+    	}
+       	if($("#receiverComment").val().length<1)
+    	{
+    		alert("배송 요청사항을 입력해주세요");
+    		$("#receiverComment").focus();
     		return;
     	}
     		
