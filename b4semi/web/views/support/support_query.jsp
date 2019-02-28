@@ -311,15 +311,8 @@
             padding: 10px 0 0 20px;
             background-color: rgb(247, 247, 247);
             border-radius: 5px;
-            height: 30px;
+            height: 60px;
             transition: 200ms ease-in;
-        }
-
-        #comment-form-area:focus
-        {
-            background-color: rgb(221, 221, 221);
-            box-shadow: 0 1px 10px 1px rgba(0, 0, 0, 0.3);
-            height: 100px;
         }
 
         .query-comment-confirm{display: none;}
@@ -448,7 +441,7 @@
                             {
                             	for(QueryComment qc : qb.getList())
                             	{%>
-                            <div comment-writer="<%="admin".equals(lm.getMemberId())?"admin":"customer" %>" class="query-comment-unit">
+                            <div comment-writer="<%="admin".equals(qc.getMemberId())?"admin":"customer" %>" class="query-comment-unit">
                                 <div class="query-comment-header">
                                     <div class="query-comment-id"><b><%=qc.getMemberId() %></b></div>
                                     <div class="query-comment-date"><%=getTillMin(qc.getCommentDate()) %></div>
@@ -456,18 +449,21 @@
                                 <div class="query-comment-content">
                                     <textarea name="commentText" class="written-comment-textarea" readonly="readonly"><%=qc.getCommentText() %></textarea>
                                 </div>
+                                
+                                <%if(qc.getMemberId().equals(lm.getMemberId())) { %>
                                 <div data-comment-seq="<%=qc.getCommentSeq() %>" class="query-comment-btn-set">
                                     <button class="query-comment-cancel">취소</button>
                                     <button class="query-comment-confirm">수정완료</button>
                                     <button class="query-comment-modify">수정</button>
                                     <button class="query-comment-delete">삭제</button>
                                 </div>
+                                <%} %>
                             </div>
                             <% }
                             }%>
                             <div class="query-comment-form">
                                 <textarea name="commentText" id="comment-form-area" placeholder="댓글을 입력하세요."></textarea>
-                                <button class="query-comment-write">전송</button>
+                                <button data-query-seq="<%=qb.getQuerySeq() %>" class="query-comment-write">전송</button>
                             </div>
                         </div>
                     <%	}
@@ -500,92 +496,75 @@
     const queryCmtWrite = $('.query-comment-write');
     const queryConfirm = $('.query-confirm');
     const queryCmtCancel = $('.query-comment-cancel');
+    const commentFormArea = $('#comment-form-area');
 
-    //커멘트 수정버튼 이벤트 바인드
-    $(() => {
-        queryCmtMod.on('click', e => {
-
-            const targetTextarea = $(e.target).parent().prev().children();
-            const targetModBtn = $(e.target);
-            const confirmBtn = $(e.target).prev();
-            const cancelBtn = $(e.target).prev().prev();
-            const deleteBtn = $(e.target).next();
-        
-            const targetCommentUnit = $(e.target).parent().parent();
-            targetCommentUnit.addClass('.cmt-mod-anim');
-            setTimeout(() => {targetCommentUnit.removeClass('.cmt-mod-anim')}, 1000);
-
-            targetModBtn.hide();
-            deleteBtn.hide();
-            confirmBtn.fadeToggle(500);
-            cancelBtn.fadeToggle(500);
-            targetTextarea.removeAttr('readonly');
-            targetTextarea.focus();
-            
-            let targetTextSave = targetTextarea.text();
-
-            //커멘트 텍스트창 토글 백 함수 정의
-            const toggleBack = () => {
-                targetTextarea.attr('readonly', 'readonly');
-                confirmBtn.hide();
-                cancelBtn.hide();
-                deleteBtn.fadeToggle(500);
-                targetModBtn.fadeToggle(500);
-                cancelBtn.off('click');
-            }
-
-            //커멘트 수정 취소버튼 이벤트 바인드
-            cancelBtn.on('click', e => {
-                targetTextarea.val(targetTextSave);
-                toggleBack();
-            });
-
-            //수정확인버튼 이벤트 바인드
-            confirmBtn.on('click', e => {
-
-                let flag = confirm('정말로 수정하시겠습니까?');
-                if(flag)
-                {
-                    $.ajax({
-                        url: '<%=request.getContextPath()%>/queryCommentModify',
-                        type: 'post',
-                        data: {'commentSeq': $(e.target).parent().data('commentSeq'), 'commentText': targetTextarea.val()},
-                        dataType: 'text',
-                        success: data => {
-                            alert('수정이 완료되었습니다.');
-                            toggleBack();
-                        }
-                    });
-                }
-            });
-        });
-    });
     
-    //커멘트 삭제버튼 이벤트 바인드
-    $(() => {
-        queryCmtDel.on('click', e =>{
-            let flag = confirm('정말로 삭제하시겠습니까?');
+    //커멘트 수정버튼 콜백 함수
+    const commentModFunc = (e) => {
+
+        const targetTextarea = $(e.target).parent().prev().children();
+        const targetModBtn = $(e.target);
+        const confirmBtn = $(e.target).prev();
+        const cancelBtn = $(e.target).prev().prev();
+        const deleteBtn = $(e.target).next();
+    
+        const targetCommentUnit = $(e.target).parent().parent();
+        targetCommentUnit.addClass('.cmt-mod-anim');
+        setTimeout(() => {targetCommentUnit.removeClass('.cmt-mod-anim')}, 1000);
+
+        targetModBtn.hide();
+        deleteBtn.hide();
+        confirmBtn.fadeToggle(500);
+        cancelBtn.fadeToggle(500);
+        targetTextarea.removeAttr('readonly');
+        targetTextarea.focus();
+        
+        let targetTextSave = targetTextarea.text();
+
+        //커멘트 텍스트창 토글 백 함수 정의
+        const toggleBack = () => {
+            targetTextarea.attr('readonly', 'readonly');
+            confirmBtn.hide();
+            cancelBtn.hide();
+            deleteBtn.fadeToggle(500);
+            targetModBtn.fadeToggle(500);
+            cancelBtn.off('click');
+        }
+
+        //커멘트 수정 취소버튼 이벤트 바인드
+        cancelBtn.on('click', e => {
+            targetTextarea.val(targetTextSave);
+            toggleBack();
+        });
+
+        //수정확인버튼 이벤트 바인드
+        confirmBtn.on('click', e => {
+
+            let flag = confirm('정말로 수정하시겠습니까?');
             if(flag)
             {
                 $.ajax({
-                    url: '<%=request.getContextPath()%>/queryCommentDelete?commentSeq='+$(e.target).parent().data('commentSeq'),
-                    type: 'get',
+                    url: '<%=request.getContextPath()%>/queryCommentModify',
+                    type: 'post',
+                    data: {'commentSeq': $(e.target).parent().data('commentSeq'), 'commentText': targetTextarea.val()},
                     dataType: 'text',
                     success: data => {
-                    	if(data = 1)
-                        {
-                    		$(e.target).parent().parent().fadeOut(500);
-                    		setTimeout(() => {$(e.target).parent().parent().remove();}, 2000);
-                    		
-                        }
-                    	else
-                    	{
-                    		alert('커멘트 삭제에 실패하였습니다.');
-                    	}
+                        alert('수정이 완료되었습니다.');
+                        toggleBack();
                     }
                 });
             }
         });
+    }
+    
+    //커멘트 수정버튼 이벤트 바인드
+    $(() => {
+        queryCmtMod.on('click', commentModFunc);
+    });
+    
+    //커멘트 삭제버튼 이벤트 바인드
+    $(() => {
+        queryCmtDel.on('click', queryCmtDelFunc);
 
         //1:1문의 삭제버튼 이벤트 바인드
         queryDelete.on('click', e => {
@@ -596,18 +575,72 @@
             }
         });
     });
+    
+    //커멘트 삭제버튼 이벤트 함수
+    const queryCmtDelFunc = (e) => {
+        let flag = confirm('정말로 삭제하시겠습니까?');
+        if(flag)
+        {
+            $.ajax({
+                url: '<%=request.getContextPath()%>/queryCommentDelete?commentSeq='+$(e.target).parent().data('commentSeq'),
+                type: 'get',
+                dataType: 'text',
+                success: data => {
+                	if(data = 1)
+                    {
+                		$(e.target).parent().parent().fadeOut(400);
+                		setTimeout(() => {$(e.target).parent().parent().remove();}, 400);
+                		
+                    }
+                	else
+                	{
+                		alert('커멘트 삭제에 실패하였습니다.');
+                	}
+                }
+            });
+        }
+    }
 
     //커멘트 작성버튼 이벤트 바인드
     $(() => {
         queryCmtWrite.on('click', e => {
             textToSend = $(e.target).prev().val();
-            $.ajax({
+            if(textToSend.trim().length == 0)
+           	{alert('댓글은 1자 이상 입력 가능합니다.'); return;}
+            
+           	$.ajax({
                 url: '<%=request.getContextPath()%>/queryCommentForm',
                 type: 'post',
-                data: {'commentText': textToSend, 'memberSeq': <%=lm.getMemberSeq()%>},
-                dataType: 'text',
+                data: {'commentText': textToSend, 'memberSeq': <%=lm.getMemberSeq()%>, 'boardSeq': $(e.target).data('querySeq')},
+                dataType: 'json',
                 success: data => {
-                    $(e.target).parent().before(data);
+                	if(data.result == 1)
+                	{
+                		const commentToAdd =
+                			'<div comment-writer="<%="admin".equals(lm.getMemberId())?"admin":"customer" %>" class="query-comment-unit" style="display:none">'
+                			+'<div class="query-comment-header">'
+                				+'<div class="query-comment-id"><b><%=lm.getMemberId() %></b></div>'
+                				+'<div class="query-comment-date">'+data.commentDate+'</div>'
+                			+'</div>'
+                			+'<div class="query-comment-content">'
+	                			+'<textarea name="commentText" class="written-comment-textarea" readonly="readonly">'+data.commentText+'</textarea>'
+                			+'</div>'
+                			+'<div data-comment-seq="'+data.currval+'" class="query-comment-btn-set">'
+	                			+'<button class="query-comment-cancel">취소</button>'
+	                			+'<button class="query-comment-confirm">수정완료</button>'
+	                			+'<button class="query-comment-modify">수정</button>'
+	                			+'<button class="query-comment-delete">삭제</button>'
+                			+'</div>'
+                			+'</div>';
+                			commentFormArea.parent().before(commentToAdd);
+                			commentFormArea.parent().prev().fadeIn(400);
+                			queryCmtMod.off('click');
+                			$('.query-comment-modify').on('click', commentModFunc);
+                			
+                	}
+                	else{
+                		alert('댓글 등록에 실패하였습니다.');
+                	}
                 }
             });
         });

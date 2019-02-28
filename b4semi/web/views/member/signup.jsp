@@ -52,8 +52,9 @@
             border: none;
             background-color: rgb(38, 85, 139);
             color: white;
-            
+            cursor: pointer;
             box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.3);
+            border-radius: 3px;
         }
 
         .signup-frm-header
@@ -127,7 +128,7 @@
     <div class="signup-frm-header">
        <span>회원가입</span>
     </div>
-        <form action="memberEndroll" method="post" class="signup-frm" autocomplete="off">
+        <form action="<%=request.getContextPath() %>/memberEnroll" method="post" class="signup-frm" autocomplete="off">
             <div>
                 <div>
                     <span>아이디</span>
@@ -217,8 +218,6 @@ const idAvail = $('#idAvail');
 	//회원가입 submit시 체크
 	$(() => {
 		signupFrm.on('submit', e => {
-			e.preventDefault();
-			
 			let invalidCount = 0;
        
             checkBlank();
@@ -229,32 +228,15 @@ const idAvail = $('#idAvail');
             if(!pwCkValid(e)) invalidCount++;
             if(!phoneRegExpValid(e)) invalidCount++;
             
-            
-            
             if(invalidCount == 0)
             {
-                $.ajax({
-                    url: '<%=request.getContextPath()%>/memberEnroll',
-                    type: 'post',
-                    data: signupFrm.serialize(),
-                    dataType: 'text',
-                    success: data => {
-                        if(data > 0)
-                        {
-                            alert('회원가입이 완료되었습니다.');
-                            location.assign('<%=request.getContextPath()%>');
-                        }
-                        else
-                        {
-                            alert('회원가입에 실패하였습니다.')
-                        }
-                    }
-                });
-                return true;
+            	console.log('됩니까?');
+				return true;
             }
             else
             {
 				alert('회원가입 양식에 수정이 필요합니다.');
+            	return false;
             }
 		});
 	});

@@ -1,6 +1,7 @@
 package com.b4.controller.queryBoard;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.b4.service.QueryBoardService;
+import com.google.gson.JsonObject;
+
+import static common.DateFormatTemplate.getTillMin;
 
 /**
  * Servlet implementation class QueryCommentFormServlet
@@ -33,19 +37,24 @@ public class QueryCommentFormServlet extends HttpServlet {
 		int boardSeq = Integer.parseInt(request.getParameter("boardSeq"));
 		String commentText = request.getParameter("commentText");
 		
-		System.out.println(memberSeq);
-		System.out.println(boardSeq);
-		System.out.println(commentText);
+		Timestamp commentDate = new Timestamp(System.currentTimeMillis());
 		
+		int result[] = new QueryBoardService().insertReply(boardSeq, memberSeq, commentText, commentDate);
 		
-		int result = new QueryBoardService().insertReply(boardSeq, memberSeq, commentText);
-		if(result > 0)
+		JsonObject json = new JsonObject();
+		
+		if(result[0] > 0)
 		{
-			response.getWriter().println("1");
+			json.addProperty("result", 1);
+			json.addProperty("commentDate", getTillMin(commentDate));
+			json.addProperty("currval", result[1]);
+			json.addProperty("commentText", commentText);
+			response.getWriter().println(json);
 		}
 		else
 		{
-			response.getWriter().println("0");
+			json.addProperty("result", 0);
+			response.getWriter().println(json);
 		}
 	}
 
