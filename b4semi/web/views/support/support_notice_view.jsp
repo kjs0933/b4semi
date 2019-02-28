@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
  <%@ page import="java.util.*,com.b4.model.vo.*,java.sql.*" %>
  <%@ page import ="static common.DateFormatTemplate.*"%>   
+ <%@ page import = "com.b4.controller.notice.*" %>
  <%
 	Notice n=(Notice)request.getAttribute("notice");
 %>
@@ -119,7 +120,7 @@
             </div>
             <div class="support-notice-view-date-hit">
                 <div>작성일</div>
-               <%--  <div><a herf="<%=DateFormatTemplate.getGetTillDate(timestamp)%>/common/DateFormatTemplate"></a></div> --%>
+                <div><%=n.getNoticeDate()%></div>
                 <div>조회수</div>
                 <div><%=n.getNoticeReadCount()%></div>
             </div>
@@ -147,7 +148,7 @@
 		<script>
 			function fn_updateNotice()
 			{
-				location.href="<%=request.getContextPath()%>/support/support_notice_view?noticeseq=<%=n.getNoticeSeq()%>";
+				location.href="<%=request.getContextPath()%>/support/support_notice_form?noticeseq=<%=n.getNoticeSeq()%>";
 			}
 			function fn_listView()
 			{

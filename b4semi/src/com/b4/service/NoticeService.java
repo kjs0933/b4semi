@@ -31,10 +31,10 @@ public class NoticeService {
 		return result;
 	}
 	
-	public Notice NoticeOne(int no)
+	public Notice selectOne(int no)
 	{
 		Connection conn=getConnection();
-		Notice n=dao.NoticeOne(conn,no);
+		Notice n=dao.noticeOne(conn,no);
 		close(conn);
 		return n;
 	}

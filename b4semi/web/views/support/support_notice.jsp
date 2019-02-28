@@ -9,7 +9,7 @@
 <%@ page import ="static common.PagingTemplate.pageBar2"%>
 <%
 	List<Notice> list=(List)request.getAttribute("list");
-	String cPage = (String)request.getAttribute("cPage");
+	int cPage = (int)request.getAttribute("cPage");
 	String pageBar = (String)request.getAttribute("pageBar");
 %>    
 

@@ -21,7 +21,6 @@ public class NoticeDao {
 	public NoticeDao() {
 		try {
 			String fileName = NoticeDao.class.getResource("/sql/notice/notice-query.properties").getPath();
-			System.out.println(fileName);
 			prop.load(new FileReader(fileName));
 		}catch(IOException e)
 		{
@@ -35,7 +34,6 @@ public class NoticeDao {
 		ResultSet rs=null;
 		List<Notice> list = new ArrayList<Notice>();
 		String sql = prop.getProperty("selectList");
-		System.out.println(sql);
 		
 		try {
 			pstmt=conn.prepareStatement(sql);
@@ -52,7 +50,7 @@ public class NoticeDao {
 				n.setNoticeDate(rs.getTimestamp("noticedate"));
 				n.setNoticeReadCount(rs.getInt("noticeReadCount"));
 				list.add(n);
-				System.out.println("listDao"+list);
+				
 			}
 		}
 		catch(SQLException e)
@@ -71,7 +69,7 @@ public class NoticeDao {
 		PreparedStatement pstmt=null;
 		int result=0;
 		ResultSet rs=null;
-		String sql=prop.getProperty("selectCount");
+		String sql=prop.getProperty("noticeCount");
 		try {
 			pstmt=conn.prepareStatement(sql);
 			rs=pstmt.executeQuery();
@@ -86,12 +84,12 @@ public class NoticeDao {
 		return result;
 	}
 	
-	public Notice NoticeOne(Connection conn, int no)
+	public Notice noticeOne(Connection conn, int no)
 	{
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
 		Notice n=null;
-		String sql=prop.getProperty("NoticeOne");
+		String sql=prop.getProperty("noticeOne");
 		try
 		{
 			pstmt=conn.prepareStatement(sql);
@@ -105,7 +103,8 @@ public class NoticeDao {
 				n.setNoticeTitle(rs.getString("noticetitle"));
 				n.setNoticeContents(rs.getString("noticeContents"));
 				n.setNoticeDate(rs.getTimestamp("noticeDate"));
-				n.setNoticeReadCount(rs.getInt("noticereadcount"));
+				n.setNoticeReadCount(rs.getInt("noticeReadCount"));
+				
 			}
 		}
 		catch(SQLException e)

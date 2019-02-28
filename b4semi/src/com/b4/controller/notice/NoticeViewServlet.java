@@ -1,6 +1,7 @@
 package com.b4.controller.notice;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,7 +15,7 @@ import com.b4.service.NoticeService;
 /**
  * Servlet implementation class NoticeViewServlet
  */
-@WebServlet("/support/support_notice_View")
+@WebServlet("/notice/noticeview")
 public class NoticeViewServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -30,12 +31,10 @@ public class NoticeViewServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		request.setCharacterEncoding("UTF-8");
 		
-		int no=Integer.parseInt(request.getParameter("noticeone"));
+		int no=Integer.parseInt(request.getParameter("noticeseq"));
 		
-		Notice n=new NoticeService().NoticeOne(no);
+		Notice n=new NoticeService().selectOne(no);
 		
 		request.setAttribute("notice", n);
 		request.getRequestDispatcher("/views/support/support_notice_view.jsp").forward(request, response);
