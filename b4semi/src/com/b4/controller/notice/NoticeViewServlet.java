@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.b4.model.vo.Images;
 import com.b4.model.vo.Notice;
+import com.b4.service.ImagesService;
 import com.b4.service.NoticeService;
 
 /**
@@ -31,7 +33,7 @@ public class NoticeViewServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		int no=Integer.parseInt(request.getParameter("noticeseq"));
 		
 		Notice n=new NoticeService().selectOne(no);

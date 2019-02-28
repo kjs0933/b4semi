@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Properties;
 
 import com.b4.model.vo.Images;
+import com.b4.model.vo.Notice;
 
 
 public class ImagesDao {
@@ -55,6 +56,37 @@ public class ImagesDao {
 		{e.printStackTrace();}
 		finally {close(rs);close(pstmt);}
 		return list;	
+	}
+	
+	public Images selectOne(Connection conn, int no)
+	{
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		Images i=null;
+		String sql=prop.getProperty("selectOne");
+		try
+		{
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			rs=pstmt.executeQuery();
+			if(rs.next())
+			{
+				i=new Images();
+				i.setRenameFile(rs.getString("renameFile"));
+				i.setOriginalFile(rs.getString("originalFile"));
+				i.setBoardCode(rs.getString("boardCode"));
+				i.setBoardNo(rs.getInt("boardNo"));
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally {
+			close(rs);
+			close(pstmt);
+		}
+		return i;
 	}
 	
 	public int ImagesSeq(Connection conn)
