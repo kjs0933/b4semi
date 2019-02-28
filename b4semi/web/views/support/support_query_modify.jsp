@@ -295,7 +295,7 @@
                     <div class="image-upload-container">
                         <span>+</span><input type="file" name="upFile" id="originalFile" multiple>
                     </div>
-                    <p>이미지는 한 장만 등록할 수 있습니다.</p>
+                    
                 </div>
             </div>
             <div class="query-button-set">

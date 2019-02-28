@@ -399,8 +399,6 @@
                     </div>
                     <div class="current-tab"><a href="#">1:1문의<img src="<%=request.getContextPath() %>/images/arrow_right_black.png"></a>
                     </div>
-                    <div><a href="">상품제안<img src="<%=request.getContextPath() %>/images/arrow_right_black.png"></a>
-                    </div>
                 </div>
             </div>
             <div class="support-content">
@@ -500,7 +498,7 @@
 
     
     //커멘트 수정버튼 콜백 함수
-    const commentModFunc = (e) => {
+    const queryCmtModFunc = (e) => {
 
         const targetTextarea = $(e.target).parent().prev().children();
         const targetModBtn = $(e.target);
@@ -559,14 +557,16 @@
     
     //커멘트 수정버튼 이벤트 바인드
     $(() => {
-        queryCmtMod.on('click', commentModFunc);
+        queryCmtMod.on('click', queryCmtModFunc);
     });
     
     //커멘트 삭제버튼 이벤트 바인드
     $(() => {
         queryCmtDel.on('click', queryCmtDelFunc);
-
-        //1:1문의 삭제버튼 이벤트 바인드
+    });
+    
+ 	//1:1문의 삭제버튼 이벤트 바인드
+    $(() => {
         queryDelete.on('click', e => {
             let flag = confirm('정말로 삭제하시겠습니까?');
             if(flag)
@@ -590,7 +590,6 @@
                     {
                 		$(e.target).parent().parent().fadeOut(400);
                 		setTimeout(() => {$(e.target).parent().parent().remove();}, 400);
-                		
                     }
                 	else
                 	{
@@ -632,11 +631,13 @@
 	                			+'<button class="query-comment-delete">삭제</button>'
                 			+'</div>'
                 			+'</div>';
-                			commentFormArea.parent().before(commentToAdd);
-                			commentFormArea.parent().prev().fadeIn(400);
-                			queryCmtMod.off('click');
-                			$('.query-comment-modify').on('click', commentModFunc);
+                			$(e.target).parent().before(commentToAdd);
+                			$(e.target).parent().prev().fadeIn(400);
                 			
+                			queryCmtMod.off('click');
+                			queryCmtDel.off('click');
+                			$('.query-comment-modify').on('click', queryCmtModFunc);
+                			$('.query-comment-delete').on('click', queryCmtDelFunc);
                 	}
                 	else{
                 		alert('댓글 등록에 실패하였습니다.');
@@ -653,5 +654,6 @@
             location.href='<%=request.getContextPath()%>/queryModify?querySeq='+$(e.target).parent().data('querySeq');
         });
     });
+    
     </script>
 <%@ include file="/views/common/footer.jsp" %>

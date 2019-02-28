@@ -752,7 +752,6 @@
             <div class="select-ship-destination">
                 <div>배송지 선택</div>
                 <div>
-                    <input id="address-api-open-btn" type="button" value="주소 검색">
                     <input id="search-address-open-btn" type="button" value="배송지 목록">
                 </div>
             </div>
@@ -1087,24 +1086,5 @@
     		alert("결제가 취소되었습니다.")	
     	}
     }
-    
-    //주소검색 API
-    const addressAPI = $('#address-api-open-btn');
-    $(() => {
-        addressAPI.on('click', () => {
-            new daum.Postcode({
-                oncomplete: function(data) {
-                    const jibun = data.jibunAddress;
-                    const road = data.roadAddress;
-                    if(data.userSelectedType === 'R')
-                    {$('#address').val(road);}
-                    else
-                    {$('#address').val(jibun);}
-            }
-            }).open({
-                autoClose: true
-            });
-        });
-    });
 </script>
 <%@ include file="/views/common/footer.jsp" %>
