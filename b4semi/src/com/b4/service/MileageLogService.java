@@ -9,6 +9,8 @@ import java.util.List;
 import com.b4.dao.MileageLogDao;
 import com.b4.model.vo.MileageLog;
 
+import common.JDBCTemplate;
+
 public class MileageLogService {
 	
 	private MileageLogDao dao = new MileageLogDao();
@@ -36,6 +38,22 @@ public class MileageLogService {
 	{
 		Connection conn = getConnection();
 		List<MileageLog> result = dao.selectAllMileageLogList(conn, memberSeq);
+		close(conn);
+		return result;
+	}
+	
+	public int createLog(MileageLog mlog)
+	{
+		Connection conn = getConnection();
+		int result = dao.createLog(conn, mlog);
+		if(result>0)
+		{
+			JDBCTemplate.commit(conn);
+		}
+		else
+		{
+			JDBCTemplate.rollback(conn);
+		}
 		close(conn);
 		return result;
 	}

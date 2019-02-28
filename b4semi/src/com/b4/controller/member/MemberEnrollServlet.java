@@ -1,6 +1,7 @@
 package com.b4.controller.member;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,7 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.b4.model.vo.Member;
+import com.b4.model.vo.MileageLog;
+import com.b4.service.CouponService;
 import com.b4.service.MemberService;
+import com.b4.service.MileageLogService;
 
 /**
  * Servlet implementation class MemberEnrollServlet
@@ -50,6 +54,23 @@ public class MemberEnrollServlet extends HttpServlet {
 		if(result > 0)
 		{
 			msg = "회원가입이 완료되었습니다.";
+			//회원번호 가져오기!
+			int seq = new MemberService().selectOne(m).getMemberSeq();
+			CouponService service = new CouponService();
+			service.issueCoupon(seq, "NEW-20K-0.1-5000");
+			service.issueCoupon(seq, "FREE-5K");
+			service.issueCoupon(seq, "LCP-30K-1-3000");
+			service.issueCoupon(seq, "FCP-0-0.07-7000");
+			service.issueCoupon(seq, "GCP-500K-0.15-100000");
+			//마일리지 등록
+			MileageLog mlog = new MileageLog();
+			mlog.setMileageLogType("MPN");
+			mlog.setMemberSeq(seq);
+			mlog.setLogDate(new Timestamp(System.currentTimeMillis()));
+			mlog.setPreMileage(0);
+			mlog.setNextMileage(1000);
+			new MileageLogService().createLog(mlog);
+			
 		}
 		else
 		{

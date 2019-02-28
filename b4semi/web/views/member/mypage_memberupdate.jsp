@@ -405,7 +405,7 @@
     //새 패스워드 정규식
     const pwRegExpValid = (e) => {
         if(memberUpdatePwNew.val().length == 0) return;
-        const regex = new RegExp('(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,16}$');
+        const regex = new RegExp('^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,16}$');
         let result = regex.test(memberUpdatePwNew.val());
         if(!result)
        	{

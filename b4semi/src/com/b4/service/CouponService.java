@@ -78,6 +78,14 @@ public class CouponService {
 		close(conn);
 		return result;
 	}
+	
+	public int issueCoupon(int memberSeq, String code)
+	{
+		Connection conn = getConnection();
+		int result = dao.issueCoupon(conn, memberSeq, code);
+		close(conn);
+		return result;
+	}
 
 /*	public int couponCountByMember(String id) {
 		Connection conn = getConnection();
