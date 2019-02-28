@@ -1,6 +1,7 @@
 package com.b4.controller.notice;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.b4.model.vo.Member;
+import com.b4.model.vo.Notice;
 
 /**
  * Servlet implementation class NoticeFormServlet
@@ -37,7 +39,9 @@ public class NoticeFormServlet extends HttpServlet {
 			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
 		}
 		
-		request.getRequestDispatcher("/views/notice/noticeForm.jsp").forward(request, response);
+		
+		
+		request.getRequestDispatcher("/views/support/support_notice_form.jsp").forward(request, response);
 	}
 
 	/**
