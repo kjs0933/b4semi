@@ -596,7 +596,7 @@
             top: 50vh;
             transform: translateX(-50%) translateY(-50%);
             width: 400px;
-            height: auto;
+            height: 500px;
             display: flex;
             flex-flow: column nowrap;
             align-items: center;
@@ -692,62 +692,9 @@
         	text-decoration: none;
         	color: gray;
         }
-        
-        .signin-frm #saveId
-        {
-            display: none;
-        }
-
-        #saveId + label
-        {
-            position: relative;
-            align-self: flex-start;
-            width: 17px;
-            height: 17px;
-            background-color: rgb(38, 85, 139);
-            cursor: pointer;
-            border-radius: 1px;
-        }
-        
-        #saveId + label span
-        {
-            position: absolute;
-            display: none;
-            left: 5px;
-            top: 1px;
-            width: 4px;
-            height: 10px;
-            border-right: 2px solid white;
-            border-bottom: 2px solid white;
-            transform: rotateZ(40deg);
-        }
-
-        #saveId + label:hover
-        {
-            background-color: rgb(47, 105, 172);
-        }
-
-        #saveId:checked + label span
-        {
-            display: inline-block;
-        }
-        
-        #saveId + label span:last-of-type
-        {
-        	position: absolute !important;
-        }
 
         .signin-frm > p
         {
-            font-size: 14px;
-            color: gray;
-            cursor: pointer;
-        }
-
-        .signin-frm > p:first-of-type
-        {
-            margin-top: -19px;
-            margin-left: -110px;
             color: gray;
         }
 
