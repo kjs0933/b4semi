@@ -449,7 +449,7 @@
                     <div><%=orderStatus%></div>
                             <div>
                                 <input type="button" value="후기 작성">
-                                <input type="button" value="장바구니 담기">
+                                <input type="button" onclick="fn_cart_add()" value="장바구니 담기" data-dpseq="<%=cartList.get(i).getDisplayListSeq()%>" data-pcode="<%=cartList.get(i).getProductCode()%>">
                             </div>
                         </div>
                         <%}} %>
@@ -582,5 +582,20 @@
             </div>
         </div>
     </section>
-
+	<script>
+	function fn_cart_add() {
+		var dpseq = ($(event.target).data("dpseq"));
+		var pcode = ($(event.target).data("pcode"));
+		$.ajax({
+			url:"<%=request.getContextPath()%>/cartAdd.do",
+			type:"post",
+			data:{"dpseq":dpseq,"pcode":pcode},
+			success:function(data){
+					alert("상품을 장바구니에 담았습니다. 해당상품 "+data[1]+"개, 총 " + data[0] +" 종류");
+			}
+		});
+		
+	}
+	
+	</script>
 <%@ include file="/views/common/footer.jsp" %>
