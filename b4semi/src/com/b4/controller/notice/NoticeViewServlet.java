@@ -33,12 +33,28 @@ public class NoticeViewServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		int no=Integer.parseInt(request.getParameter("noticeSeq"));
+		int no=0;
+		try {
+			no=Integer.parseInt(request.getParameter("noticeseq"));
+		}
+		catch(NumberFormatException e)
+		{
+			request.setAttribute("msg", "게시글이 없습니다");
+			request.setAttribute("loc", "/noticeList");
+			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
+			return;
+		}
 		
 		Notice n=new NoticeService().selectOne(no);
-		
 		request.setAttribute("notice", n);
+		
+		if(n== null)
+		{
+			request.setAttribute("msg", "게시글이 없습니다");
+			request.setAttribute("loc", "/noticeList");
+			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
+			return;
+		}
 		request.getRequestDispatcher("/views/support/support_notice_view.jsp").forward(request, response);
 	}
 
