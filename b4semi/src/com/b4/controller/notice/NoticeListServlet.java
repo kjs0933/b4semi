@@ -57,7 +57,7 @@ public class NoticeListServlet extends HttpServlet {
 		int totalCount = new NoticeService().NoticeCount();
 		
 		List<Notice> list = new NoticeService().selectList(cPage, numPerPage);
-		String pageBar = pageBar(request.getContextPath(),cPage,numPerPage,totalCount);
+		String pageBar = pageBar(request.getContextPath()+"/noticeList",cPage,numPerPage,totalCount);
 
 		
 		//응답view선택 데이터 응답view에 전송
