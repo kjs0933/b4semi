@@ -395,7 +395,7 @@
                     <p>고객센터</p>
                 </div>
                 <div class="support-nav">
-                    <div><a href="">공지사항<img src="<%=request.getContextPath() %>/images/arrow_right_black.png"></a>
+                    <div><a href="<%=request.getContextPath()%>/noticeList">공지사항<img src="<%=request.getContextPath() %>/images/arrow_right_black.png"></a>
                     </div>
                     <div class="current-tab"><a href="#">1:1문의<img src="<%=request.getContextPath() %>/images/arrow_right_black.png"></a>
                     </div>

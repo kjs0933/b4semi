@@ -211,9 +211,9 @@
                     <p>고객센터</p>
                 </div>
                 <div class="support-nav">
-                    <div class="current-tab"><a href="<%=request.getContextPath()%>/views/support/support_notice.jsp">공지사항<img src="<%=request.getContextPath() %>/images/arrow_right_black.png"></a>
+                    <div class="current-tab"><a href="<%=request.getContextPath()%>/noticeList">공지사항<img src="<%=request.getContextPath() %>/images/arrow_right_black.png"></a>
                     </div>
-                    <div><a href="<%=request.getContextPath()%>/views/support/support_query.jsp">1:1문의<img src="<%=request.getContextPath() %>/images/arrow_right_black.png"></a>
+                    <div><a href="<%=request.getContextPath()%>/query">1:1문의<img src="<%=request.getContextPath() %>/images/arrow_right_black.png"></a>
                     </div>
                     <div><a href="">상품제안<img src="<%=request.getContextPath()%>/images/arrow_right_black.png"></a>
                     </div>
