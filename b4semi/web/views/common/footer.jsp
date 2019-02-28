@@ -45,7 +45,7 @@
             <label for="login-id">아이디<br><input type="text" name="memberId" id="login-id" value=""/></label>
             <label for="login-pw">비밀번호<br><input type="password" name="memberPw" id="login-pw"></label>
             <input type="submit" value="로그인">
-            <p class="not-member"><a href="<%=request.getContextPath()%>/memberEnroll">회원이 아니신가요?</a></p>
+            <p class="not-member"><a href="<%=request.getContextPath()%>/views/member/signup.jsp">회원이 아니신가요?</a></p>
         </form>
     </div>
 </body>
