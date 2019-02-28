@@ -136,7 +136,7 @@
             </div>
             </div>
             <div class="support-notice-view-btns">
-                <input type="button" value="수정" onclick=fn_updateNotice()>
+              <!--   <input type="button" value="수정" onclick=fn_updateNotice()> -->
                 <input type="button" value="목록보기" onclick=fn_listView()>
             </div>
         
