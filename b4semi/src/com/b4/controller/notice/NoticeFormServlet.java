@@ -37,7 +37,7 @@ public class NoticeFormServlet extends HttpServlet {
 			request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
 		}
 		
-		request.getRequestDispatcher("/views/notice/noticeForm.jsp").forward(request, response);
+		request.getRequestDispatcher("/views/supprt/supprt_notice_form.jsp").forward(request, response);
 	}
 
 	/**
