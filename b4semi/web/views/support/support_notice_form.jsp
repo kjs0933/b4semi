@@ -263,7 +263,7 @@
         <div class="notice-form-header">
             공지사항
         </div>
-        <form action="#" method="post" class="notice-form">
+        <form action="<%=request.getContextPath()%>/NoticeFormEndServlet" method="post" class="notice-form">
             <div class="notice-form-title">
                 <div>제목</div>
                 <div><input type="text" name="" id=""></div>
@@ -284,7 +284,7 @@
                 </div>
             </div>
             <div class="notice-frm-btn-set">
-                <input type="button" value="취소">
+                <input type="button" value="취소" onclick="location.href='<%=request.getContextPath()%>/noticeList'">
                 <input type="submit" value="저장">
             </div>
         </form>

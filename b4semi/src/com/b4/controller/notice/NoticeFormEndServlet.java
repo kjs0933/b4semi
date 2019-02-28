@@ -46,7 +46,7 @@ public class NoticeFormEndServlet extends HttpServlet {
 		//1.전송된 파일을 처리하기 위해 전송된 파일을 저장할 공간확보~
 		//디렉토리경로를 확인! 파일이 저장 low 최상위 드라이브시작! 절대경로로 확보
 		String dir=getServletContext().getRealPath("/");//루트 web~폴더가 저장공간으로 잡힘
-		dir+="upload/notice";
+		dir+="upload/board/";
 		System.out.println(dir);
 		
 		//2.저장크기설정
