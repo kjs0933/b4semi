@@ -48,7 +48,7 @@
             <p id="remember-id">비밀번호 기억</p>
             <input type="submit" value="로그인">
             <p>회원정보 분실</p>
-            <p class="not-member"><a href="<%=request.getContextPath()%>/memberEnroll">회원이 아니신가요?</a></p>
+            <p class="not-member"><a href="<%=request.getContextPath()%>/views/member/signup.jsp">회원이 아니신가요?</a></p>
         </form>
     </div>
 </body>
