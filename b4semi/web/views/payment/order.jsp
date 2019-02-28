@@ -86,6 +86,8 @@
 	}
 			
 %>
+<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 <style>
     .orderlist-pre-wrapper input {
         padding: 0 5px;
@@ -534,7 +536,7 @@
         width: 850px;
         height: 550px;
         border: 1px solid black;
-        font-size: 12px;
+        font-size: 13px;
         background-color: white;
 
         font-family: 'Noto Sans KR';
@@ -561,6 +563,7 @@
         justify-content: center;
         color: white;
         position: relative;
+        font-size: 15px;
     }
 
     .close {
@@ -667,43 +670,18 @@
     .address-cols>div:nth-of-type(5) {
         flex: 1 1 0;
     }
-
-    .pagebar img {
-        width: 40%;
-        height: 40%;
+    
+    #submit
+    {
+    	background-color: rgb(42, 71, 114);
+    	border-radius: 2px;
     }
-
-    .pagebar {
-        display: flex;
-        align-self: center;
-        margin: 40px;
-        font-size: 12px;
+    
+    #submit:hover
+    {
+    	background-color: rgb(62, 91, 134)
     }
-
-    .pagebar div {
-        width: 33px;
-        height: 33px;
-        border: 1px solid rgb(220, 220, 220);
-        border-left: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-    }
-
-    .pagebar div:first-of-type {
-        border-left: 1px solid rgb(220, 220, 220);
-    }
-
-    .pagebar a {
-        display: flex;
-        width: 100%;
-        height: 100%;
-        align-items: center;
-        justify-content: center;
-        text-decoration: none;
-        color: black;
-    }
+    
 </style>
 
 <section>
@@ -734,7 +712,7 @@
                     <div>상품 금액</div>
                 </div>
                 <%for(int i=0; i<clist.size(); i++){%>
-                <div class="products-info-cols">
+                <div data-main-product-name="<%=clist.get(i).getProductName()%>" data-product-count="<%=clist.size()%>" class="products-info-cols">
                     <div><img src="<%=request.getContextPath()%>/upload/product/<%=clist.get(i).getImg()%>"></div>
                     <div>
                         <div><b><%=clist.get(i).getDisplayListTitle()%></b> (옵션 - <%=clist.get(i).getProductName()%>)<%=clist.get(i).getDiscountName()==null?"":" : "+clist.get(i).getDiscountName()+" 적용"%></div>
@@ -776,7 +754,6 @@
                 <div>
                     <input id="address-api-open-btn" type="button" value="주소 검색">
                     <input id="search-address-open-btn" type="button" value="배송지 목록">
-                    <input id="add-address-open-btn" type="button" value="배송지 추가">
                 </div>
             </div>
             <div class="shipment-info-table">
@@ -881,8 +858,6 @@
                     <div>
                         <label><input type="radio" name="paymentMethod" id="payment-method-credit"
                                 value="creidt" checked>신용카드</label>
-                        <label><input type="radio" name="paymentMethod" id="payment-method-phone"
-                                value="phone">휴대전화</label>
                     </div>
                 </div>
                 <div class="payment-method-cols payment-method-refund-method">
@@ -897,7 +872,7 @@
                     </div>
                 </div>
             </div>
-            <input type="button" value="결제하기" onclick="fn_order_end()">
+            <input id="submit" type="button" value="결제하기" onclick="fn_order_end()">
         </div>
     </form>
 
@@ -941,20 +916,6 @@
                 </div>
             </div>
             <%} %>
-
- <!--            <div class="pagebar">
-                <div><a href="#"><img src="images/board-arrow-left.png"></a></div>
-                <div><a href="#">1</a></div>
-                <div><a href="#">2</a></div>
-                <div><a href="#">3</a></div>
-                <div><a href="#">4</a></div>
-                <div><a href="#">5</a></div>
-                <div><a href="#"><img src="images/board-arrow-right.png"></a></div>
-            </div> -->
-        </div>
-        <div>
-        </div>
-    </div>
 
     <!-- 배송지 목록 클릭시 출력되는 되는 부분 -->
 </section>
@@ -1094,16 +1055,55 @@
     		return;
     	}
     		
-    	alert("결제페이지로 이동합니다.");
     	if(confirm($("#totalPrice").val()+"원 결제 하시겠습니까?"))
     	{
-    		$("#payment-frm").submit();
+    		//결제 API 넘길 데이터 획득
+    		const mainProductName = $('.products-info-cols').data('mainProductName');
+    		const productCount = $('.products-info-cols').data('productCount');
+			let paymentName;
+    		if(productCount == 1){paymentName = mainProductName;}
+    		else{paymentName = mainProductName+ '외 '+productCount+'개';}
+    		
+    		//결제 API 호출 코드
+    	    const imp = window.IMP;
+    	    imp.init('imp40348442');
+    	    IMP.request_pay({
+    	       amount : $('#result-final').text().replace(/\D/g,''),
+    	       buyer_name : '<%=m.getMemberName()%>',
+    	       name : paymentName,
+    	    }, function(response) 
+    	    {
+    			if ( response.success ) { 
+    				console.log(response);
+    				$("#payment-frm").submit();
+    			} 
+    			else {
+    				alert('결제실패:' + response.error_msg);
+    			}
+    	    });
     	}
     	else
     	{
     		alert("결제가 취소되었습니다.")	
     	}
     }
+    
+    //주소검색 API
+    const addressAPI = $('#address-api-open-btn');
+    $(() => {
+        addressAPI.on('click', () => {
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    const jibun = data.jibunAddress;
+                    const road = data.roadAddress;
+                    $('#address').val(jibun);
+            }
+            }).open({
+                autoClose: true
+            });
+        });
+    });
+</script>
 
 </script>
 

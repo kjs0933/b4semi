@@ -1069,3 +1069,18 @@
             </div>
         </div>
     </header>
+<script>
+//카트 상품 수 획득 후 헤더에 출력하기
+    <%if(loginMember!=null){%>
+    $(() => {
+    		$.ajax({
+    		url: '<%=request.getContextPath()%>/ajaxCartCount?memberSeq=<%=loginMember.getMemberSeq()%>',
+    		type: 'get',
+    		dataType: 'text',
+    		success: (data) => {
+    			$('#cart-count').text(data);
+    		}
+    	});
+    });
+    <%}%>
+</script>

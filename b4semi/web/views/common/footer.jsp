@@ -210,6 +210,5 @@ const toggleSet = () => {
         mainFrmBox.addClass('frm-invalid-anim');
         setTimeout(() => {mainFrmBox.removeClass('frm-invalid-anim')}, 200);
     }
-    
 </script>
 </html>

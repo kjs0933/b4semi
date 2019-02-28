@@ -744,6 +744,5 @@ try {
     setInterval(eventNextSlide, 5000);
     setInterval(newNextSlide, 5000);
     setInterval(klovesNextSlide, 5000);
-    </script>
-
+</script>
 <%@ include file="views/common/footer.jsp" %>
