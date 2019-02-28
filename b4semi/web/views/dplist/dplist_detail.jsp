@@ -312,7 +312,7 @@ if(scrollAnchor == null)
 
         .dp-detail-tab > div
         {
-            width: 181px;
+            width: 20%;
             height: 47px;
             border: 1px solid #ccc;
             border-right: none;
@@ -655,7 +655,6 @@ if(scrollAnchor == null)
                 <div><a href="#dp-image-tab">상품이미지</a></div>
                 <div><a href="#detail-view-tab">상세정보</a></div>
                 <div><a href="#review-tab">고객후기(<%=detail.getReviewCount()%>)</a></div>
-                <div><a href="#qna-tab">상품문의(<%=detail.getQnaCount()%>)</a></div>
                 <div></div>
             </div>
             <div><%=detail.getDisplayListContents()%></div>
@@ -666,7 +665,6 @@ if(scrollAnchor == null)
                 <div class="current-tab"><a href="#dp-image-tab">상품이미지</a></div>
                 <div><a href="#detail-view-tab">상세정보</a></div>
                 <div><a href="#review-tab">고객후기(<%=detail.getReviewCount()%>)</a></div>
-                <div><a href="#qna-tab">상품문의(<%=detail.getQnaCount()%>)</a></div>
                 <div></div>
             </div>
             <%for(int i=0; i<renames.size();i++){ %>
@@ -679,7 +677,6 @@ if(scrollAnchor == null)
                 <div><a href="#dp-image-tab">상품이미지</a></div>
                 <div class="current-tab"><a href="#detail-view-tab">상세정보</a></div>
                 <div><a href="#review-tab">고객후기(<%=detail.getReviewCount()%>)</a></div>
-                <div><a href="#qna-tab">상품문의(<%=detail.getQnaCount()%>)</a></div>
                 <div></div>
             </div>
             <div>
@@ -695,7 +692,6 @@ if(scrollAnchor == null)
                 <div><a href="#dp-image-tab">상품이미지</a></div>
                 <div><a href="#detail-view-tab">상세정보</a></div>
                 <div class="current-tab"><a href="#review-tab">고객후기(<%=detail.getReviewCount()%>)</a></div>
-                <div><a href="#qna-tab">상품문의(<%=detail.getQnaCount()%>)</a></div>
                 <div></div>
             </div>
 			<div class="review-board-wrapper">
@@ -751,16 +747,6 @@ if(scrollAnchor == null)
 		      <%}%>
     		</div>
 			<%=rpageStr%>
-        </div>
-        <div id="dp-detail-body-wrapper">
-            <div id="qna-tab" class="dp-detail-tab">
-                <div><a href="#dp-desc-tab">상품설명</a></div>
-                <div><a href="#dp-image-tab">상품이미지</a></div>
-                <div><a href="#detail-view-tab">상세정보</a></div>
-                <div><a href="#review-tab">고객후기(<%=detail.getReviewCount()%>)</a></div>
-                <div class="current-tab"><a href="#qna-tab">상품문의(<%=detail.getQnaCount()%>)</a></div>
-                <div></div>
-            </div>
         </div>
     </div>
 </section>

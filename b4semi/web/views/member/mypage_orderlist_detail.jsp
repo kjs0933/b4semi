@@ -591,7 +591,7 @@
 			type:"post",
 			data:{"dpseq":dpseq,"pcode":pcode},
 			success:function(data){
-					alert("상품을 장바구니에 담았습니다. 해당상품 "+data[1]+"개, 총 " + data[0] +" 종류");
+					alert("상품을 장바구니에 담았습니다. 해당상품 총 "+data[1]+"개);
 			}
 		});
 		

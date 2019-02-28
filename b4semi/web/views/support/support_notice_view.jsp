@@ -25,7 +25,7 @@
             border: none;
             background-color: rgb(42, 71, 114);
             color: white;
-            margin: 0 10px;
+            margin-left: 10px;
             border-radius: 2px;
             cursor: pointer;
         }
@@ -102,6 +102,11 @@
             margin-right: 5px;
             margin-top: 4px;
         }
+        
+        .support-notice-view-wrapper input:hover
+        {
+        	background-color: rgb(62, 91, 134);
+        }
     </style>
 
 <section>
@@ -129,19 +134,12 @@
                     <%=n.getNoticeContents() %>
                 </div>
             </div>
+            </div>
             <div class="support-notice-view-btns">
                 <input type="button" value="수정" onclick=fn_updateNotice()>
                 <input type="button" value="목록보기" onclick=fn_listView()>
             </div>
-            <div class="support-notice-prev">
-                <div><img src="arrow-up.png">이전글</div>
-                <div>[가격인상공지] 무농약</div>
-            </div>
-            <div class="support-notice-next">
-                <div><img src="arrow-down.png">다음글</div>
-                <div>[가격인상공지] 무농약</div>
-            </div>
-        </div>
+        
     </div>
 </section>
 
@@ -160,7 +158,7 @@
 
 			function fn_listView()
 			{
-				location.href="<%=request.getContextPath()%>/noticeList";	
+				location.href="<%=request.getContextPath()%>/noticeList";
 			}
 			
 		</script>

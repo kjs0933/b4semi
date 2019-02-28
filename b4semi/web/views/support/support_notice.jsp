@@ -147,7 +147,7 @@
         .support-board-cols
         {
             display: flex;
-
+            cursor: pointer;
         }
 
         .support-board-cols > div
@@ -170,8 +170,6 @@
         .support-board-cols > div:nth-of-type(4){flex: 3 1 0;color: #aaa;}
         .support-board-cols > div:nth-of-type(5){flex: 1 1 0;color: #aaa;}
 
-
-
         .pagebar img
         {
             width: 40%;
@@ -182,11 +180,11 @@
         {
             display: flex;
             align-self: center;
-            margin: 30px;
+            margin: 40px;
             font-size: 12px;
         }
 
-        .pagebar > div
+        .pagebar div
         {
             width: 33px;
             height: 33px;
@@ -198,11 +196,22 @@
             cursor: pointer;
         }
 
-        .pagebar > div:first-of-type
+        .pagebar div:first-of-type
         {
             border-left: 1px solid rgb(220, 220, 220);
         }
-
+        
+        .pagebar a
+        {
+        	display: flex;
+        	width: 100%;
+        	height: 100%;
+        	align-items: center;
+        	justify-content: center;
+        	text-decoration: none;
+        	color: black;
+        }
+        
     </style>
 	<section>
         <div class="support-wrapper">
@@ -214,8 +223,6 @@
                     <div class="current-tab"><a href="<%=request.getContextPath()%>/noticeList">공지사항<img src="<%=request.getContextPath() %>/images/arrow_right_black.png"></a>
                     </div>
                     <div><a href="<%=request.getContextPath()%>/query">1:1문의<img src="<%=request.getContextPath() %>/images/arrow_right_black.png"></a>
-                    </div>
-                    <div><a href="">상품제안<img src="<%=request.getContextPath()%>/images/arrow_right_black.png"></a>
                     </div>
                 </div>
             </div>
@@ -233,20 +240,25 @@
                         <div>조회수</div>
                     </div>
                     <%for(Notice o:list) {%>
-                    <div class="support-board-cols">
+                    <div data-notice-seq="<%=o.getNoticeSeq() %>" class="support-board-cols">
                         <div><%=o.getNoticeSeq() %></div>
-                        <div><a href="<%=request.getContextPath()%>/notice/noticeview?noticeseq=<%=o.getNoticeSeq()%>"><%=o.getNoticeTitle() %></a></div>
+                        <div><%=o.getNoticeTitle() %></div>
                         <div>TheFoodForum</div>
                         <div><%=getTillDate(o.getNoticeDate())%></div>
                         <div><%=o.getNoticeReadCount() %></div>
                     </div>
                     <%} %>
                 </div>
-
-                <div class="pagebar">
-                    <%=pageBar %>
-                </div>
+               <%=pageBar %>
             </div>
         </div>
     </section>
+<script>
+	const noticeCols = $('.support-board-cols');
+	$(()=> {
+		noticeCols.on('click', (e) => {
+			location.href='<%=request.getContextPath()%>/notice/noticeview?noticeseq='+$(e.currentTarget).data('noticeSeq');
+		});
+	});
+</script>
 <%@ include file="/views/common/footer.jsp" %>
