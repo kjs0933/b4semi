@@ -6,12 +6,11 @@ import static common.JDBCTemplate.getConnection;
 import static common.JDBCTemplate.rollback;
 
 import java.sql.Connection;
+import java.sql.Timestamp;
 import java.util.List;
 
 import com.b4.dao.QueryBoardDao;
 import com.b4.model.vo.QueryBoard;
-import com.b4.model.vo.QueryComment;
-import com.b4.model.vo.Reply;
 
 public class QueryBoardService {
 	//1대1문의 게시판 및 댓글 테이블에 대한 메소드정의.
@@ -90,11 +89,13 @@ public class QueryBoardService {
 	//Reply 메소드
 	
 	//댓글 입력
-	public int insertReply(int boardSeq, int memberSeq, String commentText)
+	public int[] insertReply(int boardSeq, int memberSeq, String commentText, Timestamp commentDate)
 	{
 		Connection conn = getConnection();
-		int result = dao.insertReply(conn, boardSeq, memberSeq, commentText);
-		if(result>0) commit(conn);
+		int result[] = new int[2];
+		result[0] = dao.insertReply(conn, boardSeq, memberSeq, commentText, commentDate);
+		result[1] = dao.selectReplyCurrval(conn);
+		if(result[0] > 0) commit(conn);
 		else rollback(conn);
 		close(conn);
 		return result;

@@ -238,7 +238,7 @@ public class QueryBoardDao {
 	}
 
 
-	public int insertReply(Connection conn, int boardSeq, int memberSeq, String commentText) {
+	public int insertReply(Connection conn, int boardSeq, int memberSeq, String commentText, Timestamp commentDate) {
 		PreparedStatement pstmt = null;
 		int result = 0;
 		String sql = prop.getProperty("insertReply");
@@ -246,7 +246,7 @@ public class QueryBoardDao {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, boardSeq);
 			pstmt.setInt(2, memberSeq);
-			pstmt.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
+			pstmt.setTimestamp(3, commentDate);
 			pstmt.setString(4, commentText);
 			result = pstmt.executeUpdate();
 		}
@@ -458,6 +458,30 @@ public class QueryBoardDao {
 		ResultSet rs = null;
 		int result = 0;
 		String sql = prop.getProperty("selectNextVal");
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+			{
+				result = rs.getInt(1);
+			}
+		}catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			close(rs);
+			close(pstmt);
+		}
+		return result;
+	}
+	
+	public int selectReplyCurrval(Connection conn) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int result = 0;
+		String sql = prop.getProperty("selectReplyCurrval");
 		try {
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();

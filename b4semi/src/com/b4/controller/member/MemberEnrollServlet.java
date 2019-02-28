@@ -46,24 +46,19 @@ public class MemberEnrollServlet extends HttpServlet {
 		
 		int result = new MemberService().insertOne(m);
 		
+		String msg = "";
+		if(result > 0)
+		{
+			msg = "회원가입이 완료되었습니다.";
+		}
+		else
+		{
+			msg = "회원가입에 실패하였습니다.";
+		}
 		
-		response.getWriter().println(result);
-		
-		
-//		String msg = "";
-//		if(result > 0)
-//		{
-//			msg = "회원가입이 완료되었습니다.";
-//		}
-//		else
-//		{
-//			msg = "회원가입에 실패하였습니다.";
-//		}
-//		
-//		
-//		request.setAttribute("msg", msg);
-//		request.setAttribute("loc", "");
-//		request.getRequestDispatcher(request.getContextPath()+"/view/common/msg.jsp").forward(request, response);
+		request.setAttribute("msg", msg);
+		request.setAttribute("loc", "/");
+		request.getRequestDispatcher("/views/common/msg.jsp").forward(request, response);
 	}
 
 	/**
