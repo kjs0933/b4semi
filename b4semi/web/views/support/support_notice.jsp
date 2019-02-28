@@ -210,6 +210,25 @@
         	justify-content: center;
         	text-decoration: none;
         	color: black;
+        	rgb(38, 85, 139);
+        }
+        
+        #write-notice
+        {
+        	align-self: flex-end;
+        	width: 100px;
+        	height: 40px;
+        	background-color: rgb(38, 85, 139);
+        	border: none;
+        	color: white!important;
+        	margin-top: 15px;
+        	border-radius: 3px;
+        	cursor: pointer;
+        }
+        
+        #write-notice:hover
+        {
+        	background-color: rgb(58, 105, 159);
         }
         
     </style>
@@ -249,6 +268,9 @@
                     </div>
                     <%} %>
                 </div>
+                <%if("admin".equals(loginMember.getMemberId())){ %>
+                <button id="write-notice" onclick="location.href='<%=request.getContextPath()%>/NoticeFormServlet'">글쓰기</button>
+                <%} %>
                <%=pageBar %>
             </div>
         </div>
