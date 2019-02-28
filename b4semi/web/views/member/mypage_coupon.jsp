@@ -337,7 +337,7 @@
                             </div>
                             <div><%=ic.getDiscountRate() != 0 ? (ic.getDiscountRate() != 1 ? (int)(ic.getDiscountRate()*100)+"% 할인" : ic.getMaxDisPrice()+"원 할인") : "배송료 무료" %></div>
                             <div><%=getTillDate(ic.getIssueDate())%> ~ <%=getTillDate(ic.getExpiryDate())%></div>
-                            <div><%=ic.getExpiryDate().getTime() > System.currentTimeMillis() ? (ic.getIsUsed().equals("Y") ? "사용후" : "사용전" ) : "만료"%></div>
+                            <div><%=ic.getExpiryDate().getTime() > System.currentTimeMillis() ? (ic.getIsUsed().equals("Y") ? "사용가능" : "사용됨" ) : "만료"%></div>
                         </div>	
                           <%}
                         } %>

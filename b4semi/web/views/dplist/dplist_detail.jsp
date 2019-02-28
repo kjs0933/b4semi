@@ -926,7 +926,7 @@ if(scrollAnchor == null)
     	}
     	else
     	{
-    		alert("먼저 상품을 선택해주세요");
+    		alert("먼저 상품 수량을 설정해주세요");
     	}
     }
     
