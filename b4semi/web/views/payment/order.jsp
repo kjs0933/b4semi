@@ -1096,7 +1096,10 @@
                 oncomplete: function(data) {
                     const jibun = data.jibunAddress;
                     const road = data.roadAddress;
-                    $('#address').val(jibun);
+                    if(data.userSelectedType === 'R')
+                    {$('#address').val(road);}
+                    else
+                    {$('#address').val(jibun);}
             }
             }).open({
                 autoClose: true
