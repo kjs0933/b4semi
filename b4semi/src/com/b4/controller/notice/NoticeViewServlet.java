@@ -34,7 +34,7 @@ public class NoticeViewServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		int no=Integer.parseInt(request.getParameter("noticeseq"));
+		int no=Integer.parseInt(request.getParameter("noticeSeq"));
 		
 		Notice n=new NoticeService().selectOne(no);
 		

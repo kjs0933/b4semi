@@ -355,8 +355,7 @@
         {
             padding: 0 10px;
             height: 35px;
-            align-self: flex-end;
-            
+            align-self: flex-end;   
         }
 
 

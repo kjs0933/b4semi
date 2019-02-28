@@ -85,7 +85,7 @@ public class NoticeUpdateEndServlet extends HttpServlet {
 		int result=new NoticeService().updateNotice(n);
 		
 		String msg="";
-		String loc="/notice/noticeView?noticeno="+mr.getParameter("no");
+		String loc="/notice/noticeView?noticeseq="+mr.getParameter("no");
 		String view="/views/common/msg.jsp";
 		if(result>0)
 		{

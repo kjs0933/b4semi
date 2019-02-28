@@ -1,10 +1,6 @@
 package com.b4.controller.notice;
 
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
