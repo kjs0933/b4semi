@@ -93,7 +93,7 @@ public class QueryModifyEndServlet extends HttpServlet {
 		int resultQuery = new QueryBoardDao().updateQuery(conn, qb);
 		if(resultQuery>0) 
 		{
-			if(!img.getOriginalFile().isEmpty())
+			if(img.getOriginalFile()!=null&&!img.getOriginalFile().isEmpty())
 			{
 				int resultFile = new ImagesService().updateImages(oldFile,img);
 				if(resultFile>0) {
