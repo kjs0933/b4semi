@@ -147,9 +147,17 @@
 
 		<script>
 			function fn_updateNotice()
-			{
-				location.href="<%=request.getContextPath()%>/support/support_notice_form?noticeseq=<%=n.getNoticeSeq()%>";
+			{	
+				if(n.memberId="admin")
+				{
+					location.href="<%=request.getContextPath()%>/noticeUpdate?noticeseq=<%=n.getNoticeSeq()%>";
+				}
+				else
+				{
+					alert("접근할 권한이 없습니다.");					
+				}
 			}
+
 			function fn_listView()
 			{
 				location.href="<%=request.getContextPath()%>/support/support_notice?noticeseq=<%=n.getNoticeSeq()%>";	
