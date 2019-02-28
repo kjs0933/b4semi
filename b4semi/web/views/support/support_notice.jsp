@@ -1,16 +1,39 @@
 <%@page import="common.DateFormatTemplate"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="com.b4.model.vo.*" %>
+<%@ page import="com.b4.model.vo.*"%>
+<%@ page import="com.b4.model.vo.Member"%>
 <%@ page import="com.b4.controller.notice.*" %>
 <%@ page import="java.util.*" %>
 <%@ page import="java.sql.*" %>
 <%@ page import ="static common.DateFormatTemplate.getTillDate"%>
 <%@ page import ="static common.PagingTemplate.pageBar2"%>
 <%
-	List<Notice> list=(List)request.getAttribute("list");
+ArrayList<Notice> list;
+try {
+	list= (ArrayList<Notice>)request.getAttribute("list");
+	if(list == null)
+	{
+		list=new ArrayList<Notice>();
+	}
+} catch (ClassCastException e) {
+	list=new ArrayList<Notice>();
+}
+Member m;
+	try{
+		m = (Member)session.getAttribute("loginMember");
+		if(m == null)
+		{
+			m=new Member();
+		}
+	}catch(ClassCastException e)
+	{
+		m = new Member();
+	}
+	
 	int cPage = (int)request.getAttribute("cPage");
 	String pageBar = (String)request.getAttribute("pageBar");
+	
 %>    
 
 <%@ include file="/views/common/header.jsp"%>
@@ -258,7 +281,7 @@
                         <div>작성일</div>
                         <div>조회수</div>
                     </div>
-                    <%for(Notice o:list) {%>
+                    <%for(Notice o : list) {%>
                     <div data-notice-seq="<%=o.getNoticeSeq() %>" class="support-board-cols">
                         <div><%=o.getNoticeSeq() %></div>
                         <div><%=o.getNoticeTitle() %></div>
@@ -268,9 +291,9 @@
                     </div>
                     <%} %>
                 </div>
-                <%if("admin".equals(loginMember.getMemberId())){ %>
+                 <%if("admin".equals(m.getMemberId())){ %>
                 <button id="write-notice" onclick="location.href='<%=request.getContextPath()%>/NoticeFormServlet'">글쓰기</button>
-                <%} %>
+                <%} %> 
                <%=pageBar %>
             </div>
         </div>
