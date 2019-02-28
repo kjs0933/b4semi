@@ -1,6 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="/views/common/header.jsp"%>
+    <!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<meta http-equiv="refresh" content="0;<%=request.getContextPath()%>/memberOrderlist"/>
+</head>
+<body>
+</body>
+</html>
+<%-- <%@ include file="/views/common/header.jsp"%>
 <%@ page import="com.b4.model.vo.MypageHeader" %>
 
 <%
@@ -369,4 +379,4 @@
             </div>
         </div>
     </section>
-<%@ include file="/views/common/footer.jsp" %>
+<%@ include file="/views/common/footer.jsp" %> --%>
