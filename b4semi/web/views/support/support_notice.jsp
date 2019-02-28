@@ -1,10 +1,16 @@
 <%@page import="common.DateFormatTemplate"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="com.b4.model.vo.*,com.b4.controller.notice.*,java.util.*,java.sql.*" %>
+<%@ page import="com.b4.model.vo.*" %>
+<%@ page import="com.b4.controller.notice.*" %>
+<%@ page import="java.util.*" %>
+<%@ page import="java.sql.*" %>
 <%@ page import ="static common.DateFormatTemplate.getTillDate"%>
+<%@ page import ="static common.PagingTemplate.pageBar2"%>
 <%
 	List<Notice> list=(List)request.getAttribute("list");
+	int cPage = (int)request.getAttribute("cPage");
+	String pageBar = (String)request.getAttribute("pageBar");
 %>    
 
 <%@ include file="/views/common/header.jsp"%>
@@ -229,23 +235,16 @@
                     <%for(Notice o:list) {%>
                     <div class="support-board-cols">
                         <div><%=o.getNoticeSeq() %></div>
-                        <div><a href="<%=request.getContextPath()%>/notice/noticeView?noticeseq=<%=o.getNoticeSeq()%>"><%=o.getNoticeTitle() %></a></div>
+                        <div><a href="<%=request.getContextPath()%>/notice/noticeview?noticeseq=<%=o.getNoticeSeq()%>"><%=o.getNoticeTitle() %></a></div>
                         <div>TheFoodForum</div>
-                        <%-- <div><a herf="<%=DateFormatTemplate.getetTillDate()%>"></a></div> --%>
-                        
+                        <div><%=getTillDate(o.getNoticeDate())%></div>
                         <div><%=o.getNoticeReadCount() %></div>
                     </div>
                     <%} %>
                 </div>
 
                 <div class="pagebar">
-                    <div><img src="/images/board-arrow-left.png"></div>
-                    <div>1</div>
-                    <div>2</div>
-                    <div>3</div>
-                    <div>4</div>
-                    <div>5</div>
-                    <div><img src="/images/board-arrow-right.png"></div>
+                    <%=pageBar %>
                 </div>
             </div>
         </div>

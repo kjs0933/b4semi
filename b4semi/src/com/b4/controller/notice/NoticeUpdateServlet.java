@@ -15,7 +15,7 @@ import com.b4.service.NoticeService;
 /**
  * Servlet implementation class NoticeUpdateServlet
  */
-@WebServlet("/NoticeUpdateServlet")
+@WebServlet("/noticeUpdate")
 public class NoticeUpdateServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -41,7 +41,7 @@ public class NoticeUpdateServlet extends HttpServlet {
 		}
 		
 		int no = Integer.parseInt(request.getParameter("no"));
-		Notice notice = new NoticeService().NoticeOne(no);
+		Notice notice = (Notice) new NoticeService().selectOne(no);
 		String view="";
 		String msg="";
 		if(notice!=null)

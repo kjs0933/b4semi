@@ -12,10 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 import com.b4.model.vo.Notice;
 import com.b4.service.NoticeService;
 
+import static common.PagingTemplate.pageBar;
+
 /**
  * Servlet implementation class NoticeListServlet
  */
-@WebServlet("/support/support_notice")
+@WebServlet("/noticeList")
 public class NoticeListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -40,63 +42,30 @@ public class NoticeListServlet extends HttpServlet {
 		{
 			cPage=1;
 		}
-		int numPerPage=5;
-		//전체자료수 호출
-		int totalContent=new NoticeService().NoticeCount();
-		//전체 페이지수
-		int totalPage=(int)Math.ceil((double)totalContent/numPerPage);	
-		
+		int numPerPage;
+		try {
+			numPerPage = Integer.parseInt(request.getParameter("numPerPage"));
+		}
+		catch(NumberFormatException e)
+		{
+			numPerPage = 15;
+		}
+
 		
 		//DB에서 데이터를 불러옴!
 		//servlet -> service(Connection) -> Dao
-		List<Notice> list = new NoticeService().selectList(cPage,numPerPage);
-		//page구현하는 pageBar
-		String pageBar="";
-		int pageBarSize=5;
-		int pageNo=((cPage-1)/pageBarSize)*pageBarSize+1;
-		int pageEnd=pageNo+pageBarSize-1;
+		int totalCount = new NoticeService().NoticeCount();
 		
-		//pageBar채우기
-		if(pageNo==1)
-		{
-			pageBar+="<span>[이전]</span>";
-		}
-		else
-		{
-			pageBar+="<a href='"+request.getContextPath()+"/notice/noticeList?cPage="+(pageNo-1)+"'>[이전]</a>";
-		}
-		//번호구현
-		while(!(pageNo>pageEnd||pageNo>totalPage))
-		{
-			if(cPage==pageNo)
-			{
-				pageBar+="<span class='cPage'>"+pageNo+"</span>";
-			}
-			else
-			{
-				pageBar+="<a href='"+request.getContextPath()+"/notice/noticeList?cPage="+pageNo+"'>"+pageNo+"</a>";
-			}
-			pageNo++;
-		}
-		
-		if(pageNo>totalPage)
-		{
-			pageBar+="<span>[다음]</span>	";
-		}
-		else
-		{
-			pageBar+="<a href='"+request.getContextPath()+"/notice/noticeList?cPage="+pageNo+"'>[다음]</a>";
-		}
+		List<Notice> list = new NoticeService().selectList(cPage, numPerPage);
+		String pageBar = pageBar(request.getContextPath(),cPage,numPerPage,totalCount);
+
 		
 		//응답view선택 데이터 응답view에 전송
 		request.setAttribute("list", list);
 		request.setAttribute("cPage", cPage);
 		request.setAttribute("pageBar", pageBar);
 		
-		
-		
 		request.getRequestDispatcher("/views/support/support_notice.jsp").forward(request, response);
-		
 	}
 
 	/**

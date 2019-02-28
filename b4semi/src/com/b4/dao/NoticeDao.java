@@ -2,6 +2,8 @@ package com.b4.dao;
 
 import static common.JDBCTemplate.close;
 
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,11 +18,21 @@ public class NoticeDao {
 	
 	Properties prop = new Properties();
 	
-	public List<Notice> NoticeList(Connection conn, int cPage, int numPerPage)//시작페이지
+	public NoticeDao() {
+		try {
+			String fileName = NoticeDao.class.getResource("/sql/notice/notice-query.properties").getPath();
+			prop.load(new FileReader(fileName));
+		}catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public List<Notice> selectList(Connection conn, int cPage, int numPerPage)//시작페이지
 	{
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
-		List<Notice> list = new ArrayList<>();
+		List<Notice> list = new ArrayList<Notice>();
 		String sql = prop.getProperty("selectList");
 		
 		try {
@@ -34,11 +46,11 @@ public class NoticeDao {
 				n.setNoticeSeq(rs.getInt("noticeseq"));
 				n.setMemberSeq(rs.getInt("memberseq"));
 				n.setNoticeTitle(rs.getString("noticetitle"));
-				n.setNoticeContents(rs.getString("noticecontents"));
+				n.setNoticeContents(rs.getString("noticeContents"));
 				n.setNoticeDate(rs.getTimestamp("noticedate"));
-				n.setNoticeReadCount(rs.getInt("noticereadcount"));
-				n.setNoticeOriginalFilename(rs.getString("noticeoriginalfilename"));
-				n.setNoticeRenameFilename(rs.getString("noticerenamefilename"));
+				n.setNoticeReadCount(rs.getInt("noticeReadCount"));
+				list.add(n);
+				
 			}
 		}
 		catch(SQLException e)
@@ -57,7 +69,7 @@ public class NoticeDao {
 		PreparedStatement pstmt=null;
 		int result=0;
 		ResultSet rs=null;
-		String sql=prop.getProperty("selectCount");
+		String sql=prop.getProperty("noticeCount");
 		try {
 			pstmt=conn.prepareStatement(sql);
 			rs=pstmt.executeQuery();
@@ -72,12 +84,12 @@ public class NoticeDao {
 		return result;
 	}
 	
-	public Notice NoticeOne(Connection conn, int no)
+	public Notice noticeOne(Connection conn, int no)
 	{
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
 		Notice n=null;
-		String sql=prop.getProperty("NoticeOne");
+		String sql=prop.getProperty("noticeOne");
 		try
 		{
 			pstmt=conn.prepareStatement(sql);
@@ -91,7 +103,8 @@ public class NoticeDao {
 				n.setNoticeTitle(rs.getString("noticetitle"));
 				n.setNoticeContents(rs.getString("noticeContents"));
 				n.setNoticeDate(rs.getTimestamp("noticeDate"));
-				n.setNoticeReadCount(rs.getInt("noticereadcount"));
+				n.setNoticeReadCount(rs.getInt("noticeReadCount"));
+				
 			}
 		}
 		catch(SQLException e)

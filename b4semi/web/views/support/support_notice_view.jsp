@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
  <%@ page import="java.util.*,com.b4.model.vo.*,java.sql.*" %>
  <%@ page import ="static common.DateFormatTemplate.*"%>   
+ <%@ page import = "com.b4.controller.notice.*" %>
  <%
 	Notice n=(Notice)request.getAttribute("notice");
 %>
@@ -119,7 +120,7 @@
             </div>
             <div class="support-notice-view-date-hit">
                 <div>작성일</div>
-               <%--  <div><a herf="<%=DateFormatTemplate.getGetTillDate(timestamp)%>/common/DateFormatTemplate"></a></div> --%>
+                <div><%=n.getNoticeDate()%></div>
                 <div>조회수</div>
                 <div><%=n.getNoticeReadCount()%></div>
             </div>
@@ -146,9 +147,17 @@
 
 		<script>
 			function fn_updateNotice()
-			{
-				location.href="<%=request.getContextPath()%>/support/support_notice_view?noticeseq=<%=n.getNoticeSeq()%>";
+			{	
+				if(n.memberId="admin")
+				{
+					location.href="<%=request.getContextPath()%>/noticeUpdate?noticeseq=<%=n.getNoticeSeq()%>";
+				}
+				else
+				{
+					alert("접근할 권한이 없습니다.");					
+				}
 			}
+
 			function fn_listView()
 			{
 				location.href="<%=request.getContextPath()%>/support/support_notice?noticeseq=<%=n.getNoticeSeq()%>";	

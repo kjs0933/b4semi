@@ -13,12 +13,12 @@ import com.b4.model.vo.Notice;
 
 public class NoticeService {
 	
-	private NoticeDao dao = new NoticeDao();
+	NoticeDao dao = new NoticeDao();
 	
 	public List<Notice> selectList(int cPage,int numPerPage)
 	{
 		Connection conn=getConnection();
-		List<Notice> list = dao.NoticeList(conn,cPage,numPerPage);
+		List<Notice> list = dao.selectList(conn,cPage,numPerPage);
 		close(conn);
 		return list;
 	}
@@ -31,10 +31,10 @@ public class NoticeService {
 		return result;
 	}
 	
-	public Notice NoticeOne(int no)
+	public Notice selectOne(int no)
 	{
 		Connection conn=getConnection();
-		Notice n=dao.NoticeOne(conn,no);
+		Notice n=dao.noticeOne(conn,no);
 		close(conn);
 		return n;
 	}
