@@ -160,7 +160,7 @@
 
 			function fn_listView()
 			{
-				location.href="<%=request.getContextPath()%>/support/support_notice?noticeseq=<%=n.getNoticeSeq()%>";	
+				location.href='<%=request.getContextPath()%>/noticeList';	
 			}
 			
 		</script>

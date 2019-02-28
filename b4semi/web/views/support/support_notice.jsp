@@ -147,7 +147,7 @@
         .support-board-cols
         {
             display: flex;
-
+            cursor: pointer;
         }
 
         .support-board-cols > div
@@ -233,9 +233,9 @@
                         <div>조회수</div>
                     </div>
                     <%for(Notice o:list) {%>
-                    <div class="support-board-cols">
+                    <div data-notice-seq="<%=o.getNoticeSeq() %>" class="support-board-cols">
                         <div><%=o.getNoticeSeq() %></div>
-                        <div><a href="<%=request.getContextPath()%>/notice/noticeview?noticeseq=<%=o.getNoticeSeq()%>"><%=o.getNoticeTitle() %></a></div>
+                        <div><%=o.getNoticeTitle() %></div>
                         <div>TheFoodForum</div>
                         <div><%=getTillDate(o.getNoticeDate())%></div>
                         <div><%=o.getNoticeReadCount() %></div>
@@ -249,4 +249,12 @@
             </div>
         </div>
     </section>
+<script>
+	const noticeCols = $('.support-board-cols');
+	$(()=> {
+		noticeCols.on('click', (e) => {
+			location.href='<%=request.getContextPath()%>/notice/noticeview?noticeseq='+$(e.currentTarget).data('noticeSeq');
+		});
+	});
+</script>
 <%@ include file="/views/common/footer.jsp" %>
